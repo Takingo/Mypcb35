@@ -1,0 +1,96 @@
+{
+  "schema": "FABRICATION_DRAWING_V1",
+  "generated_at": "2026-05-24T07:21:59+00:00",
+  "project_name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs",
+  "board_width_mm": 120.0,
+  "board_height_mm": 80.0,
+  "board_thickness_mm": 1.6,
+  "layer_count": 4,
+  "min_trace_width_mm": 0.2,
+  "min_clearance_mm": 0.2,
+  "min_drill_mm": 0.3,
+  "surface_finish": "HASL (Lead-Free)",
+  "solder_mask_sides": "Both",
+  "silkscreen_sides": "Top",
+  "controlled_impedance": true,
+  "impedance_note": "UWB RF net (UWB_RF_50R): 50Ω microstrip, top layer, er=4.6, h=0.36mm, trace_width=0.88mm",
+  "drill_table": [
+    {
+      "symbol": "A",
+      "diameter_mm": 0.3,
+      "plated": true,
+      "count": 4,
+      "tool_description": "Via 0.30mm PTH"
+    },
+    {
+      "symbol": "B",
+      "diameter_mm": 0.5,
+      "plated": true,
+      "count": 12,
+      "tool_description": "Via 0.50mm PTH"
+    },
+    {
+      "symbol": "C",
+      "diameter_mm": 0.8,
+      "plated": true,
+      "count": 28,
+      "tool_description": "Component PTH"
+    },
+    {
+      "symbol": "D",
+      "diameter_mm": 1.0,
+      "plated": true,
+      "count": 8,
+      "tool_description": "Power/GND PTH"
+    },
+    {
+      "symbol": "E",
+      "diameter_mm": 3.2,
+      "plated": false,
+      "count": 4,
+      "tool_description": "Mounting hole NPTH"
+    }
+  ],
+  "layer_stack": [
+    {
+      "layer_number": 1,
+      "name": "F.Cu",
+      "type": "signal",
+      "copper_weight_oz": 1.0
+    },
+    {
+      "layer_number": 2,
+      "name": "In1.Cu",
+      "type": "plane",
+      "copper_weight_oz": 0.5
+    },
+    {
+      "layer_number": 3,
+      "name": "In2.Cu",
+      "type": "plane",
+      "copper_weight_oz": 0.5
+    },
+    {
+      "layer_number": 4,
+      "name": "B.Cu",
+      "type": "signal",
+      "copper_weight_oz": 1.0
+    }
+  ],
+  "notes": [
+    "Tüm boyutlar mm cinsindendir; tolerans ±0.1mm.",
+    "AC primer bölgesi (J1, F1, MOV1, HLK-5M05) ile düşük voltaj bölgesi arasında min. 8mm creepage / 4mm clearance uygulanmalıdır.",
+    "DWM3000 UWB modülü alt pad (1.0mm pitch LGA) için reflow ön ısıtma profili gerekmektedir; IPC-7711/7721 uygulanacaktır.",
+    "RF trace (UWB_RF_50R) üzerinde via, test noktası veya bileşen bulunmamalıdır.",
+    "PCB yüzeyi: HASL (Kurşunsuz) veya ENIG; solder mask yeşil (standart) ya da üretici seçimine göre.",
+    "Üretici DFM kuralları: min. trace/space 0.15mm/0.15mm; min. drill 0.30mm.",
+    "IPC-2221B sınıf 2 üretim standardı uygulanacaktır.",
+    "Tüm vias tented (kapalı) olmalıdır; via-in-pad gerekli değildir."
+  ],
+  "exported_files": [
+    "outputs\\fabrication_drawing\\fabrication_drawing.pdf",
+    "outputs\\fabrication_drawing\\fabrication_drawing.svg",
+    "outputs\\fabrication_drawing\\drill_map.pdf"
+  ],
+  "status": "generated"
+}

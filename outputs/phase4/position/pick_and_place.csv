@@ -1,0 +1,4 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"J2","SMA antenna connector","",104.000000,-24.000000,0.000000,top
+"U1","ESP32-S3 module","",64.000000,-20.000000,0.000000,top
+"U2","External connector","",56.000000,-20.000000,0.000000,top

@@ -1,0 +1,193 @@
+{
+  "schema": "FABRICATION_PACKAGE_V1",
+  "generated_at": "2026-05-24T07:34:49+00:00",
+  "status": "package_ready",
+  "message": "Tasarim, Dogrulama ve Uretim Hazirligi Tamamlandi. Uretim paketi hazir.",
+  "production_zip": "outputs\\fabrication\\Quantum_Mind_Anchor_v2_4_Production.zip",
+  "production_zip_size_bytes": 17997,
+  "board_width_mm": 120.0,
+  "board_height_mm": 80.0,
+  "checkout": {
+    "manufacturer": "PCBWay",
+    "quantity": 5,
+    "layers": 4,
+    "solder_mask_color": "Green",
+    "includes_assembly": true
+  },
+  "files": [
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba",
+      "size_bytes": 505
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl",
+      "size_bytes": 510
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
+      "size_bytes": 487
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs",
+      "size_bytes": 511
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp",
+      "size_bytes": 506
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo",
+      "size_bytes": 507
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1",
+      "size_bytes": 683
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta",
+      "size_bytes": 505
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl",
+      "size_bytes": 1285
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
+      "size_bytes": 8113
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts",
+      "size_bytes": 975
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp",
+      "size_bytes": 970
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto",
+      "size_bytes": 1233
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-job.gbrjob",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-job.gbrjob",
+      "size_bytes": 5091
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
+      "size_bytes": 481
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
+      "size_bytes": 488
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
+      "category": "gerber",
+      "path": "outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
+      "size_bytes": 478
+    },
+    {
+      "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl",
+      "category": "drill",
+      "path": "outputs\\phase4\\drill\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl",
+      "size_bytes": 274
+    },
+    {
+      "name": "pick_and_place.csv",
+      "category": "pick_and_place",
+      "path": "outputs\\phase4\\position\\pick_and_place.csv",
+      "size_bytes": 229
+    },
+    {
+      "name": "BOM.csv",
+      "category": "bom",
+      "path": "BOM.csv",
+      "size_bytes": 1683
+    }
+  ],
+  "estimate": {
+    "unit_price_usd": 14.7,
+    "total_usd": 73.48,
+    "lead_time_days": 9,
+    "note": "Yerel tahmindir; nihai fiyat uretici panelinde dogrulanmalidir."
+  }
+}

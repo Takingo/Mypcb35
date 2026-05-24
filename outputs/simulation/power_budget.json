@@ -1,0 +1,18 @@
+{
+  "name": "Power Budget",
+  "domain": "PI",
+  "status": "pass",
+  "metrics": {
+    "relay_count": 0,
+    "five_volt_load_ma": 420.0,
+    "hlk_5m05_capacity_ma": 1000.0,
+    "three_v_three_load_ma": 440.0,
+    "tps54331_capacity_ma": 3000.0,
+    "one_v_eight_load_ma": 220.0,
+    "ldo_part": "TPS7A2018PDBVR",
+    "ldo_capacity_ma": 300.0,
+    "ldo_margin_ma": 80.0
+  },
+  "evidence": "First-order current budget from BOM assumptions.",
+  "recommendation": "Power rails have first-order current margin."
+}

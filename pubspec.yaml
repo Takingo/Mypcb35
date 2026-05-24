@@ -1,0 +1,31 @@
+name: omnicircuit_ai
+description: Autonomous PCB/PCBA design and manufacturing suite proof of concept.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  file_picker: ^11.0.2
+  flutter:
+    sdk: flutter
+  provider: ^6.1.5+1
+  flutter_svg: ^2.0.10
+  http: ^1.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/generated/uwb_anchor_analysis.json
+    - assets/generated/drc_report_v1.json
+    - assets/generated/layout_optimization_status.json
+    - assets/generated/fabrication_package.json
+    - assets/generated/engineering_readiness_report.json
+    - assets/generated/schematic.svg/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.svg
+    - assets/generated/schematic_sample.png
+    - assets/generated/pcb.svg

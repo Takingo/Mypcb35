@@ -1,0 +1,6035 @@
+{
+  "schema": "DRC_REPORT_V1",
+  "source": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+  "kicad_version": "10.0.3",
+  "coordinate_units": "mm",
+  "total_violations": 94,
+  "summary_by_category": {
+    "clearance": 52,
+    "other": 42
+  },
+  "summary_by_severity": {
+    "error": 92,
+    "warning": 2
+  },
+  "violations": [
+    {
+      "id": "DRC-0001",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+        },
+        {
+          "x": 35.8,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 35.8,
+          "y": 17.35,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0002",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 18.5,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "532fb722-4268-4f46-aa9d-59d108f3f4e1"
+        },
+        {
+          "x": 81.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 19.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0003",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+        },
+        {
+          "x": 73.8,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 73.8,
+          "y": 35.349999999999994,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0004",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+        },
+        {
+          "x": 17.8,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 17.8,
+          "y": 19.35,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0005",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+        },
+        {
+          "x": 35.8,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 35.8,
+          "y": 17.674999999999997,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0006",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+        },
+        {
+          "x": 81.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0007",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+        },
+        {
+          "x": 73.8,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 73.8,
+          "y": 35.675,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0008",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+        },
+        {
+          "x": 81.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 21.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0009",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+        },
+        {
+          "x": 35.8,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 35.8,
+          "y": 18.325000000000003,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0010",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+        },
+        {
+          "x": 17.8,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 17.8,
+          "y": 19.674999999999997,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0011",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+        },
+        {
+          "x": 35.8,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 35.8,
+          "y": 18.0,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0012",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+        },
+        {
+          "x": 35.8,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 35.8,
+          "y": 18.65,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0013",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+        },
+        {
+          "x": 17.8,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 17.8,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0014",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+        },
+        {
+          "x": 81.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 22.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0015",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+        },
+        {
+          "x": 40.2,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 40.2,
+          "y": 17.35,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0016",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+        },
+        {
+          "x": 73.8,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 73.8,
+          "y": 36.0,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0017",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+        },
+        {
+          "x": 17.8,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 17.8,
+          "y": 20.325000000000003,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0018",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+        },
+        {
+          "x": 40.2,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 40.2,
+          "y": 17.674999999999997,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0019",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+        },
+        {
+          "x": 17.8,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 17.8,
+          "y": 20.65,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0020",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+        },
+        {
+          "x": 81.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 23.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0021",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+        },
+        {
+          "x": 73.8,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 73.8,
+          "y": 36.325,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0022",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+        },
+        {
+          "x": 22.2,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 22.2,
+          "y": 19.35,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0023",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+        },
+        {
+          "x": 40.2,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 40.2,
+          "y": 18.0,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0024",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+        },
+        {
+          "x": 22.2,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 22.2,
+          "y": 19.674999999999997,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0025",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+        },
+        {
+          "x": 73.8,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 73.8,
+          "y": 36.650000000000006,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0026",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+        },
+        {
+          "x": 81.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 24.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0027",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+        },
+        {
+          "x": 40.2,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 40.2,
+          "y": 18.325000000000003,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0028",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+        },
+        {
+          "x": 22.2,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 22.2,
+          "y": 20.325000000000003,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0029",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+        },
+        {
+          "x": 40.2,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 40.2,
+          "y": 18.65,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0030",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+        },
+        {
+          "x": 22.2,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 22.2,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0031",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+        },
+        {
+          "x": 81.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 25.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0032",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+        },
+        {
+          "x": 22.2,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 22.2,
+          "y": 20.65,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0033",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+        },
+        {
+          "x": 78.2,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 78.2,
+          "y": 35.349999999999994,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0034",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+        },
+        {
+          "x": 81.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 9 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 26.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0035",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+        },
+        {
+          "x": 78.2,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 78.2,
+          "y": 35.675,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0036",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 9 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+        },
+        {
+          "x": 81.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 10 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 27.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0037",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+        },
+        {
+          "x": 78.2,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 78.2,
+          "y": 36.0,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0038",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 10 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+        },
+        {
+          "x": 81.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 11 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 28.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0039",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+        },
+        {
+          "x": 78.2,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 78.2,
+          "y": 36.325,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0040",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+        },
+        {
+          "x": 78.2,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 78.2,
+          "y": 36.650000000000006,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0041",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 11 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+        },
+        {
+          "x": 81.0,
+          "y": 29.5,
+          "layer": "F.Cu",
+          "item": "Pad 12 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "5932189f-39bb-485f-93f7-98362207126d"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 81.0,
+          "y": 29.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0042",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 18.5,
+          "layer": "F.Cu",
+          "item": "Pad 13 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "37dfdced-4075-41cb-b104-1a038fc64bc6"
+        },
+        {
+          "x": 95.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 14 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 19.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0043",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 14 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+        },
+        {
+          "x": 95.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 15 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0044",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 15 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+        },
+        {
+          "x": 95.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 16 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 21.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0045",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 16 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+        },
+        {
+          "x": 95.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 17 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 22.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0046",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 17 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+        },
+        {
+          "x": 95.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 18 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 23.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0047",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 18 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+        },
+        {
+          "x": 95.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 19 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 24.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0048",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 19 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+        },
+        {
+          "x": 95.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 20 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 25.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0049",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 20 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+        },
+        {
+          "x": 95.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 21 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 26.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0050",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 21 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+        },
+        {
+          "x": 95.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 22 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 27.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0051",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 22 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+        },
+        {
+          "x": 95.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 28.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0052",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "severity": "error",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+        },
+        {
+          "x": 95.0,
+          "y": 29.5,
+          "layer": "F.Cu",
+          "item": "Pad 24 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "94db90a7-9f82-4463-844f-d18789744896"
+        }
+      ],
+      "repair_hint": "Move one of the conflicting items away from the shared coordinate until clearance is above the active netclass threshold.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "clearance",
+        "raw_type": "clearance",
+        "weight": 100,
+        "target": {
+          "x": 95.0,
+          "y": 29.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "spread_coordinates",
+        "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+      }
+    },
+    {
+      "id": "DRC-0053",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 18.5,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "532fb722-4268-4f46-aa9d-59d108f3f4e1"
+        },
+        {
+          "x": 81.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 19.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0054",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 29.5,
+          "layer": "F.Cu",
+          "item": "Pad 12 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "5932189f-39bb-485f-93f7-98362207126d"
+        },
+        {
+          "x": 81.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 11 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 29.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0055",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 9 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+        },
+        {
+          "x": 81.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 26.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0056",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 15 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+        },
+        {
+          "x": 95.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 14 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0057",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+        },
+        {
+          "x": 81.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0058",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+        },
+        {
+          "x": 81.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 22.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0059",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 9 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+        },
+        {
+          "x": 81.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 10 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 27.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0060",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+        },
+        {
+          "x": 81.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 23.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0061",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+        },
+        {
+          "x": 22.2,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 22.2,
+          "y": 19.35,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0062",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+        },
+        {
+          "x": 73.8,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 73.8,
+          "y": 36.650000000000006,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0063",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 10 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+        },
+        {
+          "x": 81.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 11 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 28.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0064",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+        },
+        {
+          "x": 40.2,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 40.2,
+          "y": 17.35,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0065",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+        },
+        {
+          "x": 73.8,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 73.8,
+          "y": 35.349999999999994,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0066",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+        },
+        {
+          "x": 35.8,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 35.8,
+          "y": 18.65,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0067",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 35.025,
+          "layer": "F.Cu",
+          "item": "Pad 5 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+        },
+        {
+          "x": 78.2,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 78.2,
+          "y": 35.349999999999994,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0068",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+        },
+        {
+          "x": 81.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 21.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0069",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+        },
+        {
+          "x": 17.8,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 17.8,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0070",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 73.8,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+        },
+        {
+          "x": 73.8,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 73.8,
+          "y": 36.0,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0071",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+        },
+        {
+          "x": 40.2,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 40.2,
+          "y": 18.0,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0072",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 17.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+        },
+        {
+          "x": 35.8,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 35.8,
+          "y": 17.35,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0073",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 35.8,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+        },
+        {
+          "x": 35.8,
+          "y": 17.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 35.8,
+          "y": 18.0,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0074",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 18 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+        },
+        {
+          "x": 95.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 17 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 23.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0075",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 20.5,
+          "layer": "F.Cu",
+          "item": "Pad 15 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+        },
+        {
+          "x": 95.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 16 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 21.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0076",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+        },
+        {
+          "x": 78.2,
+          "y": 35.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 78.2,
+          "y": 36.0,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0077",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 3 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+        },
+        {
+          "x": 17.8,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 4 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 17.8,
+          "y": 20.65,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0078",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 21 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+        },
+        {
+          "x": 95.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 20 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 26.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0079",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+        },
+        {
+          "x": 81.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 24.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0080",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 26.5,
+          "layer": "F.Cu",
+          "item": "Pad 21 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+        },
+        {
+          "x": 95.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 22 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 27.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0081",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 23.5,
+          "layer": "F.Cu",
+          "item": "Pad 18 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+        },
+        {
+          "x": 95.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 19 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 24.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0082",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 21.5,
+          "layer": "F.Cu",
+          "item": "Pad 16 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+        },
+        {
+          "x": 95.0,
+          "y": 22.5,
+          "layer": "F.Cu",
+          "item": "Pad 17 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 22.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0083",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 78.2,
+          "y": 36.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+        },
+        {
+          "x": 78.2,
+          "y": 36.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U3 on F.Cu",
+          "component": "U3",
+          "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 78.2,
+          "y": 36.650000000000006,
+          "units": "mm",
+          "components": [
+            "U3"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0084",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 6 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+        },
+        {
+          "x": 22.2,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 22.2,
+          "y": 20.0,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0085",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 27.5,
+          "layer": "F.Cu",
+          "item": "Pad 22 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+        },
+        {
+          "x": 95.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 28.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0086",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 19 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+        },
+        {
+          "x": 95.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 20 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 25.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0087",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 40.2,
+          "y": 18.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+        },
+        {
+          "x": 40.2,
+          "y": 18.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U6 on F.Cu",
+          "component": "U6",
+          "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 40.2,
+          "y": 18.65,
+          "units": "mm",
+          "components": [
+            "U6"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0088",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 18.5,
+          "layer": "F.Cu",
+          "item": "Pad 13 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "37dfdced-4075-41cb-b104-1a038fc64bc6"
+        },
+        {
+          "x": 95.0,
+          "y": 19.5,
+          "layer": "F.Cu",
+          "item": "Pad 14 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 19.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0089",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 81.0,
+          "y": 24.5,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+        },
+        {
+          "x": 81.0,
+          "y": 25.5,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 81.0,
+          "y": 25.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0090",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 95.0,
+          "y": 29.5,
+          "layer": "F.Cu",
+          "item": "Pad 24 [<no net>] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "94db90a7-9f82-4463-844f-d18789744896"
+        },
+        {
+          "x": 95.0,
+          "y": 28.5,
+          "layer": "F.Cu",
+          "item": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+          "component": "U2",
+          "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 95.0,
+          "y": 29.0,
+          "units": "mm",
+          "components": [
+            "U2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0091",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 22.2,
+          "y": 20.325,
+          "layer": "F.Cu",
+          "item": "Pad 7 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+        },
+        {
+          "x": 22.2,
+          "y": 20.975,
+          "layer": "F.Cu",
+          "item": "Pad 8 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 22.2,
+          "y": 20.65,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0092",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "severity": "error",
+      "description": "Front solder mask aperture bridges items with different nets",
+      "locations": [
+        {
+          "x": 17.8,
+          "y": 19.025,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+        },
+        {
+          "x": 17.8,
+          "y": 19.675,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of U1 on F.Cu",
+          "component": "U1",
+          "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "solder_mask_bridge",
+        "weight": 40,
+        "target": {
+          "x": 17.8,
+          "y": 19.35,
+          "units": "mm",
+          "components": [
+            "U1"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Front solder mask aperture bridges items with different nets"
+      }
+    },
+    {
+      "id": "DRC-0093",
+      "category": "other",
+      "raw_type": "silk_over_copper",
+      "severity": "warning",
+      "description": "Silkscreen clipped by solder mask",
+      "locations": [
+        {
+          "x": 66.0,
+          "y": 66.0,
+          "layer": null,
+          "item": "Reference field of OK1-OK2",
+          "component": "OK1-OK2",
+          "uuid": "3c8866c2-6d5d-45c5-8fe4-cd80b373d81f"
+        },
+        {
+          "x": 65.2,
+          "y": 66.0,
+          "layer": "F.Cu",
+          "item": "Pad 1 [<no net>] of OK1-OK2 on F.Cu",
+          "component": "OK1-OK2",
+          "uuid": "5b0de76f-8110-4935-a637-6210effee05f"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "silk_over_copper",
+        "weight": 40,
+        "target": {
+          "x": 65.6,
+          "y": 66.0,
+          "units": "mm",
+          "components": [
+            "OK1-OK2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Silkscreen clipped by solder mask"
+      }
+    },
+    {
+      "id": "DRC-0094",
+      "category": "other",
+      "raw_type": "silk_over_copper",
+      "severity": "warning",
+      "description": "Silkscreen clipped by solder mask",
+      "locations": [
+        {
+          "x": 66.0,
+          "y": 66.0,
+          "layer": null,
+          "item": "Reference field of OK1-OK2",
+          "component": "OK1-OK2",
+          "uuid": "3c8866c2-6d5d-45c5-8fe4-cd80b373d81f"
+        },
+        {
+          "x": 66.8,
+          "y": 66.0,
+          "layer": "F.Cu",
+          "item": "Pad 2 [<no net>] of OK1-OK2 on F.Cu",
+          "component": "OK1-OK2",
+          "uuid": "bf01a961-cc9b-4f1a-a61b-0e8f258725c3"
+        }
+      ],
+      "repair_hint": "Inspect the item pair and map it to a concrete placement/routing constraint.",
+      "pcbai_penalty": {
+        "source": "kicad_drc",
+        "category": "other",
+        "raw_type": "silk_over_copper",
+        "weight": 40,
+        "target": {
+          "x": 66.4,
+          "y": 66.0,
+          "units": "mm",
+          "components": [
+            "OK1-OK2"
+          ],
+          "layers": [
+            "F.Cu"
+          ]
+        },
+        "action": "inspect_and_penalize_overlap",
+        "description": "Silkscreen clipped by solder mask"
+      }
+    }
+  ],
+  "pcbai_constraints": [
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 35.8,
+        "y": 17.35,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 19.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 73.8,
+        "y": 35.349999999999994,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 17.8,
+        "y": 19.35,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 35.8,
+        "y": 17.674999999999997,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 73.8,
+        "y": 35.675,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 21.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 35.8,
+        "y": 18.325000000000003,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 17.8,
+        "y": 19.674999999999997,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 35.8,
+        "y": 18.0,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 35.8,
+        "y": 18.65,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 17.8,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 22.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 40.2,
+        "y": 17.35,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 73.8,
+        "y": 36.0,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 17.8,
+        "y": 20.325000000000003,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 40.2,
+        "y": 17.674999999999997,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 17.8,
+        "y": 20.65,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 23.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 73.8,
+        "y": 36.325,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 22.2,
+        "y": 19.35,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 40.2,
+        "y": 18.0,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 22.2,
+        "y": 19.674999999999997,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 73.8,
+        "y": 36.650000000000006,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 24.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 40.2,
+        "y": 18.325000000000003,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 22.2,
+        "y": 20.325000000000003,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 40.2,
+        "y": 18.65,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 22.2,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 25.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 22.2,
+        "y": 20.65,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 78.2,
+        "y": 35.349999999999994,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 26.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 78.2,
+        "y": 35.675,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 27.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 78.2,
+        "y": 36.0,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 28.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 78.2,
+        "y": 36.325,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 78.2,
+        "y": 36.650000000000006,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 81.0,
+        "y": 29.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 19.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 21.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 22.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 23.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 24.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 25.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 26.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 27.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 28.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "clearance",
+      "raw_type": "clearance",
+      "weight": 100,
+      "target": {
+        "x": 95.0,
+        "y": 29.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "spread_coordinates",
+      "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 19.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 29.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 26.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 22.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 27.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 23.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 22.2,
+        "y": 19.35,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 73.8,
+        "y": 36.650000000000006,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 28.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 40.2,
+        "y": 17.35,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 73.8,
+        "y": 35.349999999999994,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 35.8,
+        "y": 18.65,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 78.2,
+        "y": 35.349999999999994,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 21.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 17.8,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 73.8,
+        "y": 36.0,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 40.2,
+        "y": 18.0,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 35.8,
+        "y": 17.35,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 35.8,
+        "y": 18.0,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 23.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 21.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 78.2,
+        "y": 36.0,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 17.8,
+        "y": 20.65,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 26.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 24.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 27.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 24.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 22.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 78.2,
+        "y": 36.650000000000006,
+        "units": "mm",
+        "components": [
+          "U3"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 22.2,
+        "y": 20.0,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 28.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 25.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 40.2,
+        "y": 18.65,
+        "units": "mm",
+        "components": [
+          "U6"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 19.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 81.0,
+        "y": 25.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 95.0,
+        "y": 29.0,
+        "units": "mm",
+        "components": [
+          "U2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 22.2,
+        "y": 20.65,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "solder_mask_bridge",
+      "weight": 40,
+      "target": {
+        "x": 17.8,
+        "y": 19.35,
+        "units": "mm",
+        "components": [
+          "U1"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Front solder mask aperture bridges items with different nets"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "silk_over_copper",
+      "weight": 40,
+      "target": {
+        "x": 65.6,
+        "y": 66.0,
+        "units": "mm",
+        "components": [
+          "OK1-OK2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Silkscreen clipped by solder mask"
+    },
+    {
+      "source": "kicad_drc",
+      "category": "other",
+      "raw_type": "silk_over_copper",
+      "weight": 40,
+      "target": {
+        "x": 66.4,
+        "y": 66.0,
+        "units": "mm",
+        "components": [
+          "OK1-OK2"
+        ],
+        "layers": [
+          "F.Cu"
+        ]
+      },
+      "action": "inspect_and_penalize_overlap",
+      "description": "Silkscreen clipped by solder mask"
+    }
+  ]
+}

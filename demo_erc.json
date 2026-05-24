@@ -1,0 +1,3069 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-24T06:19:59",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/1b112ac5-701b-420f-be34-0e29a2cb55ca",
+            "violations": [
+                {
+                    "description": "Hierarchical label 'ETH_PI{ETH}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ETH_PI{ETH}'",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.889
+                            },
+                            "uuid": "36acd672-3582-491f-9137-1bd73c7c7f0c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'TACHO' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'TACHO'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.9652
+                            },
+                            "uuid": "6025055e-f6a3-42d2-b692-61091d85d623"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'EEPROM_nWP' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'EEPROM_nWP'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.016
+                            },
+                            "uuid": "c324f287-279e-4993-bd93-308bd2a10d51"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'MISO_GPIO19' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'MISO_GPIO19'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.0922
+                            },
+                            "uuid": "42d6c416-ea88-4e07-af00-411d3f8ed176"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'ID_SD' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ID_SD'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.2192
+                            },
+                            "uuid": "95a2be6d-51aa-4edc-8c72-2f6c6389ffff"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'RST_GPIO27' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'RST_GPIO27'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.3716
+                            },
+                            "uuid": "95e67ec9-8509-4dc1-8b7d-c51bb3eff148"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'SCL1_IO3' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCL1_IO3'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.4732
+                            },
+                            "uuid": "f10466c8-cabc-4999-b752-c5249c17f89f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'SDA1_IO2' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SDA1_IO2'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.4986
+                            },
+                            "uuid": "896cea00-4f3b-458e-bc05-99fc1d2477c7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'GPIO_VREF' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'GPIO_VREF'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.7526
+                            },
+                            "uuid": "a5c410e2-dcc3-4a70-9b22-5905db959e69"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'SCL0' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCL0'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.778
+                            },
+                            "uuid": "2669f1fd-4482-4d35-9c4e-8bf6fc269f31"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'SDA0' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SDA0'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.8034
+                            },
+                            "uuid": "d096c3cb-8948-4700-84aa-023e2f5eb925"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label '3V3_CM4' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label '3V3_CM4'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.8288
+                            },
+                            "uuid": "bc09c1f5-fb4f-414e-af34-04bb016a4bd3"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label '1V8_CM4' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label '1V8_CM4'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.8796
+                            },
+                            "uuid": "ec4f6f08-616a-45ec-aa7e-8a3c18ef4be6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'PWR_BUT' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PWR_BUT'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.9304
+                            },
+                            "uuid": "40577b18-d72c-441c-b64f-165e10302cd7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'CC1' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CC1'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.9558
+                            },
+                            "uuid": "094039a2-3bc2-4398-9c1e-5705b481afe7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'CAM_GPIO1' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CAM_GPIO1'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 2.032
+                            },
+                            "uuid": "3e814951-9be6-4b7b-aafe-33a72fa61529"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 16 [FAN_TACHO, Input, Line]",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 0.9652
+                            },
+                            "uuid": "4f14f501-ce04-463a-900c-52b9ec9e9413"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 78 [GPIO_VREF(1.8v/3.3v_Input), Power input, Line]",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 1.7526
+                            },
+                            "uuid": "15f87cdb-6e3a-49f0-af1f-899c268b9b76"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 1 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 1.4732,
+                                "y": 0.7874
+                            },
+                            "uuid": "ffa7032f-51e2-42dd-b22e-a544ba713472"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 77 [+5v_(Input), Power input, Line]",
+                            "pos": {
+                                "x": 1.4732,
+                                "y": 1.7526
+                            },
+                            "uuid": "56b926ff-56a6-4c7f-baf8-101825207156"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 93 [nRPIBOOT, Input, Line]",
+                            "pos": {
+                                "x": 1.4732,
+                                "y": 1.9558
+                            },
+                            "uuid": "096768fc-da02-4ac7-9033-3f351931643c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 Pin 99 [PMIC_ENABLE, Input, Line]",
+                            "pos": {
+                                "x": 1.4732,
+                                "y": 2.032
+                            },
+                            "uuid": "ca3d4000-bcb0-46d6-aca2-d3278847db84"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Hierarchical label 'DC_GPI25' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'DC_GPI25'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.2954
+                            },
+                            "uuid": "1b50b677-9dec-4446-9176-3a01631843d6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'BL_GPIO24' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'BL_GPIO24'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.3462
+                            },
+                            "uuid": "c41ecc3b-c4e9-42c4-9363-2fd47ea08290"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'CS_GPIO18' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CS_GPIO18'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.397
+                            },
+                            "uuid": "37515e51-bd10-4353-9c97-9128b78639a6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'ETH_nLED_ACTIVITY' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ETH_nLED_ACTIVITY'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.9652
+                            },
+                            "uuid": "5ee3c119-437d-4159-847b-79e277c887bc"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'nLED_SPEED_100_1000' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nLED_SPEED_100_1000'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.9906
+                            },
+                            "uuid": "85e3be37-55d7-495e-8f54-761c32d6ae06"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'PWM' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PWM'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.016
+                            },
+                            "uuid": "c295a7f2-2d7c-4a54-96f8-5103db89da5d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'nLED_ACTIVITY' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nLED_ACTIVITY'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.0414
+                            },
+                            "uuid": "fc606151-1fa9-4916-b08a-ccb1e54120b0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'SCLK_GPIO21' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCLK_GPIO21'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.0922
+                            },
+                            "uuid": "b42b8d29-5382-45e7-b002-37c0c1f9a841"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'MOSI_GPIO20' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'MOSI_GPIO20'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.1176
+                            },
+                            "uuid": "048e19fd-b11f-47d8-a92a-2fdbb97dca6e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'ID_SC' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ID_SC'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.2192
+                            },
+                            "uuid": "50979d4c-d6b1-48d4-9d41-78fdae3a9c78"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label '+5V' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label '+5V'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.7526
+                            },
+                            "uuid": "e5943eb2-c7d4-4fbd-8458-6708fc295dc2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'nRPIBOOT' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nRPIBOOT'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.9558
+                            },
+                            "uuid": "abe8fed1-627a-4061-8ee5-c33d518da8ca"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'PI_nLED_PWR' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PI_nLED_PWR'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.9812
+                            },
+                            "uuid": "902e4a7e-793f-462f-b2cc-0fdde50bc11a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'CAM_GPIO0' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CAM_GPIO0'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 2.0066
+                            },
+                            "uuid": "9755dc39-9145-47fb-9820-9202374fa4b5"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'GLOBAL_EN' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'GLOBAL_EN'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 2.032
+                            },
+                            "uuid": "700840cf-e93c-453f-ba09-e02d08aedb35"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'HDMI_PI{HDMI}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'HDMI_PI{HDMI}'",
+                            "pos": {
+                                "x": 2.3114,
+                                "y": 2.159
+                            },
+                            "uuid": "39689ce4-2aa0-4afa-a6ff-ae9810cdc05d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'USB2P{USB}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'USB2P{USB}'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.3208
+                            },
+                            "uuid": "1908cf4f-76d9-42aa-9fb7-84a931df0972"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'PCIE_PI{PCIE}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PCIE_PI{PCIE}'",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 0.4826
+                            },
+                            "uuid": "65a1d18a-4b97-4bd5-b906-efd9255b9dc0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 102 [PCIe_nCLKREQ, Input, Line]",
+                            "pos": {
+                                "x": 2.6797,
+                                "y": 0.8128
+                            },
+                            "uuid": "6680e3b3-7271-4bde-a029-380975580e7e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 104 [PCIE_nWAKE, Input, Line]",
+                            "pos": {
+                                "x": 2.6797,
+                                "y": 0.8382
+                            },
+                            "uuid": "86a45a5c-0a76-446f-b9d9-3477fe1d1eee"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 116 [PCIe_RX_P, Input, Line]",
+                            "pos": {
+                                "x": 2.6797,
+                                "y": 0.9906
+                            },
+                            "uuid": "78ec5e25-5ea9-42cc-b9da-26a7db2041f3"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 118 [PCIe_RX_N, Input, Line]",
+                            "pos": {
+                                "x": 2.6797,
+                                "y": 1.016
+                            },
+                            "uuid": "0de976a9-0356-4e81-91c8-c69832466cf1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 101 [USB_OTG_ID, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 0.8128
+                            },
+                            "uuid": "9662e439-ebb2-4d3b-b22a-1ae4d2ebf55f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 115 [MIPI0_D0_N, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 0.9906
+                            },
+                            "uuid": "d94e4343-2b56-4faf-a2ee-e102d557ff64"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 117 [MIPI0_D0_P, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.016
+                            },
+                            "uuid": "a320bc3d-1b93-48aa-8933-c37844c2cc5d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 121 [MIPI0_D1_N, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.0668
+                            },
+                            "uuid": "ccdb7905-5122-48a4-bb90-60589d6e3f3d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 123 [MIPI0_D1_P, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.0922
+                            },
+                            "uuid": "ada7b6a1-a56d-4ef9-83e4-04809e9c6c7f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 127 [MIPI0_C_N, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.143
+                            },
+                            "uuid": "30b0ac59-18d2-4f7d-a8ac-6f4d4f873587"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 129 [MIPI0_C_P, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.1684
+                            },
+                            "uuid": "66fa0116-eee0-4e2b-a976-e3f4a61968e4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 133 [MIPI0_D2_N, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.2192
+                            },
+                            "uuid": "449abe39-9c8e-4e9d-b709-0916103e1315"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 135 [MIPI0_D2_P, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.2446
+                            },
+                            "uuid": "5a041023-9547-4da5-9360-9195b80f1744"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 139 [MIPI0_D3_N, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.2954
+                            },
+                            "uuid": "1aee38bb-1307-4c58-90c6-811aac78ba64"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 141 [MIPI0_D3_P, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.3208
+                            },
+                            "uuid": "59de2183-43cd-4dd9-89b7-5b6dcb8eda2d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 Pin 153 [HDMI0_HOTPLUG, Input, Line]",
+                            "pos": {
+                                "x": 3.2893,
+                                "y": 1.4732
+                            },
+                            "uuid": "b179d4b5-bd42-4fe1-9784-9df99347ca94"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "Hierarchical label 'USBOTG_ID' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'USBOTG_ID'",
+                            "pos": {
+                                "x": 3.3147,
+                                "y": 0.7874
+                            },
+                            "uuid": "cc4788dd-769c-4f38-97e1-657ceeba5818"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'VBUS_EN' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'VBUS_EN'",
+                            "pos": {
+                                "x": 3.3528,
+                                "y": 0.9398
+                            },
+                            "uuid": "84cc37d9-81ea-428e-8963-3b85b2f38e5e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'USB_PI{USB}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'USB_PI{USB}'",
+                            "pos": {
+                                "x": 3.4417,
+                                "y": 0.7239
+                            },
+                            "uuid": "4dd2011c-6801-4e43-8cfb-bcf6fd5e1877"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Hierarchical label 'DPHY0_P{DPHY}' in root sheet cannot be connected to non-existent parent sheet",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'DPHY0_P{DPHY}'",
+                            "pos": {
+                                "x": 3.5814,
+                                "y": 0.889
+                            },
+                            "uuid": "224c0aaa-1fa6-4a6c-8cff-b942f9fcd4d1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD1_P is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.7874
+                            },
+                            "uuid": "7b8a33ba-7723-4048-850e-f4ccbb2bdf75"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.7874
+                            },
+                            "uuid": "5da08a1c-98ae-46b1-883e-5b037277c8c5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD1_N is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.8128
+                            },
+                            "uuid": "383c2a13-2f5d-4ca2-8b30-a161f39370f4"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.7874
+                            },
+                            "uuid": "5da08a1c-98ae-46b1-883e-5b037277c8c5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD0_N is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.8636
+                            },
+                            "uuid": "0104cc5a-dc6a-465c-9d8b-1f657d1a9fe2"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.8636
+                            },
+                            "uuid": "3a2c0b02-ffaf-40fd-bea2-de2e5712e448"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD0_P is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.889
+                            },
+                            "uuid": "051d7180-6409-4363-8530-0e3fec5bc5a4"
+                        },
+                        {
+                            "description": "Horizontal Bus, length 0,1016 mm",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.889
+                            },
+                            "uuid": "fa76e23c-21f6-4990-a655-625d999340c6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD1_P'",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 0.8128
+                            },
+                            "uuid": "a2df0d63-fd06-493f-8763-84e06eed24c4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD1_N'",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 0.8382
+                            },
+                            "uuid": "65c9727b-b47c-4acd-815b-05193ec6aa85"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD0_N'",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 0.889
+                            },
+                            "uuid": "03965310-6b56-4e51-a529-a0e6a17621c0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD0_P'",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 0.9144
+                            },
+                            "uuid": "b3ad57d5-b106-4743-8690-35be06c1a8b7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'TACHO'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.9652
+                            },
+                            "uuid": "6025055e-f6a3-42d2-b692-61091d85d623"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'EEPROM_nWP'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.016
+                            },
+                            "uuid": "c324f287-279e-4993-bd93-308bd2a10d51"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'MISO_GPIO19'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.0922
+                            },
+                            "uuid": "42d6c416-ea88-4e07-af00-411d3f8ed176"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ID_SD'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.2192
+                            },
+                            "uuid": "95a2be6d-51aa-4edc-8c72-2f6c6389ffff"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'RST_GPIO27'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.3716
+                            },
+                            "uuid": "95e67ec9-8509-4dc1-8b7d-c51bb3eff148"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCL1_IO3'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.4732
+                            },
+                            "uuid": "f10466c8-cabc-4999-b752-c5249c17f89f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SDA1_IO2'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.4986
+                            },
+                            "uuid": "896cea00-4f3b-458e-bc05-99fc1d2477c7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR01 [+BATT]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.7272
+                            },
+                            "uuid": "b05d5ee5-3791-4dd9-b8ae-185f4172e4f8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'GPIO_VREF'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.7526
+                            },
+                            "uuid": "a5c410e2-dcc3-4a70-9b22-5905db959e69"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCL0'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.778
+                            },
+                            "uuid": "2669f1fd-4482-4d35-9c4e-8bf6fc269f31"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SDA0'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.8034
+                            },
+                            "uuid": "d096c3cb-8948-4700-84aa-023e2f5eb925"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PWR_BUT'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.9304
+                            },
+                            "uuid": "40577b18-d72c-441c-b64f-165e10302cd7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CC1'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.9558
+                            },
+                            "uuid": "094039a2-3bc2-4398-9c1e-5705b481afe7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CC2'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.9812
+                            },
+                            "uuid": "6f965300-69f3-45d9-8257-e1a5e020ae02"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CAM_GPIO1'",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 2.032
+                            },
+                            "uuid": "3e814951-9be6-4b7b-aafe-33a72fa61529"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR0307 [GND]",
+                            "pos": {
+                                "x": 0.8509,
+                                "y": 2.0828
+                            },
+                            "uuid": "4ec9e7b8-9562-4e5f-9c1c-ef25f0dd4785"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 [ComputeModule5-CM5_GPIO]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 1.3462
+                            },
+                            "uuid": "aa589407-88b8-4555-8b85-86bc1c33d17f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol Module301 [ComputeModule5-CM5_GPIO]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 1.3462
+                            },
+                            "uuid": "aa589407-88b8-4555-8b85-86bc1c33d17f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol CN1 [SM02B-SRSS-TB(LF)(SN)]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.3876
+                            },
+                            "uuid": "7b946dea-e567-419f-adc5-7e829a6ea453"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol CN1 [SM02B-SRSS-TB(LF)(SN)]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.3876
+                            },
+                            "uuid": "7b946dea-e567-419f-adc5-7e829a6ea453"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG01 [PWR_FLAG]",
+                            "pos": {
+                                "x": 1.3081,
+                                "y": 2.3749
+                            },
+                            "uuid": "9864e8f7-4646-4f87-a330-4da4d27a0c49"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR02 [+BATT]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 2.3495
+                            },
+                            "uuid": "dc1fb808-1ec1-49db-8008-44e996832d23"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR0311 [GND]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 2.413
+                            },
+                            "uuid": "08d42191-5bf9-430e-837e-20a458c52ed5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR0308 [GND]",
+                            "pos": {
+                                "x": 1.4859,
+                                "y": 2.0828
+                            },
+                            "uuid": "c0adfc5f-450e-4802-9987-248cfab2d7e8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'DC_GPI25'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.2954
+                            },
+                            "uuid": "1b50b677-9dec-4446-9176-3a01631843d6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'BL_GPIO24'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.3462
+                            },
+                            "uuid": "c41ecc3b-c4e9-42c4-9363-2fd47ea08290"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CS_GPIO18'",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.397
+                            },
+                            "uuid": "37515e51-bd10-4353-9c97-9128b78639a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ETH_nLED_ACTIVITY'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.9652
+                            },
+                            "uuid": "5ee3c119-437d-4159-847b-79e277c887bc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nLED_SPEED_100_1000'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 0.9906
+                            },
+                            "uuid": "85e3be37-55d7-495e-8f54-761c32d6ae06"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PWM'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.016
+                            },
+                            "uuid": "c295a7f2-2d7c-4a54-96f8-5103db89da5d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nLED_ACTIVITY'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.0414
+                            },
+                            "uuid": "fc606151-1fa9-4916-b08a-ccb1e54120b0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'SCLK_GPIO21'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.0922
+                            },
+                            "uuid": "b42b8d29-5382-45e7-b002-37c0c1f9a841"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'MOSI_GPIO20'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.1176
+                            },
+                            "uuid": "048e19fd-b11f-47d8-a92a-2fdbb97dca6e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'ID_SC'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.2192
+                            },
+                            "uuid": "50979d4c-d6b1-48d4-9d41-78fdae3a9c78"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'nRPIBOOT'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.9558
+                            },
+                            "uuid": "abe8fed1-627a-4061-8ee5-c33d518da8ca"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'PI_nLED_PWR'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.9812
+                            },
+                            "uuid": "902e4a7e-793f-462f-b2cc-0fdde50bc11a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'CAM_GPIO0'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 2.0066
+                            },
+                            "uuid": "9755dc39-9145-47fb-9820-9202374fa4b5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'GLOBAL_EN'",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 2.032
+                            },
+                            "uuid": "700840cf-e93c-453f-ba09-e02d08aedb35"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD3_P'",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.8128
+                            },
+                            "uuid": "8fd68eee-03c3-4838-baf2-680dfbb55072"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD3_P is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.8128
+                            },
+                            "uuid": "3cd91ecf-0682-4788-94e9-824329c58111"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 0.7874
+                            },
+                            "uuid": "903391bf-3b32-4d44-9615-91fa82fe1bea"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD3_N'",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.8382
+                            },
+                            "uuid": "0fac88f2-ba1d-4ce2-8fad-a43f11648c4d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD3_N is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.8382
+                            },
+                            "uuid": "e97b4553-2f2a-43f0-aa36-3a6a3673aa1f"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 0.7874
+                            },
+                            "uuid": "903391bf-3b32-4d44-9615-91fa82fe1bea"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD2_N'",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.889
+                            },
+                            "uuid": "cae0d40a-7c51-4a2f-b56f-5af84bd3d9d6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD2_N is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.889
+                            },
+                            "uuid": "81529ab7-e1f2-4b8d-a8cc-ac871dbe13bd"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 0.8636
+                            },
+                            "uuid": "993ed95d-a4a9-44b7-b29b-cff755e855f0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'ETH_PI.TRD2_P'",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.9144
+                            },
+                            "uuid": "199904d5-f34f-4802-9f26-7ac399f578f8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /ETH_PI.TRD2_P is graphically connected to bus /ETH_PI{ETH} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 0.9144
+                            },
+                            "uuid": "0267bc5b-7b95-4b45-a728-c19cad4f3f01"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 0.8636
+                            },
+                            "uuid": "993ed95d-a4a9-44b7-b29b-cff755e855f0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D2_P is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.6764
+                            },
+                            "uuid": "ed229071-5006-47aa-9044-03bf0e61e051"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.7018
+                            },
+                            "uuid": "d7c80f2d-48ca-4ca4-971b-a53495a6640d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D2_N is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.7018
+                            },
+                            "uuid": "5a6599f3-41ad-47b0-834d-2ebecc5f533f"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.7018
+                            },
+                            "uuid": "d7c80f2d-48ca-4ca4-971b-a53495a6640d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D1_P is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.7526
+                            },
+                            "uuid": "7f9c6113-18b9-46f8-8104-7994c098969e"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.778
+                            },
+                            "uuid": "8a91c9c5-f696-4226-a07b-b737afe47daf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D1_N is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.778
+                            },
+                            "uuid": "c67307c8-9090-4009-ab86-366241c63e6c"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.778
+                            },
+                            "uuid": "8a91c9c5-f696-4226-a07b-b737afe47daf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D0_P is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.8288
+                            },
+                            "uuid": "452a0b68-588b-4be9-9855-58850f1f75e2"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.8542
+                            },
+                            "uuid": "68014af1-0142-43c3-8149-2f9b5e70477d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.D0_N is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.8542
+                            },
+                            "uuid": "aa5c171a-5c6b-4a2e-8f9f-5b33a7ef49d8"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.8796
+                            },
+                            "uuid": "f824e14d-5f75-4635-8c33-62117f0b5e05"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.CK_P is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.905
+                            },
+                            "uuid": "df01f5bc-9a16-4cf7-a13c-6e900a7c583d"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.8796
+                            },
+                            "uuid": "f824e14d-5f75-4635-8c33-62117f0b5e05"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.CK_N is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 1.9304
+                            },
+                            "uuid": "a69344e7-25d2-4c5a-a15f-23716603c5d7"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 1.9304
+                            },
+                            "uuid": "a4b4233c-6214-4551-8282-dd02df757f38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.SCL is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.3749,
+                                "y": 2.0574
+                            },
+                            "uuid": "4450da84-a366-4bc2-b163-7b3edd386ab1"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0762 mm",
+                            "pos": {
+                                "x": 2.3495,
+                                "y": 2.0828
+                            },
+                            "uuid": "cc539eb2-cd41-4271-8e58-7449b7e8574e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D2_P'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.6764
+                            },
+                            "uuid": "e1b183b6-ca30-468e-b08f-5145b3af47c0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D2_N'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.7018
+                            },
+                            "uuid": "468e764e-4d6e-4f78-81f2-6c5a13151a43"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D1_P'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.7526
+                            },
+                            "uuid": "872989bc-203b-4dff-911b-3f9488ca1a3b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D1_N'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.778
+                            },
+                            "uuid": "8c21efe2-bafc-46e0-b30d-f6f6c634c775"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D0_P'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.8288
+                            },
+                            "uuid": "49abf1b4-3aca-4d08-84d5-7d4675d94bcc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.D0_N'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.8542
+                            },
+                            "uuid": "55a93706-507b-4983-82af-0131277e88ff"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.CK_P'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.905
+                            },
+                            "uuid": "82f531fe-be05-43a2-a697-897c25849b9b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.CK_N'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 1.9304
+                            },
+                            "uuid": "71af7d03-ae62-4bce-b5fd-48bc2f401a51"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.SCL'",
+                            "pos": {
+                                "x": 2.4003,
+                                "y": 2.0574
+                            },
+                            "uuid": "7d853cdf-e041-4e61-b2c3-cb5cc10996be"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /USB2P.D_P is graphically connected to bus /USB2P{USB} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 1.2446
+                            },
+                            "uuid": "5281f506-9eac-4957-9fa2-a318ae56bbd9"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 1.2446
+                            },
+                            "uuid": "2b051038-c219-492a-a150-5a88dc50641c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /USB2P.D_N is graphically connected to bus /USB2P{USB} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 1.27
+                            },
+                            "uuid": "68d87978-453d-494f-b222-e68b27402848"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.413,
+                                "y": 1.27
+                            },
+                            "uuid": "65486b48-1138-41f8-9fd6-d1d84eba4bd7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.nCLKREQ is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.7874
+                            },
+                            "uuid": "295ca2c6-6a0c-4a63-8b0b-736d0a7614a9"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,2159 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.7874
+                            },
+                            "uuid": "c288b333-6d72-4775-b145-f82309e4666e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.nWAKE is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.8128
+                            },
+                            "uuid": "520e65d4-7dec-48bd-a48e-cdf2c42836ab"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.8382
+                            },
+                            "uuid": "caefb10c-92cb-4915-9122-2dbc71ba59fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.PWR_EN is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.8382
+                            },
+                            "uuid": "0369b1dd-7d06-401b-b2fb-2e45a1f5017b"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.8382
+                            },
+                            "uuid": "caefb10c-92cb-4915-9122-2dbc71ba59fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.CLK_P is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.889
+                            },
+                            "uuid": "6c1ddd66-d291-48cb-873f-67578d21e72e"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9144
+                            },
+                            "uuid": "be9ce292-e2a4-498c-9570-f9ae875f6eaf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.CLK_N is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9144
+                            },
+                            "uuid": "c20c4c8e-e317-4651-a5c7-aba2cb40b0f2"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9652
+                            },
+                            "uuid": "e5da145f-b2b8-44d6-97d3-2ffd39a086a0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.RX_P is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9652
+                            },
+                            "uuid": "a8ebcacd-cd9a-45a6-b0ab-8c2d5d9b564d"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9652
+                            },
+                            "uuid": "e5da145f-b2b8-44d6-97d3-2ffd39a086a0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.RX_N is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 0.9906
+                            },
+                            "uuid": "366ffbe3-8d65-44d1-8844-5e3c476164f1"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0508 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 1.0414
+                            },
+                            "uuid": "ec16db5a-db1c-4b97-8feb-e2ea6a6f7531"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.TX_P is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 1.0414
+                            },
+                            "uuid": "4ad908d9-cbc7-47d0-9c97-c424358d8501"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 1.0668
+                            },
+                            "uuid": "fb3e0213-fd07-48ad-b455-3be60a28275c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /PCIE_PI.TX_N is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 1.0668
+                            },
+                            "uuid": "58d12afc-405c-4857-a00b-4c40aeff0f56"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 2.4257,
+                                "y": 1.0668
+                            },
+                            "uuid": "fb3e0213-fd07-48ad-b455-3be60a28275c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'USB2P.D_P'",
+                            "pos": {
+                                "x": 2.4384,
+                                "y": 1.2192
+                            },
+                            "uuid": "4aad3a49-f395-4506-bac3-f7a592a1a836"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'USB2P.D_N'",
+                            "pos": {
+                                "x": 2.4384,
+                                "y": 1.2446
+                            },
+                            "uuid": "a148c459-807c-43fd-b5db-4e1898d1eead"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.nCLKREQ'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.8128
+                            },
+                            "uuid": "52717845-4922-48d5-84e5-b81a866a9d5a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.nWAKE'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.8382
+                            },
+                            "uuid": "0743b5e8-43e7-4f67-89f8-66ab66fbcf13"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.PWR_EN'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.8636
+                            },
+                            "uuid": "2ebf046a-fc41-4b27-927d-fc7a106d4cc4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.CLK_P'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.9144
+                            },
+                            "uuid": "9746c67c-7c5e-497c-bf12-d8db22947128"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.CLK_N'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.9398
+                            },
+                            "uuid": "f1aa3fee-a2c5-46c0-a384-04d073039d14"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.RX_P'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 0.9906
+                            },
+                            "uuid": "7e237aac-34c6-4c6f-a46f-a9342caa6598"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.RX_N'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 1.016
+                            },
+                            "uuid": "7dfd8208-6b63-43f6-a8af-a869aea8d8d1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.TX_P'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 1.0668
+                            },
+                            "uuid": "45af07ab-6ccd-4af9-8d15-2080723102e4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.TX_N'",
+                            "pos": {
+                                "x": 2.5019,
+                                "y": 1.0922
+                            },
+                            "uuid": "afc78eca-504a-4c9d-a251-eb062ebf968d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR0305 [GND]",
+                            "pos": {
+                                "x": 2.6543,
+                                "y": 2.0828
+                            },
+                            "uuid": "77a8ca10-654a-494b-a578-0968ee1ca527"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 [ComputeModule5-CM5_HSS]",
+                            "pos": {
+                                "x": 2.9845,
+                                "y": 1.3589
+                            },
+                            "uuid": "2bb854a5-5925-4ac5-81ba-6df57472a34d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol Module302 [ComputeModule5-CM5_HSS]",
+                            "pos": {
+                                "x": 2.9845,
+                                "y": 1.3589
+                            },
+                            "uuid": "2bb854a5-5925-4ac5-81ba-6df57472a34d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'USBOTG_ID'",
+                            "pos": {
+                                "x": 3.3147,
+                                "y": 0.7874
+                            },
+                            "uuid": "cc4788dd-769c-4f38-97e1-657ceeba5818"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'power'",
+                    "items": [
+                        {
+                            "description": "Symbol #PWR0306 [GND]",
+                            "pos": {
+                                "x": 3.3147,
+                                "y": 2.0828
+                            },
+                            "uuid": "483d1936-6c8e-4c97-a84f-bc7bbfc3073d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.CEC'",
+                            "pos": {
+                                "x": 3.3401,
+                                "y": 1.4478
+                            },
+                            "uuid": "460831f3-2f26-4a72-a7b5-fad6b0c5f9bb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.HOTPLUG'",
+                            "pos": {
+                                "x": 3.3401,
+                                "y": 1.4732
+                            },
+                            "uuid": "a2f72ae3-74f7-45ef-8c81-b4ddbe45935d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'HDMI_PI.SDA'",
+                            "pos": {
+                                "x": 3.3401,
+                                "y": 2.0574
+                            },
+                            "uuid": "0787bf81-c9e7-4b89-b1ec-801c69c163dd"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Hierarchical Label 'VBUS_EN'",
+                            "pos": {
+                                "x": 3.3528,
+                                "y": 0.9398
+                            },
+                            "uuid": "84cc37d9-81ea-428e-8963-3b85b2f38e5e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.C_N'",
+                            "pos": {
+                                "x": 3.3782,
+                                "y": 1.143
+                            },
+                            "uuid": "351d362a-5f18-426d-92f5-3083783f8d53"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.C_P'",
+                            "pos": {
+                                "x": 3.3782,
+                                "y": 1.1684
+                            },
+                            "uuid": "1b534be9-afe2-48d4-8bbe-e88126414701"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'USB_PI.D_N'",
+                            "pos": {
+                                "x": 3.429,
+                                "y": 0.8382
+                            },
+                            "uuid": "9cc967fa-979b-457c-9a2f-2b7ab497d6ad"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'USB_PI.D_P'",
+                            "pos": {
+                                "x": 3.429,
+                                "y": 0.8636
+                            },
+                            "uuid": "3109c171-5679-42c2-aad9-39bcaaed27de"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /USB_PI.D_N is graphically connected to bus /USB_PI{USB} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.4544,
+                                "y": 0.8128
+                            },
+                            "uuid": "74833846-cba8-4ec4-99de-244bcfd893dc"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0889 mm",
+                            "pos": {
+                                "x": 3.4544,
+                                "y": 0.7239
+                            },
+                            "uuid": "8a569799-a0b5-459d-b881-26fbf1c8d824"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /USB_PI.D_P is graphically connected to bus /USB_PI{USB} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.4544,
+                                "y": 0.8382
+                            },
+                            "uuid": "01808465-8316-4ceb-8a9b-4b23da4d065d"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 3.4544,
+                                "y": 0.8128
+                            },
+                            "uuid": "2f511060-97d8-4566-85b5-41d85ff828c7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'PCIE_PI.nRST'",
+                            "pos": {
+                                "x": 3.4544,
+                                "y": 0.9144
+                            },
+                            "uuid": "fbf659c7-ab29-4014-8fbb-ec34d9226b65"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Net /PCIE_PI.nRST is graphically connected to bus /PCIE_PI{PCIE} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.4671,
+                                "y": 0.9144
+                            },
+                            "uuid": "5a5517a3-4e12-4bca-9ad5-105c229fa38d"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,3175 mm",
+                            "pos": {
+                                "x": 3.4925,
+                                "y": 0.889
+                            },
+                            "uuid": "b8369873-f1cd-4162-a10a-7129d1e6b64f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D0_N'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 0.9906
+                            },
+                            "uuid": "4035616a-f235-48fc-a543-35c964cbb0df"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D0_P'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.016
+                            },
+                            "uuid": "cb4c3662-89b4-481a-877f-8b841c49fb45"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D1_N'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.0668
+                            },
+                            "uuid": "39a30f5e-69c0-42f2-9aff-14df87ab9bf6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D1_P'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.0922
+                            },
+                            "uuid": "8a64a210-c9f1-4e2e-896e-2bc4b1338fe1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D2_N'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.2192
+                            },
+                            "uuid": "a7ca9cb3-70e2-46a2-96b1-0ea92bebb424"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D2_P'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.2446
+                            },
+                            "uuid": "b6478f95-99be-4b09-8055-3a5195403ac3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D3_N'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.2954
+                            },
+                            "uuid": "a93f05f7-8a9b-45a4-bcf2-2308554f69e5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "Label 'DPHY0_P.D3_P'",
+                            "pos": {
+                                "x": 3.5179,
+                                "y": 1.3208
+                            },
+                            "uuid": "5e71455a-ec17-423c-b406-40d4af10fe89"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "The current configuration does not include the footprint library 'Antmicro-footprints'",
+                    "items": [
+                        {
+                            "description": "Symbol M303 [Compute-Module-4_H1.5mm]",
+                            "pos": {
+                                "x": 3.5687,
+                                "y": 2.4257
+                            },
+                            "uuid": "ea25af20-fa66-41e8-9f63-749e93b5d368"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "The current configuration does not include the symbol library 'CM5IO'",
+                    "items": [
+                        {
+                            "description": "Symbol M303 [Compute-Module-4_H1.5mm]",
+                            "pos": {
+                                "x": 3.5687,
+                                "y": 2.4257
+                            },
+                            "uuid": "ea25af20-fa66-41e8-9f63-749e93b5d368"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Net /HDMI_PI.CEC is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.5941,
+                                "y": 1.4478
+                            },
+                            "uuid": "2d83bfc9-4728-4f06-a9ac-2e87d09287d3"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 3.6195,
+                                "y": 1.4732
+                            },
+                            "uuid": "80f85da9-0ac5-4e6c-a070-db59bd061a9e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.HOTPLUG is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.5941,
+                                "y": 1.4732
+                            },
+                            "uuid": "cf8b9a77-24ca-41b0-b7a9-12ea145ebb69"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0254 mm",
+                            "pos": {
+                                "x": 3.6195,
+                                "y": 1.4732
+                            },
+                            "uuid": "80f85da9-0ac5-4e6c-a070-db59bd061a9e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                },
+                {
+                    "description": "Net /HDMI_PI.SDA is graphically connected to bus /HDMI_PI{HDMI} but is not a member of that bus",
+                    "items": [
+                        {
+                            "description": "Bus to wire entry",
+                            "pos": {
+                                "x": 3.5941,
+                                "y": 2.0574
+                            },
+                            "uuid": "bccf8daf-915a-45d5-bed9-b17cd62fa44d"
+                        },
+                        {
+                            "description": "Vertical Bus, length 0,0762 mm",
+                            "pos": {
+                                "x": 3.6195,
+                                "y": 2.0828
+                            },
+                            "uuid": "daccf72a-3611-4bd9-b80a-432282ec156d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "net_not_bus_member"
+                }
+            ]
+        }
+    ],
+    "source": "CM5.kicad_sch"
+}

@@ -1,0 +1,23 @@
+Reference,Quantity,Value,Manufacturer,Part Number,Package,Notes
+U1,1,ESP32-S3 module,Espressif,ESP32-S3-WROOM-1,SMD module,Host MCU
+U2,1,UWB module,Qorvo,DWM3000,SMD module,1.8V UWB module
+U3,1,4-bit level shifter,Texas Instruments,TXB0104RUT,QFN, SPI level shifting
+U4,1,Single-bit level shifter,Texas Instruments,SN74LVC1T45DCK,SC70,IRQ level shifting
+U5,1,Single-bit level shifter,Texas Instruments,SN74LVC1T45DCK,SC70,EXT_TX level shifting
+U6,1,5V isolated AC/DC,Hi-Link,HLK-5M05,Module,AC to 5V isolated supply
+U7,1,3.3V buck,Texas Instruments,TPS54331DR,SOIC-8,5V to 3.3V buck
+U8,1,1.8V low-noise LDO,Texas Instruments,TPS7A2018PDBVR,SOT-23-5,3.3V to 1.8V UWB rail; upgraded from TPS780 after power-budget simulation showed insufficient 150mA margin
+J1,1,AC input terminal,Phoenix Contact,1984617,Terminal block,100-240VAC input
+J2,1,SMA edge connector,Amphenol RF,132134,Edge SMA,UWB antenna output
+J6-J13,8,GPIO headers,Samtec,TSW-104-07-G-S,2.54mm header,GPIO expansion
+J14,1,I2C header,Samtec,TSW-104-07-G-S,2.54mm header,SDA/SCL/3V3/GND
+J15,1,UART header,Samtec,TSW-104-07-G-S,2.54mm header,TX/RX/3V3/GND
+J16,1,Power header,Samtec,TSW-104-07-G-S,2.54mm header,5V/3V3/1V8/GND
+F1,1,500mA fuse,Littelfuse,0451.500MRL,Fuse,AC input fuse
+MOV1,1,AC varistor,Bourns,MOV-14D471K,Disc,Surge protection
+TVS1-TVS3,3,TVS diode,Littelfuse,SMBJ5.0A,SMB,Rail and input protection
+FB1-FB3,3,Ferrite bead,Murata,BLM21PG221SN1D,0805,EMI filtering
+R10-R13,4,100R,Yageo,RC0603FR-07100RL,0603,SPI series resistors
+R20,1,10K,Yageo,RC0603FR-0710KL,0603,IRQ pull-up
+R21,1,33R,Yageo,RC0603FR-0733RL,0603,EXT_TX series resistor
+TP1-TP18,18,Test point,Keystone,5015,Loop/Pogo,Accessible test points

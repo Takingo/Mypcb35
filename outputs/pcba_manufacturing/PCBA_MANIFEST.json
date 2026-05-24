@@ -1,0 +1,136 @@
+{
+  "schema": "PCBA_MANUFACTURING_PACKAGE_V1",
+  "generated_at": "2026-05-24T07:39:45+00:00",
+  "design_name": "Quantum Mind Anchor v2.4",
+  "manufacturer": "PCBWay",
+  "board_size_mm": [
+    120.0,
+    80.0
+  ],
+  "layer_count": 4,
+  "component_count": 22,
+  "total_weight_grams": 24.42,
+  "files": [
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1",
+      "mandatory": true
+    },
+    {
+      "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
+      "category": "gerber",
+      "description": "Gerber layer: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2",
+      "mandatory": true
+    },
+    {
+      "path": "BOM_Extended.csv",
+      "category": "bom",
+      "description": "Bill of Materials with cost/availability/lead-time",
+      "mandatory": true
+    },
+    {
+      "path": "ASSEMBLY_DRAWING.txt",
+      "category": "documentation",
+      "description": "Assembly placement guide and test point locations",
+      "mandatory": true
+    },
+    {
+      "path": "FABRICATION_NOTES.txt",
+      "category": "documentation",
+      "description": "PCB design rules, stackup, RF/power constraints, safety requirements",
+      "mandatory": true
+    },
+    {
+      "path": "PCBWay_UPLOAD_GUIDE.txt",
+      "category": "documentation",
+      "description": "Step-by-step instructions for uploading to PCBWay",
+      "mandatory": false
+    }
+  ],
+  "pcba_instructions": "PCBWAY UPLOAD INSTRUCTIONS\n\n1. Visit: https://www.pcbway.com/\n2. Click \"Upload Gerber File\" button\n3. Select the \"Quantum_Mind_Anchor_v2_4_Production.zip\" file\n4. Review auto-detected settings:\n   - Layers: 4\n   - Board Size: 120\u00d780 mm (auto-detected)\n   - Solder Mask: Green (default)\n   - Silkscreen: White\n   - Surface Finish: HASL LeadFree (standard)\n5. Select \"Quick Turn PCB\" for fast turnaround\n6. In \"PCB Assembly\" section:\n   - Enable \"SMT Assembly\"\n   - Upload BOM.csv file\n   - Upload POS file (pick & place)\n   - Set stencil thickness: 0.125mm (standard)\n7. Review component placement preview (PDF generated by PCBWay)\n8. Add special notes in \"Add Special Requirements\":\n   \"DWM3000 RF traces must maintain 50\u03a9 impedance. ESP32-S3 antenna clearance critical.\"\n9. Select quantity and shipping method\n10. Proceed to checkout\n11. Allow 7-10 business days for standard turnaround",
+  "upload_steps": [
+    "1. Visit PCBWay website (see PCBWay_UPLOAD_GUIDE.txt)",
+    "2. Upload Quantum_Mind_Anchor_v2_4_Production.zip file",
+    "3. Verify layer count, dimensions, and component placement",
+    "4. Confirm BOM and pick & place data",
+    "5. Review fabrication notes for PCBWay requirements",
+    "6. Select quantity, color, surface finish, and delivery method",
+    "7. Pay and receive confirmation email"
+  ],
+  "cost_estimate": {
+    "setup_fee_usd": 22.0,
+    "unit_cost_usd": 8.5,
+    "quantity": 5,
+    "total_usd": 64.5,
+    "lead_time_days": 7,
+    "currency": "USD",
+    "note": "Estimated cost; actual pricing from manufacturer portal"
+  }
+}

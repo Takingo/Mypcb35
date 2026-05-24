@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omnicircuit.local/schemas/AI_NETLIST_V1.schema.json",
+  "title": "AI_Netlist_v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "project_name",
+    "generated_at",
+    "source_prompt",
+    "assumptions",
+    "components",
+    "nets",
+    "rules",
+    "reasoning_log",
+    "erc_summary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "AI_Netlist_v1"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_prompt": {
+      "type": "string"
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "nets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/net"
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "reasoning_log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reasoning_step"
+      }
+    },
+    "erc_summary": {
+      "type": "object",
+      "required": [
+        "status",
+        "checks"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "required": [
+        "ref",
+        "type",
+        "value",
+        "manufacturer",
+        "part_number",
+        "footprint",
+        "reason"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "part_number": {
+          "type": "string"
+        },
+        "footprint": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "net": {
+      "type": "object",
+      "required": [
+        "net",
+        "pins",
+        "net_class",
+        "reason"
+      ],
+      "properties": {
+        "net": {
+          "type": "string"
+        },
+        "pins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        },
+        "net_class": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "severity",
+        "description",
+        "applies_to"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "applies_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reasoning_step": {
+      "type": "object",
+      "required": [
+        "level",
+        "message",
+        "outcome"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "outcome": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "AC Safety Clearance",
+  "domain": "safety",
+  "status": "review",
+  "metrics": {
+    "required_clearance_mm": 8.0,
+    "implemented_primary_area": "F.Cu rule area 5,5 to 42,34",
+    "primary_tracks_allowed": true,
+    "secondary_tracks_forbidden_in_primary_area": "requires net-specific review"
+  },
+  "evidence": "AC primary-side rule area is present; DRC is clean after allowing required primary copper.",
+  "recommendation": "Add net-specific primary/secondary creepage rules and isolation slot before real AC production."
+}

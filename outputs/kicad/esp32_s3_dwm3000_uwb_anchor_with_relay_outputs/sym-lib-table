@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "OmniCircuit")(type "KiCad")(uri "${KIPRJMOD}/omnicircuit.kicad_sym")(options "")(descr "OmniCircuit generated symbols"))
+)

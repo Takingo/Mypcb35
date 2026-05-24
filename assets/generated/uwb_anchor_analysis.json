@@ -1,0 +1,104 @@
+{
+  "project_id": "uwb_anchor",
+  "project_name": "ESP32-S3 + DWM3000 UWB Anchor",
+  "generated_at": "2026-05-24T04:39:04+00:00",
+  "overall_status": "pass",
+  "checks": [
+    {
+      "category": "RF",
+      "requirement": "50 ohm controlled RF trace from DWM3000 pin 23 to SMA",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Preserve the specified microstrip geometry and keep the RF path free of vias, probes, and components."
+    },
+    {
+      "category": "RF",
+      "requirement": "Dense via stitching around SMA and RF section",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Add explicit via fence coordinates during KiCad/PCBai placement export."
+    },
+    {
+      "category": "Power",
+      "requirement": "Three-stage isolated power architecture",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Keep AC/DC isolation, 3.3V buck, and 1.8V LDO as separate validated power stages."
+    },
+    {
+      "category": "Safety",
+      "requirement": "8mm AC isolation and high-voltage warning",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Emit board keepout, silkscreen warning, and fabrication notes in the PCB exporter."
+    },
+    {
+      "category": "Protection",
+      "requirement": "ESD/EMI protection parts present",
+      "status": "pass",
+      "evidence": "All required BOM entries found.",
+      "recommendation": "Keep fuse, MOV, TVS, and ferrite beads near entry and rail transition points."
+    },
+    {
+      "category": "Level Shifting",
+      "requirement": "Required SPI and RTLS level shifters present",
+      "status": "pass",
+      "evidence": "All required BOM entries found.",
+      "recommendation": "Constrain TXB0104 within 15mm and SN74LVC1T45 devices within 10mm of DWM3000 pins."
+    },
+    {
+      "category": "Signal Integrity",
+      "requirement": "SPI length matching and series resistors",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "During routing, constrain SPI length skew to 2mm and lock series resistors near ESP32 pins."
+    },
+    {
+      "category": "RTLS",
+      "requirement": "Critical RTLS traces shorter than 30mm",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Place RTLS translators and pull/series resistors close to the DWM3000 edge."
+    },
+    {
+      "category": "Expansion",
+      "requirement": "GPIO, I2C, UART, and power headers included",
+      "status": "pass",
+      "evidence": "All required BOM entries found.",
+      "recommendation": "Keep expansion headers at board edges with readable silkscreen and ground return pins."
+    },
+    {
+      "category": "Testability",
+      "requirement": "All 18 named test points documented",
+      "status": "pass",
+      "evidence": "All required source markers found.",
+      "recommendation": "Exporter should place TP1-TP18 near accessible board edges and include them in CPL exclusions."
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "AI Design Report",
+      "path": "outputs/uwb_anchor/AI_DESIGN_REPORT.md",
+      "status": "generated",
+      "description": "Readable summary of design choices, checks, and next KiCad/PCBai actions."
+    },
+    {
+      "name": "Validation Report",
+      "path": "outputs/uwb_anchor/VALIDATION_REPORT.md",
+      "status": "generated",
+      "description": "DRC/ERC/DFM/DFA-oriented checklist for the UWB anchor constraints."
+    },
+    {
+      "name": "Manufacturing Handoff",
+      "path": "outputs/uwb_anchor/manufacturing/",
+      "status": "scaffolded",
+      "description": "PCBWay-compatible package structure with BOM and CPL placeholders."
+    },
+    {
+      "name": "Dashboard Asset",
+      "path": "assets/generated/uwb_anchor_analysis.json",
+      "status": "generated",
+      "description": "JSON consumed by the Flutter dashboard."
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+FABRICATION NOTES & DESIGN RULES
+Generated: 2026-05-24T07:39:45.064307+00:00
+
+PROJECT: Quantum Mind Anchor v2.4 (UWB Positioning + DWM3000 + ESP32-S3)
+MANUFACTURER: PCBWay
+
+═══════════════════════════════════════════════════════════════
+
+1. PCB STACKUP & LAYER STRUCTURE
+
+Layer Stack (4-Layer):
+  Layer 1: F.Cu (Signal + Power Distribution)
+  Layer 2: GND (Ground Plane - solid, no discontinuities)
+  Layer 3: GND (Ground Plane - solid, no discontinuities)
+  Layer 4: B.Cu (Signal + Power Distribution)
+
+Copper Thickness:
+  - Standard 1oz (35μm) per IPC-2221
+  - GND planes: 1oz minimum
+  - Power planes (if used): 2oz recommended for >3A traces
+
+Dielectric:
+  - Core: FR-4, Tg 130°C minimum (non-halogenated preferred)
+  - Prepreg: 106 standard between layers
+  - Total thickness: 1.6mm ±0.15mm
+
+═══════════════════════════════════════════════════════════════
+
+2. CRITICAL DESIGN RULES
+
+Trace & Space:
+  - Minimum trace width: 0.127mm (5mil)
+  - Minimum clearance: 0.127mm (5mil)
+  - Power traces (>2A): 0.254mm minimum (10mil)
+  - RF traces (50Ω): 0.35mm width, 0.127mm clearance
+
+Via Specifications:
+  - Finished hole: 0.2mm diameter (plated through-hole)
+  - Via pad: 0.45mm diameter
+  - Via spacing: 0.254mm minimum (edge-to-edge)
+  - Thermal relief: 4-spokes, 0.2mm width, standard undercut
+
+Component Clearance:
+  - Pad-to-pad (SMD): 0.127mm minimum
+  - Component-to-board-edge: 3mm minimum (for tooling)
+  - Component-to-via: 0.2mm minimum clearance
+
+═══════════════════════════════════════════════════════════════
+
+3. CRITICAL RF & POWER AREAS
+
+RF Microstrip (DWM3000 antenna traces):
+  - Impedance target: 50Ω ±5% (measure with TDR if possible)
+  - Width: 0.35mm, height: 0.20mm above GND, Er=4.5
+  - No vias or crossovers allowed on RF traces
+  - Keep RF traces on top layer, route away from switching noise
+  - Minimum trace length from DWM3000 RF pin: 150mm (antenna matching network)
+
+Power Distribution (HLK-5M05 output):
+  - 5V distribution: trace width 0.254mm minimum (10mil)
+  - All vias on 5V net must connect to power plane (Layer 1)
+  - Bulk capacitors (470μF) within 5mm of HLK output
+  - Decoupling capacitors within 10mm of each IC power pin
+
+1.8V LDO Output (for DWM3000):
+  - Dedicated trace from TPS7A2018 output to DWM3000 VDDIO/VDDF
+  - Bypass capacitor (100nF) within 3mm of DWM3000 power pin
+  - Output filtering: LC network (L=10μH, C=10μF ceramic)
+
+Switching Noise Isolation:
+  - TPS54331 (5V buck): switching frequency 360kHz, inductor placed >10mm from RF
+  - Keep switching node traces <20mm length
+  - Local ground return via main GND plane (Layer 2-3)
+
+═══════════════════════════════════════════════════════════════
+
+4. AC MAINS SAFETY (230V Input)
+
+Creepage & Clearance (IEC 60664-1 / IEC 62368-1):
+  - 230V AC to 3.3V circuits: 8mm clearance, 16mm creepage (MINIMUM)
+  - 230V AC to GND: 3.2mm clearance, 6.4mm creepage
+  - High-voltage areas enclosed by solder mask or potting recommended
+
+Design Implementation:
+  - High-voltage section on B.Cu layer only (isolated from signal)
+  - Dedicated GND trace between HLK-5M05 and AC primary side
+  - No through-holes in AC section; use castellated pads if needed
+  - Mains earth connection: ≥0.2mm2 copper trace to chassis GND
+
+Test & Certification:
+  - High-pot test: 3kV RMS, 60 seconds minimum (recommended before shipment)
+  - Insulation resistance: >100MΩ at 500VDC between AC and low-voltage
+  - Leakage current: <0.5mA at 230V nominal input
+
+═══════════════════════════════════════════════════════════════
+
+5. SOLDER MASK & SILKSCREEN
+
+Solder Mask:
+  - Color: PCBWay standard green (other colors +lead time)
+  - Type: Liquid photoimageable (LPI) preferred
+  - Coverage: Top and bottom surfaces
+  - Dam-to-pad rules:
+    * Between pads <0.127mm spacing: 0.05mm solder dam minimum
+    * Via tenting allowed on power planes
+    * Component pads: keep mask-free for solder wetting
+
+Silkscreen:
+  - Color: white (standard on green mask)
+  - Text size: minimum 0.5mm height, 0.15mm line width
+  - Content: reference designators, polarity marks, test point labels
+  - Warning: "230V AC — Hazard" silkscreen near mains connector
+  - Logo/artwork: keep away from thermal areas and connector openings
+
+═══════════════════════════════════════════════════════════════
+
+6. PANELIZATION & TOOLING
+
+Board Dimensions: 120.00mm × 80.00mm
+Panelization: Single board (no matrix/panel)
+Tooling Holes: 4 corners, 3.2mm diameter plated (already in design)
+
+Edge Clearance:
+  - Components: minimum 3mm from board edge
+  - Traces: minimum 2mm from board edge
+  - Board outline: smooth contours, no sharp corners (<90° angles)
+
+Cutting/Milling:
+  - Edge tolerances: ±0.15mm
+  - Routing: mill after solder reflow if applicable
+  - Fiducials: 1.0-1.5mm diameter, top layer, 3.0mm min spacing
+
+═══════════════════════════════════════════════════════════════
+
+7. COMPONENT HANDLING & ASSEMBLY
+
+Moisture Sensitivity:
+  - ESP32-S3: MSL3 (168 hours at 30°C/60% RH) — store in sealed bag with desiccant
+  - DWM3000: MSL2a (1 year nominal) — room temperature acceptable
+  - Capacitors/Resistors: MSL1 (unlimited storage)
+
+Electrostatic (ESD):
+  - All handling in ESD-safe environment (wrist strap, mat grounding)
+  - Store parts in Faraday bags until assembly
+  - Charge threshold: >2kV danger zone
+
+Soldering:
+  - Reflow profile: Peak 260°C ±5°C for 10-30 seconds
+  - Ramp rate: 2-3°C/second (avoid thermal shock on BGA)
+  - Lead-free: SAC305 (99.3% Sn, 0.5% Ag, 0.7% Cu)
+
+═══════════════════════════════════════════════════════════════
+
+8. TESTING & INSPECTION (POST-ASSEMBLY)
+
+Automated Optical Inspection (AOI):
+  - Solder joint coverage (minimum 75% pad area)
+  - No bridging between pads
+  - Correct component orientation (reference marks aligned)
+  - Solder bead shape (accept pyramidal, reject icicles/dull)
+
+Functional Testing:
+  - Power-on: 3V3 rail stable within ±2%, <10mA standby
+  - DWM3000: responds to SPI commands within 50ms boot
+  - ESP32-S3: UART console output at 115200 baud
+  - RF: impedance <2:1 VSWR at operating frequency (UWB 6-8 GHz)
+
+In-Circuit Testing (ICT):
+  - Test points: TP_3V3, TP_1V8, TP_GND provided
+  - Continuity: all nets to test points verified
+  - Isolation: no shorts between power and GND planes
+
+═══════════════════════════════════════════════════════════════
+
+9. FABRICATION QUESTIONS & CONTACTS
+
+Upload ZIP to PCBWay.com → Upload Gerber → Select PCBA Service
+
+Expected lead time: 7-10 (standard) or 3-5 (expedited +fee) business days
+Quality standard: IPC-A-610 Class 2 (commercial electronics)
+Inspection level: PCBWay standard (AOI + sampling)
+
+DO NOT START FABRICATION until:
+  ✓ Engineer reviews this checklist
+  ✓ RF stackup confirmed with your field solver
+  ✓ High-pot test plan reviewed (AC safety)
+  ✓ Component availability confirmed (long-lead items noted)
+  ✓ Design freeze approved by project lead

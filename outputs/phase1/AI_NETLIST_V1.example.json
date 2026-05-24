@@ -1,0 +1,103 @@
+{
+  "schema": "AI_Netlist_v1",
+  "project_name": "ESP32-S3 DWM3000 UWB Anchor with Relay Outputs",
+  "generated_at": "2026-05-24T06:10:48+00:00",
+  "source_prompt": "Bana bir ESP32 sens\u00f6r kart\u0131 yap",
+  "assumptions": [
+    "AC mains input is isolated before low-voltage logic.",
+    "ESP32-S3 logic domain is 3.3V.",
+    "DWM3000 logic and RF module domain is 1.8V.",
+    "Relay coils are 5V and must not be driven directly from MCU pins."
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "type": "mcu",
+      "value": "ESP32-S3 module",
+      "manufacturer": "Espressif",
+      "part_number": "ESP32-S3-WROOM-1",
+      "footprint": "SMD module",
+      "reason": "User requested ESP32-S3 host controller.",
+      "constraints": [
+        "3V3 logic",
+        "place away from AC isolation slot"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "net": "UWB_RF_50R",
+      "pins": [
+        "U2.RF_PIN23",
+        "J2.CENTER"
+      ],
+      "net_class": "rf_50r",
+      "reason": "DWM3000 RF output to SMA antenna connector."
+    }
+  ],
+  "rules": [
+    {
+      "id": "RF_50R_WIDTH_035MM",
+      "severity": "error",
+      "description": "RF trace must be 50 ohm controlled impedance with 0.35mm width on specified FR4 stackup.",
+      "applies_to": [
+        "UWB_RF_50R"
+      ]
+    },
+    {
+      "id": "RF_NO_VIAS_OR_TESTPOINTS",
+      "severity": "error",
+      "description": "No vias, test points, or components are allowed on the RF trace.",
+      "applies_to": [
+        "UWB_RF_50R"
+      ]
+    },
+    {
+      "id": "RF_KEEP_OUT_3MM",
+      "severity": "error",
+      "description": "Maintain 3mm RF keepout around antenna trace.",
+      "applies_to": [
+        "UWB_RF_50R"
+      ]
+    },
+    {
+      "id": "POWER_RAIL_SEQUENCE",
+      "severity": "warning",
+      "description": "Validate 5V before 3V3 before 1V8 startup behavior.",
+      "applies_to": [
+        "+5V_ISO",
+        "+3V3",
+        "+1V8"
+      ]
+    },
+    {
+      "id": "HUMAN_REVIEW_REQUIRED",
+      "severity": "warning",
+      "description": "Human engineer must review AC safety, RF impedance, relay isolation, and final DRC/ERC before fabrication.",
+      "applies_to": [
+        "ALL"
+      ]
+    }
+  ],
+  "reasoning_log": [
+    {
+      "level": "info",
+      "message": "ESP32-S3 detected as 3.3V host MCU.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Added RF net class and keepout constraints for DWM3000 pin 23 to SMA.",
+      "outcome": "successful"
+    }
+  ],
+  "erc_summary": {
+    "status": "pass_with_engineering_review_required",
+    "checks": [
+      "Power rails inferred: 5V, 3V3, 1V8",
+      "Voltage mismatch mitigation added for SPI and RTLS lines",
+      "Relay isolation and low-side drivers added",
+      "AC clearance and RF impedance rules emitted"
+    ]
+  }
+}

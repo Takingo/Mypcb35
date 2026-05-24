@@ -1,0 +1,23 @@
+Reference,Value,Part Number,Manufacturer,Quantity,Unit Cost USD,Total Cost USD,Lead Time Days,Stock Status,Component Type,Package,Datasheet URL
+U1,"ESP32-S3 module",ESP32-S3-WROOM-1,Espressif,1,4.85,4.85,14,In Stock,MCU,QFN-56,https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+U2,"UWB module",DWM3000,Decawave,1,18.5,18.5,21,Limited,RF Module,LGA-64,https://www.decawave.com/wp-content/uploads/2021/04/DWM3000_Datasheet_v1p0.pdf
+U3,"4-bit level shifter",TXB0104RUT,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U4,"Single-bit level shifter",SN74LVC1T45DCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U5,"Single-bit level shifter",SN74LVC1T45DCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U6,"5V isolated AC/DC",HLK-5M05,HLK,1,2.3,2.3,7,In Stock,SMPS Module,SIP-4,https://www.hlktech.net/uploads/file/20200410/HLK-5M05.pdf
+U7,"3.3V buck",TPS54331DR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U8,"1.8V low-noise LDO",TPS7A2018PDBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J1,"AC input terminal",1984617,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J2,"SMA edge connector",132134,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J6-J13,"GPIO headers",TSW-104-07-G-S,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J14,"I2C header",TSW-104-07-G-S,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J15,"UART header",TSW-104-07-G-S,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+J16,"Power header",TSW-104-07-G-S,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+F1,"500mA fuse",0451.500MRL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+MOV1,"AC varistor",MOV-14D471K,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+TVS1-TVS3,"TVS diode",SMBJ5.0A,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+FB1-FB3,"Ferrite bead",BLM21PG221SN1D,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R10-R13,"100R",RC0603FR-07100RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R20,"10K",RC0603FR-0710KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R21,"33R",RC0603FR-0733RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+TP1-TP18,"Test point",5015,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A

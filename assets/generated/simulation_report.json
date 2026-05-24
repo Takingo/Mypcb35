@@ -1,0 +1,70 @@
+{
+  "schema": "SIMULATION_REPORT_V1",
+  "generated_at": "2026-05-24T07:23:56+00:00",
+  "overall_status": "review_required",
+  "results": [
+    {
+      "name": "Power Budget",
+      "domain": "PI",
+      "status": "pass",
+      "metrics": {
+        "relay_count": 0,
+        "five_volt_load_ma": 420.0,
+        "hlk_5m05_capacity_ma": 1000.0,
+        "three_v_three_load_ma": 440.0,
+        "tps54331_capacity_ma": 3000.0,
+        "one_v_eight_load_ma": 220.0,
+        "ldo_part": "TPS7A2018PDBVR",
+        "ldo_capacity_ma": 300.0,
+        "ldo_margin_ma": 80.0
+      },
+      "evidence": "First-order current budget from BOM assumptions.",
+      "recommendation": "Power rails have first-order current margin."
+    },
+    {
+      "name": "RF Microstrip Impedance",
+      "domain": "SI/RF",
+      "status": "pass",
+      "metrics": {
+        "trace_width_mm": 0.35,
+        "dielectric_height_mm": 0.2,
+        "er": 4.5,
+        "estimated_z0_ohm": 52.39,
+        "target_ohm": 50.0
+      },
+      "evidence": "Closed-form Hammerstad-style microstrip estimate for the specified stackup.",
+      "recommendation": "Confirm with manufacturer stackup field solver and keep RF trace via-free on top layer."
+    },
+    {
+      "name": "Thermal Estimate",
+      "domain": "thermal",
+      "status": "pass",
+      "metrics": {
+        "buck_loss_w": 0.45,
+        "ldo_loss_w": 0.18,
+        "ambient_c": 40.0,
+        "estimated_ldo_temp_c": 61.6
+      },
+      "evidence": "First-order junction temperature estimate.",
+      "recommendation": "Validate with real load current and copper area once final footprints are bound."
+    },
+    {
+      "name": "AC Safety Clearance & Engineering Reality",
+      "domain": "safety",
+      "status": "review",
+      "metrics": {
+        "required_ac_clearance_mm": 8.0,
+        "pcb_rule_area_found": true,
+        "pcb_edge_cuts_found": true,
+        "pcb_footprints_present": true,
+        "datasheet_pinout_verified": false,
+        "rf_stackup_dielectric_verified": false,
+        "ac_creepage_certification_checked": false,
+        "spice_si_pi_thermal_models_matched": false,
+        "note": "UYARI: datasheet_pinout, rf_stackup, ac_creepage ve spice_models kalemleri otomatik dogrulanamaz. Gercek uretimden once bir elektronik muhendisi tarafindan manuel olarak onaylanmalidir."
+      },
+      "evidence": "PCB dosyas\u0131 footprint i\u00e7eriyor. AC rule area: VAR. datasheet_pinout, RF stackup, AC sertifikasyon ve SPICE modelleri BU ARA\u00c7 TARAFINDAN OTOMAT\u0130K DO\u011eRULANAMAZ \u2014 manuel m\u00fchendis incelemesi zorunludur.",
+      "recommendation": "GEREKL\u0130 MANUEL KONTROLLER:\n1. Her komponentin datasheet pinout'unu KiCad sembol\u00fcyle kar\u015f\u0131la\u015ft\u0131r.\n2. \u00dcretici stackup field solver ile RF microstrip empedans\u0131n\u0131 hesaplat.\n3. IEC 60664-1 / IEC 62368-1 tablolar\u0131nda 230VAC i\u00e7in creepage+clearance de\u011ferlerini do\u011frula.\n4. TPS54331DR, TPS7A2018, HLK-5M05 i\u00e7in ger\u00e7ek SPICE modelleri ile transient sim\u00fclasyon yap.\n5. DWM3000 1.0mm pitch footprint'ini datasheet land pattern ile kar\u015f\u0131la\u015ft\u0131r."
+    }
+  ]
+}

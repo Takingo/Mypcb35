@@ -1,0 +1,38 @@
+ASSEMBLY DRAWING - COMPONENT PLACEMENT GUIDE
+Generated: 2026-05-24T07:39:45.063879+00:00
+
+GENERAL INSTRUCTIONS:
+1. All component positions shown in mm from board origin (0,0) at bottom-left corner
+2. Rotation angles in degrees: 0°=reference, 90°=rotated 90° CCW, etc.
+3. Polarity indicators (★) mark positive pins for polarized components
+4. Test points (◆) are provided for in-circuit testing
+5. Ground vias (⊙) must maintain thermal connection to GND plane
+
+COMPONENT CATEGORIES:
+- ICs: Place flat-side toward reference indicator, verify pin 1 alignment
+- Capacitors: Observe polarity for electrolytics (● side = positive)
+- Inductors: Check orientation per BOM; some are unidirectional
+- Resistors: Non-polarized; rotation does not affect function
+- Connectors: Verify keying/orientation per PCB silkscreen
+- Relay: Pin 1 must match BOM orientation
+
+CRITICAL COMPONENTS (Manual Verification Required):
+- ESP32-S3-WROOM-1: Antenna area must be clear of copper/components within 5mm
+- DWM3000: RF traces 50Ω impedance controlled; no vias/crossovers
+- High-Current Traces: >1A paths require minimum 0.2mm trace width
+- AC Mains (220V): Minimum 8mm clearance/creepage from 3.3V/1.8V circuits
+
+SOLDER PROFILE:
+- Lead-free SAC305: Peak 260°C for 10-30 seconds
+- Reflow time: 60-90 seconds within 217°C window
+- Inspect for cold solder joints on thermal relief pads
+
+TEST POINTS:
+- TP_3V3: 3.3V rail test point
+- TP_1V8: 1.8V rail test point
+- TP_GND: Ground reference point
+- TP_HLK: Power input monitoring point
+
+TOTAL COMPONENTS: 22
+Estimated Placement Time: 15-30 minutes (automated PCBA service)
+Post-Assembly QC: Automated AOI + manual inspection of critical RF/power areas

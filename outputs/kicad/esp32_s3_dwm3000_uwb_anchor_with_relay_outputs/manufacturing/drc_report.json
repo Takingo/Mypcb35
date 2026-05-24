@@ -1,0 +1,2199 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-23T07:35:00",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "schematic_parity": [],
+    "source": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.025
+                    },
+                    "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.675
+                    },
+                    "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 18.5
+                    },
+                    "uuid": "532fb722-4268-4f46-aa9d-59d108f3f4e1"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 19.5
+                    },
+                    "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.025
+                    },
+                    "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.675
+                    },
+                    "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.025
+                    },
+                    "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.675
+                    },
+                    "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.025
+                    },
+                    "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.325
+                    },
+                    "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 19.5
+                    },
+                    "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 20.5
+                    },
+                    "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.025
+                    },
+                    "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.325
+                    },
+                    "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 20.5
+                    },
+                    "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 21.5
+                    },
+                    "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.675
+                    },
+                    "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.975
+                    },
+                    "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.025
+                    },
+                    "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.325
+                    },
+                    "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.675
+                    },
+                    "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.325
+                    },
+                    "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.325
+                    },
+                    "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.975
+                    },
+                    "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.675
+                    },
+                    "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.325
+                    },
+                    "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 4 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 21.5
+                    },
+                    "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+                },
+                {
+                    "description": "Pad 5 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 22.5
+                    },
+                    "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.025
+                    },
+                    "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.675
+                    },
+                    "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.675
+                    },
+                    "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.325
+                    },
+                    "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.675
+                    },
+                    "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.975
+                    },
+                    "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.025
+                    },
+                    "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.325
+                    },
+                    "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.325
+                    },
+                    "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.975
+                    },
+                    "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 22.5
+                    },
+                    "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 23.5
+                    },
+                    "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.675
+                    },
+                    "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.975
+                    },
+                    "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.025
+                    },
+                    "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.675
+                    },
+                    "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.675
+                    },
+                    "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.325
+                    },
+                    "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.025
+                    },
+                    "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.325
+                    },
+                    "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.325
+                    },
+                    "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.975
+                    },
+                    "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 23.5
+                    },
+                    "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 24.5
+                    },
+                    "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.675
+                    },
+                    "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.975
+                    },
+                    "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.675
+                    },
+                    "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.975
+                    },
+                    "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.325
+                    },
+                    "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.975
+                    },
+                    "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.675
+                    },
+                    "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.325
+                    },
+                    "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 24.5
+                    },
+                    "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 25.5
+                    },
+                    "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.325
+                    },
+                    "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.975
+                    },
+                    "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.025
+                    },
+                    "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.675
+                    },
+                    "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 8 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 25.5
+                    },
+                    "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+                },
+                {
+                    "description": "Pad 9 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 26.5
+                    },
+                    "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.025
+                    },
+                    "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.325
+                    },
+                    "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 9 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 26.5
+                    },
+                    "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+                },
+                {
+                    "description": "Pad 10 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 27.5
+                    },
+                    "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.675
+                    },
+                    "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.325
+                    },
+                    "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 10 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 27.5
+                    },
+                    "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+                },
+                {
+                    "description": "Pad 11 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 28.5
+                    },
+                    "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,1000 mm)",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.675
+                    },
+                    "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.975
+                    },
+                    "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.325
+                    },
+                    "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.975
+                    },
+                    "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 11 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 28.5
+                    },
+                    "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+                },
+                {
+                    "description": "Pad 12 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 29.5
+                    },
+                    "uuid": "5932189f-39bb-485f-93f7-98362207126d"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 13 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 18.5
+                    },
+                    "uuid": "37dfdced-4075-41cb-b104-1a038fc64bc6"
+                },
+                {
+                    "description": "Pad 14 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 19.5
+                    },
+                    "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 14 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 19.5
+                    },
+                    "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+                },
+                {
+                    "description": "Pad 15 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 20.5
+                    },
+                    "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 15 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 20.5
+                    },
+                    "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+                },
+                {
+                    "description": "Pad 16 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 21.5
+                    },
+                    "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 16 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 21.5
+                    },
+                    "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+                },
+                {
+                    "description": "Pad 17 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 22.5
+                    },
+                    "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 17 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 22.5
+                    },
+                    "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+                },
+                {
+                    "description": "Pad 18 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 23.5
+                    },
+                    "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 18 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 23.5
+                    },
+                    "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+                },
+                {
+                    "description": "Pad 19 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 24.5
+                    },
+                    "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 19 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 24.5
+                    },
+                    "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+                },
+                {
+                    "description": "Pad 20 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 25.5
+                    },
+                    "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 20 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 25.5
+                    },
+                    "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+                },
+                {
+                    "description": "Pad 21 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 26.5
+                    },
+                    "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 21 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 26.5
+                    },
+                    "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+                },
+                {
+                    "description": "Pad 22 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 27.5
+                    },
+                    "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 22 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 27.5
+                    },
+                    "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+                },
+                {
+                    "description": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 28.5
+                    },
+                    "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation ( clearance 0,2000 mm; actual 0,0000 mm)",
+            "items": [
+                {
+                    "description": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 28.5
+                    },
+                    "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+                },
+                {
+                    "description": "Pad 24 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 29.5
+                    },
+                    "uuid": "94db90a7-9f82-4463-844f-d18789744896"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 18.5
+                    },
+                    "uuid": "532fb722-4268-4f46-aa9d-59d108f3f4e1"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 19.5
+                    },
+                    "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 12 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 29.5
+                    },
+                    "uuid": "5932189f-39bb-485f-93f7-98362207126d"
+                },
+                {
+                    "description": "Pad 11 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 28.5
+                    },
+                    "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 9 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 26.5
+                    },
+                    "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 25.5
+                    },
+                    "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 15 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 20.5
+                    },
+                    "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+                },
+                {
+                    "description": "Pad 14 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 19.5
+                    },
+                    "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 19.5
+                    },
+                    "uuid": "54fa11ef-3d2a-458a-b441-50933269d14c"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 20.5
+                    },
+                    "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 22.5
+                    },
+                    "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 21.5
+                    },
+                    "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 9 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 26.5
+                    },
+                    "uuid": "69d141b9-5117-490b-926a-5003786e1927"
+                },
+                {
+                    "description": "Pad 10 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 27.5
+                    },
+                    "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 22.5
+                    },
+                    "uuid": "b177af16-16e0-4cde-9e17-d57f1b0087fc"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 23.5
+                    },
+                    "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.675
+                    },
+                    "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+                },
+                {
+                    "description": "Pad 5 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.025
+                    },
+                    "uuid": "61866195-1f02-4383-9cab-049b27d8eb24"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 4 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.975
+                    },
+                    "uuid": "7b711bf9-9314-419d-9b4e-375bb342904b"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.325
+                    },
+                    "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 10 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 27.5
+                    },
+                    "uuid": "6c36c103-fb01-476f-aed4-53265b42c0b1"
+                },
+                {
+                    "description": "Pad 11 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 28.5
+                    },
+                    "uuid": "a17a453a-3cbb-455f-aa71-06a086822d39"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.675
+                    },
+                    "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+                },
+                {
+                    "description": "Pad 5 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.025
+                    },
+                    "uuid": "99067ed1-74e6-4ea0-96ee-c5a6554d9a32"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.025
+                    },
+                    "uuid": "683948cc-5199-434f-917d-99c57dee2f54"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.675
+                    },
+                    "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.325
+                    },
+                    "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.975
+                    },
+                    "uuid": "4eaad5ec-4513-4092-bf48-7ac95dcb7810"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 5 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.025
+                    },
+                    "uuid": "5131c479-580f-4480-b290-b45a4b4b625f"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.675
+                    },
+                    "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 20.5
+                    },
+                    "uuid": "cdd90790-c93e-40d2-af7a-f319d33d5b83"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 21.5
+                    },
+                    "uuid": "85114e56-1d3c-4cb7-83c6-f4d8a26f834f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.325
+                    },
+                    "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.675
+                    },
+                    "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 2 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 35.675
+                    },
+                    "uuid": "7062dfcc-3fe8-43ca-9b97-595efa7ac66f"
+                },
+                {
+                    "description": "Pad 3 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 73.8,
+                        "y": 36.325
+                    },
+                    "uuid": "7e4a5c01-4d8d-498a-9c14-2bc4b53559be"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 17.675
+                    },
+                    "uuid": "353b5ed4-140c-4a8d-bcab-3ea5fa37bc02"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.325
+                    },
+                    "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.025
+                    },
+                    "uuid": "34b28c1c-1c74-4434-8476-a3b1ac6815f0"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.675
+                    },
+                    "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 18.325
+                    },
+                    "uuid": "46d54b64-780b-4bc8-a621-99e398aa0dfd"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 35.8,
+                        "y": 17.675
+                    },
+                    "uuid": "7767c185-099c-4866-86c5-54de56d068e8"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 18 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 23.5
+                    },
+                    "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+                },
+                {
+                    "description": "Pad 17 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 22.5
+                    },
+                    "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 15 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 20.5
+                    },
+                    "uuid": "ed35ba50-e06b-4b3c-af5f-9d58893eefe9"
+                },
+                {
+                    "description": "Pad 16 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 21.5
+                    },
+                    "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.325
+                    },
+                    "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+                },
+                {
+                    "description": "Pad 6 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 35.675
+                    },
+                    "uuid": "dc95d28a-6276-4b69-8647-4c4707918efd"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 3 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.325
+                    },
+                    "uuid": "819125c7-a932-4acb-9bc3-0ce95bfda28f"
+                },
+                {
+                    "description": "Pad 4 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 20.975
+                    },
+                    "uuid": "ae87dd4d-0ffb-40b6-9b09-f1aa220facef"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 21 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 26.5
+                    },
+                    "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+                },
+                {
+                    "description": "Pad 20 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 25.5
+                    },
+                    "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 23.5
+                    },
+                    "uuid": "4c038e96-019a-4011-8ef1-f562c0c276c8"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 24.5
+                    },
+                    "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 21 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 26.5
+                    },
+                    "uuid": "4f91be96-d3d3-493e-b1c3-f94d065e9929"
+                },
+                {
+                    "description": "Pad 22 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 27.5
+                    },
+                    "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 18 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 23.5
+                    },
+                    "uuid": "ec8062b2-f3cd-4b66-b52b-aba0d7b9036b"
+                },
+                {
+                    "description": "Pad 19 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 24.5
+                    },
+                    "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 16 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 21.5
+                    },
+                    "uuid": "fc32b6f3-df46-422f-9348-6cc3254225f8"
+                },
+                {
+                    "description": "Pad 17 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 22.5
+                    },
+                    "uuid": "64abdce6-95f0-4f12-99a9-fa47cfcfd491"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.325
+                    },
+                    "uuid": "a4ee4531-5222-4ba9-9f7d-e3763e929240"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U3 on F.Cu",
+                    "pos": {
+                        "x": 78.2,
+                        "y": 36.975
+                    },
+                    "uuid": "8bc9a30f-bf3d-4519-86db-cdc521d349f3"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 6 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 19.675
+                    },
+                    "uuid": "6474b495-cb30-450c-9195-5da71853c82e"
+                },
+                {
+                    "description": "Pad 7 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.325
+                    },
+                    "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 22 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 27.5
+                    },
+                    "uuid": "54a46ff3-ed62-4b2e-bcce-6298f2bfc454"
+                },
+                {
+                    "description": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 28.5
+                    },
+                    "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 19 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 24.5
+                    },
+                    "uuid": "8d9ba5f2-ff9b-4e08-bc6a-8b4176b5a6a0"
+                },
+                {
+                    "description": "Pad 20 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 25.5
+                    },
+                    "uuid": "6a2021a6-b117-49ef-af03-5c9ed87643a0"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.325
+                    },
+                    "uuid": "abd0d198-2ea0-4620-9d17-42a950e3c398"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U6 on F.Cu",
+                    "pos": {
+                        "x": 40.2,
+                        "y": 18.975
+                    },
+                    "uuid": "6ea76196-555d-4088-865d-e6bb7f05032c"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 13 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 18.5
+                    },
+                    "uuid": "37dfdced-4075-41cb-b104-1a038fc64bc6"
+                },
+                {
+                    "description": "Pad 14 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 19.5
+                    },
+                    "uuid": "99a03048-a029-4b5f-8083-6c37249686c5"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 24.5
+                    },
+                    "uuid": "eb497c23-76df-4909-ac0b-a9b8d2b293e1"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 81.0,
+                        "y": 25.5
+                    },
+                    "uuid": "ac86758b-6c41-446b-83a5-586f9f19005f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 24 [<no net>] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 29.5
+                    },
+                    "uuid": "94db90a7-9f82-4463-844f-d18789744896"
+                },
+                {
+                    "description": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+                    "pos": {
+                        "x": 95.0,
+                        "y": 28.5
+                    },
+                    "uuid": "e36fc011-7fbf-4694-9c93-9bffe320fd72"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 7 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.325
+                    },
+                    "uuid": "50bef378-b7de-453e-9e9c-2aa8017b43e1"
+                },
+                {
+                    "description": "Pad 8 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 22.2,
+                        "y": 20.975
+                    },
+                    "uuid": "eafd8e3f-c297-41ec-97ca-467d4df690c9"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Pad 1 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.025
+                    },
+                    "uuid": "96b3ba0a-418f-46d9-b16e-0995f84d3059"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of U1 on F.Cu",
+                    "pos": {
+                        "x": 17.8,
+                        "y": 19.675
+                    },
+                    "uuid": "80b645d8-0545-4be2-82ad-a465549d380b"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Reference field of OK1-OK2",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 66.0
+                    },
+                    "uuid": "3c8866c2-6d5d-45c5-8fe4-cd80b373d81f"
+                },
+                {
+                    "description": "Pad 1 [<no net>] of OK1-OK2 on F.Cu",
+                    "pos": {
+                        "x": 65.2,
+                        "y": 66.0
+                    },
+                    "uuid": "5b0de76f-8110-4935-a637-6210effee05f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Reference field of OK1-OK2",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 66.0
+                    },
+                    "uuid": "3c8866c2-6d5d-45c5-8fe4-cd80b373d81f"
+                },
+                {
+                    "description": "Pad 2 [<no net>] of OK1-OK2 on F.Cu",
+                    "pos": {
+                        "x": 66.8,
+                        "y": 66.0
+                    },
+                    "uuid": "bf01a961-cc9b-4f1a-a61b-0e8f258725c3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        }
+    ]
+}

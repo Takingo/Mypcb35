@@ -1,0 +1,14 @@
+{
+  "name": "RF Microstrip Impedance",
+  "domain": "SI/RF",
+  "status": "pass",
+  "metrics": {
+    "trace_width_mm": 0.35,
+    "dielectric_height_mm": 0.2,
+    "er": 4.5,
+    "estimated_z0_ohm": 52.39,
+    "target_ohm": 50.0
+  },
+  "evidence": "Closed-form Hammerstad-style microstrip estimate for the specified stackup.",
+  "recommendation": "Confirm with manufacturer stackup field solver and keep RF trace via-free on top layer."
+}

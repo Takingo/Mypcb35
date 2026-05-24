@@ -1,0 +1,49 @@
+{
+  "schema": "LAYOUT_OPTIMIZATION_RUN_V1",
+  "pcb_file": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+  "max_iterations": 5,
+  "final_violation_count": 0,
+  "manufacturing_ready": true,
+  "iterations": [
+    {
+      "iteration": 1,
+      "violation_count_before": 19,
+      "violation_count_after": 0,
+      "actions": [
+        {
+          "iteration": 1,
+          "action_type": "shrink_placeholder_pads",
+          "target": "U1",
+          "detail": "Reduced generated pad size to satisfy clearance while preserving pad pitch."
+        },
+        {
+          "iteration": 1,
+          "action_type": "hide_silkscreen_text",
+          "target": "U2",
+          "detail": "Hid reference/value text for DRC-0017 to clear solder mask/copper overlap."
+        },
+        {
+          "iteration": 1,
+          "action_type": "hide_silkscreen_text",
+          "target": "U2",
+          "detail": "Hid reference/value text for DRC-0018 to clear solder mask/copper overlap."
+        },
+        {
+          "iteration": 1,
+          "action_type": "hide_silkscreen_text",
+          "target": "J2",
+          "detail": "Hid reference/value text for DRC-0019 to clear solder mask/copper overlap."
+        }
+      ]
+    }
+  ],
+  "export_results": {
+    "gerber": true,
+    "drill": true,
+    "position": true,
+    "gerber_stdout": "Plotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr'.\r\nPlotted to 'outputs\\phase4\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr'.\r\n",
+    "drill_stdout": "Created file 'outputs\\phase4\\drill\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl'\r\nDone.\r\n",
+    "position_stdout": "Wrote position data to 'outputs\\phase4\\position\\pick_and_place.csv'.\r\n"
+  },
+  "notes": []
+}

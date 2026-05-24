@@ -1,0 +1,13 @@
+{
+  "name": "Thermal Estimate",
+  "domain": "thermal",
+  "status": "pass",
+  "metrics": {
+    "buck_loss_w": 0.45,
+    "ldo_loss_w": 0.18,
+    "ambient_c": 40.0,
+    "estimated_ldo_temp_c": 61.6
+  },
+  "evidence": "First-order junction temperature estimate.",
+  "recommendation": "Validate with real load current and copper area once final footprints are bound."
+}
