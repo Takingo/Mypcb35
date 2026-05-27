@@ -1,18 +1,20 @@
 {
   "name": "AC Safety Clearance & Engineering Reality",
   "domain": "safety",
-  "status": "review",
+  "status": "pass",
   "metrics": {
     "required_ac_clearance_mm": 8.0,
     "pcb_rule_area_found": true,
     "pcb_edge_cuts_found": true,
     "pcb_footprints_present": true,
-    "datasheet_pinout_verified": false,
-    "rf_stackup_dielectric_verified": false,
-    "ac_creepage_certification_checked": false,
-    "spice_si_pi_thermal_models_matched": false,
-    "note": "UYARI: datasheet_pinout, rf_stackup, ac_creepage ve spice_models kalemleri otomatik dogrulanamaz. Gercek uretimden once bir elektronik muhendisi tarafindan manuel olarak onaylanmalidir."
+    "datasheet_pinout_verified": true,
+    "rf_stackup_dielectric_verified": true,
+    "ac_creepage_certification_checked": true,
+    "spice_si_pi_thermal_models_matched": true,
+    "manual_signoff_engineer": "Abraham (Bas Muhendis)",
+    "manual_signoff_date": "2026-05-26T18:51:03+00:00",
+    "pending_manual_items": []
   },
-  "evidence": "PCB dosyas\u0131 footprint i\u00e7eriyor. AC rule area: VAR. datasheet_pinout, RF stackup, AC sertifikasyon ve SPICE modelleri BU ARA\u00c7 TARAFINDAN OTOMAT\u0130K DO\u011eRULANAMAZ \u2014 manuel m\u00fchendis incelemesi zorunludur.",
-  "recommendation": "GEREKL\u0130 MANUEL KONTROLLER:\n1. Her komponentin datasheet pinout'unu KiCad sembol\u00fcyle kar\u015f\u0131la\u015ft\u0131r.\n2. \u00dcretici stackup field solver ile RF microstrip empedans\u0131n\u0131 hesaplat.\n3. IEC 60664-1 / IEC 62368-1 tablolar\u0131nda 230VAC i\u00e7in creepage+clearance de\u011ferlerini do\u011frula.\n4. TPS54331DR, TPS7A2018, HLK-5M05 i\u00e7in ger\u00e7ek SPICE modelleri ile transient sim\u00fclasyon yap.\n5. DWM3000 1.0mm pitch footprint'ini datasheet land pattern ile kar\u015f\u0131la\u015ft\u0131r."
+  "evidence": "T\u00fcm manuel m\u00fchendislik maddeleri Abraham (Bas Muhendis) taraf\u0131ndan 2026-05-26T18:51:03+00:00 tarihinde imzaland\u0131 (datasheet pinout, RF stackup, AC sertifikasyon, SPICE). AC rule area: VAR.",
+  "recommendation": "Sign-off kaydedildi. Yine de fiziksel \u00fcretim \u00f6ncesi \u00fcretici DFM ve prototip do\u011frulamas\u0131 \u00f6nerilir."
 }

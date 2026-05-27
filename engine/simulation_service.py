@@ -40,14 +40,19 @@ class SimulationService:
     empty UI claims.
     """
 
-    def run(self, *, bom_file: Path, output_dir: Path, asset_output: Path | None) -> SimulationReport:
+    def run(self, *, bom_file: Path, output_dir: Path, asset_output: Path | None,
+            netlist_file: Path | None = None,
+            signoff_file: Path | None = None) -> SimulationReport:
         output_dir.mkdir(parents=True, exist_ok=True)
         bom_rows = self._read_bom(bom_file)
+        netlist = self._read_netlist(netlist_file)
+        signoff = self._read_signoff(signoff_file)
         results = [
             self._power_budget(bom_rows),
             self._rf_impedance(),
             self._thermal_estimate(),
-            self._safety_check(),
+            self._decoupling_coverage(netlist),
+            self._safety_check(signoff),
         ]
         overall = "pass" if all(result.status == "pass" for result in results) else "review_required"
         report = SimulationReport(
@@ -70,6 +75,68 @@ class SimulationService:
             return []
         with bom_file.open("r", encoding="utf-8-sig", newline="") as handle:
             return list(csv.DictReader(handle))
+
+    def _read_netlist(self, netlist_file: Path | None) -> dict[str, Any]:
+        if netlist_file is None or not netlist_file.exists():
+            return {}
+        try:
+            return json.loads(netlist_file.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return {}
+
+    def _read_signoff(self, signoff_file: Path | None) -> dict[str, Any]:
+        path = signoff_file or Path("outputs/engineering/manual_signoff.json")
+        if not path.exists():
+            return {}
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return {}
+
+    def _decoupling_coverage(self, netlist: dict[str, Any]) -> SimulationResult:
+        """Her aktif IC'nin decoupling kondansatoru var mi? GERCEK board
+        artefaktindan (.kicad_pcb) sayilir; board yoksa netlist'e duser.
+        Decoupling kondansatorleri board uretiminde (_enrich_netlist) eklendigi
+        icin dogru artefakt board'dur."""
+        pcb_path = Path("outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
+                        "/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb")
+        ic_count = 0
+        decap_count = 0
+        source = "board"
+        if pcb_path.exists():
+            import re as _re
+            pcb_text = pcb_path.read_text(encoding="utf-8", errors="ignore")
+            refs = _re.findall(r'\(property "Reference" "([A-Za-z]+\d+)"', pcb_text)
+            ic_count = sum(1 for r in refs if r.upper().startswith("U"))
+            decap_count = sum(1 for r in refs if r.upper().startswith("C"))
+        if ic_count == 0:  # board okunamadiysa netlist'e dus
+            source = "netlist"
+            components = netlist.get("components", []) if isinstance(netlist, dict) else []
+            ic_count = sum(1 for c in components if isinstance(c, dict)
+                           and str(c.get("ref", "")).upper().startswith("U"))
+            decap_count = sum(1 for c in components if isinstance(c, dict)
+                              and str(c.get("ref", "")).upper().startswith("C"))
+
+        adequate = ic_count == 0 or decap_count >= ic_count
+        status = "pass" if adequate else "review"
+        return SimulationResult(
+            name="Decoupling Coverage",
+            domain="PI",
+            status=status,
+            metrics={
+                "source": source,
+                "active_ic_count": ic_count,
+                "decoupling_caps": decap_count,
+                "ratio_caps_per_ic": round(decap_count / ic_count, 2) if ic_count else None,
+            },
+            evidence=(f"Ilk-derece decoupling kapsama analizi ({source}): "
+                      f"{decap_count} kondansator / {ic_count} aktif IC."),
+            recommendation=(
+                "Her IC VCC pinine <5mm 100nF decoupling kondansator yerlestir."
+                if not adequate
+                else "Decoupling kapsama ilk-derece yeterli; yerlesim mesafesi PCB'de dogrulanmali."
+            ),
+        )
 
     def _power_budget(self, bom_rows: list[dict[str, str]]) -> SimulationResult:
         relay_count = sum(1 for row in bom_rows if "g5q" in self._row_text(row))
@@ -175,14 +242,29 @@ class SimulationService:
             recommendation="Validate with real load current and copper area once final footprints are bound.",
         )
 
-    def _safety_check(self) -> SimulationResult:
-        """AC güvenlik ve engineering reality kontrolü.
+    # Manuel mühendis incelemesi gerektiren, otomatik DOĞRULANAMAYAN maddeler.
+    MANUAL_REVIEW_ITEMS = (
+        "datasheet_pinout_verified",          # Gerçek datasheet kontrolü gerekli
+        "rf_stackup_dielectric_verified",     # Üretici field solver gerekli
+        "ac_creepage_certification_checked",  # IEC 60664 / IEC 62368 sertifikasyon gerekli
+        "spice_si_pi_thermal_models_matched", # Gerçek SPICE modelleri gerekli
+    )
 
-        ÖNEMLİ: Bu kontrol otomatik olarak doğrulanamayan mühendislik
-        gerçeklerini bildirir. Aşağıdaki maddeler gerçek ölçüm/sertifikasyon
-        gerektirdiğinden MANUEL MÜHENDİS İNCELEMESİ olmadan PASS verilemez.
+    def _safety_check(self, signoff: dict[str, Any] | None = None) -> SimulationResult:
+        """AC güvenlik + engineering reality kontrolü.
+
+        Otomatik doğrulanamayan 4 madde vardır (datasheet pinout, RF stackup,
+        AC sertifikasyon, SPICE). Bunlar ancak GERÇEK bir mühendis
+        `outputs/engineering/manual_signoff.json` dosyasıyla açıkça imzalarsa
+        'verified' sayılır. Sistem bu imzayı ASLA kendisi uydurmaz.
+        - İmza yoksa: status=review (otomasyon temiz, insan onayı bekliyor).
+        - Tüm maddeler imzalıysa: status=pass (mühendis sorumluluğu kaydedildi).
         """
-        # Gerçek kontrol: PCB dosyasında AC rule area var mı?
+        signoff = signoff or {}
+        signed = signoff.get("signed_items", {}) if isinstance(signoff, dict) else {}
+        engineer = str(signoff.get("engineer", "")).strip()
+        signoff_date = str(signoff.get("date", "")).strip()
+
         pcb_path = Path("outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
                         "/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb")
         pcb_text = pcb_path.read_text(encoding="utf-8", errors="ignore") if pcb_path.exists() else ""
@@ -190,25 +272,20 @@ class SimulationService:
         has_edge_cuts = "(layer \"Edge.Cuts\")" in pcb_text
         pcb_exists = pcb_path.exists() and "(footprint" in pcb_text
 
-        # Bu 4 madde hiçbir zaman otomatik doğrulanamaz — gerçekçi uyarı ver
-        unverifiable_items = {
-            "datasheet_pinout_verified": False,           # Gerçek datasheet kontrolü gerekli
-            "rf_stackup_dielectric_verified": False,      # Üretici field solver gerekli
-            "ac_creepage_certification_checked": False,   # IEC 60664 / IEC 62368 sertifikasyon gerekli
-            "spice_si_pi_thermal_models_matched": False,  # Gerçek SPICE modelleri gerekli
-        }
+        item_status = {item: bool(signed.get(item, False)) for item in self.MANUAL_REVIEW_ITEMS}
+        all_signed = all(item_status.values())
+        valid_signoff = all_signed and bool(engineer) and bool(signoff_date)
+        pending = [item for item, ok in item_status.items() if not ok]
 
         metrics = {
             "required_ac_clearance_mm": 8.0,
             "pcb_rule_area_found": has_rule_area,
             "pcb_edge_cuts_found": has_edge_cuts,
             "pcb_footprints_present": pcb_exists,
-            **unverifiable_items,
-            "note": (
-                "UYARI: datasheet_pinout, rf_stackup, ac_creepage ve spice_models "
-                "kalemleri otomatik dogrulanamaz. Gercek uretimden once bir "
-                "elektronik muhendisi tarafindan manuel olarak onaylanmalidir."
-            ),
+            **item_status,
+            "manual_signoff_engineer": engineer or None,
+            "manual_signoff_date": signoff_date or None,
+            "pending_manual_items": pending,
         }
 
         if not pcb_exists:
@@ -218,51 +295,44 @@ class SimulationService:
                 status="fail",
                 metrics=metrics,
                 evidence="PCB dosyası bulunamadı veya footprint içermiyor.",
-                recommendation=(
-                    "PCB dosyasını yeniden üret. "
-                    "AC creepage/clearance, RF stackup, SPICE modelleri ve "
-                    "datasheet pinout doğrulaması için mühendis incelemesi gereklidir."
-                ),
+                recommendation="PCB dosyasını yeniden üret; sonra manuel mühendis sign-off gerekir.",
             )
 
-        if not has_rule_area:
+        if valid_signoff:
             return SimulationResult(
                 name="AC Safety Clearance & Engineering Reality",
                 domain="safety",
-                status="review",
+                status="pass",
                 metrics=metrics,
                 evidence=(
-                    "PCB dosyası mevcut ve footprint içeriyor ancak AC primer bölge "
-                    "keepout/rule_area bulunamadı. Fiziksel clearance doğrulanamıyor."
+                    f"Tüm manuel mühendislik maddeleri {engineer} tarafından {signoff_date} "
+                    "tarihinde imzalandı (datasheet pinout, RF stackup, AC sertifikasyon, SPICE). "
+                    f"AC rule area: {'VAR' if has_rule_area else 'YOK'}."
                 ),
                 recommendation=(
-                    "AC primer bölge için KiCad keepout area ekle. "
-                    "IEC 60664-1 / IEC 62368-1 creepage+clearance tablolarını "
-                    "230VAC için kontrol et (min 8mm clearance, 16mm creepage). "
-                    "datasheet_pinout, RF stackup ve SPICE modelleri manuel inceleme gerektirir."
+                    "Sign-off kaydedildi. Yine de fiziksel üretim öncesi üretici DFM "
+                    "ve prototip doğrulaması önerilir."
                 ),
             )
 
         return SimulationResult(
             name="AC Safety Clearance & Engineering Reality",
             domain="safety",
-            status="review",   # Hiçbir zaman otomatik "pass" OLAMAZ
+            status="review",   # imza yoksa otomatik pass OLAMAZ
             metrics=metrics,
             evidence=(
-                f"PCB dosyası footprint içeriyor. "
-                f"AC rule area: {'VAR' if has_rule_area else 'YOK'}. "
-                "datasheet_pinout, RF stackup, AC sertifikasyon ve SPICE modelleri "
-                "BU ARAÇ TARAFINDAN OTOMATİK DOĞRULANAMAZ — manuel mühendis incelemesi zorunludur."
+                f"Otomasyon temiz (AC rule area: {'VAR' if has_rule_area else 'YOK'}). "
+                f"Manuel mühendis imzası bekleyen maddeler: {', '.join(pending)}. "
+                "Bu maddeler BU ARAÇ TARAFINDAN OTOMATİK DOĞRULANAMAZ."
             ),
             recommendation=(
-                "GEREKLİ MANUEL KONTROLLER:\n"
+                "GEREKLİ MANUEL KONTROLLER (tamamlayınca sign-off ile imzala):\n"
                 "1. Her komponentin datasheet pinout'unu KiCad sembolüyle karşılaştır.\n"
-                "2. Üretici stackup field solver ile RF microstrip empedansını hesaplat.\n"
-                "3. IEC 60664-1 / IEC 62368-1 tablolarında 230VAC için "
-                "creepage+clearance değerlerini doğrula.\n"
-                "4. TPS54331DR, TPS7A2018, HLK-5M05 için gerçek SPICE modelleri ile "
-                "transient simülasyon yap.\n"
-                "5. DWM3000 1.0mm pitch footprint'ini datasheet land pattern ile karşılaştır."
+                "2. Üretici stackup field solver ile RF microstrip empedansını doğrula.\n"
+                "3. IEC 60664-1 / IEC 62368-1 ile 230VAC creepage+clearance doğrula.\n"
+                "4. TPS54331DR, TPS7A2018, HLK-5M05 için gerçek SPICE transient simülasyon.\n"
+                "5. DWM3000 1.0mm pitch footprint'ini datasheet land pattern ile karşılaştır.\n"
+                "Sonra: tool\\run_engineering_signoff.ps1 -Engineer \"Ad Soyad\" -All"
             ),
         )
 
@@ -302,11 +372,15 @@ class SimulationService:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run deterministic OmniCircuit engineering simulations.")
     parser.add_argument("--bom-file", default="BOM.csv")
+    parser.add_argument("--netlist-file", default="outputs/phase1/AI_NETLIST_V1.json")
+    parser.add_argument("--signoff-file", default="outputs/engineering/manual_signoff.json")
     parser.add_argument("--output-dir", default="outputs/simulation")
     parser.add_argument("--asset-output", default="assets/generated/simulation_report.json")
     args = parser.parse_args()
     SimulationService().run(
         bom_file=Path(args.bom_file),
+        netlist_file=Path(args.netlist_file) if args.netlist_file else None,
+        signoff_file=Path(args.signoff_file) if args.signoff_file else None,
         output_dir=Path(args.output_dir),
         asset_output=Path(args.asset_output) if args.asset_output else None,
     )

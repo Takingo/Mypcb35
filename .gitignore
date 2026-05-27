@@ -43,3 +43,23 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# AI Settings — contains API keys, NEVER commit
+engine/ai_settings.json
+engine/ai_settings_*.json
+
+# KiCad user config (machine-specific)
+.kicad_config/
+
+# Font cache
+.cache/
+
+# Claude local settings
+.claude/settings.local.json
+
+# Python cache
+__pycache__/
+*.pyo
+
+# Windows metadata
+.metadata

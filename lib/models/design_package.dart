@@ -343,3 +343,60 @@ class EngineeringReadinessCheck {
     );
   }
 }
+
+/// Girdi Paneli (BOM/istek/netlist) kanit dogrulama raporu — INPUT_EVIDENCE_V1.
+/// Kullanicinin verdigi listede hata varsa burada gorunur; "sorulacaklar"
+/// listesi kullanici onayina/duzeltmesine yonlendirir.
+class InputEvidenceReport {
+  const InputEvidenceReport({
+    required this.status,
+    required this.errorCount,
+    required this.warnCount,
+    required this.reviewCount,
+    required this.questions,
+  });
+
+  final String status; // pass | review | fail
+  final int errorCount;
+  final int warnCount;
+  final int reviewCount;
+  final List<InputEvidenceQuestion> questions;
+
+  factory InputEvidenceReport.fromJson(Map<String, dynamic> json) {
+    final counts = (json['counts'] as Map<String, dynamic>?) ?? const {};
+    final rawQuestions = json['missing_questions'] as List<dynamic>? ?? const [];
+    return InputEvidenceReport(
+      status: json['status'] as String? ?? 'unknown',
+      errorCount: (counts['error'] as num?)?.toInt() ?? 0,
+      warnCount: (counts['warn'] as num?)?.toInt() ?? 0,
+      reviewCount: (counts['review'] as num?)?.toInt() ?? 0,
+      questions: rawQuestions
+          .whereType<Map<String, dynamic>>()
+          .map(InputEvidenceQuestion.fromJson)
+          .toList(growable: false),
+    );
+  }
+}
+
+class InputEvidenceQuestion {
+  const InputEvidenceQuestion({
+    required this.id,
+    required this.category,
+    required this.severity,
+    required this.ask,
+  });
+
+  final String id;
+  final String category;
+  final String severity;
+  final String ask;
+
+  factory InputEvidenceQuestion.fromJson(Map<String, dynamic> json) {
+    return InputEvidenceQuestion(
+      id: json['id'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      severity: json['severity'] as String? ?? 'info',
+      ask: json['ask'] as String? ?? '',
+    );
+  }
+}

@@ -24,7 +24,7 @@ New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
   --output $OutputDir `
   --layers "F.Cu,F.Mask,F.SilkS,Edge.Cuts" `
   --mode-multi `
-  --fit-page-to-board `
+  --fit-page-to-board --exclude-drawing-sheet `
   $PcbFile
 
 & $KiCadCli pcb export glb `
@@ -35,3 +35,6 @@ New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
   --include-silkscreen `
   --include-soldermask `
   $PcbFile
+
+# Birlesik tek-dosya tahta gorunumleri (Flutter PCB/PCBA onizleme icin)
+& "$PSScriptRoot\render_board_views.ps1" -PcbFile $PcbFile -OutputDir $OutputDir -KiCadCli $KiCadCli

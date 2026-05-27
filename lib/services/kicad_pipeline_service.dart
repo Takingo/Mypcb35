@@ -59,6 +59,23 @@ class KiCadPipelineService {
     scriptPath: r'tool\run_fabrication_drawing.ps1',
   );
 
+  /// Birleşik tahta görünümlerini (pcb_top/bottom/pcba_assembly SVG) yeniden üretir.
+  /// PCB/PCBA önizleme "Görünümü Yenile" butonu için kullanılır.
+  Future<bool> renderBoardViews() async {
+    final result = await _runScript(
+      step: PipelineStep.pcbaExports,
+      scriptPath: r'tool\render_board_views.ps1',
+    );
+    return result.success;
+  }
+
+  /// Birleşik tahta görünümlerinin mutlak disk yolları.
+  String get pcbTopSvgPath => '$projectRoot\\outputs\\assembly\\pcb_top.svg';
+  String get pcbBottomSvgPath =>
+      '$projectRoot\\outputs\\assembly\\pcb_bottom.svg';
+  String get pcbaAssemblySvgPath =>
+      '$projectRoot\\outputs\\assembly\\pcba_assembly.svg';
+
   Future<PipelineStepResult> _runScript({
     required PipelineStep step,
     required String scriptPath,

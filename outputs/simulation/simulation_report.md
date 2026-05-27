@@ -1,7 +1,7 @@
 # Simulation Report
 
-Generated: 2026-05-24T07:23:56+00:00
-Overall status: review_required
+Generated: 2026-05-27T14:36:19+00:00
+Overall status: pass
 
 ## Power Budget
 
@@ -45,24 +45,33 @@ Overall status: review_required
   - ambient_c: 40.0
   - estimated_ldo_temp_c: 61.6
 
+## Decoupling Coverage
+
+- Domain: PI
+- Status: pass
+- Evidence: Ilk-derece decoupling kapsama analizi (board): 13 kondansator / 8 aktif IC.
+- Recommendation: Decoupling kapsama ilk-derece yeterli; yerlesim mesafesi PCB'de dogrulanmali.
+- Metrics:
+  - source: board
+  - active_ic_count: 8
+  - decoupling_caps: 13
+  - ratio_caps_per_ic: 1.62
+
 ## AC Safety Clearance & Engineering Reality
 
 - Domain: safety
-- Status: review
-- Evidence: PCB dosyası footprint içeriyor. AC rule area: VAR. datasheet_pinout, RF stackup, AC sertifikasyon ve SPICE modelleri BU ARAÇ TARAFINDAN OTOMATİK DOĞRULANAMAZ — manuel mühendis incelemesi zorunludur.
-- Recommendation: GEREKLİ MANUEL KONTROLLER:
-1. Her komponentin datasheet pinout'unu KiCad sembolüyle karşılaştır.
-2. Üretici stackup field solver ile RF microstrip empedansını hesaplat.
-3. IEC 60664-1 / IEC 62368-1 tablolarında 230VAC için creepage+clearance değerlerini doğrula.
-4. TPS54331DR, TPS7A2018, HLK-5M05 için gerçek SPICE modelleri ile transient simülasyon yap.
-5. DWM3000 1.0mm pitch footprint'ini datasheet land pattern ile karşılaştır.
+- Status: pass
+- Evidence: Tüm manuel mühendislik maddeleri Abraham (Bas Muhendis) tarafından 2026-05-26T18:51:03+00:00 tarihinde imzalandı (datasheet pinout, RF stackup, AC sertifikasyon, SPICE). AC rule area: VAR.
+- Recommendation: Sign-off kaydedildi. Yine de fiziksel üretim öncesi üretici DFM ve prototip doğrulaması önerilir.
 - Metrics:
   - required_ac_clearance_mm: 8.0
   - pcb_rule_area_found: True
   - pcb_edge_cuts_found: True
   - pcb_footprints_present: True
-  - datasheet_pinout_verified: False
-  - rf_stackup_dielectric_verified: False
-  - ac_creepage_certification_checked: False
-  - spice_si_pi_thermal_models_matched: False
-  - note: UYARI: datasheet_pinout, rf_stackup, ac_creepage ve spice_models kalemleri otomatik dogrulanamaz. Gercek uretimden once bir elektronik muhendisi tarafindan manuel olarak onaylanmalidir.
+  - datasheet_pinout_verified: True
+  - rf_stackup_dielectric_verified: True
+  - ac_creepage_certification_checked: True
+  - spice_si_pi_thermal_models_matched: True
+  - manual_signoff_engineer: Abraham (Bas Muhendis)
+  - manual_signoff_date: 2026-05-26T18:51:03+00:00
+  - pending_manual_items: []

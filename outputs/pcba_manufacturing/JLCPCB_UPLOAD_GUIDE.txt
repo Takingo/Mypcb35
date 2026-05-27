@@ -1,0 +1,22 @@
+JLCPCB UPLOAD INSTRUCTIONS (jlc.vip)
+
+1. Visit: https://jlc.vip/
+2. Click "Add gerber file" or drag-drop the ZIP
+3. System auto-parses layers and settings:
+   - Layers: 4
+   - PCB Thickness: 1.6mm
+   - Copper Weight: 1 oz
+4. In "SMT Assembly" section:
+   - Enable assembly service
+   - Upload BOM file (CSV)
+   - Upload Pick & Place file (POS)
+   - Confirm part numbers match available inventory
+5. Review JLCPCB stock status for each component
+   - DWM3000 may require "Global Parts" selection (+7 day lead)
+6. Set stencil specifications:
+   - Thickness: 0.1mm
+   - Aperture: Square
+7. Add manufacturing notes: "Ensure DWM3000 RF impedance 50Ω verified"
+8. Select quantity (typically $6 setup + $25-50 per board for assembly)
+9. Choose shipping (DHL/FedEx available)
+10. Confirm and pay; track production via dashboard

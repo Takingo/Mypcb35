@@ -112,17 +112,52 @@ def main() -> int:
     except Exception as exc:
         elapsed = round(time.time() - t0, 1)
         error_msg = str(exc)
-        _log(f"[BASARISIZ] Gercek AI yanit vermedi: {error_msg}")
-        _log("Flutter kendi deterministik fallback'ini kullanacak (bu dogru davranis).")
+        _log(f"[BASARISIZ] Gercek AI kullanilabilir netlist uretmedi: {error_msg}")
+        _log("Deterministik mühendislik motoruna geciliyor (kaynak ASLA bos birakilmaz).")
+
+        # Kaynak zincirini bos birakmamak icin deterministik tam tasarima dus.
+        # Bu bir MOCK degil — kurallari acik, dogrulanabilir bir muhendislik motoru.
+        # synthesis_source acikca "deterministic_fallback" olarak isaretlenir;
+        # UI asla "gercek AI analiz etti" demez.
+        fb_netlist = generator._synthesize_fallback(user_request)  # noqa: SLF001
+        component_count = len(fb_netlist.components)
+        net_count = len(fb_netlist.nets)
+        _log(f"[FALLBACK] Deterministik netlist uretildi — {component_count} komponent, {net_count} net.")
         result = {
-            "success": False,
-            "synthesis_source": "failed",   # Flutter fallback'e gececek
+            "success": True,
+            "synthesis_source": "deterministic_fallback",
             "provider": provider,
             "model": model,
             "elapsed_seconds": elapsed,
-            "error": error_msg,
-            "netlist": None,
+            "ai_error": error_msg,
+            "netlist": fb_netlist.to_dict(),
         }
+
+    # [YENİ] Sentez başarılı ise, otomatik olarak hata düzeltme önerileri oluştur
+    correction_proposals_generated = False
+    proposals_count = 0
+    if result["success"]:
+        try:
+            from engine.ai_error_corrector import AiErrorCorrector
+        except ImportError:
+            from ai_error_corrector import AiErrorCorrector  # type: ignore
+
+        try:
+            _log("Sentez sonrası hata düzeltme önerileri oluşturuluyor...")
+            corrector = AiErrorCorrector(project_root)
+            proposals_result = corrector.generate_proposals()
+            if proposals_result.get("status") in ("success", "no_findings"):
+                correction_proposals_generated = True
+                proposals_count = proposals_result.get("total_proposals", 0)
+                _log(f"[PROPOSALS] {proposals_count} hata düzeltme önerisi oluşturuldu.")
+            else:
+                _log(f"[PROPOSALS] Oluşturma başarısız: {proposals_result.get('message', '?')}")
+        except Exception as exc:
+            # Sentez başarılı, önerileri oluşturamadık — loga yazıp devam et, Flutter'a hata verme
+            _log(f"[PROPOSALS] Önerileri oluşturma hatası (sentez tamam): {exc}")
+
+    result["correction_proposals_generated"] = correction_proposals_generated
+    result["correction_proposals_count"] = proposals_count
 
     # JSON'u stdout'a yaz — tek satirda, Flutter bu satiri parse eder
     print(json.dumps(result, ensure_ascii=False), flush=True)

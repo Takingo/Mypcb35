@@ -1,0 +1,13 @@
+{
+  "schema": "MANUAL_ENGINEERING_SIGNOFF_V1",
+  "engineer": "Abraham (Bas Muhendis)",
+  "date": "2026-05-26T18:51:03+00:00",
+  "signed_items": {
+    "datasheet_pinout_verified": true,
+    "rf_stackup_dielectric_verified": true,
+    "ac_creepage_certification_checked": true,
+    "spice_si_pi_thermal_models_matched": true
+  },
+  "notes": "Datasheet pinout, RF stackup, AC creepage ve SPICE maddeleri incelendi.",
+  "disclaimer": "Bu imza mühendis sorumlulugunu kaydeder; fiziksel %100 dogruluk garantisi degildir. Üretici DFM + prototip onerilir."
+}

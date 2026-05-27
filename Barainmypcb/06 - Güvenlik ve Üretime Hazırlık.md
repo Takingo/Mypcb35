@@ -1,74 +1,85 @@
 ---
-title: Güvenlik ve Üretime Hazırlık
+title: Guvenlik ve Uretime Hazirlik
 tags:
   - safety
   - manufacturing
-  - pcbway
   - review
 status: active
+updated: 2026-05-26
 ---
 
-# Güvenlik ve Üretime Hazırlık
+# Guvenlik ve Uretime Hazirlik
 
-Bu not, üretim öncesi kontrol kapılarını açık tutmak için yazılmıştır.
+Bu not, uretim oncesi kilitleri acik ve durust tutmak icin yazilmistir.
 
-> [!danger] Nihai Üretim Uyarısı
-> DRC=0 olması, tasarımın otomatik olarak gerçek dünyada güvenli ve kusursuz olduğu anlamına gelmez. Özellikle AC şebeke, RF ve regülatör termali için mühendis onayı gerekir.
+> [!warning] Nihai Uretim Uyarisi
+> Otomasyon kapilari temiz: DRC total `0`, readiness `%89`, engineering audit `review_required` (0 bloklayici). Fiziksel uretim oncesi `REAL_SIMULATION` muhendis incelemesi (RF/AC/thermal/datasheet) ve uretici DFM zorunludur.
 
-## Üretim İçin Gerekli Dosyalar
+## Guncel Kontrol Listesi
 
-| Dosya | Durum |
-| --- | --- |
-| Gerber | `outputs/phase4/gerber/` |
-| Drill | `outputs/phase4/drill/` |
-| Pick and Place | `outputs/phase4/position/pick_and_place.csv` |
-| BOM | `BOM.csv` ve `outputs/uwb_anchor/manufacturing/BOM_PCBA.csv` |
-| KiCad PCB | `outputs/kicad/.../*.kicad_pcb` |
-| DRC status | `outputs/phase4/layout_optimization_status.json` |
+- [x] KiCad 10.0.3 bridge calisiyor.
+- [x] KiCad ERC temiz raporlaniyor.
+- [x] Aktif PCB dosyasi footprint verisi iceriyor.
+- [x] Design source evidence gate eklendi.
+- [x] Production model gate eklendi.
+- [x] Fabrication ZIP DRC temiz degilse duruyor.
+- [x] Aktif AI netlist dolu `components` ve `nets` kanitiyla yeniden uretildi.
+- [x] KiCad DRC=0 dogrulandi (0 error, 0 unconnected, 0 dangling).
+- [x] `manufacturing_ready=true` dogrulandi.
+- [ ] U2 DWM3000 resmi/dogrulanmis footprint ile degistirildi.
+- [ ] U2/U3/U7 no-net padleri bilincli NC veya gercek net olarak modellendi.
+- [ ] UWB RF trace uretici stackup ile 50 ohm dogrulandi.
+- [ ] AC primer ve dusuk voltaj tarafi creepage/clearance sertifikasyonla dogrulandi.
+- [ ] Regulator akim/isi hesabi gercek SPICE/SI/PI/thermal modelle dogrulandi.
+- [ ] BOM uretici parca numaralari ve stok durumu dogrulandi.
+- [ ] Uretici DFM kontrolu yapildi.
 
-## Üretim Öncesi Kontrol Listesi
+## Uretim Icin Gerekli Dosyalar
 
-- [ ] DRC=0 doğrulandı.
-- [ ] ERC raporu üretildi.
-- [ ] Gerçek üretici footprint’leri doğrulandı.
-- [ ] DWM3000 footprint pitch değeri 1.0mm doğrulandı.
-- [ ] UWB RF trace 50 ohm stackup ile doğrulandı.
-- [ ] RF trace üzerinde via/test point/component olmadığı doğrulandı.
-- [ ] AC primer ve düşük voltaj tarafı arasında 8mm clearance/creepage doğrulandı.
-- [ ] HLK-5M05 datasheet izolasyon gereksinimleri kontrol edildi.
-- [ ] Röle kontak izolasyonu ve yük akımı doğrulandı.
-- [ ] Regülatör akım/ısı hesabı yapıldı.
-- [ ] Pick and Place koordinatları gerçek footprint merkezleriyle doğrulandı.
-- [ ] BOM üretici parça numaraları ve stok durumu kontrol edildi.
-- [ ] PCBWay/JLCPCB üretici kurallarıyla DFM kontrolü yapıldı.
+Bu dosyalar ancak gate gecerse uretime kanit sayilir:
 
-## Güvenli Export Mantığı
+```text
+outputs/phase4/gerber/
+outputs/phase4/drill/
+outputs/phase4/position/pick_and_place.csv
+outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip
+```
 
-Sistem sadece şu durumda `manufacturing_ready: true` kabul eder:
+Guncel durumda eski/onceki kosulardan kalmis dosyalar olabilir; son gate `blocked` oldugu icin bunlar uretim onayi degildir.
+
+## Guvenli Export Mantigi
+
+Sistem yalnizca su durumda uretim paketi cikarmalidir:
 
 ```text
 final_violation_count == 0
+manufacturing_ready == true
+design_source_evidence == pass
+production_model_gate == pass
+engineering_readiness == production_candidate
 ```
 
-Bu bayrak:
+Guncel durum:
 
 ```text
-outputs/phase4/layout_optimization_status.json
+final_violation_count = 0
+manufacturing_ready = true
+design_source_evidence = pass
+production_model_gate = pass
+engineering_readiness = review_required (REAL_SIMULATION review bekliyor)
 ```
 
-dosyasında tutulur.
+## Ureticiye Gonderme Kurali
 
-## Üreticiye Gönderirken
+PCBWay/JLCPCB/Seeed gibi bir ureticiye manuel yukleme ancak su kanitlarla yapilabilir:
 
-PCBWay gibi üreticiye gönderilecek paket:
+- DRC=0 raporu
+- ERC temiz raporu
+- Production model gate pass
+- BOM/CPL/Gerber/drill tutarliligi
+- Assembly/fabrication drawing
+- Datasheet pinout incelemesi
+- RF stackup/impedance onayi
+- AC guvenlik onayi
 
-- Gerber zip
-- Drill
-- BOM
-- CPL / Pick and Place
-- Assembly drawing
-- Fabrication drawing
-- Stackup / impedance notları
-
-> [!todo]
-> Bir sonraki fazda Gerber klasörünü otomatik zipleyen ve BOM/CPL ile tek “manufacturer package” oluşturan servis eklenmeli.
+Bugunku durumda bu kosullar saglanmiyor.

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,33 @@ import 'kicad_pipeline_panel.dart';
 import 'manufacturing_dashboard.dart';
 import 'models/ai_netlist.dart';
 import 'models/design_package.dart';
+import 'services/kicad_pipeline_service.dart';
 import 'settings_screen.dart';
+
+/// Canlı üretilen SVG'yi diskten okur; yoksa paketlenmiş asset'e düşer.
+/// Pipeline her çalıştığında diskteki dosya güncellendiği için önizlemeler
+/// gerçek üretim çıktısını yansıtır (build-time asset değil).
+Future<String?> _loadLiveSvg(
+  String absolutePath, {
+  String? bundleFallback,
+}) async {
+  try {
+    final file = File(absolutePath);
+    if (await file.exists()) {
+      return _cleanKiCadSvgText(await file.readAsString());
+    }
+  } catch (_) {
+    // diskten okunamadı — bundle fallback dene
+  }
+  if (bundleFallback != null) {
+    try {
+      return _cleanKiCadSvgText(await rootBundle.loadString(bundleFallback));
+    } catch (_) {
+      // bundle'da da yok
+    }
+  }
+  return null;
+}
 
 class OmniCircuitDashboard extends StatelessWidget {
   const OmniCircuitDashboard({super.key});
@@ -47,11 +74,7 @@ class _DashboardScaffold extends StatelessWidget {
               ),
               IconButton(
                 tooltip: 'Uretim ve siparis hazirligi',
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const ManufacturingDashboard(),
-                  ),
-                ),
+                onPressed: () => _openManufacturingDashboard(context),
                 icon: const Icon(Icons.local_shipping),
               ),
               IconButton(
@@ -89,6 +112,18 @@ class _DashboardScaffold extends StatelessWidget {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('AI_Netlist_v1 JSON panoya kopyalandi.')),
+    );
+  }
+
+  void _openManufacturingDashboard(BuildContext context) {
+    final controller = context.read<NetlistController>();
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ChangeNotifierProvider.value(
+          value: controller,
+          child: const ManufacturingDashboard(),
+        ),
+      ),
     );
   }
 }
@@ -149,6 +184,8 @@ class _CompactLayout extends StatelessWidget {
         _InputPanel(),
         SizedBox(height: 16),
         _ReasoningLogPanel(),
+        SizedBox(height: 16),
+        _AiCorrectionProposalsPanel(),
         SizedBox(height: 16),
         _SanityPanel(),
         SizedBox(height: 16),
@@ -282,6 +319,11 @@ class _InputPanel extends StatelessWidget {
             minLines: 4,
             maxLines: 7,
             labelText: 'Urun isterleri',
+            title: '1. Urun Isterleri',
+            description:
+                'Devrenin ne yapacagini, giris/cikislarini, ortam kosullarini ve ozel fonksiyonlarini yaz.',
+            hintText:
+                'Ornek: ESP32-S3 tabanli UWB anchor. 5V giris, 3.3V MCU, 1.8V UWB, iki role cikisi, Wi-Fi ayari, USB programlama, kutu icinde calisacak.',
             onChanged: controller.updateRequest,
           ),
           _ImportStatus(fileName: controller.requestFileName),
@@ -291,6 +333,11 @@ class _InputPanel extends StatelessWidget {
             minLines: 3,
             maxLines: 6,
             labelText: 'BOM CSV veya komponent listesi',
+            title: '2. BOM / Komponent Listesi',
+            description:
+                'Varsa resmi parca numaralariyla gir. CSV yukleyebilir veya satir satir yazabilirsin.',
+            hintText:
+                'Ornek CSV kolonlari: Reference, Quantity, Manufacturer, Part Number, Value, Package, Footprint, Notes\nU1,1,Espressif,ESP32-S3-WROOM-1,,Module,RF_Module:ESP32-S3-WROOM-1,MCU',
             onChanged: controller.updateBom,
           ),
           _ImportStatus(fileName: controller.bomFileName),
@@ -300,6 +347,11 @@ class _InputPanel extends StatelessWidget {
             minLines: 2,
             maxLines: 5,
             labelText: 'Teknik notlar: voltaj, RF, izolasyon, standartlar',
+            title: '3. Teknik Notlar ve Uretim Kurallari',
+            description:
+                'Elektriksel limitleri, kart kurallarini, uretim tercihini ve dogrulanmasi gereken standartlari yaz.',
+            hintText:
+                'Ornek: 4 katman, 1.6mm FR4, RF net 50 ohm, AC bolge 8mm clearance, DRC=0 zorunlu, JLCPCB/PCBWay PCBA, kritik footprint datasheet ile dogrulansin.',
             onChanged: controller.updateTechnicalNotes,
           ),
           _ImportStatus(fileName: controller.technicalNotesFileName),
@@ -520,6 +572,9 @@ class _SyncedTextArea extends StatefulWidget {
   const _SyncedTextArea({
     required this.value,
     required this.labelText,
+    required this.title,
+    required this.description,
+    required this.hintText,
     required this.minLines,
     required this.maxLines,
     required this.onChanged,
@@ -527,6 +582,9 @@ class _SyncedTextArea extends StatefulWidget {
 
   final String value;
   final String labelText;
+  final String title;
+  final String description;
+  final String hintText;
   final int minLines;
   final int maxLines;
   final ValueChanged<String> onChanged;
@@ -559,16 +617,36 @@ class _SyncedTextAreaState extends State<_SyncedTextArea> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _controller,
-      minLines: widget.minLines,
-      maxLines: widget.maxLines,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: widget.labelText,
-        alignLabelWithHint: true,
-      ),
-      onChanged: widget.onChanged,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          widget.description,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: _controller,
+          minLines: widget.minLines,
+          maxLines: widget.maxLines,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: widget.labelText,
+            hintText: widget.hintText,
+            alignLabelWithHint: true,
+          ),
+          onChanged: widget.onChanged,
+        ),
+      ],
     );
   }
 }
@@ -633,6 +711,9 @@ class _SanityPanel extends StatelessWidget {
     final readinessReport = context
         .watch<NetlistController>()
         .engineeringReadinessReport;
+    final inputEvidence = context
+        .watch<NetlistController>()
+        .inputEvidenceReport;
     return _Panel(
       title: 'Sanal Laboratuvar',
       icon: Icons.science,
@@ -645,6 +726,10 @@ class _SanityPanel extends StatelessWidget {
               children: [
                 if (readinessReport != null) ...[
                   _EngineeringReadinessPanel(report: readinessReport),
+                  const Divider(height: 22),
+                ],
+                if (inputEvidence != null) ...[
+                  _InputEvidencePanel(report: inputEvidence),
                   const Divider(height: 22),
                 ],
                 for (final check in designPackage.netlist.ercChecks)
@@ -673,6 +758,102 @@ class _SanityPanel extends StatelessWidget {
   }
 }
 
+class _InputEvidencePanel extends StatelessWidget {
+  const _InputEvidencePanel({required this.report});
+
+  final InputEvidenceReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasError = report.errorCount > 0;
+    final hasIssue = hasError || report.warnCount > 0 || report.reviewCount > 0;
+    final color = hasError
+        ? Colors.red.shade700
+        : hasIssue
+        ? Colors.orange.shade700
+        : Colors.green.shade700;
+    final bgColor = hasError
+        ? const Color(0xFFFFECE8)
+        : hasIssue
+        ? const Color(0xFFFFF7E5)
+        : const Color(0xFFEAF7EF);
+    final icon = hasError
+        ? Icons.report_problem
+        : hasIssue
+        ? Icons.fact_check
+        : Icons.verified;
+    final label = hasError
+        ? 'GİRDİ HATASI — ${report.errorCount} kritik bulgu'
+        : hasIssue
+        ? 'GİRDİ İNCELEMESİ — ${report.warnCount} uyarı, ${report.reviewCount} inceleme'
+        : 'GİRDİ TUTARLI';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Girdi Paneli Kanıt Denetimi: $label',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+            ],
+          ),
+          if (report.questions.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            const Text(
+              'Kullanıcı onayı / düzeltmesi gereken maddeler:',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 4),
+            for (final q in report.questions.take(6))
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      q.severity == 'error' ? '⛔ ' : '🔎 ',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    Expanded(
+                      child: Text(
+                        q.ask,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (report.questions.length > 6)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  '… ve ${report.questions.length - 6} madde daha',
+                  style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _EngineeringReadinessPanel extends StatelessWidget {
   const _EngineeringReadinessPanel({required this.report});
 
@@ -687,23 +868,23 @@ class _EngineeringReadinessPanel extends StatelessWidget {
     final color = blocked
         ? Colors.red.shade700
         : review
-            ? Colors.orange.shade700
-            : Colors.green.shade700;
+        ? Colors.orange.shade700
+        : Colors.green.shade700;
     final bgColor = blocked
         ? const Color(0xFFFFECE8)
         : review
-            ? const Color(0xFFFFF7E5)
-            : const Color(0xFFEAF7EF);
+        ? const Color(0xFFFFF7E5)
+        : const Color(0xFFEAF7EF);
     final statusIcon = blocked
         ? Icons.gpp_bad
         : review
-            ? Icons.manage_search
-            : Icons.verified;
+        ? Icons.manage_search
+        : Icons.verified;
     final statusLabel = blocked
         ? 'BLOKE — Üretim Kilitli'
         : review
-            ? 'İNCELEME GEREKLİ — Manuel mühendis onayı bekleniyor'
-            : 'ÜRETİM ADAYI';
+        ? 'İNCELEME GEREKLİ — Manuel mühendis onayı bekleniyor'
+        : 'ÜRETİM ADAYI';
 
     return Container(
       width: double.infinity,
@@ -1209,10 +1390,7 @@ String _cleanKiCadSvgText(String svg) {
   // <text ... opacity="0" stroke-opacity="0">...</text> kalıbını kaldır
   // (tek satır ve çok satırlı her ikisini de)
   return svg.replaceAll(
-    RegExp(
-      r'<text\b[^>]*\bopacity="0"[^>]*>.*?</text>',
-      dotAll: true,
-    ),
+    RegExp(r'<text\b[^>]*\bopacity="0"[^>]*>.*?</text>', dotAll: true),
     '',
   );
 }
@@ -1300,42 +1478,42 @@ class _SchematicPreviewState extends State<_SchematicPreview> {
           child: _loading
               ? const Center(child: CircularProgressIndicator())
               : _error != null
-                  ? Center(
-                      child: Text(
-                        'SVG yüklenemedi:\n$_error',
-                        textAlign: TextAlign.center,
+              ? Center(
+                  child: Text(
+                    'SVG yüklenemedi:\n$_error',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : Stack(
+                  children: [
+                    InteractiveViewer(
+                      boundaryMargin: const EdgeInsets.all(200),
+                      minScale: 0.05,
+                      maxScale: 8.0,
+                      constrained: false,
+                      child: SizedBox(
+                        width: 1800,
+                        height: 1300,
+                        child: SvgPicture.string(
+                          _cleanedSvg!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    )
-                  : Stack(
-                      children: [
-                        InteractiveViewer(
-                          boundaryMargin: const EdgeInsets.all(200),
-                          minScale: 0.05,
-                          maxScale: 8.0,
-                          constrained: false,
-                          child: SizedBox(
-                            width: 1800,
-                            height: 1300,
-                            child: SvgPicture.string(
-                              _cleanedSvg!,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 16,
-                          top: 16,
-                          child: FloatingActionButton.small(
-                            backgroundColor: Colors.white,
-                            onPressed: () => _openFullscreen(context),
-                            child: const Icon(
-                              Icons.fullscreen,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
+                    Positioned(
+                      right: 16,
+                      top: 16,
+                      child: FloatingActionButton.small(
+                        backgroundColor: Colors.white,
+                        onPressed: () => _openFullscreen(context),
+                        child: const Icon(
+                          Icons.fullscreen,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ],
     );
@@ -1389,10 +1567,13 @@ class _PcbPreview extends StatefulWidget {
 }
 
 class _PcbPreviewState extends State<_PcbPreview> {
-  static const _svgAssetPath = 'assets/generated/pcb.svg';
+  static const _bundleFallback = 'assets/generated/pcb.svg';
+  static const _service = KiCadPipelineService();
 
   String? _cleanedSvg;
   bool _loading = true;
+  bool _rendering = false;
+  bool _showBottom = false;
 
   @override
   void initState() {
@@ -1401,23 +1582,70 @@ class _PcbPreviewState extends State<_PcbPreview> {
   }
 
   Future<void> _loadSvg() async {
-    try {
-      final raw = await rootBundle.loadString(_svgAssetPath);
-      if (mounted) {
-        setState(() {
-          _cleanedSvg = _cleanKiCadSvgText(raw);
-          _loading = false;
-        });
-      }
-    } catch (_) {
-      if (mounted) setState(() => _loading = false);
+    setState(() => _loading = true);
+    final path = _showBottom
+        ? _service.pcbBottomSvgPath
+        : _service.pcbTopSvgPath;
+    final svg = await _loadLiveSvg(path, bundleFallback: _bundleFallback);
+    if (mounted) {
+      setState(() {
+        _cleanedSvg = svg;
+        _loading = false;
+      });
+    }
+  }
+
+  /// Diskte güncel tahta görünümü yoksa kicad-cli ile yeniden üret.
+  Future<void> _regenerate() async {
+    setState(() => _rendering = true);
+    await _service.renderBoardViews();
+    if (mounted) {
+      setState(() => _rendering = false);
+      await _loadSvg();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            SegmentedButton<bool>(
+              selected: {_showBottom},
+              onSelectionChanged: (v) {
+                setState(() => _showBottom = v.first);
+                _loadSvg();
+              },
+              segments: const [
+                ButtonSegment(value: false, label: Text('Üst (Top)')),
+                ButtonSegment(value: true, label: Text('Alt (Bottom)')),
+              ],
+            ),
+            const Spacer(),
+            IconButton.filledTonal(
+              tooltip: 'Tam ekran ac',
+              onPressed: _cleanedSvg == null
+                  ? null
+                  : () => _openFullscreen(context),
+              icon: const Icon(Icons.fullscreen),
+            ),
+            const SizedBox(width: 8),
+            OutlinedButton.icon(
+              onPressed: _rendering ? null : _regenerate,
+              icon: _rendering
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh, size: 16),
+              label: const Text('Görünümü Yenile'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
         Container(
           height: 450,
           width: double.infinity,
@@ -1431,6 +1659,8 @@ class _PcbPreviewState extends State<_PcbPreview> {
               ? const Center(
                   child: CircularProgressIndicator(color: Colors.white),
                 )
+              : _cleanedSvg == null
+              ? _BoardEmptyState(rendering: _rendering, onRender: _regenerate)
               : Stack(
                   children: [
                     InteractiveViewer(
@@ -1441,15 +1671,10 @@ class _PcbPreviewState extends State<_PcbPreview> {
                       child: SizedBox(
                         width: 800,
                         height: 600,
-                        child: _cleanedSvg != null
-                            ? SvgPicture.string(
-                                _cleanedSvg!,
-                                fit: BoxFit.contain,
-                              )
-                            : SvgPicture.asset(
-                                _svgAssetPath,
-                                fit: BoxFit.contain,
-                              ),
+                        child: SvgPicture.string(
+                          _cleanedSvg!,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                     Positioned(
@@ -1483,6 +1708,8 @@ class _PcbPreviewState extends State<_PcbPreview> {
   }
 
   void _openFullscreen(BuildContext context) {
+    final svg = _cleanedSvg;
+    if (svg == null) return;
     showDialog<void>(
       context: context,
       builder: (_) => Dialog(
@@ -1500,9 +1727,7 @@ class _PcbPreviewState extends State<_PcbPreview> {
                 minScale: 0.05,
                 maxScale: 20.0,
                 constrained: false,
-                child: _cleanedSvg != null
-                    ? SvgPicture.string(_cleanedSvg!)
-                    : SvgPicture.asset(_svgAssetPath),
+                child: SvgPicture.string(svg),
               ),
               Positioned(
                 right: 16,
@@ -1520,16 +1745,168 @@ class _PcbPreviewState extends State<_PcbPreview> {
   }
 }
 
-class _PcbaPreview extends StatelessWidget {
+/// Tahta görünümü diskte yokken gösterilen boş durum + üret butonu.
+class _BoardEmptyState extends StatelessWidget {
+  const _BoardEmptyState({required this.rendering, required this.onRender});
+
+  final bool rendering;
+  final VoidCallback onRender;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.developer_board, color: Colors.white38, size: 48),
+          const SizedBox(height: 12),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              'Tahta görünümü henüz üretilmedi. Önce "KiCad Üretimi" + '
+              '"Optimizer + DRC" adımlarını çalıştırın, sonra görünümü üretin.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white70),
+            ),
+          ),
+          const SizedBox(height: 14),
+          FilledButton.icon(
+            onPressed: rendering ? null : onRender,
+            icon: rendering
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.auto_awesome),
+            label: Text(rendering ? 'Üretiliyor...' : 'Tahta Görünümü Üret'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PcbaPreview extends StatefulWidget {
   const _PcbaPreview({required this.items});
 
   final List<PcbaItem> items;
 
   @override
+  State<_PcbaPreview> createState() => _PcbaPreviewState();
+}
+
+class _PcbaPreviewState extends State<_PcbaPreview> {
+  static const _service = KiCadPipelineService();
+
+  String? _cleanedSvg;
+  bool _loading = true;
+  bool _rendering = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSvg();
+  }
+
+  Future<void> _loadSvg() async {
+    setState(() => _loading = true);
+    final svg = await _loadLiveSvg(_service.pcbaAssemblySvgPath);
+    if (mounted) {
+      setState(() {
+        _cleanedSvg = svg;
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _regenerate() async {
+    setState(() => _rendering = true);
+    await _service.renderBoardViews();
+    if (mounted) {
+      setState(() => _rendering = false);
+      await _loadSvg();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final item in items.take(16))
+        Row(
+          children: [
+            Text(
+              'Montaj Görünümü (komponent yerleşimi)',
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+            ),
+            const Spacer(),
+            OutlinedButton.icon(
+              onPressed: _rendering ? null : _regenerate,
+              icon: _rendering
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh, size: 16),
+              label: const Text('Görünümü Yenile'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          height: 420,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: const Color(0xFF14201D),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade400),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: _loading
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
+              : _cleanedSvg == null
+              ? _BoardEmptyState(rendering: _rendering, onRender: _regenerate)
+              : Stack(
+                  children: [
+                    InteractiveViewer(
+                      boundaryMargin: const EdgeInsets.all(200),
+                      minScale: 0.05,
+                      maxScale: 12.0,
+                      constrained: false,
+                      child: SizedBox(
+                        width: 800,
+                        height: 600,
+                        child: SvgPicture.string(
+                          _cleanedSvg!,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 12,
+                      top: 12,
+                      child: FloatingActionButton.small(
+                        tooltip: 'Tam ekran ac',
+                        backgroundColor: Colors.white,
+                        onPressed: () => _openFullscreen(context),
+                        child: const Icon(
+                          Icons.fullscreen,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+        const SizedBox(height: 12),
+        const _SectionTitle('Komponent Yerleşim Listesi'),
+        for (final item in widget.items.take(16))
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.zero,
@@ -1538,7 +1915,71 @@ class _PcbaPreview extends StatelessWidget {
             subtitle: Text('${item.placement}\n${item.assemblyNote}'),
             isThreeLine: true,
           ),
+        if (widget.items.length > 16)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text('+${widget.items.length - 16} ek komponent'),
+          ),
       ],
+    );
+  }
+
+  void _openFullscreen(BuildContext context) {
+    final svg = _cleanedSvg;
+    if (svg == null) return;
+    showDialog<void>(
+      context: context,
+      builder: (_) => Dialog.fullscreen(
+        backgroundColor: const Color(0xFF14201D),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: InteractiveViewer(
+                boundaryMargin: const EdgeInsets.all(800),
+                minScale: 0.03,
+                maxScale: 20.0,
+                constrained: false,
+                child: SizedBox(
+                  width: 1400,
+                  height: 1000,
+                  child: SvgPicture.string(svg, fit: BoxFit.contain),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 20,
+              top: 20,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    'PCBA Montaj Gorunumu',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 20,
+              top: 20,
+              child: IconButton.filled(
+                tooltip: 'Kapat',
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1574,15 +2015,151 @@ class _ExportPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final artifact in artifacts)
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(_artifactIcon(artifact.state)),
-            title: Text('${artifact.name} (${artifact.format})'),
-            subtitle: Text('${artifact.path}\n${artifact.note}'),
-            isThreeLine: true,
+        Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE3F2FD),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFF90CAF9)),
           ),
+          child: const Row(
+            children: [
+              Icon(Icons.info_outline, color: Color(0xFF0D47A1)),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Aşağıdaki dosyalar projenizin üretimi için KiCad tarafından oluşturulan temel çıktılardır. Dosya yollarını kopyalayabilir veya doğrudan klasörlerini açabilirsiniz.',
+                  style: TextStyle(
+                    color: Color(0xFF0D47A1),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        for (final artifact in artifacts)
+          Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: BorderSide(color: Colors.grey.shade300),
+            ),
+            child: ListTile(
+              leading: Icon(
+                _artifactIcon(artifact.state),
+                color: _artifactColor(artifact.state),
+              ),
+              title: Text(
+                '${artifact.name} (${artifact.format})',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                'Konum: ${artifact.path}\nNot: ${artifact.note}',
+                style: TextStyle(color: Colors.grey.shade700, height: 1.3),
+              ),
+              isThreeLine: true,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 20),
+                    tooltip: 'Yolu Kopyala',
+                    onPressed: () {
+                      final fullPath = artifact.path.startsWith('C:')
+                          ? artifact.path
+                          : 'C:\\Mypcb\\${artifact.path.replaceAll('/', '\\')}';
+                      Clipboard.setData(ClipboardData(text: fullPath));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${artifact.name} yolu kopyalandı.'),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.folder_open, size: 20),
+                    tooltip: 'Klasörü Aç',
+                    onPressed: () async {
+                      final fullPath = artifact.path.startsWith('C:')
+                          ? artifact.path
+                          : 'C:\\Mypcb\\${artifact.path.replaceAll('/', '\\')}';
+                      try {
+                        final file = File(fullPath);
+                        String dirPath;
+                        if (await FileSystemEntity.isDirectory(fullPath)) {
+                          dirPath = fullPath;
+                        } else {
+                          dirPath = file.parent.path;
+                        }
+                        final dir = Directory(dirPath);
+                        if (await dir.exists()) {
+                          await Process.run('explorer.exe', [dirPath]);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Klasör bulunamadı. Önce üretimi çalıştırın.',
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Klasör açılamadı: $e')),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        const SizedBox(height: 16),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                icon: const Icon(Icons.folder_shared),
+                label: const Text('Ana Çıktı Klasörünü Aç (outputs/)'),
+                onPressed: () async {
+                  final dir = Directory('C:\\Mypcb\\outputs');
+                  if (await dir.exists()) {
+                    await Process.run('explorer.exe', ['C:\\Mypcb\\outputs']);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Outputs klasörü bulunamadı.'),
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.rocket_launch),
+                label: const Text('PCBA Sipariş Ekranına Git'),
+                onPressed: () {
+                  final controller = context.read<NetlistController>();
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => ChangeNotifierProvider.value(
+                        value: controller,
+                        child: const ManufacturingDashboard(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1592,6 +2169,14 @@ class _ExportPreview extends StatelessWidget {
       ArtifactState.generated => Icons.check_circle,
       ArtifactState.scaffolded => Icons.construction,
       ArtifactState.blocked => Icons.lock,
+    };
+  }
+
+  Color _artifactColor(ArtifactState state) {
+    return switch (state) {
+      ArtifactState.generated => Colors.green.shade700,
+      ArtifactState.scaffolded => Colors.orange.shade700,
+      ArtifactState.blocked => Colors.red.shade700,
     };
   }
 }
@@ -1644,13 +2229,12 @@ class _LogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAiLog =
-        entry.outcome == 'ai-log' || entry.outcome == 'ai-complete';
+    final isAiLog = entry.outcome == 'ai-log' || entry.outcome == 'ai-complete';
     final color = entry.level == 'warning'
         ? Colors.orange.shade700
         : isAiLog
-            ? const Color(0xFF1565C0)
-            : Theme.of(context).colorScheme.primary;
+        ? const Color(0xFF1565C0)
+        : Theme.of(context).colorScheme.primary;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -1660,8 +2244,8 @@ class _LogTile extends StatelessWidget {
             entry.level == 'warning'
                 ? Icons.warning_amber
                 : isAiLog
-                    ? Icons.psychology
-                    : Icons.check_circle,
+                ? Icons.psychology
+                : Icons.check_circle,
             color: color,
             size: 20,
           ),
@@ -1799,10 +2383,9 @@ class _AiStatusBanner extends StatelessWidget {
           : const Color(0xFFEAF7EF);
       borderColor = Colors.green.shade400;
       icon = Icons.smart_toy;
-      final modelLine =
-          status.availableModels.isEmpty
-              ? status.model
-              : '${status.model} (${status.availableModels.length} model mevcut)';
+      final modelLine = status.availableModels.isEmpty
+          ? status.model
+          : '${status.model} (${status.availableModels.length} model mevcut)';
       label =
           '${status.provider.toUpperCase()} bağlı — $modelLine'
           '${showSource ? (realAi ? " ✓ Son sentez GERÇEK AI" : " ⚡ Son sentez deterministik motor") : ""}';
@@ -1843,6 +2426,244 @@ class _AiStatusBanner extends StatelessWidget {
             onPressed: controller.refreshOllamaStatus,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// AI Hata Düzeltme Önerileri Paneli
+class _AiCorrectionProposalsPanel extends StatelessWidget {
+  const _AiCorrectionProposalsPanel();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<NetlistController>();
+    final report = controller.correctionProposals;
+
+    if (report == null || report.proposals.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return _Panel(
+      title: 'AI Hata Düzeltme Önerileri',
+      icon: Icons.auto_fix_high,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Summary banner
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: report.proposals.any((p) => p.isSafetyCritical)
+                  ? Colors.red.shade50
+                  : Colors.orange.shade50,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              '${report.totalCount} hata bulundu — '
+              '${report.autoApplicableCount} düşük riskli, '
+              '${report.safetyCriticalCount} güvenlik kritik',
+              style: TextStyle(
+                fontSize: 13,
+                color: report.proposals.any((p) => p.isSafetyCritical)
+                    ? Colors.red.shade900
+                    : Colors.orange.shade900,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // "Fix All Low-Risk" button
+          if (report.autoApplicable.isNotEmpty)
+            FilledButton.icon(
+              onPressed: () => controller.approveAllLowRisk(),
+              icon: const Icon(Icons.auto_fix_high),
+              label: Text('${report.autoApplicableCount} Düşük Riskli Öneyi Onayla'),
+            ),
+          if (report.autoApplicable.isNotEmpty) const SizedBox(height: 12),
+          // Per-proposal cards
+          for (final proposal in report.proposals) _ProposalCard(proposal: proposal, controller: controller),
+          const SizedBox(height: 12),
+          // Apply button
+          if (report.proposals.any((p) => p.status == 'approved'))
+            FilledButton.tonal(
+              onPressed: controller.isApplyingCorrections ? null : controller.applyApprovedCorrections,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  controller.isApplyingCorrections
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.check_circle),
+                  const SizedBox(width: 8),
+                  Text(
+                    controller.isApplyingCorrections ? 'Uygulanıyor...' : 'Onaylanan Önerileri Uygula',
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Tek bir düzeltme önerisinin kartı
+class _ProposalCard extends StatefulWidget {
+  const _ProposalCard({
+    required this.proposal,
+    required this.controller,
+  });
+
+  final AiCorrectionProposal proposal;
+  final NetlistController controller;
+
+  @override
+  State<_ProposalCard> createState() => _ProposalCardState();
+}
+
+class _ProposalCardState extends State<_ProposalCard> {
+  bool _showReasoning = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.proposal;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: error badge + human readable
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Chip(
+                  label: Text(p.errorCategory),
+                  backgroundColor: p.isSafetyCritical ? Colors.red.shade100 : Colors.orange.shade100,
+                  labelStyle: TextStyle(
+                    fontSize: 11,
+                    color: p.isSafetyCritical ? Colors.red.shade900 : Colors.orange.shade900,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    p.humanReadable,
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // AI Proposal text
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                p.aiProposalText,
+                style: TextStyle(fontSize: 12, color: Colors.blue.shade900, fontStyle: FontStyle.italic),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Reasoning toggle
+            GestureDetector(
+              onTap: () => setState(() => _showReasoning = !_showReasoning),
+              child: Row(
+                children: [
+                  Icon(_showReasoning ? Icons.expand_less : Icons.expand_more, size: 18),
+                  const SizedBox(width: 4),
+                  const Text('AI Gerekçesi', style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic)),
+                ],
+              ),
+            ),
+            if (_showReasoning) ...[
+              const SizedBox(height: 4),
+              Text(
+                p.aiReasoning,
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ],
+            const SizedBox(height: 8),
+            // Confidence meter
+            Row(
+              children: [
+                Expanded(
+                  child: LinearProgressIndicator(
+                    value: p.confidence,
+                    backgroundColor: Colors.grey.shade300,
+                    color: p.confidence >= 0.8
+                        ? Colors.green
+                        : p.confidence >= 0.6
+                            ? Colors.orange
+                            : Colors.red,
+                    minHeight: 6,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Güven: ${(p.confidence * 100).toInt()}%',
+                  style: const TextStyle(fontSize: 11),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Safety and uncertain badges
+            if (p.isSafetyCritical)
+              Chip(
+                label: const Text('⚠️ Güvenlik Kritik'),
+                backgroundColor: Colors.red.shade100,
+                labelStyle: TextStyle(fontSize: 11, color: Colors.red.shade900),
+              ),
+            if (p.aiUncertain) ...[
+              if (p.isSafetyCritical) const SizedBox(height: 4),
+              Chip(
+                label: const Text('❓ Emin Değilim'),
+                backgroundColor: Colors.amber.shade100,
+                labelStyle: TextStyle(fontSize: 11, color: Colors.amber.shade900),
+              ),
+            ],
+            const SizedBox(height: 8),
+            // Action buttons
+            if (p.status == 'pending')
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FilledButton.tonal(
+                    onPressed: () => widget.controller.rejectProposal(p.id),
+                    child: const Text('Reddet'),
+                  ),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: p.isSafetyCritical
+                        ? () => ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Güvenlik kritik — manuel inceleme zorunlu')),
+                            )
+                        : () => widget.controller.approveProposal(p.id),
+                    child: const Text('Onayla'),
+                  ),
+                ],
+              )
+            else
+              Chip(
+                label: Text(
+                  p.status == 'approved'
+                      ? '✓ Onaylandı'
+                      : p.status == 'rejected'
+                          ? '✗ Reddedildi'
+                          : p.status,
+                ),
+                backgroundColor: p.status == 'approved'
+                    ? Colors.green.shade100
+                    : p.status == 'rejected'
+                        ? Colors.grey.shade300
+                        : Colors.blue.shade100,
+              ),
+          ],
+        ),
       ),
     );
   }

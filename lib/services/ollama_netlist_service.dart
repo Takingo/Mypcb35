@@ -39,9 +39,21 @@ class OllamaNetlistService {
                     ?.map((m) => (m as Map)['name'] as String? ?? '')
                     .toList() ??
                 [];
-            final active = models.contains(model)
-                ? model
-                : (models.isNotEmpty ? models.first : model);
+            // Model eşleşmesi toleranslı: Ollama "gemma4:latest" listeler ama
+            // ayar "gemma4" olabilir. Önce tam eşleşme, sonra ":latest"/prefix
+            // eşleşmesi, en son ilk model. Böylece yapilandirilan model gercekten
+            // kullanilir (yanlislikla minik bir modele dusmez).
+            String _resolveModel() {
+              if (models.contains(model)) return model;
+              final prefixMatch = models.firstWhere(
+                (m) => m == '$model:latest' || m.split(':').first == model,
+                orElse: () => '',
+              );
+              if (prefixMatch.isNotEmpty) return prefixMatch;
+              return models.isNotEmpty ? models.first : model;
+            }
+
+            final active = _resolveModel();
             return OllamaStatus(
               connected: true,
               provider: provider,

@@ -1,11 +1,11 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-from engine.omnicircuit.input_loader import load_project_inputs
-from engine.omnicircuit.report_writer import write_outputs
-from engine.omnicircuit.uwb_anchor_rules import evaluate_uwb_anchor
+from omnicircuit.input_loader import load_project_inputs
+from omnicircuit.report_writer import write_outputs
+from omnicircuit.uwb_anchor_rules import evaluate_uwb_anchor
 
 
 def run(project_root: Path) -> int:

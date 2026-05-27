@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import json
@@ -7,6 +7,10 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from board_verification_manifest import manifest_gate_failure
+from design_evidence_gate import audit_design_evidence_gate
+from production_model_gate import audit_production_model_gate
 
 
 DEFAULT_PROJECT = "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
@@ -52,7 +56,10 @@ class EngineeringReadinessService:
         pcb_file: Path,
         backup_pcb_file: Path,
         bom_file: Path,
+        netlist_file: Path,
         layout_status_file: Path,
+        drc_report_file: Path,
+        verification_manifest_file: Path,
         fabrication_package_file: Path,
         production_zip: Path,
         output_path: Path,
@@ -60,12 +67,14 @@ class EngineeringReadinessService:
     ) -> EngineeringReadinessReport:
         checks = [
             self._check_bom(bom_file),
+            self._check_design_evidence(netlist_file, bom_file),
             self._check_schematic(schematic_file, erc_report_file),
             self._check_current_pcb(pcb_file, backup_pcb_file),
-            self._check_drc_consistency(layout_status_file, pcb_file),
+            self._check_production_model(pcb_file),
+            self._check_drc_consistency(layout_status_file, pcb_file, drc_report_file, verification_manifest_file),
             self._check_simulation_evidence(),
-            self._check_pcba_evidence(fabrication_package_file),
-            self._check_fabrication_zip(production_zip),
+            self._check_pcba_evidence(fabrication_package_file, layout_status_file, pcb_file, drc_report_file, verification_manifest_file),
+            self._check_fabrication_zip(production_zip, layout_status_file, pcb_file, drc_report_file, verification_manifest_file),
         ]
         report = self._build_report(checks)
         self._write_json(report, output_path)
@@ -89,6 +98,18 @@ class EngineeringReadinessService:
                 "Eksik MPN ve paket bilgilerini BOM'a ekle.",
             )
         return self._pass("BOM_SOURCE", "bom", "BOM kritik komponentleri iceriyor.")
+
+    def _check_design_evidence(self, netlist_file: Path, bom_file: Path) -> ReadinessCheck:
+        evidence_gate = audit_design_evidence_gate(netlist_file, bom_file)
+        if evidence_gate.ok:
+            return self._pass("DESIGN_SOURCE_EVIDENCE", "source", "AI netlist komponent/net/BOM izlenebilirlik kapisini gecti.")
+        return self._fail(
+            "DESIGN_SOURCE_EVIDENCE",
+            "source",
+            "blocker",
+            evidence_gate.evidence_summary,
+            "Gemma4/local AI ciktisini yeniden uret veya eksik komponent/net/BOM kanitlarini kullanicidan iste.",
+        )
 
     def _check_schematic(self, schematic_file: Path, erc_report_file: Path) -> ReadinessCheck:
         if not schematic_file.exists():
@@ -142,22 +163,55 @@ class EngineeringReadinessService:
             )
         return self._pass("PCB_ARTIFACT", "pcb", "Aktif PCB dosyasi footprint verisi iceriyor.")
 
-    def _check_drc_consistency(self, layout_status_file: Path, pcb_file: Path) -> ReadinessCheck:
-        if not layout_status_file.exists():
-            return self._fail("DRC_EVIDENCE", "drc", "blocker", "Layout optimizer durum dosyasi yok.", "KiCad DRC ve optimizer'i calistir.")
-        data = json.loads(layout_status_file.read_text(encoding="utf-8"))
-        final_count = int(data.get("final_violation_count", -1))
-        manufacturing_ready = bool(data.get("manufacturing_ready", False))
-        pcb_text = pcb_file.read_text(encoding="utf-8", errors="ignore") if pcb_file.exists() else ""
-        if final_count == 0 and manufacturing_ready and "pcbnew unavailable" not in pcb_text and "(footprint" in pcb_text:
-            return self._pass("DRC_EVIDENCE", "drc", "KiCad DRC=0 ve aktif PCB dosyasi tutarli.")
+    def _check_production_model(self, pcb_file: Path) -> ReadinessCheck:
+        model_gate = audit_production_model_gate(pcb_file)
+        if model_gate.ok:
+            return self._pass("PRODUCTION_MODEL", "pcb", "Footprint kimlikleri ve pad-net modeli uretim kapisini gecti.")
+        return self._fail(
+            "PRODUCTION_MODEL",
+            "pcb",
+            "blocker",
+            model_gate.evidence_summary,
+            "Sentetik/genel footprintleri resmi KiCad footprintleriyle degistir ve tum no-net padleri bilincli NC veya net baglantisi olarak modelle.",
+        )
+
+    def _check_drc_consistency(
+        self,
+        layout_status_file: Path,
+        pcb_file: Path,
+        drc_report_file: Path,
+        verification_manifest_file: Path,
+    ) -> ReadinessCheck:
+        gate_failure = self._layout_gate_failure(layout_status_file, pcb_file, drc_report_file, verification_manifest_file)
+        if gate_failure is None:
+            return self._pass("DRC_EVIDENCE", "drc", "Board verification manifest aktif PCB ve KiCad DRC raporuyla tutarli; DRC=0.")
         return self._fail(
             "DRC_EVIDENCE",
             "drc",
             "blocker",
-            f"DRC status final={final_count}, manufacturing_ready={manufacturing_ready}; aktif PCB kaniti tutarsiz.",
+            gate_failure,
             "DRC sonucunu aktif board dosyasiyla ayni kosuda yeniden uret.",
         )
+
+    def _layout_gate_failure(
+        self,
+        layout_status_file: Path,
+        pcb_file: Path,
+        drc_report_file: Path | None = None,
+        verification_manifest_file: Path | None = None,
+    ) -> str | None:
+        if verification_manifest_file is not None and verification_manifest_file.exists() and drc_report_file is not None:
+            return manifest_gate_failure(verification_manifest_file, pcb_file=pcb_file, drc_report_file=drc_report_file)
+        if not layout_status_file.exists():
+            return "Layout optimizer durum dosyasi yok."
+        data = json.loads(layout_status_file.read_text(encoding="utf-8"))
+        final_count = int(data.get("final_violation_count", -1))
+        manufacturing_ready = bool(data.get("manufacturing_ready", False))
+        pcb_text = pcb_file.read_text(encoding="utf-8", errors="ignore") if pcb_file.exists() else ""
+        pcb_has_footprints = "pcbnew unavailable" not in pcb_text and "(footprint" in pcb_text
+        if final_count == 0 and manufacturing_ready and pcb_has_footprints:
+            return None
+        return f"DRC status final={final_count}, manufacturing_ready={manufacturing_ready}; aktif PCB kaniti tutarsiz."
 
     def _check_simulation_evidence(self) -> ReadinessCheck:
         simulation_dir = Path("outputs/simulation")
@@ -192,7 +246,23 @@ class EngineeringReadinessService:
                 )
         return self._pass("REAL_SIMULATION", "simulation", f"{len(evidence)} simulasyon kaniti bulundu.")
 
-    def _check_pcba_evidence(self, fabrication_package_file: Path) -> ReadinessCheck:
+    def _check_pcba_evidence(
+        self,
+        fabrication_package_file: Path,
+        layout_status_file: Path,
+        pcb_file: Path,
+        drc_report_file: Path,
+        verification_manifest_file: Path,
+    ) -> ReadinessCheck:
+        gate_failure = self._layout_gate_failure(layout_status_file, pcb_file, drc_report_file, verification_manifest_file)
+        if gate_failure is not None:
+            return self._fail(
+                "PCBA_HANDOFF",
+                "pcba",
+                "blocker",
+                f"PCBA paketi guncel DRC kapisini gecemez: {gate_failure}",
+                "DRC=0 ve manufacturing_ready=true olmadan PCBA handoff'u gecirme.",
+            )
         if not fabrication_package_file.exists():
             return self._fail("PCBA_HANDOFF", "pcba", "blocker", "fabrication_package.json yok.", "Faz 5 paketleme komutunu calistir.")
         data = json.loads(fabrication_package_file.read_text(encoding="utf-8"))
@@ -220,7 +290,23 @@ class EngineeringReadinessService:
             "Assembly drawing, fabrication drawing ve 3D PCBA export ekle.",
         )
 
-    def _check_fabrication_zip(self, production_zip: Path) -> ReadinessCheck:
+    def _check_fabrication_zip(
+        self,
+        production_zip: Path,
+        layout_status_file: Path,
+        pcb_file: Path,
+        drc_report_file: Path,
+        verification_manifest_file: Path,
+    ) -> ReadinessCheck:
+        gate_failure = self._layout_gate_failure(layout_status_file, pcb_file, drc_report_file, verification_manifest_file)
+        if gate_failure is not None:
+            return self._fail(
+                "FAB_ZIP",
+                "export",
+                "blocker",
+                f"ZIP paketi guncel DRC kapisini gecemez: {gate_failure}",
+                "DRC=0 ve manufacturing_ready=true olmadan uretim ZIP'i gecer sayma.",
+            )
         if not production_zip.exists():
             return self._fail("FAB_ZIP", "export", "blocker", "Uretim ZIP paketi yok.", "Faz 5 paketleme komutunu calistir.")
         with zipfile.ZipFile(production_zip) as archive:
@@ -274,7 +360,10 @@ def main() -> int:
     parser.add_argument("--pcb-file", default=str(project_dir / f"{DEFAULT_PROJECT}.kicad_pcb"))
     parser.add_argument("--backup-pcb-file", default=str(project_dir / f"{DEFAULT_PROJECT}.before_optimizer.kicad_pcb"))
     parser.add_argument("--bom-file", default="BOM.csv")
+    parser.add_argument("--netlist-file", default="outputs/phase1/AI_NETLIST_V1.json")
     parser.add_argument("--layout-status-file", default="outputs/phase4/layout_optimization_status.json")
+    parser.add_argument("--drc-report-file", default=str(project_dir / "manufacturing" / "drc_report.json"))
+    parser.add_argument("--verification-manifest-file", default="outputs/engineering/board_verification_manifest.json")
     parser.add_argument("--fabrication-package-file", default="outputs/fabrication/fabrication_package.json")
     parser.add_argument("--production-zip", default="outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip")
     parser.add_argument("--output", default="outputs/engineering/engineering_readiness_report.json")
@@ -287,7 +376,10 @@ def main() -> int:
         pcb_file=Path(args.pcb_file),
         backup_pcb_file=Path(args.backup_pcb_file),
         bom_file=Path(args.bom_file),
+        netlist_file=Path(args.netlist_file),
         layout_status_file=Path(args.layout_status_file),
+        drc_report_file=Path(args.drc_report_file),
+        verification_manifest_file=Path(args.verification_manifest_file),
         fabrication_package_file=Path(args.fabrication_package_file),
         production_zip=Path(args.production_zip),
         output_path=Path(args.output),

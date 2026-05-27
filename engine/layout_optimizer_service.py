@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import asyncio
@@ -9,8 +9,8 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-from engine.drc_parser import DrcReport, KiCadDrcParser, write_report
-from engine.kicad_automation_service import CliResult, KiCadAutomationService
+from drc_parser import DrcReport, KiCadDrcParser, write_report
+from kicad_automation_service import CliResult, KiCadAutomationService
 
 
 MM = 1_000_000
@@ -92,9 +92,12 @@ class LayoutOptimizerService:
         for iteration in range(1, self.max_iterations + 1):
             if final_count == 0:
                 break
+            iteration_backup = work_dir / f"before_optimizer_iteration_{iteration}.kicad_pcb"
+            shutil.copy2(pcb_file, iteration_backup)
             actions = self._apply_repairs(pcb_file, final_report, iteration)
             if not actions:
                 notes.append("No deterministic repairs were applicable for remaining DRC items.")
+                iteration_backup.unlink(missing_ok=True)
                 break
             after_report = await self._run_and_parse_drc(pcb_file, work_dir, iteration)
             iterations.append(
@@ -106,13 +109,14 @@ class LayoutOptimizerService:
                 )
             )
             if after_report.total_violations >= final_count:
+                shutil.copy2(iteration_backup, pcb_file)
                 notes.append(
                     f"Iteration {iteration} did not reduce DRC count "
-                    f"({final_count} -> {after_report.total_violations}). Stopping to avoid oscillation."
+                    f"({final_count} -> {after_report.total_violations}); rolled back PCB changes."
                 )
-                final_report = after_report
-                final_count = after_report.total_violations
+                iteration_backup.unlink(missing_ok=True)
                 break
+            iteration_backup.unlink(missing_ok=True)
             final_report = after_report
             final_count = after_report.total_violations
 

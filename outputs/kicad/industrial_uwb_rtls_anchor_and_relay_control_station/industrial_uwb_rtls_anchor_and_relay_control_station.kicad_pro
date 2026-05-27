@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "version": 1
+  },
+  "project": {
+    "name": "industrial_uwb_rtls_anchor_and_relay_control_station"
+  },
+  "schematic": {},
+  "board": {}
+}

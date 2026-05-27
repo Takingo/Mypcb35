@@ -33,3 +33,6 @@ $env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
 
 Copy-Item "$WorkDir\DRC_REPORT_V1_iteration_1.json" "assets\generated\drc_report_v1.json" -Force -ErrorAction SilentlyContinue
 Copy-Item "$WorkDir\layout_optimization_status.json" "assets\generated\layout_optimization_status.json" -Force
+
+# Optimize edilmis final tahta gorunumlerini yeniden uret (PCB/PCBA onizleme guncel kalsin)
+& "$PSScriptRoot\render_board_views.ps1" -PcbFile $PcbFile -KiCadCli $KiCadCli

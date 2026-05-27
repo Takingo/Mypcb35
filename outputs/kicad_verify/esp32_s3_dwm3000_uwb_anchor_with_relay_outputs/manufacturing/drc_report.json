@@ -1,0 +1,376 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-25T19:37:30",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "schematic_parity": [],
+    "source": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [SPI_CS_1V8] on F.Cu, length 1,6000 mm",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 14.8
+                    },
+                    "uuid": "d9e5d9b9-6e09-463e-85b2-70508382e4e1"
+                },
+                {
+                    "description": "Track [SPI_CS_1V8] on F.Cu, length 1,2000 mm",
+                    "pos": {
+                        "x": 117.75,
+                        "y": 28.7375
+                    },
+                    "uuid": "727bf922-02d9-451e-9479-27ceda7abf0d"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 129.5375,
+                        "y": 39.35
+                    },
+                    "uuid": "1cce6a19-082c-4391-b3d7-7bbe7487a4e6"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 80.8625,
+                        "y": 14.95
+                    },
+                    "uuid": "56e8da19-1920-410c-833d-3747d09cbb2b"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 81.225,
+                        "y": 10.0
+                    },
+                    "uuid": "dae82e8c-f151-4086-9090-c969d67f3954"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 123.5375,
+                        "y": 39.35
+                    },
+                    "uuid": "ec2c6691-719a-49da-99ee-9ab92ac6953f"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 125.225,
+                        "y": 48.0
+                    },
+                    "uuid": "fc597afe-843e-4366-b248-4e00c8733d09"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [SPI_CS_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 125.4,
+                        "y": 14.8
+                    },
+                    "uuid": "822133ec-a04f-4af5-afdf-558afa2d1a74"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [SPI_CS_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 117.75,
+                        "y": 27.5375
+                    },
+                    "uuid": "d2f3b123-d81e-4ac8-9914-e2d22587f1dd"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_IRQ_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 125.4,
+                        "y": 21.200001
+                    },
+                    "uuid": "9d873ae3-5d92-4c3f-b213-1ba07cbe7efe"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_IRQ_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 123.5375,
+                        "y": 40.65
+                    },
+                    "uuid": "a43dc892-6a8c-4cad-84bc-81e73313559e"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_EXT_TX_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 126.0,
+                        "y": 22.8
+                    },
+                    "uuid": "4452ab3d-28df-415b-aa09-84eb7f5116e3"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_EXT_TX_1V8] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 129.5375,
+                        "y": 40.65
+                    },
+                    "uuid": "802fc355-6c45-46a5-a3f3-1397a3057af9"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 115.5375,
+                        "y": 29.5
+                    },
+                    "uuid": "251e7313-767e-4d6f-802d-c0ca765755df"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 83.1375,
+                        "y": 13.05
+                    },
+                    "uuid": "34231dca-ea97-4851-b772-73cc312dc94e"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 119.9625,
+                        "y": 39.35
+                    },
+                    "uuid": "41b5f7a5-951d-4c45-ab20-bd91400ca56b"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 125.9625,
+                        "y": 39.35
+                    },
+                    "uuid": "4c167087-43dc-4121-b325-2b668dfd3afd"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 122.225,
+                        "y": 22.0
+                    },
+                    "uuid": "542cf96c-46c4-4b11-bea0-5a8598554847"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 119.9625,
+                        "y": 30.5
+                    },
+                    "uuid": "9dfa77ce-1e9f-4967-97b0-5e51014db5d5"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_EXT_TX_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 125.9625,
+                        "y": 40.65
+                    },
+                    "uuid": "f6f1ff14-fc25-4ff9-ab2b-f531718faa58"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DWM_IRQ_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 119.9625,
+                        "y": 40.65
+                    },
+                    "uuid": "8b819dc5-2233-4074-9793-b7c838c51237"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [SPI_CS_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 116.0375,
+                        "y": 30.0
+                    },
+                    "uuid": "8f79536a-4761-4a00-aa7d-5245922ee508"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "The current configuration does not include the footprint library 'OmniCircuit'",
+            "items": [
+                {
+                    "description": "Footprint U2",
+                    "pos": {
+                        "x": 135.0,
+                        "y": 22.0
+                    },
+                    "uuid": "116ad53d-3a92-4698-b717-3542e5042a4d"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

@@ -1,89 +1,91 @@
 ---
-title: DRC ve Otonom Düzeltme Döngüsü
+title: DRC ve Otonom Duzeltme Dongusu
 tags:
   - drc
   - optimizer
   - closed-loop
 status: active
+updated: 2026-05-26
 ---
 
-# DRC ve Otonom Düzeltme Döngüsü
+# DRC ve Otonom Duzeltme Dongusu
 
-## Amaç
+## Amac
 
-Sistemin sadece PCB çizmesi değil, **kendi hatasını okuyup düzeltmesi** hedeflenmiştir.
+Sistemin amaci sadece PCB dosyasi uretmek degil; KiCad DRC sonucunu okuyup guvenli sekilde iyilestirme denemesi yapmak ve basarisiz/kotulestiren denemeleri geri almaktir.
 
-## Döngü
+## Guncel Gercek Sonuc
 
-```mermaid
-graph TD
-    A[Board Kaydet] --> B[KiCad DRC Çalıştır]
-    B --> C[DRC_REPORT_V1 Üret]
-    C --> D{Violation var mı?}
-    D -->|Hayır| E[Manufacturing Ready]
-    D -->|Evet| F[Hata Türünü Sınıflandır]
-    F --> G[pcbnew ile Düzelt]
-    G --> A
-```
+Son calistirilan akis:
 
-## DRC Kategorileri
-
-| Kategori | Düzeltme Stratejisi |
-| --- | --- |
-| clearance | Pad küçültme veya komponentleri ayırma |
-| unrouted | Top-layer track çizme, gerekirse layer değiştirme |
-| keepout | Objeleri keepout dışına taşıma |
-| courtyard | Komponent aralığını artırma |
-| drill | Drill clearance / via ölçüsü düzeltme |
-| silkscreen | Referans/value yazısını taşıma veya gizleme |
-
-## Faz 4 Gerçek Sonuç
-
-İlk DRC:
-
-```text
-94 violations
-```
-
-İlk optimizer:
-
-```text
-94 -> 2
-```
-
-İkinci optimizer:
-
-```text
-2 -> 0
+```powershell
+.\tool\run_kicad_phase2.ps1 -Export
+.\tool\run_layout_optimizer.ps1
 ```
 
 Son durum:
 
 ```text
+KiCad: 10.0.3
+DRC violations: 0 (0 via_dangling, 0 track_dangling, 0 unconnected, 0 error)
 manufacturing_ready: true
+dangling temizligi: _prune_dangling_copper, 29 bos via/track silindi
+optimizer: hala kapali (mevcut star-routing DRC'yi kotulestiriyor)
 ```
 
-## Uygulanan Düzeltmeler
+> [!note]
+> DRC=0 sonucu `_prune_dangling_copper` ile elde edildi; ayri layout optimizer (Faz 4) hala devre disi. Eski notlarda gecen `94 -> 2 -> 0`, `331`, `20` gibi sayilar artik gecerli karar kaynagi degildir.
 
-- `U1`, `U2`, `U3`, `U6` placeholder pad ölçüleri küçültüldü.
-- DWM3000 için 1.0mm pitch korunarak pad boyutu azaltıldı.
-- `OK1-OK2` silkscreen reference/value text gizlendi.
-- DRC temizlenince Gerber/drill/position export çalıştı.
+## DRC Kategorileri
 
-## Hard Constraints
+Son raporlarda agirlikli sorunlar:
 
-> [!danger] DWM3000 RF
-> `UWB_RF_50R` neti DWM3000 pin 23 ile SMA arasında olmalıdır. Bu net top layer, viasız ve 50 ohm kontrollü olarak ele alınmalıdır.
+- solder mask bridge
+- shorting items
+- clearance
+- items not allowed
+- tracks crossing
+- drill / hole clearance
+- silkscreen overlap
+- no-net pad model sorunlari
 
-> [!warning] AC İzolasyon
-> HLK-5M05 ve AC giriş bölgesi için 8mm izolasyon/keepout mantığı korunmalıdır.
+## Dongu
 
-## Geliştirme Notu
+```mermaid
+graph TD
+    A[Board Kaydet] --> B[KiCad DRC Calistir]
+    B --> C[DRC Raporunu Oku]
+    C --> D{Ihlal var mi?}
+    D -->|Hayir| E[Model Gate Kontrolu]
+    E -->|Pass| F[Manufacturing Ready]
+    E -->|Fail| G[Uretim Kilidi]
+    D -->|Evet| H[Onarim Denemesi]
+    H --> I[DRC Tekrar Calistir]
+    I --> J{Ihlal azaldi mi?}
+    J -->|Evet| A
+    J -->|Hayir| K[Rollback ve Kilitli Durum]
+```
 
-Şu anki optimizer placeholder footprint’ler üzerinde iyi çalışır. Gerçek üretici footprint’leri geldiğinde optimizer daha az pad boyutu değiştirmeli, daha çok yerleşim/routing stratejisi kullanmalıdır.
+## Son Kod Davranisi
 
-İlgili dosya:
+- `engine/layout_optimizer_service.py` her iterasyon oncesi aktif PCB yedegi alir.
+- DRC sayisi azalmazsa veya artarsa aktif PCB eski haline geri alinir.
+- `engine/fabrication_api_service.py` DRC temiz degilse ZIP paketlemez.
+- `engine/production_model_gate.py` sentetik/kimliksiz footprint ve asiri no-net pad durumlarini bloke eder.
+
+## Bilinen Kalan Isler (DRC Bloklayici Yok)
+
+- U2 DWM3000 resmi KiCad library footprint kimligi tasimiyor (sentetik).
+- Son KiCad DRC: total 0 — Gerber/drill/CPL uretim paketi uretiliyor.
+- `REAL_SIMULATION`: RF/AC/thermal/datasheet muhendis incelemesi bekliyor.
+
+## Uretim Kriteri
+
+Uretime gecis icin asgari kosul:
 
 ```text
-engine/layout_optimizer_service.py
+final_violation_count == 0
+manufacturing_ready == true
+production_model_gate == pass
+engineering_readiness == production_candidate
 ```

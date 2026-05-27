@@ -1,0 +1,13 @@
+{
+  "name": "Decoupling Coverage",
+  "domain": "PI",
+  "status": "pass",
+  "metrics": {
+    "source": "board",
+    "active_ic_count": 8,
+    "decoupling_caps": 13,
+    "ratio_caps_per_ic": 1.62
+  },
+  "evidence": "Ilk-derece decoupling kapsama analizi (board): 13 kondansator / 8 aktif IC.",
+  "recommendation": "Decoupling kapsama ilk-derece yeterli; yerlesim mesafesi PCB'de dogrulanmali."
+}

@@ -1,13 +1,18 @@
 ---
-title: Mimari ve Veri Akışı
+title: Mimari ve Veri Akisi
 tags:
   - architecture
   - data-flow
   - kicad
 status: active
+updated: 2026-05-25
 ---
 
-# Mimari ve Veri Akışı
+# Mimari ve Veri Akisi
+
+## Guncel Ilke
+
+Mimari artik "dosya uretildiyse hazirdir" mantigiyla calismaz. Uretim paketi yalnizca design source evidence, DRC, production model gate ve engineering readiness kapilari gecerken gecerli sayilir.
 
 ## Katmanlar
 
@@ -15,56 +20,44 @@ status: active
 graph LR
     UI[Flutter Dashboard] --> COG[Cognitive Netlist Engine]
     COG --> NET[AI_Netlist_v1 JSON]
-    NET --> KICAD[KiCad Automation Service]
+    NET --> SOURCE[Design Source Evidence Gate]
+    SOURCE --> KICAD[KiCad Automation Service]
+    KICAD --> ERC[KiCad ERC]
     KICAD --> PCB[KiCad PCB]
     PCB --> DRC[KiCad DRC]
-    DRC --> PARSER[DRC Parser]
-    PARSER --> REPORT[DRC_REPORT_V1]
-    REPORT --> OPT[Layout Optimizer]
+    DRC --> ASSET[drc_report_v1.json]
+    DRC --> OPT[Layout Optimizer]
     OPT --> PCB
-    REPORT --> PCBAI[PCBai Feedback Adapter]
-    PCB --> EXPORT[Gerber Drill Position]
-    EXPORT --> FAB[Fabrication Package Service]
+    PCB --> MODEL[Production Model Gate]
+    DRC --> AUDIT[Engineering Readiness]
+    MODEL --> AUDIT
+    SOURCE --> AUDIT
+    AUDIT --> UI
+    AUDIT -->|blocked| LOCK[Uretim Kilidi]
+    AUDIT -->|production_candidate| FAB[Fabrication Package Service]
     FAB --> ZIP[Production ZIP]
-    FAB --> ASSET[fabrication_package.json]
-    ASSET --> CHECKOUT[Flutter Checkout Page]
 ```
 
 ## 1. Flutter Dashboard
 
-Kullanıcı şu bilgileri girer:
+Kullanici su bilgileri girer:
 
-- Ürün isterleri
+- urun isterleri
 - BOM veya komponent listesi
-- Teknik notlar
+- teknik notlar
 
-Bu bilgiler elle yazılabilir veya dosyadan içe aktarılabilir. Girdi paneli şu dosya türlerini destekler:
+Girdi paneli `.md`, `.txt`, `.csv`, `.json`, `.net`, `.xml`, `.yaml`, `.yml`, `.sch`, `.kicad_sch` gibi dosyalari ilgili metin alanlarina yukleyebilir.
 
-- ister / teknik not: `.md`, `.txt`, `.csv`, `.json`, `.net`, `.xml`, `.yaml`, `.yml`, `.sch`, `.kicad_sch`
-- BOM: `.csv`, `.tsv`, `.txt`, `.md`, `.json`, `.xml`, `.yaml`, `.yml`
+Dashboard su alanlari gosterir:
 
-Windows desktop kullanımında import penceresine doğrudan dosya yolu yazılabilir:
+- AI muhendislik akisi
+- netlist onizleme
+- KiCad/DRC durumu
+- optimizer durumu
+- uretim checkout ekrani
+- engineering readiness sonucu
 
-```text
-C:\Mypcb\BOM.csv
-C:\Mypcb\SCHEMATIC.md
-C:\Mypcb\PCB_NOTES.md
-```
-
-`Yoldan Yukle` dosyayı okuyup ilgili metin alanına basar. `Gozat` ise işletim sisteminin dosya seçicisini açar.
-
-Dashboard ayrıca şunları gösterir:
-
-- AI mühendislik akışı
-- sanal laboratuvar kontrolleri
-- netlist önizleme
-- şematik bloklar
-- PCB kuralları
-- PCBA yerleşim notları
-- DRC analizörü
-- üretim export durumu
-- üretim checkout hazırlığı
-- üretim ZIP dosyası, dosya listesi, kart ölçüsü ve yerel maliyet tahmini
+Guncel UI'da uretim dosyalari gorunse bile son gate `blocked` ise bunlar uretime onay sayilmaz.
 
 ## 2. Cognitive Netlist Engine
 
@@ -74,19 +67,20 @@ Dosya:
 engine/cognitive_netlist_generator.py
 ```
 
-Üretilen ana format:
+Ana cikti:
 
 ```text
-AI_Netlist_v1
+outputs/phase1/AI_NETLIST_V1.json
 ```
 
-Bu format şunları taşır:
+Bu format komponentleri, netleri, gerekceleri ve constraint notlarini tasir.
 
-- komponentler
-- net bağlantıları
-- DRC/ERC kuralları
-- AI reasoning log
-- ERC summary
+Guncel durum:
+
+```text
+Aktif AI_NETLIST_V1.json dolu komponent ve net listesi tasiyor.
+DESIGN_SOURCE_EVIDENCE=pass.
+```
 
 ## 3. KiCad Automation Service
 
@@ -96,47 +90,22 @@ Dosya:
 engine/kicad_automation_service.py
 ```
 
-Görevleri:
+Gorevleri:
 
-- `AI_Netlist_v1` dosyasını okumak
-- KiCad proje dizini oluşturmak
-- `.kicad_pro`, `.kicad_sch`, `.kicad_pcb` üretmek
-- `pcbnew` ile footprint ve board nesnesi oluşturmak
-- DWM3000 pad pitch değerini 1.0mm yapmak
-- RF ve AC kurallarını board metadata / rule area olarak işlemek
-- `kicad-cli` ile DRC ve export çalıştırmak
+- `AI_Netlist_v1` dosyasini okumak
+- KiCad proje dizini olusturmak
+- `.kicad_pro`, `.kicad_sch`, `.kicad_pcb` uretmek
+- footprint yuklemek veya eksikse bloklanacak sentetik fallback uretmek
+- pin-pad eslemelerini yapmak
+- KiCad CLI ile ERC/DRC calistirmak
 
-## 4. DRC Parser
+Son duzeltmeler:
 
-Dosya:
+- `R10-R13` gruplanmis refleri `R10`..`R13` olarak aciliyor.
+- `J1` gercek Phoenix terminal block footprint'e baglandi.
+- `J1/J2/U2/U7` pin alias eslemeleri eklendi.
 
-```text
-engine/drc_parser.py
-```
-
-Girdi:
-
-```text
-kicad-cli pcb drc --format json
-```
-
-Çıktı:
-
-```text
-DRC_REPORT_V1
-```
-
-Kategoriler:
-
-- clearance
-- unrouted
-- keepout
-- courtyard
-- drill
-- silkscreen
-- other
-
-## 5. Layout Optimizer
+## 4. Layout Optimizer
 
 Dosya:
 
@@ -144,34 +113,54 @@ Dosya:
 engine/layout_optimizer_service.py
 ```
 
-Kapalı döngü:
+Davranis:
 
-1. DRC çalıştır.
-2. `DRC_REPORT_V1` üret.
-3. Hata türlerini oku.
-4. `pcbnew` ile board üzerinde düzeltme yap.
-5. Board’u kaydet.
-6. DRC=0 olana veya 5 iterasyona kadar tekrarla.
-7. DRC=0 ise manufacturing export çalıştır.
+1. DRC calistir.
+2. Duzeltme dene.
+3. DRC tekrar calistir.
+4. DRC sayisi azalmazsa veya artarsa rollback yap.
 
-## 6. PCBai Feedback Adapter
+Son durum:
+
+```text
+22 -> 507 denemesi kotulestirdi
+rollback yapildi
+manufacturing_ready=false
+```
+
+## 5. Production Model Gate
 
 Dosya:
 
 ```text
-engine/pcbai_feedback_adapter.py
+engine/production_model_gate.py
 ```
 
-Amaç:
+Yakaladigi durumlar:
 
-DRC hatalarını PCBai veya ilerideki başka bir optimizer için penalty/constraint payload’una çevirmek.
+- kimliksiz/sentetik footprint
+- padsiz footprint
+- asiri no-net pad orani
 
-Örnek mantık:
+Guncel durum: **pass** — footprint kimlikleri ve pad-net modeli uretim kapisini gecti. (DWM3000 hala sentetik footprint; fiziksel uretim oncesi resmi footprint review maddesi.)
 
-- clearance → koordinatları yay
-- unrouted → net’i route et veya layer değiştir
-- keepout → objeleri keepout dışına çıkar
-- silkscreen → referans yazısını taşı/gizle
+## 6. Engineering Readiness
+
+Dosya:
+
+```text
+engine/engineering_readiness_service.py
+```
+
+Son sonuc:
+
+```text
+overall_status=review_required
+readiness_percent=89
+passed=8/9
+blockers=0
+review=1 (REAL_SIMULATION)
+```
 
 ## 7. Fabrication Package Service
 
@@ -181,43 +170,27 @@ Dosya:
 engine/fabrication_api_service.py
 ```
 
-Amaç:
+Guncel davranis:
 
-Faz 4 sonunda üretilen Gerber, drill, pick-and-place ve BOM dosyalarını tek bir üretim ZIP paketinde toplamak ve Flutter arayüzüne `FABRICATION_PACKAGE_V1` özetini vermek.
+- DRC temiz degilse paketlemez.
+- `manufacturing_ready=false` ise paketlemez.
+- production model gate fail ise paketlemez.
+- dis uretici API'sine veri gondermez.
 
-> [!important]
-> Son kararla bu servis dış üretici API payload'u üretmez ve herhangi bir yere otomatik veri göndermez. Sistem, güvenli tarafta kalmak için yerel üretim paketi ve checkout hazırlık özeti üretir.
-
-Çıktılar:
-
-- `outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip`
-- `outputs/fabrication/fabrication_package.json`
-- `assets/generated/fabrication_package.json`
-
-Flutter sayfası:
+Bugunku beklenen sonuc:
 
 ```text
-lib/manufacturing_dashboard.dart
+status: package_ready — DRC=0 + model gate + source evidence gecti, ZIP uretildi.
 ```
 
-Bu sayfa şunları gösterir:
+## Veri Formatlari
 
-- Gerber/Drill/CPL/BOM paket durumu
-- kart ölçüsü
-- 4 katman bilgisi
-- üretici seçimi
-- miktar seçimi
-- solder mask rengi
-- yerel tahmini maliyet ve süre
-
-## Veri Formatları
-
-| Format | Amaç |
+| Format | Amac |
 | --- | --- |
-| `AI_Netlist_v1` | Tasarımın elektriksel kaynak modeli |
-| `DRC_REPORT_V1` | KiCad DRC hatalarının normalize edilmiş hali |
-| `PCBAI_CONSTRAINT_FEEDBACK_V1` | PCBai optimizer için penalty listesi |
-| `LAYOUT_OPTIMIZATION_RUN_V1` | Closed-loop optimizer sonucu |
-| `FABRICATION_PACKAGE_V1` | Üretim ZIP paketi ve checkout hazırlık özeti |
+| `AI_Netlist_v1` | Tasarimin elektriksel kaynak modeli |
+| `DRC_REPORT_V1` | KiCad DRC hatalarinin normalize hali |
+| `LAYOUT_OPTIMIZATION_RUN_V1` | Optimizer sonucu |
+| `ENGINEERING_READINESS_V1` | Gercek uretim adayligi kapisi |
+| `FABRICATION_PACKAGE_V1` | Sadece gate gecerse gecerli uretim paketi |
 
-İlgili fazlar için bkz. [[03 - Faz Takip Notları]].
+Ilgili fazlar icin bkz. [[03 - Faz Takip Notları]].

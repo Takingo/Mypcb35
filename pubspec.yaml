@@ -26,6 +26,8 @@ flutter:
     - assets/generated/layout_optimization_status.json
     - assets/generated/fabrication_package.json
     - assets/generated/engineering_readiness_report.json
+    - assets/generated/input_evidence_report.json
+    - assets/generated/ai_repair_log.json
     - assets/generated/schematic.svg/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.svg
     - assets/generated/schematic_sample.png
     - assets/generated/pcb.svg

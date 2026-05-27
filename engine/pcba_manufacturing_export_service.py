@@ -10,6 +10,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from board_verification_manifest import manifest_gate_failure
+from design_evidence_gate import audit_design_evidence_gate
+from production_model_gate import audit_production_model_gate
+
 
 @dataclass(frozen=True)
 class ManufacturerSpec:
@@ -106,6 +110,59 @@ class PcbaManufacturingExportService:
             raise ValueError(f"Unknown manufacturer: {manufacturer}")
         self.manufacturer = manufacturer
         self.spec = MANUFACTURER_SPECS[manufacturer]
+
+    def validate_export_gate(
+        self,
+        *,
+        netlist_file: Path,
+        bom_file: Path,
+        layout_status_file: Path,
+        pcb_file: Path,
+        drc_report_file: Path | None = None,
+        verification_manifest_file: Path | None = None,
+    ) -> None:
+        source_gate = audit_design_evidence_gate(netlist_file, bom_file)
+        if not source_gate.ok:
+            raise RuntimeError(
+                "PCBA direct export blocked because design source evidence failed: "
+                f"{source_gate.evidence_summary}"
+            )
+
+        if verification_manifest_file is not None and drc_report_file is not None and verification_manifest_file.exists():
+            failure = manifest_gate_failure(
+                verification_manifest_file,
+                pcb_file=pcb_file,
+                drc_report_file=drc_report_file,
+            )
+            if failure is not None:
+                raise RuntimeError(f"PCBA direct export blocked by board verification manifest: {failure}")
+            return
+
+        if not layout_status_file.exists():
+            raise RuntimeError(
+                f"PCBA direct export blocked because layout status is missing: {layout_status_file}"
+            )
+        layout_status = json.loads(layout_status_file.read_text(encoding="utf-8"))
+        final_count = int(layout_status.get("final_violation_count", -1))
+        manufacturing_ready = bool(layout_status.get("manufacturing_ready", False))
+        if final_count != 0 or not manufacturing_ready:
+            raise RuntimeError(
+                "PCBA direct export blocked because KiCad DRC is not clean: "
+                f"final_violation_count={final_count}, manufacturing_ready={manufacturing_ready}."
+            )
+
+        pcb_text = pcb_file.read_text(encoding="utf-8", errors="ignore") if pcb_file.exists() else ""
+        if "pcbnew unavailable" in pcb_text or "(footprint" not in pcb_text:
+            raise RuntimeError(
+                "PCBA direct export blocked because the active PCB is missing real KiCad footprint data."
+            )
+
+        model_gate = audit_production_model_gate(pcb_file)
+        if not model_gate.ok:
+            raise RuntimeError(
+                "PCBA direct export blocked because production model validation failed: "
+                f"{model_gate.evidence_summary}"
+            )
 
     def generate_assembly_drawing_text(self, component_count: int) -> str:
         """Generate assembly drawing instructions as text (can be converted to PDF)."""
@@ -350,12 +407,57 @@ DO NOT START FABRICATION until:
         else:
             return "7-14 (varies by component sourcing)"
 
+    def generate_bom_from_netlist(self, netlist_file: Path) -> str:
+        """Generate BOM directly from AI_NETLIST_V1.json — authoritative source."""
+        lines = []
+        lines.append(
+            "Reference,Value,Part Number,Manufacturer,Quantity,Unit Cost USD,Total Cost USD,Lead Time Days,Stock Status,Component Type,Package,Datasheet URL"
+        )
+
+        try:
+            netlist = json.loads(netlist_file.read_text(encoding="utf-8-sig"))
+            components = netlist.get("components", [])
+
+            # Group by part number to count quantities
+            parts_by_ref = {}
+            for comp in components:
+                ref = comp.get("ref", "?")
+                value = comp.get("value", "")
+                part = comp.get("part_number", "")
+                reason = comp.get("reason", "")
+
+                if part and ref:
+                    parts_by_ref[ref] = {
+                        "value": value,
+                        "part": part,
+                        "reason": reason
+                    }
+
+            # Generate BOM lines
+            for ref in sorted(parts_by_ref.keys()):
+                info = parts_by_ref[ref]
+                value = info["value"]
+                part = info["part"]
+
+                cost_data = self._simulate_component_cost(part, value)
+
+                lines.append(
+                    f"{ref},\"{value}\",{part},{cost_data['mfg']},1,"
+                    f"{cost_data['unit_cost']},{cost_data['total_cost']},"
+                    f"{cost_data['lead_time']},{cost_data['stock']},{cost_data['type']},"
+                    f"{cost_data['package']},{cost_data['datasheet']}"
+                )
+        except Exception as e:
+            print(f"[ERROR] Netlist'ten BOM oluşturulamadı: {e}")
+
+        return "\n".join(lines)
+
     def generate_bom_extended(
         self,
         base_bom_csv: str,
         pcb_file: Path,
     ) -> str:
-        """Generate extended BOM with availability, cost, lead-time data."""
+        """Generate extended BOM with availability, cost, lead-time data (deprecated — use generate_bom_from_netlist)."""
         lines = []
         lines.append(
             "Reference,Value,Part Number,Manufacturer,Quantity,Unit Cost USD,Total Cost USD,Lead Time Days,Stock Status,Component Type,Package,Datasheet URL"
@@ -512,6 +614,7 @@ DO NOT START FABRICATION until:
         bom_csv: str,
         gerber_dir: Path,
         position_file: Path | None = None,
+        netlist_file: Path | None = None,
     ) -> PcbaManufacturingPackage:
         """Generate complete PCBA manufacturing package with all files."""
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -536,9 +639,14 @@ DO NOT START FABRICATION until:
                     mandatory=True,
                 ))
 
-        # 2. Generate extended BOM
+        # 2. Generate extended BOM from netlist (authoritative source)
         bom_file = output_dir / "BOM_Extended.csv"
-        extended_bom = self.generate_bom_extended(bom_csv, pcb_file)
+        netlist_path = Path(str(netlist_file)) if netlist_file else Path("outputs/phase1/AI_NETLIST_V1.json")
+        if netlist_path.exists():
+            extended_bom = self.generate_bom_from_netlist(netlist_path)
+        else:
+            # Fallback to manual BOM if netlist not found
+            extended_bom = self.generate_bom_extended(bom_csv, pcb_file)
         bom_file.write_text(extended_bom, encoding="utf-8")
         files.append(ManufacturingFile(
             path="BOM_Extended.csv",
@@ -681,6 +789,10 @@ def main() -> int:
     parser.add_argument("--output-dir", default="outputs/pcba_manufacturing")
     parser.add_argument("--pcb-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb")
     parser.add_argument("--bom-file", default="BOM.csv")
+    parser.add_argument("--netlist-file", default="outputs/phase1/AI_NETLIST_V1.json")
+    parser.add_argument("--layout-status-file", default="outputs/phase4/layout_optimization_status.json")
+    parser.add_argument("--drc-report-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/manufacturing/drc_report.json")
+    parser.add_argument("--verification-manifest-file", default="outputs/engineering/board_verification_manifest.json")
     parser.add_argument("--gerber-dir", default="outputs/phase4/gerber")
     parser.add_argument("--position-file", default="outputs/phase4/position/position.csv")
     parser.add_argument("--manufacturer", default="PCBWay", choices=list(MANUFACTURER_SPECS.keys()))
@@ -693,12 +805,21 @@ def main() -> int:
         bom_csv = bom_path.read_text(encoding="utf-8")
 
     service = PcbaManufacturingExportService(manufacturer=args.manufacturer)
+    service.validate_export_gate(
+        netlist_file=Path(args.netlist_file),
+        bom_file=bom_path,
+        layout_status_file=Path(args.layout_status_file),
+        pcb_file=Path(args.pcb_file),
+        drc_report_file=Path(args.drc_report_file),
+        verification_manifest_file=Path(args.verification_manifest_file),
+    )
     package = service.create_complete_package(
         output_dir=Path(args.output_dir),
         pcb_file=Path(args.pcb_file),
         bom_csv=bom_csv,
         gerber_dir=Path(args.gerber_dir),
         position_file=Path(args.position_file) if args.position_file else None,
+        netlist_file=Path(args.netlist_file) if args.netlist_file else None,
     )
 
     if args.asset_output:
@@ -709,7 +830,7 @@ def main() -> int:
         )
 
     print(json.dumps(package.to_dict(), indent=2))
-    print(f"\n✓ PCBA manufacturing package generated: {args.output_dir}")
+    print(f"\n[OK] PCBA manufacturing package generated: {args.output_dir}")
     print(f"  Target manufacturer: {args.manufacturer}")
     print(f"  Files generated: {len(package.files)}")
 

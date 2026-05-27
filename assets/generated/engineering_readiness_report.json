@@ -1,9 +1,9 @@
 {
   "schema": "ENGINEERING_READINESS_V1",
-  "generated_at": "2026-05-24T07:24:05+00:00",
-  "overall_status": "review_required",
-  "readiness_percent": 86,
-  "summary": "Muhendislik denetimi: review_required. 6/7 kontrol gecti, 0 bloklayici sorun, 1 inceleme uyarisi.",
+  "generated_at": "2026-05-27T03:07:46+00:00",
+  "overall_status": "production_candidate",
+  "readiness_percent": 100,
+  "summary": "Muhendislik denetimi: production_candidate. 9/9 kontrol gecti, 0 bloklayici sorun, 0 inceleme uyarisi.",
   "checks": [
     {
       "id": "BOM_SOURCE",
@@ -11,6 +11,14 @@
       "status": "pass",
       "severity": "info",
       "evidence": "BOM kritik komponentleri iceriyor.",
+      "required_action": "Islem gerekmiyor."
+    },
+    {
+      "id": "DESIGN_SOURCE_EVIDENCE",
+      "domain": "source",
+      "status": "pass",
+      "severity": "info",
+      "evidence": "AI netlist komponent/net/BOM izlenebilirlik kapisini gecti.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -30,27 +38,35 @@
       "required_action": "Islem gerekmiyor."
     },
     {
+      "id": "PRODUCTION_MODEL",
+      "domain": "pcb",
+      "status": "pass",
+      "severity": "info",
+      "evidence": "Footprint kimlikleri ve pad-net modeli uretim kapisini gecti.",
+      "required_action": "Islem gerekmiyor."
+    },
+    {
       "id": "DRC_EVIDENCE",
       "domain": "drc",
       "status": "pass",
       "severity": "info",
-      "evidence": "KiCad DRC=0 ve aktif PCB dosyasi tutarli.",
+      "evidence": "Board verification manifest aktif PCB ve KiCad DRC raporuyla tutarli; DRC=0.",
       "required_action": "Islem gerekmiyor."
     },
     {
       "id": "REAL_SIMULATION",
       "domain": "simulation",
-      "status": "warn",
-      "severity": "review",
-      "evidence": "6 simulasyon kaniti bulundu; bazi maddeler inceleme istiyor.",
-      "required_action": "Review maddelerini datasheet ve uretici stackup ile dogrula."
+      "status": "pass",
+      "severity": "info",
+      "evidence": "7 simulasyon kaniti bulundu.",
+      "required_action": "Islem gerekmiyor."
     },
     {
       "id": "PCBA_HANDOFF",
       "domain": "pcba",
       "status": "pass",
       "severity": "info",
-      "evidence": "Gerber/drill/BOM/CPL + 8 drawing + 1 3D model kaniti bulundu.",
+      "evidence": "Gerber/drill/BOM/CPL + 11 drawing + 1 3D model kaniti bulundu.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -58,7 +74,7 @@
       "domain": "export",
       "status": "pass",
       "severity": "info",
-      "evidence": "ZIP paketi 28 dosya iceriyor.",
+      "evidence": "ZIP paketi 30 dosya iceriyor.",
       "required_action": "Islem gerekmiyor."
     }
   ]

@@ -41,18 +41,15 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
           length: 2,
           child: Column(
             children: [
-              TabBar(
-                tabs: const [
+              const TabBar(
+                tabs: [
                   Tab(text: 'Temel Uretim Paketi'),
                   Tab(text: 'PCBA Direkt Export'),
                 ],
               ),
               Expanded(
                 child: TabBarView(
-                  children: [
-                    _buildBasicPackageView(),
-                    _buildPcbaExportView(),
-                  ],
+                  children: [_buildBasicPackageView(), _buildPcbaExportView()],
                 ),
               ),
             ],
@@ -140,6 +137,23 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
   }
 
   Widget _buildPcbaExportView() {
+    try {
+      context.read<NetlistController>();
+      return const _PcbaExportPanel();
+    } on ProviderNotFoundException {
+      return ChangeNotifierProvider(
+        create: (_) => NetlistController(),
+        child: const _PcbaExportPanel(),
+      );
+    }
+  }
+}
+
+class _PcbaExportPanel extends StatelessWidget {
+  const _PcbaExportPanel();
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<NetlistController>(
       builder: (context, controller, _) {
         return SingleChildScrollView(
@@ -158,7 +172,7 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      value: controller.selectedManufacturer,
+                      initialValue: controller.selectedManufacturer,
                       decoration: const InputDecoration(
                         labelText: 'Hedef PCBA Uretim Firmasi',
                         border: OutlineInputBorder(),
@@ -168,8 +182,14 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
                           value: 'PCBWay',
                           child: Text('PCBWay (tavsiye edilen)'),
                         ),
-                        DropdownMenuItem(value: 'JLCPCB', child: Text('JLCPCB')),
-                        DropdownMenuItem(value: 'Seeed', child: Text('Seeed Fusion')),
+                        DropdownMenuItem(
+                          value: 'JLCPCB',
+                          child: Text('JLCPCB'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Seeed',
+                          child: Text('Seeed Fusion'),
+                        ),
                       ],
                       onChanged: (value) {
                         if (value != null) {

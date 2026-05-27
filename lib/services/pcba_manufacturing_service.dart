@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
-
 class PcbaManufacturingExportResult {
   const PcbaManufacturingExportResult({
     required this.success,
@@ -47,7 +45,8 @@ class PcbaManufacturingService {
   }) async {
     onProgress?.call('Starting PCBA manufacturing export for $manufacturer...');
 
-    final scriptPath = '$projectRoot\\engine\\pcba_manufacturing_export_service.py';
+    final scriptPath =
+        '$projectRoot\\engine\\pcba_manufacturing_export_service.py';
     if (!File(scriptPath).existsSync()) {
       return PcbaManufacturingExportResult(
         success: false,
@@ -62,16 +61,15 @@ class PcbaManufacturingService {
     }
 
     try {
-      final process = await Process.start(
-        kicadPython,
-        [
-          scriptPath,
-          '--manufacturer', manufacturer,
-          '--output-dir', outputDir,
-          '--asset-output', 'assets/generated/pcba_manufacturing_package.json',
-        ],
-        workingDirectory: projectRoot,
-      );
+      final process = await Process.start(kicadPython, [
+        scriptPath,
+        '--manufacturer',
+        manufacturer,
+        '--output-dir',
+        outputDir,
+        '--asset-output',
+        'assets/generated/pcba_manufacturing_package.json',
+      ], workingDirectory: projectRoot);
 
       final outputLines = <String>[];
       final stderrLines = <String>[];
@@ -80,17 +78,17 @@ class PcbaManufacturingService {
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        outputLines.add(line);
-        onProgress?.call(line);
-      });
+            outputLines.add(line);
+            onProgress?.call(line);
+          });
 
       process.stderr
           .transform(utf8.decoder)
           .transform(const LineSplitter())
           .listen((line) {
-        stderrLines.add(line);
-        onProgress?.call('ERROR: $line');
-      });
+            stderrLines.add(line);
+            onProgress?.call('ERROR: $line');
+          });
 
       final exitCode = await process.exitCode;
 
@@ -103,17 +101,13 @@ class PcbaManufacturingService {
           boardWidthMm: 0,
           boardHeightMm: 0,
           componentCount: 0,
-          error: 'Python script exited with code $exitCode: ${stderrLines.join('\n')}',
+          error:
+              'Python script exited with code $exitCode: ${stderrLines.join('\n')}',
         );
       }
 
-      // Parse JSON output (last valid JSON line)
-      final jsonLine = outputLines.reversed.firstWhere(
-        (l) => l.trim().startsWith('{'),
-        orElse: () => '',
-      );
-
-      if (jsonLine.isEmpty) {
+      final data = _decodeJsonObject(outputLines.join('\n'));
+      if (data == null) {
         return PcbaManufacturingExportResult(
           success: false,
           manufacturer: manufacturer,
@@ -126,9 +120,12 @@ class PcbaManufacturingService {
         );
       }
 
-      final data = jsonDecode(jsonLine) as Map<String, dynamic>;
       final files = (data['files'] as List?)?.length ?? 0;
-      final boardSizeList = (data['board_size_mm'] as List?)?.map((v) => (v as num).toDouble()).toList() ?? <double>[0.0, 0.0];
+      final boardSizeList =
+          (data['board_size_mm'] as List?)
+              ?.map((v) => (v as num).toDouble())
+              .toList() ??
+          <double>[0.0, 0.0];
       final componentCount = (data['component_count'] as num?)?.toInt() ?? 0;
       final costMap = data['cost_estimate'] as Map<String, dynamic>?;
       final costEstimate = (costMap?['total_usd'] as num?)?.toDouble() ?? 0.0;
@@ -159,31 +156,17 @@ class PcbaManufacturingService {
     }
   }
 
-  /// Download/export generated manufacturing package as ZIP
-  Future<bool> downloadManufacturingZip({
-    String outputDir = r'outputs\pcba_manufacturing',
-    void Function(String)? onProgress,
-  }) async {
-    onProgress?.call('Bundling manufacturing package into ZIP...');
-
-    final outputPath = Path(projectRoot) / 'outputs' / 'pcba_manufacturing';
-    // TODO: Create ZIP bundling logic or call Windows shell to create ZIP
-
-    onProgress?.call('Manufacturing package ready for download');
-    return true;
+  Map<String, dynamic>? _decodeJsonObject(String output) {
+    final start = output.indexOf('{');
+    final end = output.lastIndexOf('}');
+    if (start < 0 || end <= start) {
+      return null;
+    }
+    try {
+      return jsonDecode(output.substring(start, end + 1))
+          as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
   }
-}
-
-// Simple path helper
-class Path {
-  final String path;
-
-  Path(this.path);
-
-  Path operator /(String other) {
-    return Path('$path\\$other');
-  }
-
-  @override
-  String toString() => path;
 }

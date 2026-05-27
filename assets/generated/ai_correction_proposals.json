@@ -1,0 +1,15 @@
+{
+  "schema": "AI_CORRECTION_PROPOSALS_V1",
+  "generated_at": "2026-05-27T14:34:54.493980Z",
+  "netlist_file": "C:\\Mypcb\\outputs\\phase1\\AI_NETLIST_V1.json",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "proposals": [],
+  "summary": {
+    "total": 0,
+    "pending": 0,
+    "auto_applicable": 0,
+    "needs_user": 0,
+    "safety_critical": 0
+  }
+}

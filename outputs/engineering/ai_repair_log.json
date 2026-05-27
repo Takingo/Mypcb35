@@ -1,0 +1,454 @@
+{
+  "schema": "AI_REPAIR_RUN_V1",
+  "generated_at": "2026-05-26T18:30:21+00:00",
+  "netlist_file": "C:\\Mypcb\\outputs\\phase1\\AI_NETLIST_V1.json",
+  "findings_summary": {
+    "design": 4,
+    "deterministic_skipped": 0,
+    "gate": 1,
+    "input_review": 29,
+    "deterministic_bom_fixes": 10
+  },
+  "deterministic_findings": [],
+  "design_findings": [
+    {
+      "id": "ORPHAN_AC_L_PROTECTED_J1",
+      "category": "pin_orphan",
+      "severity": "error",
+      "description": "'AC_L_PROTECTED' neti olmayan komponente isaret ediyor: J1.L",
+      "source": "input_evidence"
+    },
+    {
+      "id": "ORPHAN_+5V_ISO_K2",
+      "category": "pin_orphan",
+      "severity": "error",
+      "description": "'+5V_ISO' neti olmayan komponente isaret ediyor: K2.COIL+",
+      "source": "input_evidence"
+    },
+    {
+      "id": "ORPHAN_SPI_CS_3V3_R10",
+      "category": "pin_orphan",
+      "severity": "error",
+      "description": "'SPI_CS_3V3' neti olmayan komponente isaret ediyor: R10",
+      "source": "input_evidence"
+    },
+    {
+      "id": "ORPHAN_UWB_RF_50R_J2",
+      "category": "pin_orphan",
+      "severity": "error",
+      "description": "'UWB_RF_50R' neti olmayan komponente isaret ediyor: J2.CENTER",
+      "source": "input_evidence"
+    }
+  ],
+  "gate_findings": [
+    {
+      "id": "REAL_SIMULATION",
+      "domain": "simulation",
+      "status": "warn",
+      "severity": "review",
+      "evidence": "6 simulasyon kaniti bulundu; bazi maddeler inceleme istiyor.",
+      "required_action": "Review maddelerini datasheet ve uretici stackup ile dogrula."
+    }
+  ],
+  "input_review_findings": [
+    {
+      "id": "BOM_ONLY_FB1",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: FB1 (Ferrite bead / BLM21PG221SN1D)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_FB2",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: FB2 (Ferrite bead / BLM21PG221SN1D)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_FB3",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: FB3 (Ferrite bead / BLM21PG221SN1D)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J1",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J1 (AC input terminal / 1984617)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J10",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J10 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J11",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J11 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J12",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J12 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J13",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J13 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J14",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J14 (I2C header / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J15",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J15 (UART header / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J16",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J16 (Power header / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J2",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J2 (SMA edge connector / 132134)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J6",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J6 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J7",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J7 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J8",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J8 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_J9",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: J9 (GPIO headers / TSW-104-07-G-S)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R10",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R10 (100R / RC0603FR-07100RL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R11",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R11 (100R / RC0603FR-07100RL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R12",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R12 (100R / RC0603FR-07100RL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R13",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R13 (100R / RC0603FR-07100RL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R20",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R20 (10K / RC0603FR-0710KL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_R21",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: R21 (33R / RC0603FR-0733RL)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_TVS1",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: TVS1 (TVS diode / SMBJ5.0A)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_TVS2",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: TVS2 (TVS diode / SMBJ5.0A)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "BOM_ONLY_TVS3",
+      "category": "bom_not_in_netlist",
+      "severity": "review",
+      "description": "BOM'da var, netliste girmemis: TVS3 (TVS diode / SMBJ5.0A)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "NL_ONLY_D1",
+      "category": "netlist_not_in_bom",
+      "severity": "review",
+      "description": "Netliste var, BOM'da yok: D1 (SS14 / SS14)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "NL_ONLY_K1",
+      "category": "netlist_not_in_bom",
+      "severity": "review",
+      "description": "Netliste var, BOM'da yok: K1 (5V relay / G5Q-14-DC5)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "NL_ONLY_OK1",
+      "category": "netlist_not_in_bom",
+      "severity": "review",
+      "description": "Netliste var, BOM'da yok: OK1 (PC817 / PC817)",
+      "source": "input_evidence"
+    },
+    {
+      "id": "NL_ONLY_Q1",
+      "category": "netlist_not_in_bom",
+      "severity": "review",
+      "description": "Netliste var, BOM'da yok: Q1 (2N7002 / 2N7002)",
+      "source": "input_evidence"
+    }
+  ],
+  "deterministic_bom_fixes": [
+    {
+      "ref": "U1",
+      "field": "value",
+      "from": "ESP32-S3",
+      "to": "ESP32-S3 module",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U2",
+      "field": "value",
+      "from": "DWM3000",
+      "to": "UWB module",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "F1",
+      "field": "value",
+      "from": "500mA",
+      "to": "500mA fuse",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "MOV1",
+      "field": "value",
+      "from": "471VAC MOV",
+      "to": "AC varistor",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U6",
+      "field": "value",
+      "from": "5V isolated",
+      "to": "5V isolated AC/DC",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U7",
+      "field": "value",
+      "from": "3.3V",
+      "to": "3.3V buck",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U8",
+      "field": "value",
+      "from": "1.8V low-noise",
+      "to": "1.8V low-noise LDO",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U3",
+      "field": "value",
+      "from": "4-bit bidirectional",
+      "to": "4-bit level shifter",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U4",
+      "field": "value",
+      "from": "single-bit dual-supply",
+      "to": "Single-bit level shifter",
+      "source": "bom_authoritative"
+    },
+    {
+      "ref": "U5",
+      "field": "value",
+      "from": "single-bit dual-supply",
+      "to": "Single-bit level shifter",
+      "source": "bom_authoritative"
+    }
+  ],
+  "provider": "ollama",
+  "model": "gemma4",
+  "proposed_operations": [
+    {
+      "op": "remove_component",
+      "target": "J1",
+      "fields": {
+        "reason": "J1.L is listed as an orphan pin for AC_L_PROTECTED, suggesting it might be an incorrect connection point or a redundant pin that should not be connected to the net. Removing the component pin connection resolves the orphan error.",
+        "confidence": 0.9,
+        "requires_user_evidence": false
+      },
+      "reason": "Remove J1 component to resolve the orphan pin error on AC_L_PROTECTED.",
+      "confidence": 0.9,
+      "requires_user_evidence": false
+    },
+    {
+      "op": "remove_component",
+      "target": "K2",
+      "fields": {
+        "reason": "K2.COIL+ is listed as an orphan pin for +5V_ISO. Since K2 is not defined in the current components list, and the error points specifically to K2.COIL+, we assume K2 is either missing or the connection is incorrect. Removing the pin connection resolves the orphan error.",
+        "confidence": 0.9,
+        "requires_user_evidence": true
+      },
+      "reason": "Remove K2 component connection to resolve the orphan pin error on +5V_ISO.",
+      "confidence": 0.9,
+      "requires_user_evidence": true
+    },
+    {
+      "op": "remove_component",
+      "target": "R10",
+      "fields": {
+        "reason": "R10 is listed as an orphan pin for SPI_CS_3V3. This indicates R10 is incorrectly connected to this net. Removing the component pin connection resolves the orphan error.",
+        "confidence": 0.9,
+        "requires_user_evidence": false
+      },
+      "reason": "Remove R10 component to resolve the orphan pin error on SPI_CS_3V3.",
+      "confidence": 0.9,
+      "requires_user_evidence": false
+    },
+    {
+      "op": "remove_component",
+      "target": "J2",
+      "fields": {
+        "reason": "J2.CENTER is listed as an orphan pin for UWB_RF_50R. This indicates J2 is incorrectly connected to this net. Removing the component pin connection resolves the orphan error.",
+        "confidence": 0.9,
+        "requires_user_evidence": false
+      },
+      "reason": "Remove J2 component to resolve the orphan pin error on UWB_RF_50R.",
+      "confidence": 0.9,
+      "requires_user_EVIDENCE": false
+    }
+  ],
+  "accepted": [],
+  "rejected": [
+    {
+      "operation": {
+        "op": "remove_component",
+        "target": "J1",
+        "fields": {
+          "reason": "J1.L is listed as an orphan pin for AC_L_PROTECTED, suggesting it might be an incorrect connection point or a redundant pin that should not be connected to the net. Removing the component pin connection resolves the orphan error.",
+          "confidence": 0.9,
+          "requires_user_evidence": false
+        },
+        "reason": "Remove J1 component to resolve the orphan pin error on AC_L_PROTECTED.",
+        "confidence": 0.9,
+        "requires_user_evidence": false
+      },
+      "verdict": "rejected",
+      "reason": "komponent yok: J1"
+    },
+    {
+      "operation": {
+        "op": "remove_component",
+        "target": "R10",
+        "fields": {
+          "reason": "R10 is listed as an orphan pin for SPI_CS_3V3. This indicates R10 is incorrectly connected to this net. Removing the component pin connection resolves the orphan error.",
+          "confidence": 0.9,
+          "requires_user_evidence": false
+        },
+        "reason": "Remove R10 component to resolve the orphan pin error on SPI_CS_3V3.",
+        "confidence": 0.9,
+        "requires_user_evidence": false
+      },
+      "verdict": "rejected",
+      "reason": "komponent yok: R10"
+    },
+    {
+      "operation": {
+        "op": "remove_component",
+        "target": "J2",
+        "fields": {
+          "reason": "J2.CENTER is listed as an orphan pin for UWB_RF_50R. This indicates J2 is incorrectly connected to this net. Removing the component pin connection resolves the orphan error.",
+          "confidence": 0.9,
+          "requires_user_evidence": false
+        },
+        "reason": "Remove J2 component to resolve the orphan pin error on UWB_RF_50R.",
+        "confidence": 0.9,
+        "requires_user_EVIDENCE": false
+      },
+      "verdict": "rejected",
+      "reason": "komponent yok: J2"
+    }
+  ],
+  "questions": [
+    {
+      "operation": {
+        "op": "remove_component",
+        "target": "K2",
+        "fields": {
+          "reason": "K2.COIL+ is listed as an orphan pin for +5V_ISO. Since K2 is not defined in the current components list, and the error points specifically to K2.COIL+, we assume K2 is either missing or the connection is incorrect. Removing the pin connection resolves the orphan error.",
+          "confidence": 0.9,
+          "requires_user_evidence": true
+        },
+        "reason": "Remove K2 component connection to resolve the orphan pin error on +5V_ISO.",
+        "confidence": 0.9,
+        "requires_user_evidence": true
+      },
+      "verdict": "needs_evidence",
+      "reason": "AI emin degil (requires_user_evidence)"
+    }
+  ],
+  "candidate_file": "C:\\Mypcb\\outputs\\phase1\\AI_NETLIST_V1.candidate.json",
+  "status": "candidate_ready",
+  "note": "Candidate netlist yazildi (deterministik BOM hizalamasi + AI onerileri). Kabul icin KiCad re-verify gerekir."
+}

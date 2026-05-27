@@ -17,6 +17,9 @@ class OllamaClient:
         self.host = self.settings.get("base_url", host).rstrip("/")
         self.api_key = self.settings.get("api_key", "")
         self.temperature = self.settings.get("temperature", 0.2)
+        # Yavas lokal modeller icin ayarlanabilir timeout (sn). Buyuk modeller
+        # (orn. gemma4 9.6GB) varsayilan 300sn'yi asabilir; API modelleri hizlidir.
+        self.timeout_seconds = int(self.settings.get("timeout_seconds", 300))
 
     def _load_settings(self) -> dict[str, Any]:
         """Load AI settings from settings JSON file.
@@ -244,7 +247,7 @@ class OllamaClient:
         req = urllib.request.Request(url, data=data, headers=headers)
 
         try:
-            with urllib.request.urlopen(req, timeout=300) as response:
+            with urllib.request.urlopen(req, timeout=self.timeout_seconds) as response:
                 return json.loads(response.read().decode("utf-8"))
 
         except urllib.error.HTTPError as e:

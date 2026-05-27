@@ -20,4 +20,5 @@ FB1-FB3,3,Ferrite bead,Murata,BLM21PG221SN1D,0805,EMI filtering
 R10-R13,4,100R,Yageo,RC0603FR-07100RL,0603,SPI series resistors
 R20,1,10K,Yageo,RC0603FR-0710KL,0603,IRQ pull-up
 R21,1,33R,Yageo,RC0603FR-0733RL,0603,EXT_TX series resistor
+K1-K2,2,Relay SPDT 5V 10A,Omron,G5Q-14-DC5,DIP-8,Relay outputs
 TP1-TP18,18,Test point,Keystone,5015,Loop/Pogo,Accessible test points

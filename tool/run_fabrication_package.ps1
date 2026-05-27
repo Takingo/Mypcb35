@@ -20,3 +20,5 @@ $env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
   --manufacturer $Manufacturer `
   --solder-mask-color $SolderMaskColor `
   --asset-output "assets\generated\fabrication_package.json"
+
+exit $LASTEXITCODE

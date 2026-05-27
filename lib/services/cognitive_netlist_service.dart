@@ -118,11 +118,18 @@ class CognitiveNetlistService {
           reason: 'SPI voltage translation.',
         ),
         const NetlistComponent(
-          ref: 'U4-U5',
+          ref: 'U4',
           type: 'level_shifter',
           value: 'single-bit dual-supply',
           partNumber: 'SN74LVC1T45DCK',
-          reason: 'IRQ and EXT_TX voltage translation.',
+          reason: 'IRQ voltage translation.',
+        ),
+        const NetlistComponent(
+          ref: 'U5',
+          type: 'level_shifter',
+          value: 'single-bit dual-supply',
+          partNumber: 'SN74LVC1T45DCK',
+          reason: 'EXT_TX voltage translation.',
         ),
         for (var index = 1; index <= relayCount; index++) ...[
           NetlistComponent(
@@ -170,13 +177,13 @@ class CognitiveNetlistService {
         ),
         const NetConnection(
           net: '+3V3',
-          pins: ['U7.OUT', 'U1.3V3', 'U3.VCCA', 'U4.VCCA'],
+          pins: ['U7.OUT', 'U1.3V3', 'U3.VCCA', 'U4.VCCA', 'U5.VCCA'],
           netClass: 'power_3v3',
           reason: 'ESP32 logic rail.',
         ),
         const NetConnection(
           net: '+1V8',
-          pins: ['U8.OUT', 'U2.VDDIO', 'U3.VCCB', 'U4.VCCB'],
+          pins: ['U8.OUT', 'U2.VDDIO', 'U3.VCCB', 'U4.VCCB', 'U5.VCCB'],
           netClass: 'power_1v8',
           reason: 'DWM3000 logic rail.',
         ),
@@ -193,16 +200,43 @@ class CognitiveNetlistService {
           reason: 'Translated DWM3000 SPI chip select.',
         ),
         const NetConnection(
-          net: 'DWM_IRQ',
-          pins: ['U2.IRQ', 'U4.B', 'U4.A', 'U1.GPIO14'],
-          netClass: 'rtls',
-          reason: 'IRQ translated through SN74LVC1T45.',
+          net: 'DWM_IRQ_3V3',
+          pins: ['U4.A', 'U1.GPIO14'],
+          netClass: 'rtls_3v3',
+          reason: 'IRQ translated to ESP32 domain.',
+        ),
+        const NetConnection(
+          net: 'DWM_IRQ_1V8',
+          pins: ['U4.B', 'U2.IRQ'],
+          netClass: 'rtls_1v8',
+          reason: 'IRQ source from DWM3000 domain.',
+        ),
+        const NetConnection(
+          net: 'DWM_EXT_TX_3V3',
+          pins: ['U5.A', 'U1.GPIO15'],
+          netClass: 'rtls_3v3',
+          reason: 'EXT_TX translated to ESP32 domain.',
+        ),
+        const NetConnection(
+          net: 'DWM_EXT_TX_1V8',
+          pins: ['U5.B', 'U2.EXT_TX'],
+          netClass: 'rtls_1v8',
+          reason: 'EXT_TX source from DWM3000 domain.',
         ),
         const NetConnection(
           net: 'UWB_RF_50R',
           pins: ['U2.RF_PIN23', 'J2.CENTER'],
           netClass: 'rf_50r',
           reason: '50 ohm UWB antenna trace.',
+        ),
+        const NetConnection(
+          net: 'GND',
+          pins: [
+            'U6.-VO', 'U7.GND', 'U8.GND', 'U1.GND', 'U2.GND', 'U3.GND', 'U3.GND2',
+            'U4.GND', 'U4.DIR', 'U5.GND', 'U5.DIR'
+          ],
+          netClass: 'ground',
+          reason: 'Low-voltage ground return.',
         ),
         for (var index = 1; index <= relayCount; index++)
           NetConnection(

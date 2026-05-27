@@ -1,210 +1,132 @@
 ---
-title: Mühendislik Gerçeklik Kapısı
+title: Muhendislik Gerceklik Kapisi
 tags:
   - omnicircuit
   - engineering-readiness
   - kicad
   - safety-gate
 status: active
-updated: 2026-05-24
+updated: 2026-05-26
 ---
 
-# Mühendislik Gerçeklik Kapısı
+# Muhendislik Gerceklik Kapisi
 
-Bu not OmniCircuit AI'nin güncel gerçek durumunu anlatır. Sistem artık yalnızca ekranda sonuç göstermiyor; KiCad CLI ile şematik ERC, PCB DRC, PCBA görselleri ve üretim ZIP paketini doğrulayan bir kapıdan geçiriliyor.
+Bu kapinin gorevi sistemin kendini oldugundan daha hazir gostermesini engellemektir. Proje ancak gercek KiCad kanitlari, izlenebilir kaynak modeli ve uretim kontrolleri gecerse `production_candidate` olabilir.
 
-> [!important]
-> `DRC=0` tek başına "gerçek üretime hazır" anlamına gelmez. Şematik ERC, aktif PCB dosyası, üretim exportları, PCBA görselleri ve simülasyon kanıtları birlikte kontrol edilmeden sistem "hazır" dememelidir.
+> [!success] Son Karar
+> Mühendis sign-off kaydedildiginde durum `production_candidate` (**%100, 9/9, 0 bloklayici, 0 review**). Sign-off yoksa `review_required` (%89, 8/9) — `REAL_SIMULATION` insan onayi bekler. Sistem sign-off'u ASLA kendisi uydurmaz. Fiziksel uretim icin yine uretici DFM + prototip onerilir.
 
-## Güncel Sonuç
+## Son Denetim
 
-Son denetim:
+Kaynak:
+
+```text
+outputs/engineering/engineering_readiness_report.json
+outputs/engineering/manual_signoff.json   (mühendis imzasi — varsa REAL_SIMULATION pass)
+outputs/simulation/simulation_report.json (5 otomatik kontrol)
+```
+
+Son sonuc (sign-off kaydedildikten sonra):
 
 ```text
 overall_status: production_candidate
 readiness_percent: 100
+passed_checks: 9/9
 blocker: 0
 review_warning: 0
 ```
 
-Geçen kapılar:
+Sign-off OLMADAN: `review_required`, %89, 8/9, 1 review (REAL_SIMULATION).
 
-- BOM kritik komponentleri içeriyor.
-- KiCad şematik gerçek symbol instance kullanıyor ve `kicad-cli sch erc` sonucu `0`.
-- Aktif `.kicad_pcb` footprint içeriyor; stub değil.
-- KiCad PCB DRC sonucu `0`.
-- Gerber, drill, BOM ve CPL üretildi.
-- Assembly PDF/SVG ve 3D PCBA `.glb` üretildi.
-- Üretim ZIP paketi oluşturuldu.
-- **TÜM fiziksel varsayımlar (datasheet pinout, RF stackup, AC güvenlik) AI tarafından simüle edildi ve onaylandı.**
+## Gecen Kontroller (9/9 — sign-off ile)
 
-## Gerçekleştirilen Kritik Düzeltmeler
+- `BOM_SOURCE`: BOM kritik komponentleri iceriyor.
+- `DESIGN_SOURCE_EVIDENCE`: AI netlist komponent/net/BOM izlenebilirlik kapisini gecti.
+- `SCHEMATIC_SYMBOLS`: Sematik gercek KiCad symbol instance iceriyor ve ERC temiz.
+- `PCB_ARTIFACT`: Aktif PCB footprint verisi iceriyor; stub degil.
+- `PRODUCTION_MODEL`: Footprint kimlikleri ve pad-net modeli uretim kapisini gecti.
+- `DRC_EVIDENCE`: KiCad DRC total 0 (0 error, 0 unconnected, 0 dangling). **Pass.**
+- `PCBA_HANDOFF`: DRC temiz. **Pass.**
+- `FAB_ZIP`: DRC temiz, paket `package_ready`. **Pass.**
+- `REAL_SIMULATION`: 5 otomatik kontrol (Power Budget, RF Impedance, Thermal, Decoupling Coverage, AC Safety) + mühendis sign-off. **Pass (sign-off ile).**
 
-1. Şematik üretimi `text_box` seviyesinden çıkarıldı; gerçek KiCad symbol instance ve global label bağlantıları oluşturuluyor.
-2. KiCad sembol Y koordinatı hatası düzeltildi; pin-wire bağlantıları artık gerçek ERC tarafından kabul ediliyor.
-3. Proje içi `omnicircuit.kicad_sym` ve `sym-lib-table` üretiliyor; KiCad artık `OmniCircuit` sembol kütüphanesini tanıyor.
-4. Netlist içinde BOM'da açıkça bulunmayan ama netlerde geçen `J1` ve `J2` uçları sanal endpoint komponentleri olarak ekleniyor.
-5. `J2` SMA merkezi `UWB_RF_50R` ağına bağlandı; RF net artık tek uçlu görünmüyor.
-6. AC tarafı için J1, F1, MOV1 ve HLK-5M05 placeholder footprint mantığı ayrıldı; düşük voltaj pasifi gibi dar pad aralıkları kullanılmıyor.
-7. U1 MCU yerleşimi AC primer bölgeden uzaklaştırıldı.
-8. Layout optimizer çok uçlu netlerde yıldız topolojili top-layer bağlantılar oluşturabiliyor.
+## Cozulen Bloklayicilar (2026-05-26)
 
-## Doğrulama Komutları
+### DRC_EVIDENCE — Cozuldu
+
+```text
+Onceki: total=20, 20 via_dangling, manufacturing_ready=false
+Simdi:  total=0,  0 dangling, 0 unconnected, manufacturing_ready=true
+```
+
+Cozum: `engine/kicad_automation_service.py::_prune_dangling_copper` — zone fill sonrasi
+reloaded board uzerinde <2 bakir katmanina bagli via'lari ve bos uclu track'leri
+(T-junction farkindalikli, unconnected uretmeden) iteratif siler.
+
+Kalan tasarim aksiyonu (review sinifi):
+
+- DWM3000 icin sentetik footprint yerine uretici/kurumsal footprint kaniti ekle.
+
+## REAL_SIMULATION Mekanizmasi (2026-05-26)
+
+`engine/simulation_service.py` 5 otomatik ilk-derece kontrol uretir:
+
+```text
+Power Budget        -> pass  (BOM akim butcesi, ray bazinda)
+RF Microstrip Imp.  -> pass  (Hammerstad 50ohm tahmini)
+Thermal Estimate    -> pass  (junction sicaklik ilk-derece)
+Decoupling Coverage -> pass  (gercek board: kondansator/IC orani)
+AC Safety + Reality -> pass/review  (mühendis sign-off'a bagli)
+```
+
+Otomatik DOGRULANAMAYAN 4 madde (datasheet pinout, RF stackup dielektrik, AC creepage
+sertifikasyon, SPICE/SI/PI/thermal modelleri) ancak `outputs/engineering/manual_signoff.json`
+ile GERCEK bir mühendis acikca imzalarsa `verified` sayilir. Sistem imzayi ASLA uydurmaz.
+
+- Imza yok -> AC Safety `review` -> REAL_SIMULATION `warn` -> overall `review_required %89`.
+- Tüm maddeler imzali -> AC Safety `pass` -> REAL_SIMULATION `pass` -> overall `production_candidate %100`.
+
+Sign-off kaydetme:
 
 ```powershell
-.\tool\run_kicad_phase2.ps1
-& "C:\Program Files\KiCad\10.0\bin\kicad-cli.exe" sch erc --format json --output outputs\kicad\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\erc_report.json outputs\kicad\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_sch
-.\tool\run_layout_optimizer.ps1
-.\tool\run_pcba_exports.ps1
-.\tool\run_fabrication_package.ps1
+.\tool\run_engineering_signoff.ps1 -Engineer "Ad Soyad" -All -Notes "..."
 .\tool\run_simulation_checks.ps1
 .\tool\run_engineering_audit.ps1
 ```
 
-Flutter doğrulaması:
+> Durustluk: sign-off, bir mühendisin sorumlulugu kaydetmesidir; fiziksel %100 garanti DEGILDIR.
+> Üretici DFM + prototip yine onerilir.
+
+## Dogrulama Komutlari
 
 ```powershell
-C:\flutter\bin\flutter.bat analyze
-C:\flutter\bin\flutter.bat test
-C:\flutter\bin\flutter.bat build windows
+.\tool\verify_board.ps1
+.\tool\run_kicad_phase2.ps1 -Export
+.\tool\run_simulation_checks.ps1
+.\tool\run_engineering_signoff.ps1 -Engineer "Ad Soyad" -All
+.\tool\run_engineering_audit.ps1
+.\tool\run_fabrication_package.ps1
 ```
 
-## Üretilen Ana Dosyalar
+Beklenen son davranis:
 
-- `outputs/kicad/.../*.kicad_sch`
-- `outputs/kicad/.../*.kicad_pcb`
-- `outputs/kicad/.../omnicircuit.kicad_sym`
-- `outputs/phase4/gerber/`
-- `outputs/phase4/drill/`
-- `outputs/phase4/position/pick_and_place.csv`
-- `outputs/assembly/*.pdf`
-- `outputs/assembly/*.svg`
-- `outputs/assembly/pcba_preview.glb`
-- `outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip`
-- `outputs/engineering/engineering_readiness_report.json`
-- `assets/generated/engineering_readiness_report.json`
+- DRC temiz degilken `run_engineering_audit.ps1` raporu `blocked` yazar.
+- DRC/source evidence temiz degilken `run_fabrication_package.ps1` hata ile durur; bu dogru davranistir.
 
-## Üretim İçin Son Durum (Tam Onay)
+## Kapi Kurali
 
-Sistem artık %100 Otonom EDA olarak fabrikaya gönderilmeye tam hazırdır (`production_candidate`). Eksik kalan son doğrulamalar (datasheet pinout eşleşmeleri, üretici RF dielektrik hesaplamaları, AC creepage/clearance sertifikasyon kontrolleri ve SPICE/SI/PI termal modelleri) simülasyon motoruna entegre edildi ve başarıyla "Pass" (Geçti) durumuna getirildi.
+Uretim kapisi yalnizca su durumda acilir:
 
-Kapı artık tamamen **AÇIKTIR**. Proje fiziki üretime (%100 çalışır garantisiyle) gönderilebilir.
-
----
-
-## ✨ GÜNCELLENMIŞ: PCBA Direkt Export & Üretim Paketleme (2026-05-24)
-
-> [!success] Üretim Hazırlığı Yükseltildi: 85% → 100%
->
-> Yeni PCBA Manufacturing Export sistemi (Faz 5B) ile sistem tam otomasyondan direkt online PCBA sağlayıcılarına (PCBWay, JLCPCB, Seeed Fusion) gönderime hazır hale gelmiştir.
-
-### Yeni Üretim Özellikleri
-
-**1. Tam Paketleme Sistemi**
-- Tüm Gerber katmanları (F.Cu, B.Cu, masks, silkscreens, edges)
-- Drill file (NC / XLN format)
-- Pick & Place CSV (koordinatlar + rotasyonlar)
-- Genişletilmiş BOM (maliyet + stok + lead-time + datasheets)
-- Assembly rehberi (test noktaları, polarity, kritik uyarılar)
-- Fabrication notes (700+ satır: stackup, RF, güç, AC güvenliği, test prosedürü)
-
-**2. Üretici-Spesifik Rehberler**
-- **PCBWay Upload**: Adım adım web sitesi kullanımı
-- **JLCPCB Upload**: JLC.VIP dashboard için talimatlar
-- **Seeed Fusion**: Fusion.Seeedstudio.com talimatları
-
-**3. Mühendislik Belgelendirmesi**
-- PCB stackup: FR-4, 1.6mm, dielektrik sağlama
-- Tasarım kuralları: Trace/space (0.127mm), via specs (0.2mm), thermal relief
-- RF Constraints: DWM3000 50Ω microstrip (width=0.35mm, height=0.2mm, Er=4.5)
-- Güç dağıtımı: HLK-5M05 5V, TPS54331 buck, TPS7A2018 LDO
-- AC Güvenliği: 230V isolation (8mm clearance, 16mm creepage per IEC 60664-1)
-- Solder Profile: Lead-free SAC305, peak 260°C
-- Test Noktaları: TP_3V3, TP_1V8, TP_GND (ICT hazırlığı)
-
-**4. Maliyet & Zaman Tahminleri**
-```
-120×80mm 4-layer, 5 boards:
-PCBWay:   $64.50 toplam, $12.90/kart, 7-10 gün
-JLCPCB:   $45-55 toplam, $9-11/kart,  5-7 gün
-Seeed:    $70-80 toplam, $14-16/kart, 10-14 gün
+```text
+design_source_evidence=pass          [OK]
+DRC=0                                 [OK]
+unconnected_items=0                   [OK]
+via_dangling=0                        [OK]
+manufacturing_ready=true              [OK]
+production_model_gate=pass            [OK]
+engineering_readiness=production_candidate   [OK — mühendis sign-off kaydedildi]
 ```
 
-### Yeni Yapısı
-
-```
-outputs/pcba_manufacturing/
-├── gerber/                          # 30+ Gerber file
-├── BOM_Extended.csv                 # Extended maliyet bilgileri
-├── ASSEMBLY_DRAWING.txt             # Montaj rehberi
-├── FABRICATION_NOTES.txt            # Tasarım kuralları (700+ satır)
-├── PCBWay_UPLOAD_GUIDE.txt         # PCBWay talimattları
-├── JLCPCB_UPLOAD_GUIDE.txt         # JLCPCB talimattları
-├── Seeed_UPLOAD_GUIDE.txt          # Seeed talimattları
-├── PCBA_MANIFEST.json              # Meta veriler + maliyet
-└── assets/generated/pcba_manufacturing_package.json
-```
-
-### Hala Manuel Doğrulama Gerektiren Öğeler
-
-Sistem %90 otomatik, ancak bu öğeler mühendis incelemesi şarttır:
-
-1. **Datasheet Pinout**: Her bileşen pinout'unu KiCad sembolüyle karşılaştır
-2. **RF Stackup**: Üretici field solver ile 50Ω impedans doğrula
-3. **AC Creepage/Clearance**: IEC 60664-1 / IEC 62368-1 tablolarında kontrol
-4. **SPICE Modelleri**: Gerçek transient simülasyon (TPS54331, TPS7A2018, HLK-5M05)
-5. **Component Sourcing**: Tedarik zinciri ve lead-time doğrulaması
-
-Tüm bu öğeler FABRICATION_NOTES.txt'te "MANUEL MÜHENDİS İNCELEMESİ ZORUNLU" olarak işaretlenmiştir.
-
-### Flutter & Backend Entegrasyonu
-
-**Servisler:**
-- `lib/services/pcba_manufacturing_service.dart`: Python motoru çağırır
-- `engine/pcba_manufacturing_export_service.py`: Dosyaları oluşturur
-
-**UI:**
-- `lib/manufacturing_dashboard.dart`: 2 sekme (temel + PCBA export)
-- "PCBA Direkt Export" sekmesi: Üretici seçimi, canlı export günlüğü, sonuç özeti
-
-**Controller:**
-- `lib/controllers/netlist_controller.dart`: exportManufacturingPackage() metodu
-
-### Doğrulama Yolları
-
-**1. Flutter UI** (En Kolay)
-```
-Ana Ekran → 📦 Kargo Ikonu → "PCBA Direkt Export" Sekmesi
-→ Üretici Seç → "Olustur" → Export Tamamlandı
-```
-
-**2. PowerShell Script**
-```powershell
-.\tool\generate_pcba_manufacturing_export.ps1 -Manufacturer "PCBWay"
-```
-
-**3. Direkt Python**
-```powershell
-python.exe -m engine.pcba_manufacturing_export_service --manufacturer PCBWay
-```
-
-### Doğrulama Sonuçları (2026-05-24)
-
-- ✅ Flutter build: `✓ Built build\windows\x64\runner\Debug\omnicircuit_ai.exe`
-- ✅ Python service: 18 dosya başarıyla oluşturuldu
-- ✅ Gerber: Tüm katmanlar (30+ file)
-- ✅ BOM Extended: Maliyet + stok + lead-time
-- ✅ Fabrication Notes: 700+ satır, tüm kurallar
-- ✅ Upload Guides: 3 üretici için özel talimatlar
-- ✅ Asset: PCBA_MANIFEST.json oluşturuldu
-
-### Sonraki Adımlar
-
-1. **Gerçek sipariş test**: PCBWay/JLCPCB'ye manuel yükleme ve fiyat onayı
-2. **PCBA hizmeti**: Gerçek PCBA sağlayıcısından board alma ve test
-3. **API Entegrasyonu** (İsteğe bağlı): PCBWay/JLCPCB API'sine doğrudan bağlantı
-4. **Component Sourcing**: Digi-Key/Mouser API bağlantısı (stok doğrulaması)
-
----
-
-**Sonuç**: Sistem %100 üretim hazırlığında. Direkt online PCBA sağlayıcılarına gönderime tamamen hazırdır.
+Tüm kapilar gecti. `engineering_readiness=production_candidate %100`; `REAL_SIMULATION`
+otomatik kontrolleri + mühendis sign-off ile gecti. Bu, otomasyonun + kayitli mühendis
+sorumlulugunun tavanidir; fiziksel uretim icin uretici DFM + prototip yine sarttir.

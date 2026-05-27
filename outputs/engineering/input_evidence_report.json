@@ -1,0 +1,775 @@
+{
+  "schema": "INPUT_EVIDENCE_V1",
+  "generated_at": "2026-05-27T15:52:07+00:00",
+  "bom_file": "C:\\Mypcb\\BOM.csv",
+  "netlist_file": "C:\\Mypcb\\outputs\\phase1\\AI_NETLIST_V1.json",
+  "counts": {
+    "components": 18,
+    "nets": 12,
+    "bom_refs": 55,
+    "findings": 44,
+    "error": 0,
+    "warn": 5,
+    "review": 39
+  },
+  "status": "review",
+  "findings": [
+    {
+      "id": "BOM_ONLY_FB1",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: FB1 (Ferrite bead / BLM21PG221SN1D)",
+      "ref": "FB1",
+      "bom": {
+        "value": "Ferrite bead",
+        "manufacturer": "Murata",
+        "part_number": "BLM21PG221SN1D",
+        "package": "0805",
+        "notes": "EMI filtering"
+      }
+    },
+    {
+      "id": "BOM_ONLY_FB2",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: FB2 (Ferrite bead / BLM21PG221SN1D)",
+      "ref": "FB2",
+      "bom": {
+        "value": "Ferrite bead",
+        "manufacturer": "Murata",
+        "part_number": "BLM21PG221SN1D",
+        "package": "0805",
+        "notes": "EMI filtering"
+      }
+    },
+    {
+      "id": "BOM_ONLY_FB3",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: FB3 (Ferrite bead / BLM21PG221SN1D)",
+      "ref": "FB3",
+      "bom": {
+        "value": "Ferrite bead",
+        "manufacturer": "Murata",
+        "part_number": "BLM21PG221SN1D",
+        "package": "0805",
+        "notes": "EMI filtering"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J1",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J1 (AC input terminal / 1984617)",
+      "ref": "J1",
+      "bom": {
+        "value": "AC input terminal",
+        "manufacturer": "Phoenix Contact",
+        "part_number": "1984617",
+        "package": "Terminal block",
+        "notes": "100-240VAC input"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J10",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J10 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J10",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J11",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J11 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J11",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J12",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J12 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J12",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J13",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J13 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J13",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J14",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J14 (I2C header / TSW-104-07-G-S)",
+      "ref": "J14",
+      "bom": {
+        "value": "I2C header",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "SDA/SCL/3V3/GND"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J15",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J15 (UART header / TSW-104-07-G-S)",
+      "ref": "J15",
+      "bom": {
+        "value": "UART header",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "TX/RX/3V3/GND"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J16",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J16 (Power header / TSW-104-07-G-S)",
+      "ref": "J16",
+      "bom": {
+        "value": "Power header",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "5V/3V3/1V8/GND"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J2",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J2 (SMA edge connector / 132134)",
+      "ref": "J2",
+      "bom": {
+        "value": "SMA edge connector",
+        "manufacturer": "Amphenol RF",
+        "part_number": "132134",
+        "package": "Edge SMA",
+        "notes": "UWB antenna output"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J6",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J6 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J6",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J7",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J7 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J7",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J8",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J8 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J8",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_J9",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: J9 (GPIO headers / TSW-104-07-G-S)",
+      "ref": "J9",
+      "bom": {
+        "value": "GPIO headers",
+        "manufacturer": "Samtec",
+        "part_number": "TSW-104-07-G-S",
+        "package": "2.54mm header",
+        "notes": "GPIO expansion"
+      }
+    },
+    {
+      "id": "BOM_ONLY_MOV1",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: MOV1 (AC varistor / MOV-14D471K)",
+      "ref": "MOV1",
+      "bom": {
+        "value": "AC varistor",
+        "manufacturer": "Bourns",
+        "part_number": "MOV-14D471K",
+        "package": "Disc",
+        "notes": "Surge protection"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R10",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R10 (100R / RC0603FR-07100RL)",
+      "ref": "R10",
+      "bom": {
+        "value": "100R",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-07100RL",
+        "package": "0603",
+        "notes": "SPI series resistors"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R11",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R11 (100R / RC0603FR-07100RL)",
+      "ref": "R11",
+      "bom": {
+        "value": "100R",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-07100RL",
+        "package": "0603",
+        "notes": "SPI series resistors"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R12",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R12 (100R / RC0603FR-07100RL)",
+      "ref": "R12",
+      "bom": {
+        "value": "100R",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-07100RL",
+        "package": "0603",
+        "notes": "SPI series resistors"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R13",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R13 (100R / RC0603FR-07100RL)",
+      "ref": "R13",
+      "bom": {
+        "value": "100R",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-07100RL",
+        "package": "0603",
+        "notes": "SPI series resistors"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R20",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R20 (10K / RC0603FR-0710KL)",
+      "ref": "R20",
+      "bom": {
+        "value": "10K",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-0710KL",
+        "package": "0603",
+        "notes": "IRQ pull-up"
+      }
+    },
+    {
+      "id": "BOM_ONLY_R21",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: R21 (33R / RC0603FR-0733RL)",
+      "ref": "R21",
+      "bom": {
+        "value": "33R",
+        "manufacturer": "Yageo",
+        "part_number": "RC0603FR-0733RL",
+        "package": "0603",
+        "notes": "EXT_TX series resistor"
+      }
+    },
+    {
+      "id": "BOM_ONLY_TVS1",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: TVS1 (TVS diode / SMBJ5.0A)",
+      "ref": "TVS1",
+      "bom": {
+        "value": "TVS diode",
+        "manufacturer": "Littelfuse",
+        "part_number": "SMBJ5.0A",
+        "package": "SMB",
+        "notes": "Rail and input protection"
+      }
+    },
+    {
+      "id": "BOM_ONLY_TVS2",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: TVS2 (TVS diode / SMBJ5.0A)",
+      "ref": "TVS2",
+      "bom": {
+        "value": "TVS diode",
+        "manufacturer": "Littelfuse",
+        "part_number": "SMBJ5.0A",
+        "package": "SMB",
+        "notes": "Rail and input protection"
+      }
+    },
+    {
+      "id": "BOM_ONLY_TVS3",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: TVS3 (TVS diode / SMBJ5.0A)",
+      "ref": "TVS3",
+      "bom": {
+        "value": "TVS diode",
+        "manufacturer": "Littelfuse",
+        "part_number": "SMBJ5.0A",
+        "package": "SMB",
+        "notes": "Rail and input protection"
+      }
+    },
+    {
+      "id": "BOM_ONLY_U1",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: U1 (ESP32-S3 module / ESP32-S3-WROOM-1)",
+      "ref": "U1",
+      "bom": {
+        "value": "ESP32-S3 module",
+        "manufacturer": "Espressif",
+        "part_number": "ESP32-S3-WROOM-1",
+        "package": "SMD module",
+        "notes": "Host MCU"
+      }
+    },
+    {
+      "id": "BOM_ONLY_U4",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: U4 (Single-bit level shifter / SN74LVC1T45DCK)",
+      "ref": "U4",
+      "bom": {
+        "value": "Single-bit level shifter",
+        "manufacturer": "Texas Instruments",
+        "part_number": "SN74LVC1T45DCK",
+        "package": "SC70",
+        "notes": "IRQ level shifting"
+      }
+    },
+    {
+      "id": "BOM_ONLY_U8",
+      "severity": "review",
+      "category": "bom_not_in_netlist",
+      "message": "BOM'da var, netliste girmemis: U8 (1.8V low-noise LDO / TPS7A2018PDBVR)",
+      "ref": "U8",
+      "bom": {
+        "value": "1.8V low-noise LDO",
+        "manufacturer": "Texas Instruments",
+        "part_number": "TPS7A2018PDBVR",
+        "package": "SOT-23-5",
+        "notes": "3.3V to 1.8V UWB rail; upgraded from TPS780 after power-budget simulation showed insufficient 150mA margin"
+      }
+    },
+    {
+      "id": "NL_ONLY_ANT1",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: ANT1 (132134 / 132134)",
+      "ref": "ANT1"
+    },
+    {
+      "id": "NL_ONLY_C5",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: C5 (100nF / GRM21BR71H104KA01L)",
+      "ref": "C5"
+    },
+    {
+      "id": "NL_ONLY_Q1",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: Q1 (2N7002 / 2N7002)",
+      "ref": "Q1"
+    },
+    {
+      "id": "NL_ONLY_Q2",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: Q2 (2N7002 / 2N7002)",
+      "ref": "Q2"
+    },
+    {
+      "id": "NL_ONLY_R18",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: R18 (470 Ohm / RC0805FR-07470RL)",
+      "ref": "R18"
+    },
+    {
+      "id": "NL_ONLY_R19",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: R19 (470 Ohm / RC0805FR-07470RL)",
+      "ref": "R19"
+    },
+    {
+      "id": "NL_ONLY_RV1",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: RV1 (470V 14mm / 14D471K)",
+      "ref": "RV1"
+    },
+    {
+      "id": "NL_ONLY_U13",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U13 (SN74LVC1T45DBVR / SN74LVC1T45DBVR)",
+      "ref": "U13"
+    },
+    {
+      "id": "NL_ONLY_U1_Socket_L",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U1_Socket_L (1x22 Female Pin Header 2.54mm / 1x22-FH)",
+      "ref": "U1_Socket_L"
+    },
+    {
+      "id": "NL_ONLY_U1_Socket_R",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U1_Socket_R (1x22 Female Pin Header 2.54mm / 1x22-FH)",
+      "ref": "U1_Socket_R"
+    },
+    {
+      "id": "MPN_F1",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "F1 MPN uyumsuz: netlist='0215001.MXP' vs BOM='0451.500MRL'",
+      "ref": "F1",
+      "netlist_mpn": "0215001.MXP",
+      "bom_mpn": "0451.500MRL"
+    },
+    {
+      "id": "MPN_U3",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "U3 MPN uyumsuz: netlist='HLK-5M05' vs BOM='TXB0104RUT'",
+      "ref": "U3",
+      "netlist_mpn": "HLK-5M05",
+      "bom_mpn": "TXB0104RUT"
+    },
+    {
+      "id": "MPN_U5",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "U5 MPN uyumsuz: netlist='TPS780180200DRV' vs BOM='SN74LVC1T45DCK'",
+      "ref": "U5",
+      "netlist_mpn": "TPS780180200DRV",
+      "bom_mpn": "SN74LVC1T45DCK"
+    },
+    {
+      "id": "MPN_U6",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "U6 MPN uyumsuz: netlist='TXB0104RGYR' vs BOM='HLK-5M05'",
+      "ref": "U6",
+      "netlist_mpn": "TXB0104RGYR",
+      "bom_mpn": "HLK-5M05"
+    },
+    {
+      "id": "MPN_U7",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "U7 MPN uyumsuz: netlist='SN74LVC1T45DBVR' vs BOM='TPS54331DR'",
+      "ref": "U7",
+      "netlist_mpn": "SN74LVC1T45DBVR",
+      "bom_mpn": "TPS54331DR"
+    }
+  ],
+  "missing_questions": [
+    {
+      "id": "BOM_ONLY_FB1",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: FB1 (Ferrite bead / BLM21PG221SN1D)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_FB2",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: FB2 (Ferrite bead / BLM21PG221SN1D)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_FB3",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: FB3 (Ferrite bead / BLM21PG221SN1D)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J1",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J1 (AC input terminal / 1984617)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J10",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J10 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J11",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J11 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J12",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J12 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J13",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J13 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J14",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J14 (I2C header / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J15",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J15 (UART header / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J16",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J16 (Power header / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J2",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J2 (SMA edge connector / 132134)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J6",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J6 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J7",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J7 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J8",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J8 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_J9",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: J9 (GPIO headers / TSW-104-07-G-S)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_MOV1",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: MOV1 (AC varistor / MOV-14D471K)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R10",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R10 (100R / RC0603FR-07100RL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R11",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R11 (100R / RC0603FR-07100RL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R12",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R12 (100R / RC0603FR-07100RL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R13",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R13 (100R / RC0603FR-07100RL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R20",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R20 (10K / RC0603FR-0710KL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_R21",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: R21 (33R / RC0603FR-0733RL)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_TVS1",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: TVS1 (TVS diode / SMBJ5.0A)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_TVS2",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: TVS2 (TVS diode / SMBJ5.0A)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_TVS3",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: TVS3 (TVS diode / SMBJ5.0A)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_U1",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: U1 (ESP32-S3 module / ESP32-S3-WROOM-1)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_U4",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: U4 (Single-bit level shifter / SN74LVC1T45DCK)",
+      "severity": "review"
+    },
+    {
+      "id": "BOM_ONLY_U8",
+      "category": "bom_not_in_netlist",
+      "ask": "BOM'da var, netliste girmemis: U8 (1.8V low-noise LDO / TPS7A2018PDBVR)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_ANT1",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: ANT1 (132134 / 132134)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_C5",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: C5 (100nF / GRM21BR71H104KA01L)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_Q1",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: Q1 (2N7002 / 2N7002)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_Q2",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: Q2 (2N7002 / 2N7002)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_R18",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: R18 (470 Ohm / RC0805FR-07470RL)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_R19",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: R19 (470 Ohm / RC0805FR-07470RL)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_RV1",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: RV1 (470V 14mm / 14D471K)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U13",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U13 (SN74LVC1T45DBVR / SN74LVC1T45DBVR)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U1_Socket_L",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U1_Socket_L (1x22 Female Pin Header 2.54mm / 1x22-FH)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U1_Socket_R",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U1_Socket_R (1x22 Female Pin Header 2.54mm / 1x22-FH)",
+      "severity": "review"
+    }
+  ]
+}

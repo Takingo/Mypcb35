@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import json
@@ -8,6 +8,9 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from board_verification_manifest import manifest_gate_failure
+from production_model_gate import audit_production_model_gate
 
 
 PRODUCTION_ZIP_NAME = "Quantum_Mind_Anchor_v2_4_Production.zip"
@@ -107,6 +110,47 @@ class FabricationPackageService:
             return self._infer_board_size_with_pcbnew(pcb_file)
         except Exception:
             return BoardSize(width_mm=120.0, height_mm=80.0)
+
+    def validate_manufacturing_gate(
+        self,
+        layout_status_file: Path,
+        pcb_file: Path,
+        *,
+        drc_report_file: Path | None = None,
+        verification_manifest_file: Path | None = None,
+    ) -> None:
+        if verification_manifest_file is not None and drc_report_file is not None and verification_manifest_file.exists():
+            failure = manifest_gate_failure(
+                verification_manifest_file,
+                pcb_file=pcb_file,
+                drc_report_file=drc_report_file,
+            )
+            if failure is not None:
+                raise RuntimeError(f"Fabrication package blocked by board verification manifest: {failure}")
+            return
+        if not layout_status_file.exists():
+            raise RuntimeError(
+                f"Layout status not found: {layout_status_file}. Run the KiCad DRC optimizer first."
+            )
+        data = json.loads(layout_status_file.read_text(encoding="utf-8"))
+        final_count = int(data.get("final_violation_count", -1))
+        manufacturing_ready = bool(data.get("manufacturing_ready", False))
+        if final_count != 0 or not manufacturing_ready:
+            raise RuntimeError(
+                "Fabrication package blocked because KiCad DRC is not clean: "
+                f"final_violation_count={final_count}, manufacturing_ready={manufacturing_ready}."
+            )
+        pcb_text = pcb_file.read_text(encoding="utf-8", errors="ignore") if pcb_file.exists() else ""
+        if "pcbnew unavailable" in pcb_text or "(footprint" not in pcb_text:
+            raise RuntimeError(
+                "Fabrication package blocked because the active PCB is missing real KiCad footprint data."
+            )
+        model_gate = audit_production_model_gate(pcb_file)
+        if not model_gate.ok:
+            raise RuntimeError(
+                "Fabrication package blocked because production model validation failed: "
+                f"{model_gate.evidence_summary}"
+            )
 
     def build_summary(
         self,
@@ -216,14 +260,23 @@ def run(
     phase4_dir: Path,
     pcb_file: Path,
     bom_file: Path,
+    layout_status_file: Path,
     output_dir: Path,
     manufacturer: str,
     quantity: int,
     layers: int,
     solder_mask_color: str,
     asset_output: Path | None,
+    drc_report_file: Path | None = None,
+    verification_manifest_file: Path | None = None,
 ) -> FabricationPackageSummary:
     service = FabricationPackageService()
+    service.validate_manufacturing_gate(
+        layout_status_file,
+        pcb_file,
+        drc_report_file=drc_report_file,
+        verification_manifest_file=verification_manifest_file,
+    )
     checkout = CheckoutSelection(
         manufacturer=manufacturer,
         quantity=quantity,
@@ -254,6 +307,9 @@ def main() -> int:
     parser.add_argument("--phase4-dir", default="outputs/phase4")
     parser.add_argument("--pcb-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb")
     parser.add_argument("--bom-file", default="BOM.csv")
+    parser.add_argument("--layout-status-file", default="outputs/phase4/layout_optimization_status.json")
+    parser.add_argument("--drc-report-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/manufacturing/drc_report.json")
+    parser.add_argument("--verification-manifest-file", default="outputs/engineering/board_verification_manifest.json")
     parser.add_argument("--output-dir", default="outputs/fabrication")
     parser.add_argument("--manufacturer", default="PCBWay")
     parser.add_argument("--quantity", type=int, default=5)
@@ -265,6 +321,9 @@ def main() -> int:
         phase4_dir=Path(args.phase4_dir),
         pcb_file=Path(args.pcb_file),
         bom_file=Path(args.bom_file),
+        layout_status_file=Path(args.layout_status_file),
+        drc_report_file=Path(args.drc_report_file),
+        verification_manifest_file=Path(args.verification_manifest_file),
         output_dir=Path(args.output_dir),
         manufacturer=args.manufacturer,
         quantity=args.quantity,

@@ -1,0 +1,539 @@
+{
+  "project": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs",
+  "generated": "2026-05-27T17:42:39.858733",
+  "components": [
+    {
+      "reference": "C100",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 74.0,
+        "y": 20.0
+      }
+    },
+    {
+      "reference": "C101",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 82.0,
+        "y": 18.0
+      }
+    },
+    {
+      "reference": "C102",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 82.0,
+        "y": 10.0
+      }
+    },
+    {
+      "reference": "C90",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 94.0,
+        "y": 82.0
+      }
+    },
+    {
+      "reference": "C91",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 123.0,
+        "y": 22.0
+      }
+    },
+    {
+      "reference": "C92",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 147.0,
+        "y": 34.0
+      }
+    },
+    {
+      "reference": "C93",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 118.0,
+        "y": 26.0
+      }
+    },
+    {
+      "reference": "C94",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 122.0,
+        "y": 34.0
+      }
+    },
+    {
+      "reference": "C95",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 122.0,
+        "y": 44.0
+      }
+    },
+    {
+      "reference": "C96",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 126.0,
+        "y": 48.0
+      }
+    },
+    {
+      "reference": "C97",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 128.0,
+        "y": 44.0
+      }
+    },
+    {
+      "reference": "C98",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 128.0,
+        "y": 36.0
+      }
+    },
+    {
+      "reference": "C99",
+      "footprint": "C_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 68.0,
+        "y": 8.0
+      }
+    },
+    {
+      "reference": "F1",
+      "footprint": "Fuse_1206_3216Metric",
+      "value": "TBD",
+      "position": {
+        "x": 20.0,
+        "y": 12.0
+      }
+    },
+    {
+      "reference": "J1",
+      "footprint": "TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal",
+      "value": "TBD",
+      "position": {
+        "x": 10.0,
+        "y": 25.0
+      }
+    },
+    {
+      "reference": "J2",
+      "footprint": "SMA_Amphenol_901-144_Vertical",
+      "value": "TBD",
+      "position": {
+        "x": 152.0,
+        "y": 16.0
+      }
+    },
+    {
+      "reference": "K1",
+      "footprint": "Relay_SPDT_Omron-G5Q-1",
+      "value": "TBD",
+      "position": {
+        "x": 25.0,
+        "y": 76.0
+      }
+    },
+    {
+      "reference": "K2",
+      "footprint": "Relay_SPDT_Omron-G5Q-1",
+      "value": "TBD",
+      "position": {
+        "x": 67.0,
+        "y": 88.0
+      }
+    },
+    {
+      "reference": "MOV1",
+      "footprint": "RV_Disc_D15.5mm_W4.5mm_P7.5mm",
+      "value": "TBD",
+      "position": {
+        "x": 32.0,
+        "y": 39.0
+      }
+    },
+    {
+      "reference": "R1",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 90.0,
+        "y": 87.0
+      }
+    },
+    {
+      "reference": "R10",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 122.0,
+        "y": 61.82
+      }
+    },
+    {
+      "reference": "R11",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 122.0,
+        "y": 77.09
+      }
+    },
+    {
+      "reference": "R12",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 108.0,
+        "y": 78.36
+      }
+    },
+    {
+      "reference": "R13",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 96.0,
+        "y": 77.63
+      }
+    },
+    {
+      "reference": "R16",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 30.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R17",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 48.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R18",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 66.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R19",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 84.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R2",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 102.0,
+        "y": 87.0
+      }
+    },
+    {
+      "reference": "R20",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 102.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R21",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 120.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R22",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 138.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R23",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 12.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R24",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 30.0,
+        "y": 88.0
+      }
+    },
+    {
+      "reference": "R25",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 48.0,
+        "y": 88.0
+      }
+    },
+    {
+      "reference": "R26",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 62.0,
+        "y": 88.0
+      }
+    },
+    {
+      "reference": "R27",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 90.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R3",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 120.0,
+        "y": 87.0
+      }
+    },
+    {
+      "reference": "R34",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 102.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R35",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 120.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R36",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 138.0,
+        "y": 96.0
+      }
+    },
+    {
+      "reference": "R37",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 12.0,
+        "y": 88.0
+      }
+    },
+    {
+      "reference": "R38",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 36.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R39",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 54.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R4",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 138.0,
+        "y": 87.0
+      }
+    },
+    {
+      "reference": "R40",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 72.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R5",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 12.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R6",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 30.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R7",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 48.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R8",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 66.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "R9",
+      "footprint": "R_0603_1608Metric",
+      "value": "TBD",
+      "position": {
+        "x": 84.0,
+        "y": 92.0
+      }
+    },
+    {
+      "reference": "U1",
+      "footprint": "ESP32-S3-WROOM-1",
+      "value": "TBD",
+      "position": {
+        "x": 94.0,
+        "y": 62.0
+      }
+    },
+    {
+      "reference": "U2",
+      "footprint": "OmniCircuit:DWM3000",
+      "value": "TBD",
+      "position": {
+        "x": 135.0,
+        "y": 22.0
+      }
+    },
+    {
+      "reference": "U3",
+      "footprint": "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm",
+      "value": "TBD",
+      "position": {
+        "x": 118.0,
+        "y": 30.0
+      }
+    },
+    {
+      "reference": "U4",
+      "footprint": "SOT-363_SC-70-6",
+      "value": "TBD",
+      "position": {
+        "x": 122.0,
+        "y": 40.0
+      }
+    },
+    {
+      "reference": "U5",
+      "footprint": "SOT-363_SC-70-6",
+      "value": "TBD",
+      "position": {
+        "x": 128.0,
+        "y": 40.0
+      }
+    },
+    {
+      "reference": "U6",
+      "footprint": "Converter_ACDC_Hi-Link_HLK-5Mxx",
+      "value": "TBD",
+      "position": {
+        "x": 28.0,
+        "y": 20.0
+      }
+    },
+    {
+      "reference": "U7",
+      "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+      "value": "TBD",
+      "position": {
+        "x": 72.0,
+        "y": 14.0
+      }
+    },
+    {
+      "reference": "U8",
+      "footprint": "SOT-23-5",
+      "value": "TBD",
+      "position": {
+        "x": 82.0,
+        "y": 14.0
+      }
+    }
+  ],
+  "total_unique": 59,
+  "total_placed": 59
+}

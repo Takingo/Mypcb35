@@ -1,15 +1,15 @@
 {
   "schema": "PCBA_MANUFACTURING_PACKAGE_V1",
-  "generated_at": "2026-05-24T07:39:45+00:00",
+  "generated_at": "2026-05-27T16:20:18+00:00",
   "design_name": "Quantum Mind Anchor v2.4",
   "manufacturer": "PCBWay",
   "board_size_mm": [
-    120.0,
-    80.0
+    160.0,
+    100.0
   ],
   "layer_count": 4,
-  "component_count": 22,
-  "total_weight_grams": 24.42,
+  "component_count": 23,
+  "total_weight_grams": 38.65,
   "files": [
     {
       "path": "gerber/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",

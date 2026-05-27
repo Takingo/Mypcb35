@@ -1,104 +1,88 @@
 ---
-title: Dosya ve Klasör Rehberi
+title: Dosya ve Klasor Rehberi
 tags:
   - files
   - guide
   - project
 status: active
+updated: 2026-05-26
 ---
 
-# Dosya ve Klasör Rehberi
+# Dosya ve Klasor Rehberi
 
-## Kök Dosyalar
+## Kok Dosyalar
 
-| Dosya | Açıklama |
+| Dosya | Aciklama |
 | --- | --- |
 | `BOM.csv` | Komponent listesi |
-| `SCHEMATIC.md` | Örnek devre bağlantı açıklaması |
-| `PCB_NOTES.md` | PCB kuralları, RF, izolasyon ve test notları |
-| `README.md` | Genel çalışma talimatları |
-| `pubspec.yaml` | Flutter proje bağımlılıkları ve asset listesi |
+| `SCHEMATIC.md` | Ornek devre baglanti aciklamasi |
+| `PCB_NOTES.md` | PCB kurallari, RF, izolasyon ve test notlari |
+| `README.md` | Genel calisma talimatlari |
+| `pubspec.yaml` | Flutter proje bagimliliklari ve asset listesi |
 
 ## Engine
 
-```text
-engine/
-```
-
-| Dosya | Görev |
+| Dosya | Gorev |
 | --- | --- |
-| `cognitive_netlist_generator.py` | AI netlist üretimi |
-| `kicad_automation_service.py` | KiCad proje ve export bridge |
-| `drc_parser.py` | KiCad DRC JSON → DRC_REPORT_V1 |
-| `pcbai_feedback_adapter.py` | DRC → PCBai penalty payload |
-| `layout_optimizer_service.py` | Closed-loop DRC düzeltme |
-| `fabrication_api_service.py` | Üretim ZIP paketi ve checkout özeti |
-| `run_pipeline.py` | Eski lokal rapor pipeline |
+| `engine/cognitive_netlist_generator.py` | AI netlist uretimi |
+| `engine/kicad_automation_service.py` | KiCad proje, footprint, pin-pad ve DRC koprusu |
+| `engine/drc_parser.py` | KiCad DRC JSON -> DRC_REPORT_V1 |
+| `engine/layout_optimizer_service.py` | Closed-loop DRC duzeltme ve rollback |
+| `engine/production_model_gate.py` | Sentetik footprint/no-net pad uretim modeli kapisi |
+| `engine/engineering_readiness_service.py` | Uretim adayligi denetimi |
+| `engine/fabrication_api_service.py` | Gate gecerse yerel uretim ZIP paketi |
+| `engine/pcba_manufacturing_export_service.py` | PCBA manufacturing export yardimci servisi |
 
 ## Flutter
 
-```text
-lib/
-```
-
-| Dosya | Görev |
+| Dosya | Gorev |
 | --- | --- |
-| `main.dart` | App giriş noktası |
-| `omnicircuit_dashboard.dart` | Ana dashboard UI |
-| `manufacturing_dashboard.dart` | Üretim ve sipariş hazırlığı UI |
-| `controllers/netlist_controller.dart` | UI state yönetimi |
-| `models/ai_netlist.dart` | Netlist modeli |
-| `models/design_package.dart` | Design package, DRC ve optimizer modelleri |
-| `services/cognitive_netlist_service.dart` | Flutter tarafı netlist servis mock/logic |
-| `services/input_file_import_service.dart` | `.md`, `.csv`, `.txt`, `.json`, `.net`, `.xml`, `.yaml`, `.sch`, `.kicad_sch` giriş dosyalarını UI alanlarına yükler |
+| `lib/main.dart` | App giris noktasi |
+| `lib/omnicircuit_dashboard.dart` | Ana dashboard UI |
+| `lib/manufacturing_dashboard.dart` | Uretim ve checkout UI |
+| `lib/controllers/netlist_controller.dart` | UI state yonetimi |
+| `lib/services/input_file_import_service.dart` | Girdi/BOM dosyalarini UI alanlarina yukler |
+| `lib/services/kicad_pipeline_service.dart` | KiCad pipeline durumlari |
 
 ## Tool Scripts
 
-```text
-tool/
-```
-
-| Dosya | Görev |
-| --- | --- |
-| `run_kicad_phase2.ps1` | KiCad proje + DRC/export bridge |
-| `run_layout_optimizer.ps1` | Closed-loop optimizer |
-| `run_fabrication_package.ps1` | Üretim ZIP paketi üretimi |
-| `serve_web.dart` | Flutter web build static server |
+| Dosya | Gorev | Guncel not |
+| --- | --- | --- |
+| `tool/run_kicad_phase2.ps1` | KiCad proje + DRC/export bridge | Son verify DRC total 20 |
+| `tool/run_layout_optimizer.ps1` | Closed-loop optimizer | Kotu sonucu rollback yapiyor |
+| `tool/run_engineering_audit.ps1` | Readiness raporu | Son durum blocked |
+| `tool/run_fabrication_package.ps1` | Uretim ZIP paketi | Su anda gate tarafindan bloklaniyor |
+| `tool/render_board_views.ps1` | SVG board gorunumleri | Yardimci gorsel cikti |
 
 ## Outputs
 
-```text
-outputs/
-```
-
-| Klasör | Açıklama |
+| Klasor/Dosya | Aciklama |
 | --- | --- |
-| `outputs/phase1/` | AI netlist örneği |
-| `outputs/kicad/` | KiCad proje dosyaları |
-| `outputs/phase3/` | DRC_REPORT ve PCBai feedback |
-| `outputs/phase4/` | optimizer sonucu ve üretim dosyaları |
-| `outputs/fabrication/` | üretim ZIP paketi ve checkout özeti |
-| `outputs/uwb_anchor/` | eski rapor/manufacturing scaffold |
+| `outputs/phase1/AI_NETLIST_V1.json` | Aktif kullanici netlist kaynagi |
+| `outputs/kicad/` | KiCad proje dosyalari |
+| `outputs/kicad/.../manufacturing/drc_report.json` | Gercek KiCad DRC raporu |
+| `outputs/phase4/layout_optimization_status.json` | Optimizer ve manufacturing_ready durumu |
+| `outputs/engineering/engineering_readiness_report.json` | Son engineering gate raporu |
+| `outputs/fabrication/` | Eski/onceki paketler bulunabilir; son gate blocked ise uretim onayi degildir |
 
 ## Assets
 
-```text
-assets/generated/
-```
+Flutter tarafindan okunan dosyalar:
 
-Flutter tarafından okunan dosyalar:
+- `assets/generated/drc_report_v1.json`
+- `assets/generated/layout_optimization_status.json`
+- `assets/generated/engineering_readiness_report.json`
+- `assets/generated/fabrication_package.json`
 
-- `uwb_anchor_analysis.json`
-- `drc_report_v1.json`
-- `layout_optimization_status.json`
-- `fabrication_package.json`
+> [!warning]
+> `fabrication_package.json` veya ZIP dosyasinin diskte bulunmasi tek basina uretim onayi degildir. Son `engineering_readiness_report.json` `blocked` ise paket gecersiz/stale kabul edilmelidir.
 
-## Obsidian Hafızası
+## Obsidian Hafizasi
 
 ```text
 Barainmypcb/
 ```
 
-Bu klasör proje bilgisini takip etmek için oluşturulmuştur. Ana başlangıç notu:
+Ana baslangic notu:
 
 [[00 - OmniCircuit AI Ana Harita]]

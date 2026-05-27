@@ -12,6 +12,10 @@ from typing import Any
 AI_NETLIST_VERSION = "AI_Netlist_v1"
 
 
+class KiCadAINetlistInsufficient(RuntimeError):
+    """Gerçek AI çağrısı boş/yetersiz netlist döndürdüğünde fırlatılır."""
+
+
 @dataclass(frozen=True)
 class Component:
     ref: str
@@ -174,6 +178,14 @@ class CognitiveNetlistGenerator:
         rules = [DesignRule(**r) for r in result.get("rules", [])]
         reasoning = [ReasoningStep(**r) for r in result.get("reasoning_log", [])]
 
+        # Boş/yetersiz AI çıktısını başarı sayma — kaynaksız netlist üretim kapısını
+        # bloklar. Yetersizse dürüstçe hata fırlat; çağıran deterministik motora geçer.
+        if len(components) < 3 or len(nets) < 2:
+            raise KiCadAINetlistInsufficient(
+                f"AI yetersiz netlist dondurdu: {len(components)} komponent, {len(nets)} net "
+                f"(en az 3 komponent ve 2 net gerekli)."
+            )
+
         print(f"[AI] {provider.upper()} API basariyla netlist uretti.", flush=True)
         return AiNetlist(
             schema=result.get("schema", "AI_Netlist_v1"),
@@ -312,7 +324,7 @@ class CognitiveNetlistGenerator:
                 NetConnection("+5V_ISO", ["U6.+VO", "U7.VIN", "K1.COIL+", "K2.COIL+"], "power_5v", "Isolated 5V rail for relays and buck input."),
                 NetConnection("+3V3", ["U7.SW_OUT", "U1.3V3", "U3.VCCA", "U4.VCCA", "U5.VCCA"], "power_3v3", "ESP32 and high side level shifter rail."),
                 NetConnection("+1V8", ["U8.OUT", "U2.VDDIO", "U3.VCCB", "U4.VCCB", "U5.VCCB"], "power_1v8", "DWM3000 and low side level shifter rail."),
-                NetConnection("GND", ["U6.-VO", "U7.GND", "U8.GND", "U1.GND", "U2.GND"], "ground", "Low-voltage ground return."),
+                NetConnection("GND", ["U6.-VO", "U7.GND", "U8.GND", "U1.GND", "U2.GND", "U3.GND", "U3.GND2", "U4.GND", "U4.DIR", "U5.GND", "U5.DIR"], "ground", "Low-voltage ground return."),
             ]
         )
         rules.append(
@@ -347,7 +359,10 @@ class CognitiveNetlistGenerator:
                 Component("U3", "level_shifter", "4-bit bidirectional", "Texas Instruments", "TXB0104RUT", "QFN", "Translate SPI between 3.3V ESP32 and 1.8V DWM3000."),
                 Component("U4", "level_shifter", "single-bit dual-supply", "Texas Instruments", "SN74LVC1T45DCK", "SC70", "Translate DWM3000 IRQ."),
                 Component("U5", "level_shifter", "single-bit dual-supply", "Texas Instruments", "SN74LVC1T45DCK", "SC70", "Translate DWM3000 EXT_TX."),
-                Component("R10-R13", "resistor_array", "100R", "Yageo", "RC0603FR-07100RL", "0603", "SPI source termination close to ESP32."),
+                Component("R10", "resistor", "100R", "Yageo", "RC0603FR-07100RL", "0603", "SPI CS source termination close to ESP32."),
+                Component("R11", "resistor", "100R", "Yageo", "RC0603FR-07100RL", "0603", "SPI MOSI source termination close to ESP32."),
+                Component("R12", "resistor", "100R", "Yageo", "RC0603FR-07100RL", "0603", "SPI CLK source termination close to ESP32."),
+                Component("R13", "resistor", "100R", "Yageo", "RC0603FR-07100RL", "0603", "SPI MISO source termination close to ESP32."),
             ]
         )
         nets.extend(

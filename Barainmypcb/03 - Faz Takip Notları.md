@@ -1,154 +1,168 @@
 ---
-title: Faz Takip Notları
+title: Faz Takip Notlari
 tags:
   - phases
-  - roadmap
-  - omnicircuit
+  - progress
+  - kicad
+  - manufacturing
 status: active
+updated: 2026-05-26
 ---
 
-# Faz Takip Notları
+# Faz Takip Notlari
 
-## Faz 1 - Bilişsel Netlist ve Flutter Arayüzü
+Bu dosya projenin faz bazli son gercek durumunu takip eder. Tek dogru kaynak, ayni kosuda yeniden uretilen netlist -> KiCad proje -> KiCad DRC -> layout status -> engineering audit zinciridir.
 
-Durum: Tamamlandı
+## Guncel Gercek Durum - 2026-05-26
 
-Kazanımlar:
+```text
+overall_status: production_candidate   (mühendis sign-off kaydedildikten sonra)
+readiness_percent: 100
+passed: 9/9
+blockers: 0
+review: 0
+manufacturing_ready: true
+```
 
-- Kullanıcı isterlerinden `AI_Netlist_v1` üretimi
-- ESP32-S3 / DWM3000 / AC / röle senaryosu
-- Güç ağacı çıkarımı
-- Level shifter çıkarımı
-- Röle izolasyon çıkarımı
-- Flutter kontrol merkezi
+Sign-off OLMADAN: `review_required`, %89, 8/9, 1 review (REAL_SIMULATION). REAL_SIMULATION
+artik 5 otomatik kontrol (power/RF/thermal/decoupling/AC) + `manual_signoff.json` mühendis
+imzasi ile degerlendiriliyor; imza yoksa pass olmaz (sistem uydurmaz).
 
-Ana dosyalar:
+`tool/run_kicad_phase2.ps1 -Export -ContinueOnDrcError` ile netlistten temiz regenerate yapildiginda son DRC:
 
-- `engine/cognitive_netlist_generator.py`
-- `lib/omnicircuit_dashboard.dart`
-- `lib/services/cognitive_netlist_service.dart`
-- `lib/models/ai_netlist.dart`
+```text
+VIOLATIONS: 0 | UNCONNECTED: 0 | TOTAL: 0
+0 via_dangling
+0 track_dangling
+0 lib_footprint_issues
+0 unconnected_items
+```
 
-## Faz 2 - KiCad Python API ve CLI Entegrasyonu
+Nasil cozuldu: `_prune_dangling_copper` (engine/kicad_automation_service.py) zone fill'den sonra reloaded board uzerinde calisip <2 bakir katmanina bagli via'lari ve bos uclu track'leri (T-junction farkindalikli) iteratif siler. Onceki 20 `via_dangling` bu sekilde 0'a indi; unconnected 0'da kaldi.
 
-Durum: Tamamlandı
+Not: Bazi eski dosyalarda `331`, `6`, `20`, `26 komponent / 25 net` gibi sayilar kalmisti. Bu sayilar artik guncel karar kaynagi degildir.
 
-Kazanımlar:
+Board manifest:
 
-- KiCad 10.0.3 bulundu ve çalıştırıldı.
-- `pcbnew` import doğrulandı.
-- `.kicad_pro`, `.kicad_sch`, `.kicad_pcb` üretildi.
-- DWM3000 1.0mm pitch uygulandı.
-- KiCad DRC çalıştırıldı.
-- Gerber/drill/position export komutları doğrulandı.
+```text
+outputs/engineering/board_verification_manifest.json
+status: production_candidate
+source_evidence_pass: true
+production_model_pass: true
+total_findings: 0
+error_count: 0
+warning_count: 0
+manufacturing_ready: true
+```
 
-Ana dosyalar:
+## Faz 1 - Netlist ve Tasarim Paketi
 
-- `engine/kicad_automation_service.py`
-- `tool/run_kicad_phase2.ps1`
+Durum: calisiyor ve source evidence gate pass.
 
-## Faz 3 - DRC Geri Besleme ve PCBai Adapter
+Aktif kaynak:
 
-Durum: Tamamlandı
+```text
+outputs/phase1/AI_NETLIST_V1.json
+normalize edilmis aktif AI_NETLIST_V1.json
+DESIGN_SOURCE_EVIDENCE=pass
+```
 
-Kazanımlar:
+Yapilan duzeltmeler:
 
-- KiCad DRC JSON → `DRC_REPORT_V1`
-- DRC kategori ayrımı
-- Flutter DRC sekmesi
-- PCBai penalty payload üretimi
+- `engine/netlist_source_normalizer.py` eklendi.
+- BOM/source_prompt kaniti birlikte okunuyor.
+- `K2`, `R10-R13` gibi BOM-backed grup referanslari komponent seviyesine aciliyor.
+- `PC817 -> PC817X2CSP9F`, `SS14/SS34 -> SS34-E3/57T` gibi BOM kanitli MPN aliaslari normalize ediliyor.
 
-Ana dosyalar:
+## Faz 2 - KiCad Proje Uretimi
 
-- `engine/drc_parser.py`
-- `engine/pcbai_feedback_adapter.py`
-- `assets/generated/drc_report_v1.json`
-- `outputs/phase3/PCBAI_CONSTRAINT_FEEDBACK_V1.json`
+Durum: calisiyor; DRC temiz (total 0).
 
-## Faz 4 - Otonom Hata Düzeltme ve Routing Döngüsü
+Gecenler:
 
-Durum: Tamamlandı
+- KiCad 10.0.3 CLI ve Python bridge calisiyor.
+- Sematik ERC temiz raporlaniyor.
+- Aktif PCB dosyasi footprint verisi iceriyor.
+- `PRODUCTION_MODEL` pass: footprint kimlikleri ve pad-net modeli uretim kapisini gecti.
+- `SPI_CS_1V8` unconnected hatasi temizlendi.
+- `OmniCircuit` project-local footprint library tanimi eklendi.
+- **DRC total 0**: `via_dangling`, `track_dangling`, `unconnected_items`, error hepsi 0.
+- `_prune_dangling_copper` eklendi: zone fill sonrasi reloaded board'da bos via/track temizligi.
 
-Kazanımlar:
+Kalanlar (Faz 2 disi, review/design sinifina ait):
 
-- Closed-loop optimizer eklendi.
-- İlk DRC sonucu: 94 violation
-- Clearance düzeltmeleri sonrası: 2 warning
-- Silkscreen düzeltmesi sonrası: 0 violation
-- `manufacturing_ready: true`
-- Gerber, drill ve pick-and-place export üretildi.
+- DWM3000 (U2) sentetik footprint -> resmi uretici footprint'i.
+- RF/AC/thermal review (`REAL_SIMULATION`).
 
-Ana dosyalar:
+## Faz 3 - DRC Normalize ve UI Asset
 
-- `engine/layout_optimizer_service.py`
-- `tool/run_layout_optimizer.ps1`
-- `outputs/phase4/layout_optimization_status.json`
+Durum: board verification manifest eklendi ve engineering gate buna baglandi.
 
-## Faz 5 - Üretim Checkout ve Paketleme
+Yeni kural:
 
-Durum: Tamamlandı
+- `board_verification_manifest.json` PCB/DRC/netlist/BOM SHA256 degerlerini yazar.
+- Engineering readiness, PCBA direct export ve fabrication ZIP stale/dirty manifest ile gecmez.
+- UI/asset dosyalari son gercek KiCad DRC sonucuna baglanir.
 
-Kazanımlar:
+## Faz 4 - Layout Optimizer
 
-- Gerber, drill, pick-and-place ve BOM dosyaları tek üretim ZIP paketinde toplandı.
-- Dış API payload mantığı kaldırıldı.
-- `FABRICATION_PACKAGE_V1` yerel üretim özeti üretildi.
-- Flutter'a `Üretim ve Sipariş Hazırlığı` sayfası eklendi.
-- Ana dashboard'a üretim sayfasına giden kamyon ikonu eklendi.
-- Kullanıcı arayüzünde üretici, miktar ve solder mask rengi seçilebilir hale geldi.
-- Yerel tahmini maliyet ve süre bilgisi gösterildi.
-- Paket yolu tek tıkla panoya kopyalanabilir hale geldi.
+Durum: mevcut haliyle production kararina kaynak olamaz.
 
-Ana dosyalar:
+Son kanit:
 
-- `engine/fabrication_api_service.py`
-- `tool/run_fabrication_package.ps1`
-- `lib/manufacturing_dashboard.dart`
-- `assets/generated/fabrication_package.json`
-- `outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip`
+```text
+before: 22
+after: 507
+result: rollback
+manufacturing_ready: false
+```
 
-> [!note]
-> Faz 5 canlı PCBWay/JLCPCB API gönderimi yapmaz. Amaç, üretici paneline manuel yüklenebilecek temiz ve izlenebilir bir üretim paketi hazırlamaktır.
+Karar:
 
-## Son Ölçülen Durum
+- Mevcut optimizer manuel/naif star-routing davranisiyla DRC'yi kotulestiriyor.
+- Yeni mimaride optimizer dogrudan board'a rastgele ekleme yapmayacak; once candidate branch uretip DRC iyilesmesini kanitlayacak, sonra merge edecek.
 
-| Metrik | Değer |
-| --- | --- |
-| Başlangıç DRC | 94 |
-| İlk optimizer sonrası | 2 |
-| Son optimizer sonrası | 0 |
-| Manufacturing flag | true |
-| Export | Gerber + Drill + Position |
-| Üretim ZIP | `Quantum_Mind_Anchor_v2_4_Production.zip` |
-| Checkout asset | `FABRICATION_PACKAGE_V1` |
+## Faz 5 - Fabrication Package
 
-> [!success]
-> Faz 4 sonunda sistem DRC=0 durumuna ulaşmış ve üretim dosyalarını otomatik export etmiştir. Faz 5 sonunda bu dosyalar tek üretim ZIP paketine alınmış ve Flutter checkout ekranında görünür hale getirilmiştir.
+Durum: `package_ready` — ZIP uretiliyor (DRC=0 + model gate + source evidence gecti).
 
-## Faz 6 - EDA Pipeline Flutter Entegrasyonu
+```text
+status: package_ready
+outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip (~18 KB)
+```
 
-Durum: Tamamlandı (2026-05-24)
+ZIP/PCBA export su kosullarda acilir (hepsi saglandi):
 
-Kazanımlar:
+```text
+design_source_evidence=pass    [OK]
+KiCad DRC=0                     [OK]
+manufacturing_ready=true        [OK]
+production_model_gate=pass      [OK]
+```
 
-- Flutter içinden KiCad scriptleri tetiklenebiliyor (Process.run + PowerShell).
-- 7 pipeline adımının tamamı Flutter butonlarına bağlandı: KiCad Üretimi, Layout Optimizer+DRC, PCBA Export, Üretim ZIP, Simülasyon, Müh. Denetim, Fab Drawing.
-- Üretim hazır / kilitli banner gerçek zamanlı gösteriliyor.
-- "DRC Yenile" butonu diskten live okuma yapıyor.
-- Canlı terminal log paneli eklendi.
-- `engine/fabrication_drawing_service.py` yeni servisi: PDF/SVG/drill-map + JSON rapor.
-- `tool/run_fabrication_drawing.ps1` yeni script.
-- Flutter analyze: sadece önceden var olan 2 info (benim değişikliğimden yok).
-- Flutter Windows debug build başarılı.
+Not: Genel engineering readiness `review_required` (REAL_SIMULATION). Fabrication paketi otomasyon olarak hazir; fiziksel siparis oncesi muhendis incelemesi + uretici DFM tavsiye edilir.
 
-Ana dosyalar:
+## Muhendislik Gerceklik Kapisi
 
-- `lib/services/kicad_pipeline_service.dart`
-- `lib/controllers/kicad_pipeline_controller.dart`
-- `lib/kicad_pipeline_panel.dart`
-- `engine/fabrication_drawing_service.py`
-- `tool/run_fabrication_drawing.ps1`
+Gecen kontroller (8/9):
 
-## Sonraki Odak
+- `BOM_SOURCE`
+- `DESIGN_SOURCE_EVIDENCE`
+- `SCHEMATIC_SYMBOLS`
+- `PCB_ARTIFACT`
+- `PRODUCTION_MODEL`
+- `DRC_EVIDENCE` (DRC=0)
+- `PCBA_HANDOFF`
+- `FAB_ZIP`
 
-Bkz. [[08 - Sonraki İşler]].
+Review (1):
+
+- `REAL_SIMULATION`: datasheet, RF stackup, AC creepage/clearance, SI/PI/thermal review gerektirir.
+
+## Bir Sonraki Faz
+
+1. ~~20 `via_dangling` warning'ini sifirla~~ **Tamamlandi**: `_prune_dangling_copper` ile DRC=0.
+2. DRC=0 olmadan PCBA/FAB ZIP uretme kilidini koru (kilit calisir durumda).
+3. DWM3000 sentetik footprint bilgisini gercek uretici footprint kaniti ile degistir.
+4. ~~`REAL_SIMULATION` review maddelerini kapat~~ **Tamamlandi**: 5 otomatik kontrol + mühendis sign-off (`tool/run_engineering_signoff.ps1`). Sign-off ile production_candidate %100.
+5. 4-katman routing kalitesi: RF net viasiz/L2 GND referansli, QFN fanout, AC keepout — DRC=0 disinda tasarim incelemesi.

@@ -206,6 +206,8 @@ class FabricationDrawingService:
             "--output", str(out_path),
             "--layers", "Edge.Cuts,F.Fab,F.Courtyard,F.SilkS",
             "--fit-page-to-board",
+            "--exclude-drawing-sheet",
+            "--page-size-mode", "2",
             str(pcb_file),
         ]
         result = subprocess.run(cmd, capture_output=True, text=True)

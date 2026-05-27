@@ -1,5 +1,5 @@
 ASSEMBLY DRAWING - COMPONENT PLACEMENT GUIDE
-Generated: 2026-05-24T07:39:45.063879+00:00
+Generated: 2026-05-27T16:20:18.905078+00:00
 
 GENERAL INSTRUCTIONS:
 1. All component positions shown in mm from board origin (0,0) at bottom-left corner
@@ -33,6 +33,6 @@ TEST POINTS:
 - TP_GND: Ground reference point
 - TP_HLK: Power input monitoring point
 
-TOTAL COMPONENTS: 22
+TOTAL COMPONENTS: 23
 Estimated Placement Time: 15-30 minutes (automated PCBA service)
 Post-Assembly QC: Automated AOI + manual inspection of critical RF/power areas

@@ -15,7 +15,7 @@ def read_settings() -> dict:
     return {}
 
 
-def test_gemini(api_key: str, model: str = "gemini-1.5-flash") -> None:
+def test_gemini(api_key: str, model: str = "gemini-3.5-flash") -> None:
     print("\n=== GEMINI TESTI ===")
     if not api_key:
         print("HATA: API key bos!")
@@ -138,7 +138,7 @@ def main() -> None:
         target = sys.argv[1].lower()
         key_arg = sys.argv[2] if len(sys.argv) > 2 else api_key
         if target == "gemini":
-            test_gemini(key_arg, "gemini-1.5-flash")
+            test_gemini(key_arg, "gemini-3.5-flash")
         elif target == "claude":
             test_claude(key_arg, "claude-3-5-sonnet-20241022")
         elif target == "openai":
@@ -161,7 +161,7 @@ def main() -> None:
     print("SECNEK 1 — GEMINI (En ucuz, ucretsiz kota var):")
     print("  1. https://aistudio.google.com/app/apikey → API key olustur")
     print("  2. Uygulama Ayarlar → Google Gemini")
-    print("  3. Model: gemini-1.5-flash (ucretsiz)")
+    print("  3. Model: gemini-3.5-flash (ucretsiz, en hızlı — Mayıs 2026)")
     print("  4. API key yapistir → Test et")
     print()
     print("SECNEK 2 — CLAUDE (Ekleme yapilmali):")
