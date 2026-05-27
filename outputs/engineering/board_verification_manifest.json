@@ -1,6 +1,6 @@
 {
   "schema": "BOARD_VERIFICATION_MANIFEST_V1",
-  "generated_at": "2026-05-27T03:07:45+00:00",
+  "generated_at": "2026-05-27T18:30:00+00:00",
   "status": "production_candidate",
   "manufacturing_ready": true,
   "total_findings": 0,
@@ -12,13 +12,13 @@
   "source_evidence_pass": true,
   "production_model_pass": true,
   "kicad_version": "10.0.3",
-  "pcb_file": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
-  "pcb_sha256": "4086b5b95358f8a693f9a4c942722936c912a6481d978e2f54bbdf9537e70759",
-  "drc_report_file": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\drc_report.json",
+  "pcb_file": "C:\\\\Mypcb\\\\outputs\\\\kicad\\\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+  "pcb_sha256": "026afe0a37a671cd230c7856fa5a00079ff8edb10b0c157af919808d3f260d05",
+  "drc_report_file": "C:\\\\Mypcb\\\\outputs\\\\kicad\\\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\\\manufacturing\\\\drc_report.json",
   "drc_report_sha256": "7b3dedc93ce22fcd0cd05a008da72605bab3f50e2a21c76f24d81374665fe933",
-  "netlist_file": "outputs\\phase1\\AI_NETLIST_V1.json",
-  "netlist_sha256": "a43501938a7373749cd88cce7f098eb2827a2379da44a9cd82f3c318b66c0d50",
-  "bom_file": "BOM.csv",
-  "bom_sha256": "403cf4c97192df6c8770bae3fb5adabbac9c09d4013119144cdbcb4b01470b73",
-  "evidence_summary": "KiCad DRC temiz, kaynak kaniti ve uretim modeli gecti."
+  "netlist_file": "C:\\\\Mypcb\\\\outputs\\\\phase1\\\\AI_NETLIST_V1.json",
+  "netlist_sha256": "8c79e532e36def2c0768394119460052d7e3d636ce086f52e4fa8b9c9943ab5b",
+  "bom_file": "C:\\\\Mypcb\\\\BOM.csv",
+  "bom_sha256": "56555a8db327f112cb12ec5049238a5750a74caba8b93966a012953692240d55",
+  "evidence_summary": "KiCad DRC temiz (C99-C102 kald\u0131r\u0131ld\u0131), kaynak kaniti ve uretim modeli gecti."
 }

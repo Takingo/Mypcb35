@@ -1,32 +1,54 @@
 {
   "schema": "INPUT_EVIDENCE_V1",
-  "generated_at": "2026-05-27T15:52:07+00:00",
+  "generated_at": "2026-05-27T16:26:51+00:00",
   "bom_file": "C:\\Mypcb\\BOM.csv",
   "netlist_file": "C:\\Mypcb\\outputs\\phase1\\AI_NETLIST_V1.json",
   "counts": {
-    "components": 18,
-    "nets": 12,
+    "components": 28,
+    "nets": 23,
     "bom_refs": 55,
-    "findings": 44,
-    "error": 0,
-    "warn": 5,
-    "review": 39
+    "findings": 56,
+    "error": 4,
+    "warn": 7,
+    "review": 45
   },
-  "status": "review",
+  "status": "fail",
   "findings": [
     {
-      "id": "BOM_ONLY_FB1",
-      "severity": "review",
-      "category": "bom_not_in_netlist",
-      "message": "BOM'da var, netliste girmemis: FB1 (Ferrite bead / BLM21PG221SN1D)",
-      "ref": "FB1",
-      "bom": {
-        "value": "Ferrite bead",
-        "manufacturer": "Murata",
-        "part_number": "BLM21PG221SN1D",
-        "package": "0805",
-        "notes": "EMI filtering"
-      }
+      "id": "ORPHAN_AC_L_J1",
+      "severity": "error",
+      "category": "pin_orphan",
+      "message": "'AC_L' neti olmayan komponente isaret ediyor: J1.1",
+      "net": "AC_L",
+      "ref": "J1",
+      "pin": "J1.1"
+    },
+    {
+      "id": "ORPHAN_AC_N_J1",
+      "severity": "error",
+      "category": "pin_orphan",
+      "message": "'AC_N' neti olmayan komponente isaret ediyor: J1.2",
+      "net": "AC_N",
+      "ref": "J1",
+      "pin": "J1.2"
+    },
+    {
+      "id": "ORPHAN_5V_DC_JACK_J2",
+      "severity": "error",
+      "category": "pin_orphan",
+      "message": "'5V_DC_JACK' neti olmayan komponente isaret ediyor: J2.1",
+      "net": "5V_DC_JACK",
+      "ref": "J2",
+      "pin": "J2.1"
+    },
+    {
+      "id": "ORPHAN_GND_J2",
+      "severity": "error",
+      "category": "pin_orphan",
+      "message": "'GND' neti olmayan komponente isaret ediyor: J2.2",
+      "net": "GND",
+      "ref": "J2",
+      "pin": "J2.2"
     },
     {
       "id": "BOM_ONLY_FB2",
@@ -407,20 +429,6 @@
       }
     },
     {
-      "id": "BOM_ONLY_U8",
-      "severity": "review",
-      "category": "bom_not_in_netlist",
-      "message": "BOM'da var, netliste girmemis: U8 (1.8V low-noise LDO / TPS7A2018PDBVR)",
-      "ref": "U8",
-      "bom": {
-        "value": "1.8V low-noise LDO",
-        "manufacturer": "Texas Instruments",
-        "part_number": "TPS7A2018PDBVR",
-        "package": "SOT-23-5",
-        "notes": "3.3V to 1.8V UWB rail; upgraded from TPS780 after power-budget simulation showed insufficient 150mA margin"
-      }
-    },
-    {
       "id": "NL_ONLY_ANT1",
       "severity": "review",
       "category": "netlist_not_in_bom",
@@ -428,11 +436,53 @@
       "ref": "ANT1"
     },
     {
-      "id": "NL_ONLY_C5",
+      "id": "NL_ONLY_D1",
       "severity": "review",
       "category": "netlist_not_in_bom",
-      "message": "Netliste var, BOM'da yok: C5 (100nF / GRM21BR71H104KA01L)",
-      "ref": "C5"
+      "message": "Netliste var, BOM'da yok: D1 (SS34-E3/57T / SS34-E3/57T)",
+      "ref": "D1"
+    },
+    {
+      "id": "NL_ONLY_D2",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: D2 (1N4148TR / 1N4148TR)",
+      "ref": "D2"
+    },
+    {
+      "id": "NL_ONLY_D3",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: D3 (1N4148TR / 1N4148TR)",
+      "ref": "D3"
+    },
+    {
+      "id": "NL_ONLY_D5",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: D5 (SMBJ3.3A / SMBJ3.3A)",
+      "ref": "D5"
+    },
+    {
+      "id": "NL_ONLY_D6",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: D6 (SMBJ3.3A / SMBJ3.3A)",
+      "ref": "D6"
+    },
+    {
+      "id": "NL_ONLY_D8",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: D8 (SMBJ1.8A / SMBJ1.8A)",
+      "ref": "D8"
+    },
+    {
+      "id": "NL_ONLY_F2",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: F2 (0ZCJ0050FF2G / 0ZCJ0050FF2G)",
+      "ref": "F2"
     },
     {
       "id": "NL_ONLY_Q1",
@@ -449,25 +499,32 @@
       "ref": "Q2"
     },
     {
-      "id": "NL_ONLY_R18",
-      "severity": "review",
-      "category": "netlist_not_in_bom",
-      "message": "Netliste var, BOM'da yok: R18 (470 Ohm / RC0805FR-07470RL)",
-      "ref": "R18"
-    },
-    {
-      "id": "NL_ONLY_R19",
-      "severity": "review",
-      "category": "netlist_not_in_bom",
-      "message": "Netliste var, BOM'da yok: R19 (470 Ohm / RC0805FR-07470RL)",
-      "ref": "R19"
-    },
-    {
       "id": "NL_ONLY_RV1",
       "severity": "review",
       "category": "netlist_not_in_bom",
-      "message": "Netliste var, BOM'da yok: RV1 (470V 14mm / 14D471K)",
+      "message": "Netliste var, BOM'da yok: RV1 (14D471K / 14D471K)",
       "ref": "RV1"
+    },
+    {
+      "id": "NL_ONLY_U10",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U10 (AT24C256C-SSHL / AT24C256C-SSHL)",
+      "ref": "U10"
+    },
+    {
+      "id": "NL_ONLY_U11",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U11 (PC817X2CSP9F / PC817X2CSP9F)",
+      "ref": "U11"
+    },
+    {
+      "id": "NL_ONLY_U12",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U12 (PC817X2CSP9F / PC817X2CSP9F)",
+      "ref": "U12"
     },
     {
       "id": "NL_ONLY_U13",
@@ -491,6 +548,13 @@
       "ref": "U1_Socket_R"
     },
     {
+      "id": "NL_ONLY_U9",
+      "severity": "review",
+      "category": "netlist_not_in_bom",
+      "message": "Netliste var, BOM'da yok: U9 (DS3231SN / DS3231SN)",
+      "ref": "U9"
+    },
+    {
       "id": "MPN_F1",
       "severity": "warn",
       "category": "mpn_mismatch",
@@ -498,6 +562,15 @@
       "ref": "F1",
       "netlist_mpn": "0215001.MXP",
       "bom_mpn": "0451.500MRL"
+    },
+    {
+      "id": "MPN_FB1",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "FB1 MPN uyumsuz: netlist='BLM18PG221SN1D' vs BOM='BLM21PG221SN1D'",
+      "ref": "FB1",
+      "netlist_mpn": "BLM18PG221SN1D",
+      "bom_mpn": "BLM21PG221SN1D"
     },
     {
       "id": "MPN_U3",
@@ -534,14 +607,41 @@
       "ref": "U7",
       "netlist_mpn": "SN74LVC1T45DBVR",
       "bom_mpn": "TPS54331DR"
+    },
+    {
+      "id": "MPN_U8",
+      "severity": "warn",
+      "category": "mpn_mismatch",
+      "message": "U8 MPN uyumsuz: netlist='TPL5010DDCR' vs BOM='TPS7A2018PDBVR'",
+      "ref": "U8",
+      "netlist_mpn": "TPL5010DDCR",
+      "bom_mpn": "TPS7A2018PDBVR"
     }
   ],
   "missing_questions": [
     {
-      "id": "BOM_ONLY_FB1",
-      "category": "bom_not_in_netlist",
-      "ask": "BOM'da var, netliste girmemis: FB1 (Ferrite bead / BLM21PG221SN1D)",
-      "severity": "review"
+      "id": "ORPHAN_AC_L_J1",
+      "category": "pin_orphan",
+      "ask": "'AC_L' neti olmayan komponente isaret ediyor: J1.1",
+      "severity": "error"
+    },
+    {
+      "id": "ORPHAN_AC_N_J1",
+      "category": "pin_orphan",
+      "ask": "'AC_N' neti olmayan komponente isaret ediyor: J1.2",
+      "severity": "error"
+    },
+    {
+      "id": "ORPHAN_5V_DC_JACK_J2",
+      "category": "pin_orphan",
+      "ask": "'5V_DC_JACK' neti olmayan komponente isaret ediyor: J2.1",
+      "severity": "error"
+    },
+    {
+      "id": "ORPHAN_GND_J2",
+      "category": "pin_orphan",
+      "ask": "'GND' neti olmayan komponente isaret ediyor: J2.2",
+      "severity": "error"
     },
     {
       "id": "BOM_ONLY_FB2",
@@ -706,21 +806,51 @@
       "severity": "review"
     },
     {
-      "id": "BOM_ONLY_U8",
-      "category": "bom_not_in_netlist",
-      "ask": "BOM'da var, netliste girmemis: U8 (1.8V low-noise LDO / TPS7A2018PDBVR)",
-      "severity": "review"
-    },
-    {
       "id": "NL_ONLY_ANT1",
       "category": "netlist_not_in_bom",
       "ask": "Netliste var, BOM'da yok: ANT1 (132134 / 132134)",
       "severity": "review"
     },
     {
-      "id": "NL_ONLY_C5",
+      "id": "NL_ONLY_D1",
       "category": "netlist_not_in_bom",
-      "ask": "Netliste var, BOM'da yok: C5 (100nF / GRM21BR71H104KA01L)",
+      "ask": "Netliste var, BOM'da yok: D1 (SS34-E3/57T / SS34-E3/57T)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_D2",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: D2 (1N4148TR / 1N4148TR)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_D3",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: D3 (1N4148TR / 1N4148TR)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_D5",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: D5 (SMBJ3.3A / SMBJ3.3A)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_D6",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: D6 (SMBJ3.3A / SMBJ3.3A)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_D8",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: D8 (SMBJ1.8A / SMBJ1.8A)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_F2",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: F2 (0ZCJ0050FF2G / 0ZCJ0050FF2G)",
       "severity": "review"
     },
     {
@@ -736,21 +866,27 @@
       "severity": "review"
     },
     {
-      "id": "NL_ONLY_R18",
-      "category": "netlist_not_in_bom",
-      "ask": "Netliste var, BOM'da yok: R18 (470 Ohm / RC0805FR-07470RL)",
-      "severity": "review"
-    },
-    {
-      "id": "NL_ONLY_R19",
-      "category": "netlist_not_in_bom",
-      "ask": "Netliste var, BOM'da yok: R19 (470 Ohm / RC0805FR-07470RL)",
-      "severity": "review"
-    },
-    {
       "id": "NL_ONLY_RV1",
       "category": "netlist_not_in_bom",
-      "ask": "Netliste var, BOM'da yok: RV1 (470V 14mm / 14D471K)",
+      "ask": "Netliste var, BOM'da yok: RV1 (14D471K / 14D471K)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U10",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U10 (AT24C256C-SSHL / AT24C256C-SSHL)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U11",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U11 (PC817X2CSP9F / PC817X2CSP9F)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U12",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U12 (PC817X2CSP9F / PC817X2CSP9F)",
       "severity": "review"
     },
     {
@@ -769,6 +905,12 @@
       "id": "NL_ONLY_U1_Socket_R",
       "category": "netlist_not_in_bom",
       "ask": "Netliste var, BOM'da yok: U1_Socket_R (1x22 Female Pin Header 2.54mm / 1x22-FH)",
+      "severity": "review"
+    },
+    {
+      "id": "NL_ONLY_U9",
+      "category": "netlist_not_in_bom",
+      "ask": "Netliste var, BOM'da yok: U9 (DS3231SN / DS3231SN)",
       "severity": "review"
     }
   ]

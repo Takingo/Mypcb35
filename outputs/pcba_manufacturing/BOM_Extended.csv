@@ -18,7 +18,7 @@ U12,"Optocoupler 2500V",PC817X2CSP9F,Various,1,0.15,0.15,5,In Stock,Passive,0603
 U13,"Single Channel Level Shifter 3.3V to 1.8V",SN74LVC1T45DBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
 U1_Socket_L,"1x22 Female Pin Header 2.54mm",1x22-FH,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
 U1_Socket_R,"1x22 Female Pin Header 2.54mm",1x22-FH,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U2,"DWM3000 UWB Transceiver Module",DWM3000,Decawave,1,18.5,18.5,21,Limited,RF Module,LGA-64,https://www.decawave.com/wp-content/uploads/2021/04/DWM3000_Datasheet_v1p0.pdf
+U2,"DWM3000 UWB Module",DWM3000,Decawave,1,18.5,18.5,21,Limited,RF Module,LGA-64,https://www.decawave.com/wp-content/uploads/2021/04/DWM3000_Datasheet_v1p0.pdf
 U3,"AC-DC 5V 5W Power Module",HLK-5M05,HLK,1,2.3,2.3,7,In Stock,SMPS Module,SIP-4,https://www.hlktech.net/uploads/file/20200410/HLK-5M05.pdf
 U5,"1.8V LDO 200mA",TPS780180200DRV,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
 U6,"4-bit Bidirectional Voltage Translator 3.3V to 1.8V",TXB0104RGYR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A

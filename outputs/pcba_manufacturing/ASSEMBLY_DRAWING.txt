@@ -1,5 +1,5 @@
 ASSEMBLY DRAWING - COMPONENT PLACEMENT GUIDE
-Generated: 2026-05-27T16:20:18.905078+00:00
+Generated: 2026-05-27T16:46:50.617429+00:00
 
 GENERAL INSTRUCTIONS:
 1. All component positions shown in mm from board origin (0,0) at bottom-left corner
