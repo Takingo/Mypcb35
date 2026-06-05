@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import json
@@ -8,6 +8,9 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+import sys
+sys.path.append(str(Path(__file__).parent))
 
 from board_verification_manifest import manifest_gate_failure
 from production_model_gate import audit_production_model_gate
@@ -129,28 +132,21 @@ class FabricationPackageService:
                 raise RuntimeError(f"Fabrication package blocked by board verification manifest: {failure}")
             return
         if not layout_status_file.exists():
-            raise RuntimeError(
-                f"Layout status not found: {layout_status_file}. Run the KiCad DRC optimizer first."
-            )
+            raise RuntimeError(f"Layout status not found: {layout_status_file}")
         data = json.loads(layout_status_file.read_text(encoding="utf-8"))
         final_count = int(data.get("final_violation_count", -1))
         manufacturing_ready = bool(data.get("manufacturing_ready", False))
         if final_count != 0 or not manufacturing_ready:
             raise RuntimeError(
-                "Fabrication package blocked because KiCad DRC is not clean: "
+                "KiCad DRC is not clean: "
                 f"final_violation_count={final_count}, manufacturing_ready={manufacturing_ready}."
             )
         pcb_text = pcb_file.read_text(encoding="utf-8", errors="ignore") if pcb_file.exists() else ""
         if "pcbnew unavailable" in pcb_text or "(footprint" not in pcb_text:
-            raise RuntimeError(
-                "Fabrication package blocked because the active PCB is missing real KiCad footprint data."
-            )
+            raise RuntimeError("Active PCB is missing real KiCad footprint data.")
         model_gate = audit_production_model_gate(pcb_file)
         if not model_gate.ok:
-            raise RuntimeError(
-                "Fabrication package blocked because production model validation failed: "
-                f"{model_gate.evidence_summary}"
-            )
+            raise RuntimeError(f"production model validation failed: {model_gate.evidence_summary}")
 
     def build_summary(
         self,

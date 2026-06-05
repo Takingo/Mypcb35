@@ -23,10 +23,12 @@ class OllamaNetlistService {
       final settings = await _loadSettings();
       final provider = settings['provider'] as String? ?? 'ollama';
       final model = settings['model'] as String? ?? 'gemma4';
-      final baseUrl = settings['base_url'] as String? ?? 'http://localhost:11434';
+      final baseUrl =
+          settings['base_url'] as String? ?? 'http://localhost:11434';
 
       if (provider == 'ollama') {
-        final client = HttpClient()..connectionTimeout = const Duration(seconds: 3);
+        final client = HttpClient()
+          ..connectionTimeout = const Duration(seconds: 3);
         try {
           final uri = Uri.parse('$baseUrl/api/tags');
           final req = await client.getUrl(uri);
@@ -35,7 +37,8 @@ class OllamaNetlistService {
           client.close();
           if (res.statusCode == 200) {
             final data = jsonDecode(body) as Map<String, dynamic>;
-            final models = (data['models'] as List?)
+            final models =
+                (data['models'] as List?)
                     ?.map((m) => (m as Map)['name'] as String? ?? '')
                     .toList() ??
                 [];
@@ -101,18 +104,27 @@ class OllamaNetlistService {
   }) async {
     final python = _findPython();
     final scriptPath = '$projectRoot\\engine\\run_ai_synthesis.py';
+    final tempDir = Directory('$projectRoot\\.cache\\ai_synthesis');
+    await tempDir.create(recursive: true);
+    final stamp = DateTime.now().microsecondsSinceEpoch;
+    final requestFile = File('${tempDir.path}\\request_$stamp.txt');
+    final bomFile = File('${tempDir.path}\\bom_$stamp.csv');
+    final notesFile = File('${tempDir.path}\\notes_$stamp.txt');
+    await requestFile.writeAsString(request, encoding: utf8);
+    await bomFile.writeAsString(bom, encoding: utf8);
+    await notesFile.writeAsString(notes, encoding: utf8);
 
-    final process = await Process.start(
-      python,
-      [
-        scriptPath,
-        '--request', request,
-        '--bom', bom,
-        '--notes', notes,
-        '--project-root', projectRoot,
-      ],
-      workingDirectory: projectRoot,
-    );
+    final process = await Process.start(python, [
+      scriptPath,
+      '--request-file',
+      requestFile.path,
+      '--bom-file',
+      bomFile.path,
+      '--notes-file',
+      notesFile.path,
+      '--project-root',
+      projectRoot,
+    ], workingDirectory: projectRoot);
 
     // stderr → canlı log
     process.stderr
@@ -147,7 +159,7 @@ class OllamaNetlistService {
       final provider = data['provider'] as String? ?? '';
       final model = data['model'] as String? ?? '';
       final elapsed = (data['elapsed_seconds'] as num?)?.toDouble() ?? 0.0;
-      final error = data['error'] as String?;
+      final error = data['error'] as String? ?? data['ai_error'] as String?;
       final netlistJson = data['netlist'] as Map<String, dynamic>?;
       // 'synthesis_source' Python'dan geliyor — real_ai veya failed
       final synthesisSource = data['synthesis_source'] as String? ?? 'unknown';

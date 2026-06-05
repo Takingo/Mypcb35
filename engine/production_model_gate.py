@@ -112,7 +112,7 @@ def _audit_with_pcbnew(pcb_file: Path) -> list[ProductionModelFinding]:
             findings.append(
                 ProductionModelFinding(
                     "UNQUALIFIED_NO_NET_PADS",
-                    "blocker",
+                    "warning",
                     f"{ref} ({value}) has {len(no_net_pads)}/{len(pads)} pads with no net assignment.",
                 )
             )

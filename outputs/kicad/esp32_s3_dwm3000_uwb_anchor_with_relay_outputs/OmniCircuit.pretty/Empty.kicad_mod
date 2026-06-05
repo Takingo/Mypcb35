@@ -1,0 +1,57 @@
+(footprint "Empty"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "SK1"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "20dfb39e-560b-4bed-b488-499ff1fd167a")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Value" "Female_Header_1x22_2.54mm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "f63d44a6-2ddd-4b27-b2e4-0142210b4b5e")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4f9764fc-f719-428f-a60f-9fccaedab815")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "693041fc-7598-4d50-961b-a0035c2e3970")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd rect
+		(at 0 0)
+		(size 0.1 0.1)
+		(layers "F.Cu" "F.Mask" "F.SilkS" "F.Adhes" "F.Paste" "F.CrtYd" "F.Fab")
+		(thermal_bridge_angle 45)
+		(uuid "c4036818-1880-4d84-bb07-9f4e2c3cf626")
+	)
+	(embedded_fonts no)
+)

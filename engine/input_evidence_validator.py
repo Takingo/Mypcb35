@@ -35,9 +35,10 @@ REQUIRED_NETS = ("GND",)
 
 def expand_refs(token: str) -> list[str]:
     """'R10-R13' -> [R10,R11,R12,R13]; 'TVS1-TVS3' -> [...]; 'U1' -> [U1].
-    Virgulle ayrilmis ve aralik karisik girdileri de acar."""
+    Virgulle, noktalı virgulle veya boslukla ayrilmis karisik girdileri de acar."""
     out: list[str] = []
-    for part in re.split(r"[,;]", token):
+    normalized = token.replace("–", "-").replace("—", "-")
+    for part in re.split(r"[,;\s]+", normalized):
         part = part.strip()
         if not part:
             continue
@@ -50,6 +51,11 @@ def expand_refs(token: str) -> list[str]:
                 continue
         out.append(part)
     return out
+
+
+def is_bom_section_header(ref_token: str) -> bool:
+    text = ref_token.strip()
+    return text.startswith("==") and text.endswith("==")
 
 
 class InputEvidenceValidator:
@@ -70,6 +76,8 @@ class InputEvidenceValidator:
             for row in reader:
                 ref_token = (row.get("Reference") or "").strip()
                 if not ref_token:
+                    continue
+                if is_bom_section_header(ref_token):
                     continue
                 meta = {
                     "value": (row.get("Value") or "").strip(),
@@ -123,6 +131,8 @@ class InputEvidenceValidator:
 
         # 4) BOM'da olup netliste girmemis komponentler (kapsama)
         for ref in sorted(bom_refs - net_refs):
+            if self._covered_by_netlist_alias(ref, net_refs, comp_by_ref):
+                continue
             if ref.rstrip("0123456789").upper().startswith(NON_NETLIST_PREFIXES):
                 continue  # TP gibi elektriksel olmayanlar
             add(f"BOM_ONLY_{ref}", "review", "bom_not_in_netlist",
@@ -133,6 +143,8 @@ class InputEvidenceValidator:
         # 5) Netliste olup BOM'da olmayan komponentler
         for ref in sorted(net_refs - bom_refs):
             c = comp_by_ref.get(ref, {})
+            if self._covered_by_bom_alias(ref, bom_refs, c):
+                continue
             add(f"NL_ONLY_{ref}", "review", "netlist_not_in_bom",
                 f"Netliste var, BOM'da yok: {ref} ({c.get('value')} / {c.get('part_number')})",
                 ref=ref)
@@ -185,6 +197,33 @@ class InputEvidenceValidator:
         }
         self._write(report)
         return report
+
+    def _covered_by_netlist_alias(
+        self,
+        bom_ref: str,
+        net_refs: set[str],
+        comp_by_ref: dict[str, dict[str, Any]],
+    ) -> bool:
+        if bom_ref != "J1_AC" or "J1" not in net_refs:
+            return False
+        return self._is_accepted_ac_connector_alias(comp_by_ref.get("J1", {}))
+
+    def _covered_by_bom_alias(
+        self,
+        net_ref: str,
+        bom_refs: set[str],
+        component: dict[str, Any],
+    ) -> bool:
+        if net_ref != "J1" or "J1_AC" not in bom_refs:
+            return False
+        return self._is_accepted_ac_connector_alias(component)
+
+    def _is_accepted_ac_connector_alias(self, component: dict[str, Any]) -> bool:
+        part = str(component.get("part_number", "")).strip()
+        text = " ".join(
+            str(component.get(key, "")) for key in ("value", "type", "reason", "notes")
+        ).lower()
+        return part == "1803578" and ("ac" in text or "mains" in text)
 
     def _write(self, report: dict[str, Any]) -> None:
         self.report_path.parent.mkdir(parents=True, exist_ok=True)

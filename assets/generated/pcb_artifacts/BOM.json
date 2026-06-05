@@ -1,539 +1,613 @@
 {
-  "project": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs",
-  "generated": "2026-05-27T17:42:39.858733",
+  "schema": "BOM_V1",
+  "generated_at": "2026-05-30T07:17:23+00:00",
+  "source_pcb": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+  "component_count": 55,
   "components": [
     {
-      "reference": "C100",
-      "footprint": "C_0603_1608Metric",
-      "value": "TBD",
-      "position": {
-        "x": 74.0,
-        "y": 20.0
-      }
-    },
-    {
-      "reference": "C101",
-      "footprint": "C_0603_1608Metric",
-      "value": "TBD",
-      "position": {
-        "x": 82.0,
-        "y": 18.0
-      }
-    },
-    {
-      "reference": "C102",
-      "footprint": "C_0603_1608Metric",
-      "value": "TBD",
-      "position": {
-        "x": 82.0,
-        "y": 10.0
-      }
-    },
-    {
       "reference": "C90",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 94.0,
         "y": 82.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C91",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 123.0,
         "y": 22.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C92",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 147.0,
         "y": 34.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C93",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 118.0,
         "y": 26.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C94",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 122.0,
         "y": 34.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C95",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 122.0,
         "y": 44.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C96",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 126.0,
         "y": 48.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C97",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 128.0,
         "y": 44.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "C98",
+      "value": "100nF",
       "footprint": "C_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 128.0,
         "y": 36.0
-      }
-    },
-    {
-      "reference": "C99",
-      "footprint": "C_0603_1608Metric",
-      "value": "TBD",
-      "position": {
-        "x": 68.0,
-        "y": 8.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "F1",
+      "value": "500mA fuse",
       "footprint": "Fuse_1206_3216Metric",
-      "value": "TBD",
       "position": {
         "x": 20.0,
         "y": 12.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "J1",
+      "value": "AC Şebeke Girişi",
       "footprint": "TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal",
-      "value": "TBD",
       "position": {
         "x": 10.0,
         "y": 25.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "J2",
+      "value": "SMA Anten Konektörü",
       "footprint": "SMA_Amphenol_901-144_Vertical",
-      "value": "TBD",
       "position": {
         "x": 152.0,
         "y": 16.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "K1",
+      "value": "5V relay",
       "footprint": "Relay_SPDT_Omron-G5Q-1",
-      "value": "TBD",
       "position": {
         "x": 25.0,
         "y": 76.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "K2",
+      "value": "5V relay",
       "footprint": "Relay_SPDT_Omron-G5Q-1",
-      "value": "TBD",
       "position": {
         "x": 67.0,
         "y": 88.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "MOV1",
+      "value": "AC varistor",
       "footprint": "RV_Disc_D15.5mm_W4.5mm_P7.5mm",
-      "value": "TBD",
       "position": {
         "x": 32.0,
         "y": 39.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R1",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 90.0,
         "y": 87.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R10",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 122.0,
         "y": 61.82
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R11",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 122.0,
         "y": 77.09
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R12",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 108.0,
         "y": 78.36
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R13",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 96.0,
         "y": 77.63
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R16",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 30.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R17",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 48.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R18",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 66.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R19",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 84.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R2",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 102.0,
         "y": 87.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R20",
+      "value": "10K",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 102.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R21",
+      "value": "33R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 120.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R22",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 138.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R23",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 12.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R24",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 30.0,
         "y": 88.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R25",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 48.0,
         "y": 88.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R26",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 62.0,
         "y": 88.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R27",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 90.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R3",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 120.0,
         "y": 87.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R34",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 102.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R35",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 120.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R36",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 138.0,
         "y": 96.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R37",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 12.0,
         "y": 88.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R38",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 36.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R39",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 54.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R4",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 138.0,
         "y": 87.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R40",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 72.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R5",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 12.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R6",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 30.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R7",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 48.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R8",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 66.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "R9",
+      "value": "100R",
       "footprint": "R_0603_1608Metric",
-      "value": "TBD",
       "position": {
         "x": 84.0,
         "y": 92.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U1",
+      "value": "ESP32-S3 module",
       "footprint": "ESP32-S3-WROOM-1",
-      "value": "TBD",
       "position": {
         "x": 94.0,
         "y": 62.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U2",
-      "footprint": "OmniCircuit:DWM3000",
-      "value": "TBD",
+      "value": "UWB module",
+      "footprint": "DWM3000",
       "position": {
         "x": 135.0,
         "y": 22.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U3",
+      "value": "4-bit level shifter",
       "footprint": "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm",
-      "value": "TBD",
       "position": {
         "x": 118.0,
         "y": 30.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U4",
+      "value": "Single-bit level shifter",
       "footprint": "SOT-363_SC-70-6",
-      "value": "TBD",
       "position": {
         "x": 122.0,
         "y": 40.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U5",
+      "value": "Single-bit level shifter",
       "footprint": "SOT-363_SC-70-6",
-      "value": "TBD",
       "position": {
         "x": 128.0,
         "y": 40.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U6",
+      "value": "5V isolated AC/DC",
       "footprint": "Converter_ACDC_Hi-Link_HLK-5Mxx",
-      "value": "TBD",
       "position": {
         "x": 28.0,
         "y": 20.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U7",
+      "value": "3.3V buck",
       "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
-      "value": "TBD",
       "position": {
         "x": 72.0,
         "y": 14.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     },
     {
       "reference": "U8",
+      "value": "1.8V low-noise LDO",
       "footprint": "SOT-23-5",
-      "value": "TBD",
       "position": {
         "x": 82.0,
         "y": 14.0
-      }
+      },
+      "rotation": 0.0,
+      "side": "Front"
     }
-  ],
-  "total_unique": 59,
-  "total_placed": 59
+  ]
 }

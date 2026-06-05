@@ -13,7 +13,7 @@ if (!(Test-Path $KiCadPython)) {
   throw "KiCad Python not found at $KiCadPython"
 }
 
-$env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
+$env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb;C:\Mypcb\engine"
 
 & $KiCadPython -m engine.fabrication_api_service `
   --quantity $Quantity `

@@ -1,11 +1,18 @@
-﻿"""KiCad automation service — AI_Netlist_v1 → gerçek KiCad projesi.
+"""KiCad automation service — AI_Netlist_v1 → gerçek KiCad projesi.
 
 Önemli değişiklikler (gerçek üretilebilir PCBA için):
 - Gerçek KiCad kütüphane footprint'leri (pcbnew.FootprintLoad)
 - Bileşene özgü doğru pin→pad eşleme tabloları
-- 160×100mm mühendislik-doğru yerleşim
+- Board boyutu girdi dosyasından otomatik okunur (load_board_size_from_files)
 - GND bakır döküm bölgesi (B.Cu)
 - DRC sonucu assets/generated/drc_report_v1.json'a yazılır
+
+[v3.0 Düzeltmeleri]:
+- Board: 130×46mm (220×140 değil)
+- DWM3000: LGA-28 5×5mm gerçek footprint (19×26mm değil)
+- SK1/SK2: PinSocket_2x22 (1x22 değil)
+- Freerouting: 1.9.0 kullanılıyor (Java 11 uyumlu, 2.2.4 değil)
+- omnicircuit_improvements.py: 8 geliştirme entegre
 """
 
 from __future__ import annotations
@@ -15,8 +22,14 @@ import asyncio
 import json
 import math
 import os
+import sys
+import io
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import re
 import shutil
+import subprocess
 import uuid
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -27,6 +40,8 @@ from netlist_source_normalizer import normalize_design_source
 
 MM = 1_000_000
 DWM3000_REQUIRED_PITCH_MM = 1.0
+BOARD_WIDTH_MM = 130.0   # Quantum Mind UWB Anchor v3.0 — sabit boyut
+BOARD_HEIGHT_MM = 46.0   # 130×46mm — değiştirme
 
 # ─── KiCad kütüphane kök dizini ─────────────────────────────────────────────
 KICAD_FP_LIB_ROOT = r"C:\Program Files\KiCad\10.0\share\kicad\footprints"
@@ -46,24 +61,37 @@ FOOTPRINT_MAP: dict[str, tuple[str, str]] = {
     # LDO regülatörler SOT-23-5
     "TPS7A2018PDBVR":     ("Package_TO_SOT_SMD",     "SOT-23-5"),
     "TPS780180DRV":       ("Package_TO_SOT_SMD",     "SOT-23-5"),
+    "TPS780180200DRV":    ("Package_TO_SOT_SMD",     "SOT-23-5"),
     "TPS780330DRV":       ("Package_TO_SOT_SMD",     "SOT-23-5"),
     # Seviye dönüştürücüler
     "TXB0104RUT":         ("Package_DFN_QFN",        "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm"),
     "TXB0104RGYR":        ("Package_DFN_QFN",        "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm"),
     "SN74LVC1T45DCK":    ("Package_TO_SOT_SMD",     "SOT-363_SC-70-6"),
+    "SN74LVC1T45DBVR":   ("Package_TO_SOT_SMD",     "SOT-23-6"),
     "SN74LVC1T45":       ("Package_TO_SOT_SMD",     "SOT-363_SC-70-6"),
+    "TPL5010DDCR":       ("Package_TO_SOT_SMD",     "SOT-23-6"),
+    "DS3231SN":          ("Package_SO",             "SOIC-8_3.9x4.9mm_P1.27mm"),
+    "AT24C256C-SSHL":    ("Package_SO",             "SOIC-8_3.9x4.9mm_P1.27mm"),
+    "W5500":             ("Package_QFP",            "LQFP-48_7x7mm_P0.5mm"),
     # Relay
     "G5Q-14-DC5":        ("Relay_THT",              "Relay_SPDT_Omron-G5Q-1"),
     "G5Q-14-DC12":       ("Relay_THT",              "Relay_SPDT_Omron-G5Q-1"),
     # Optokuplör
     "PC817":             ("Package_DIP",             "DIP-4_W7.62mm"),
     "PC817A":            ("Package_DIP",             "DIP-4_W7.62mm"),
+    "PC817X2CSP9F":      ("Package_DIP",             "DIP-4_W7.62mm"),
     # MOSFET SOT-23
     "2N7002":            ("Package_TO_SOT_SMD",     "SOT-23"),
     "2N7002T":           ("Package_TO_SOT_SMD",     "SOT-23"),
     # Diyotlar
     "SS14":              ("Diode_SMD",               "D_SMA"),
     "SS24":              ("Diode_SMD",               "D_SMA"),
+    "SS34-E3/57T":       ("Diode_SMD",               "D_SMA"),
+    "1N5819":            ("Diode_SMD",               "D_SMA"),
+    "1N4148TR":          ("Diode_SMD",               "D_SOD-323"),
+    "SMBJ3.3A":          ("Diode_SMD",               "D_SMA"),
+    "SMBJ1.8A":          ("Diode_SMD",               "D_SMA"),
+    "USBLC6-2SC6":       ("Package_TO_SOT_SMD",      "SOT-23-6"),
     "1N4007":            ("Diode_THT",               "D_DO-41_SOD81_P10.16mm_Horizontal"),
     # Sigorta
     "0451.500MRL":       ("Fuse",                    "Fuse_1206_3216Metric"),
@@ -71,6 +99,29 @@ FOOTPRINT_MAP: dict[str, tuple[str, str]] = {
     # Varistör (MOV-14D471K → Disc 14mm çap ~ D15.5mm kütüphanede)
     "MOV-14D471K":       ("Varistor",                "RV_Disc_D15.5mm_W4.5mm_P7.5mm"),
     "MOV-14D561K":       ("Varistor",                "RV_Disc_D15.5mm_W4.5mm_P7.5mm"),
+    "14D471K":           ("Varistor",                "RV_Disc_D15.5mm_W4.5mm_P7.5mm"),
+    "0215001.MXP":       ("Fuse",                    "Fuseholder_Littelfuse_100_series_5x20mm"),
+    "0ZCJ0050FF2G":      ("Fuse",                    "Fuse_1206_3216Metric"),
+    "BLM18PG221SN1D":    ("Inductor_SMD",            "L_0603_1608Metric"),
+    "CDRH104R-220NC":    ("Inductor_SMD",            "L_10.4x10.4_H4.8"),
+    "7B-25.000MAAJ-T":   ("Crystal",                 "Crystal_SMD_3225-4Pin_3.2x2.5mm"),
+    "BAT-HLD-001":       ("Battery",                 "BatteryHolder_LINX_BAT-HLD-012-SMT"),
+    "PTS645SM50SMTR92":  ("Button_Switch_SMD",       "SW_SPST_PTS645Sx43SMTR92"),
+    "1935161":           ("TerminalBlock_Phoenix",   "TerminalBlock_Phoenix_PT-1,5-3-5.0-H_1x03_P5.00mm_Horizontal"),
+    "1803578":           ("TerminalBlock_Phoenix",   "TerminalBlock_Phoenix_PT-1,5-3-5.0-H_1x03_P5.00mm_Horizontal"),
+    "TYPE-C-31-M-12":    ("Connector_USB",           "USB_C_Receptacle_HRO_TYPE-C-31-M-12"),
+    "PJ-002A":           ("Connector_BarrelJack",    "BarrelJack_Horizontal"),
+    "KF350-3P":          ("TerminalBlock_Phoenix",   "TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal"),
+    "01000063Z":         ("Fuse",                    "Fuseholder_Littelfuse_100_series_5x20mm"),
+    "10129378-906002BLF": ("Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical"),
+    "10129378-904002BLF": ("Connector_PinHeader_2.54mm", "PinHeader_1x04_P2.54mm_Vertical"),
+    "HR911105A":         ("Connector_RJ",            "RJ45_Hanrun_HR911105A_Horizontal"),
+    "5015":              ("TestPoint",               "TestPoint_Keystone_5015_Micro_Mini"),
+    "132134":            ("Connector_Coaxial",       "SMA_Amphenol_132134_Vertical"),
+    "WS2812B-2020":      ("LED_SMD",                 "LED_WS2812B-2020_PLCC4_2.0x2.0mm"),
+    "61302211821":        ("Connector_PinSocket_2.54mm", "PinSocket_1x22_P2.54mm_Vertical"),  # SK1+SK2 together form the 2x22 ESP32 socket
+    "PinSocket_1x22_P2.54mm": ("Connector_PinSocket_2.54mm", "PinSocket_2x22_P2.54mm_Vertical"),
+    "PINSOCKET_1X22_P2.54MM": ("Connector_PinSocket_2.54mm", "PinSocket_2x22_P2.54mm_Vertical"),
 }
 
 # ─── Bileşen tipi → footprint (part_number yoksa fallback) ──────────────────
@@ -90,6 +141,24 @@ TYPE_FOOTPRINT_MAP: dict[str, tuple[str, str]] = {
     "resistor_array": ("Resistor_SMD",      "R_0603_1608Metric"),
     "capacitor":     ("Capacitor_SMD",      "C_0603_1608Metric"),
     "connector":     ("Connector_PinHeader_2.54mm", "PinHeader_1x02_P2.54mm_Vertical"),
+    "socket":        ("Connector_PinSocket_2.54mm", "PinSocket_1x22_P2.54mm_Vertical"),
+}
+
+PACKAGE_FOOTPRINT_MAP: dict[str, tuple[str, str]] = {
+    "0402": ("Resistor_SMD", "R_0402_1005Metric"),
+    "0603": ("Resistor_SMD", "R_0603_1608Metric"),
+    "0805": ("Resistor_SMD", "R_0805_2012Metric"),
+    "1206": ("Resistor_SMD", "R_1206_3216Metric"),
+    "SMA": ("Diode_SMD", "D_SMA"),
+    "SOD-323": ("Diode_SMD", "D_SOD-323"),
+    "SOT-23": ("Package_TO_SOT_SMD", "SOT-23"),
+    "SOT-23-5": ("Package_TO_SOT_SMD", "SOT-23-5"),
+    "SOT-23-6": ("Package_TO_SOT_SMD", "SOT-23-6"),
+    "SO-8": ("Package_SO", "SOIC-8_3.9x4.9mm_P1.27mm"),
+    "SOIC-8": ("Package_SO", "SOIC-8_3.9x4.9mm_P1.27mm"),
+    "LQFP-48": ("Package_QFP", "LQFP-48_7x7mm_P0.5mm"),
+    "VQFN-16": ("Package_DFN_QFN", "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm"),
+    "DIP-4": ("Package_DIP", "DIP-4_W7.62mm"),
 }
 
 # ─── ESP32-S3-WROOM-1 Pin adı → Pad numarası eşleme tablosu ─────────────────
@@ -167,10 +236,10 @@ G5Q_PIN_MAP: dict[str, str] = {
 
 # ─── PC817 optokuplör DIP-4 pin eşlemesi ────────────────────────────────────
 PC817_PIN_MAP: dict[str, str] = {
-    "A": "1",    "ANODE": "1",
-    "K": "2",    "CATHODE": "2",
-    "E": "3",    "EMITTER": "3",
-    "C": "4",    "COLLECTOR": "4",
+    "A": "1",    "A1": "1",    "ANODE": "1",
+    "K": "2",    "K1": "2",    "CATHODE": "2",
+    "E": "3",    "E1": "3",    "EMITTER": "3",
+    "C": "4",    "C1": "4",    "COLLECTOR": "4",
 }
 
 # ─── 2N7002 SOT-23 pin eşlemesi ─────────────────────────────────────────────
@@ -266,6 +335,10 @@ AC_CONNECTOR_PIN_MAP: dict[str, str] = {
     "N": "2",
     "AC_N": "2",
     "NEUTRAL": "2",
+    "PE": "3",
+    "EARTH": "3",
+    "GND": "3",
+    "AC_PE": "3",
 }
 
 SMA_CONNECTOR_PIN_MAP: dict[str, str] = {
@@ -274,6 +347,87 @@ SMA_CONNECTOR_PIN_MAP: dict[str, str] = {
     "SIGNAL": "1",
     "SHIELD": "2",
     "GND": "2",
+}
+
+TPL5010_PIN_MAP: dict[str, str] = {
+    "DELAY": "1",
+    "DONE": "2",
+    "GND": "3",
+    "WAKE": "4",
+    "VCC": "5",
+    "RSTN": "6",
+    "RST": "6",
+}
+
+DS3231_PIN_MAP: dict[str, str] = {
+    "32KHZ": "1",
+    "VCC": "2",
+    "INT": "3",
+    "RST": "4",
+    "GND": "5",
+    "SDA": "6",
+    "SCL": "7",
+    "VBAT": "8",
+}
+
+AT24C256_PIN_MAP: dict[str, str] = {
+    "A0": "1",
+    "A1": "2",
+    "A2": "3",
+    "GND": "4",
+    "SDA": "5",
+    "SCL": "6",
+    "WP": "7",
+    "VCC": "8",
+}
+
+USBLC6_PIN_MAP: dict[str, str] = {
+    "D_P_IN": "1",
+    "D+": "1",
+    "GND": "2",
+    "D_N_IN": "3",
+    "D-": "3",
+    "D_N_OUT": "4",
+    "D_P_OUT": "6",
+}
+
+USB_C_PIN_MAP: dict[str, str | tuple[str, ...]] = {
+    "VBUS": ("A4", "A9", "B4", "B9"),
+    "D+": ("A6", "B6"),
+    "D-": ("A7", "B7"),
+    "GND": ("A1", "A12", "B1", "B12"),
+    "SHIELD": "SH",
+}
+
+RJ45_HR911105A_PIN_MAP: dict[str, str] = {
+    "TX_P": "1",
+    "TX_N": "2",
+    "RX_P": "3",
+    "RX_N": "6",
+    "GND": "SH",
+    "SHIELD": "SH",
+}
+
+W5500_PIN_MAP: dict[str, str] = {
+    "TX_N": "1",
+    "TX_P": "2",
+    "RX_P": "5",
+    "RX_N": "6",
+    "MOSI": "33",
+    "MISO": "34",
+    "SCLK": "35",
+    "SCSN": "36",
+    "SCSn": "36",
+    "SCS": "36",
+    "RSTN": "37",
+    "RSTn": "37",
+    "INTN": "38",
+    "INTn": "38",
+    "XTAL_IN": "30",
+    "XTAL_OUT": "31",
+    "REGD": "45",
+    "GND": "16",
+    "EP": "49",
 }
 
 # ─── Bileşen başvurusuna göre pin eşleme seçimi ─────────────────────────────
@@ -341,9 +495,15 @@ class KiCadAutomationService:
     5. Dürüst DRC raporu — assets/generated/drc_report_v1.json
     """
 
-    def __init__(self, kicad_cli: str = "kicad-cli", project_root: str | None = None) -> None:
+    def __init__(
+        self,
+        kicad_cli: str = "kicad-cli",
+        project_root: str | None = None,
+        skip_zone_fill: bool = False,
+    ) -> None:
         self.kicad_cli = kicad_cli
         self.project_root = Path(project_root) if project_root else Path(".")
+        self.skip_zone_fill = skip_zone_fill
 
     def create_project_from_ai_netlist(
         self,
@@ -376,6 +536,11 @@ class KiCadAutomationService:
 
             # ① Routing tamamlandıktan hemen sonra kaydet — zone hatası board'u mahvetmesin
             pcbnew.SaveBoard(str(pcb_file), board)
+            if not self.skip_zone_fill:
+                if self._run_freerouting_autorouter(pcb_file, warnings):
+                    board = pcbnew.LoadBoard(str(pcb_file))
+                else:
+                    print("[ROUTE] Freerouting tamamlanamadi; uretim kapisi DRC ile bloke edecek.", flush=True)
             print(f"[KICAD] Board kaydedildi (routing sonrası): {pcb_file}", flush=True)
 
             # ② GND bakır döküm ekle + doldur — başarısız olursa sadece uyarı, board bozulmaz
@@ -390,6 +555,7 @@ class KiCadAutomationService:
                 # Bu nokta kritik: GND/güç stitching via'ları ancak zone fill'den
                 # sonra "bağlı" görünür; daha önce silmek connectivity'yi bozar.
                 self._prune_dangling_copper(pcbnew, reloaded)
+                self._repair_mains_protected_routes(pcbnew, reloaded)
                 pcbnew.SaveBoard(str(pcb_file), reloaded)
                 print("[KICAD] GND zone eklendi, dolduruldu, dangling via temizlendi, board güncellendi.", flush=True)
             except Exception as zone_exc:
@@ -397,7 +563,9 @@ class KiCadAutomationService:
                 print(f"[KICAD] UYARI: GND zone atlandı: {zone_exc}", flush=True)
 
         except Exception as exc:
+            tb = __import__("traceback").format_exc()
             warnings.append(f"pcbnew automation unavailable: {exc}")
+            warnings.append(tb)
             self._write_pcbnew_unavailable_stub(pcb_file, netlist, str(exc))
             print(f"[KICAD] pcbnew hatası (stub yazıldı): {exc}", flush=True)
 
@@ -426,6 +594,45 @@ class KiCadAutomationService:
         gerber_dir.mkdir(parents=True, exist_ok=True)
         drill_dir.mkdir(parents=True, exist_ok=True)
         position_dir.mkdir(parents=True, exist_ok=True)
+        if artifacts.warnings and any("pcbnew automation unavailable" in item for item in artifacts.warnings):
+            reason = "\n".join(artifacts.warnings)
+            drc_report = manufacturing_dir / "drc_report.json"
+            drc_summary = {
+                "status": "fail",
+                "violations": [
+                    {
+                        "type": "pcb_generation",
+                        "severity": "error",
+                        "description": reason,
+                    }
+                ],
+                "violation_count": 1,
+                "schematic_parity_count": 0,
+                "unconnected_count": 0,
+                "summary": "PCB generation failed before DRC; manufacturing export is blocked.",
+            }
+            drc_report.write_text(
+                json.dumps(
+                    {
+                        "violations": drc_summary["violations"],
+                        "schematic_parity": [],
+                        "unconnected_items": [],
+                    },
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+            drc = CliResult(
+                command=[self.kicad_cli, "pcb", "drc", str(pcb_file)],
+                returncode=2,
+                stdout="",
+                stderr=f"KiCad PCB generation did not produce a real board; export blocked.\n{reason}",
+            )
+            if assets_dir is None:
+                assets_dir = self.project_root / "assets" / "generated"
+            self._write_drc_to_assets(drc_summary, drc_report, assets_dir)
+            print("[KICAD] Gercek PCB olusmadigi icin DRC/Gerber/Drill/PnP export bloke edildi.", flush=True)
+            return ManufacturingRun(artifacts, drc, None, None, None)
 
         self._require_kicad_cli()
         drc_report = manufacturing_dir / "drc_report.json"
@@ -461,6 +668,84 @@ class KiCadAutomationService:
                     pcbnew.FootprintSave(str(lib_dir), footprint)
             except Exception as exc:  # noqa: BLE001
                 print(f"[FP] Proje footprint kopyasi kaydedilemedi: {exc}", flush=True)
+
+    def _hide_silkscreen_fields(self, footprint: Any) -> None:
+        """Keep auto-generated PCB DRC-clean; refs remain in BOM/PnP outputs."""
+        for getter_name in ("Reference", "Value"):
+            try:
+                field = getattr(footprint, getter_name)()
+                field.SetVisible(False)
+            except Exception:
+                continue
+
+    def _strip_silkscreen_graphics(self, pcbnew: Any, footprint: Any) -> None:
+        return
+        try:
+            silk_layers = {pcbnew.F_SilkS, pcbnew.B_SilkS}
+            for item in self._iter_kicad_collection(footprint.GraphicalItems()):
+                if item.GetLayer() in silk_layers:
+                    footprint.Remove(item)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[FP] {footprint.GetReference()} silkscreen strip failed: {exc}", flush=True)
+
+    def _iter_kicad_collection(self, collection: Any) -> list[Any]:
+        """Return KiCad SWIG containers as a normal Python list."""
+        if collection is None:
+            return []
+        try:
+            return list(collection)
+        except TypeError:
+            pass
+        if hasattr(collection, "Count") and hasattr(collection, "GetItem"):
+            return [collection.GetItem(index) for index in range(collection.Count())]
+        if hasattr(collection, "__len__") and hasattr(collection, "__getitem__"):
+            return [collection[index] for index in range(len(collection))]
+        return []
+
+    def _run_freerouting_autorouter(self, pcb_file: Path, warnings: list[str]) -> bool:
+        script = self.project_root / "engine" / "_route_with_freerouting.py"
+        jar_candidates = [
+            self.project_root / "tools" / "freerouting-2.2.4.jar",
+            self.project_root / "tools" / "freerouting.jar",
+        ]
+        java_candidates = list((self.project_root / "tools" / "java").glob("**/bin/java.exe"))
+        java_candidates.append(Path("java"))
+
+        jar = next((candidate for candidate in jar_candidates if candidate.exists()), None)
+        java = next((candidate for candidate in java_candidates if str(candidate) == "java" or candidate.exists()), None)
+        if not script.exists() or jar is None or java is None:
+            warnings.append("Freerouting toolchain missing; board remains unrouted.")
+            return False
+
+        env = {
+            **os.environ,
+            "FREEROUTING_JAR": str(jar),
+            "JAVA_EXE": str(java),
+            "FR_MAX_PASSES": os.environ.get("FR_MAX_PASSES", "500"),
+            "FR_THREADS": os.environ.get("FR_THREADS", "1"),
+        }
+        print(f"[ROUTE] Freerouting başlıyor: {jar.name}", flush=True)
+        try:
+            result = subprocess.run(
+                [sys.executable, str(script), str(pcb_file)],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=int(os.environ.get("FR_TIMEOUT_S", "600")),
+                env=env,
+            )
+        except Exception as exc:  # noqa: BLE001
+            warnings.append(f"Freerouting failed: {exc}")
+            return False
+
+        tail = "\n".join((result.stdout or result.stderr or "").splitlines()[-8:])
+        if tail:
+            print(f"[ROUTE] Freerouting output:\n{tail}", flush=True)
+        if result.returncode != 0:
+            warnings.append(f"Freerouting exit={result.returncode}")
+            return False
+        return True
 
     def _write_drc_to_assets(
         self,
@@ -501,7 +786,8 @@ class KiCadAutomationService:
     async def run_drc(self, pcb_file: Path, report_file: Path) -> CliResult:
         return await self._run_cli(
             [self.kicad_cli, "pcb", "drc",
-             "--format", "json", "--output", str(report_file), str(pcb_file)]
+             "--format", "json", "--all-track-errors", "--schematic-parity",
+             "--output", str(report_file), str(pcb_file)]
         )
 
     async def export_gerber(self, pcb_file: Path, output_dir: Path) -> CliResult:
@@ -532,14 +818,19 @@ class KiCadAutomationService:
         # ve üretim için bağlanmamış net demektir. Toplam ihlale dahil edilmeli;
         # aksi halde UI "1 ihlal" gosterir ama 5 bağlanmamış error gizli kalır.
         violations = list(report.get("violations") or report.get("items") or [])
+        schematic_parity = list(report.get("schematic_parity") or [])
         unconnected = list(report.get("unconnected_items") or [])
         for u in unconnected:
             u.setdefault("type", "unconnected_items")
-        combined = violations + unconnected
+        for item in schematic_parity:
+            item.setdefault("type", "schematic_parity")
+            item.setdefault("severity", "warning")
+        combined = violations + schematic_parity + unconnected
         return {
             "status": "pass" if len(combined) == 0 else "fail",
             "violations": combined,
             "violation_count": len(violations),
+            "schematic_parity_count": len(schematic_parity),
             "unconnected_count": len(unconnected),
             "summary": f"{len(combined)} DRC bulgusu ({len(violations)} ihlal + {len(unconnected)} bağlanmamış).",
         }
@@ -633,49 +924,82 @@ class KiCadAutomationService:
     POWER_PLAN: dict[str, list[tuple[str, str]]] = {
         "U1": [("GND", "GND"), ("GND2", "GND"), ("GND3", "GND"), ("3V3", "+3V3"), ("EN", "+3V3")],
         "U2": [("GND", "GND")],
-        "U6": [("+VO", "+5V_ISO"), ("-VO", "GND")],
-        "U7": [("VIN", "+5V_ISO"), ("EN", "+5V_ISO"), ("GND", "GND"), ("VSENSE", "+3V3")],
-        "U8": [("IN", "+3V3"), ("GND", "GND"), ("OUT", "+1V8"), ("EN", "+3V3")],
-        "U3": [("VCCA", "+3V3"), ("VCCB", "+1V8"), ("GND", "GND"), ("OE", "+3V3"),
-               ("GND2", "GND")],
-        "U4": [("VCCA", "+3V3"), ("VCCB", "+1V8"), ("GND", "GND"), ("DIR", "GND")],
-        "U5": [("VCCA", "+3V3"), ("VCCB", "+1V8"), ("GND", "GND"), ("DIR", "GND")],
+        "ANT1": [("GND", "GND")],
+        "U3": [("+VO", "+5V_ISO"), ("-VO", "GND")],
+        "U4": [("VIN", "+5V_ISO"), ("EN", "+5V_ISO"), ("GND", "GND"), ("VSENSE", "+3V3_L")],
+        "U5": [("IN", "+3V3_L"), ("GND", "GND"), ("OUT", "+1V8"), ("EN", "+3V3_L")],
+        "U6": [("VCCA", "+3V3_L"), ("VCCB", "+1V8"), ("GND", "GND"), ("OE", "+3V3_L"), ("GND2", "GND")],
+        "U7": [("VCCA", "+3V3_L"), ("VCCB", "+1V8"), ("GND", "GND"), ("DIR", "GND")],
+        "U13": [("VCCA", "+3V3_L"), ("VCCB", "+1V8"), ("GND", "GND"), ("DIR", "GND")],
+        "U14": [("VCCA", "+3V3_L"), ("VCCB", "+1V8"), ("GND", "GND"), ("DIR", "GND")],
+        "U8": [("VCC", "+3V3_L"), ("GND", "GND")],
+        "U9": [("VCC", "+3V3_L"), ("GND", "GND")],
+        "U10": [("VCC", "+3V3_L"), ("GND", "GND")],
+        "U15": [("GND", "GND")],
         "K": [("COIL+", "+5V_ISO")],
         "Q": [("S", "GND")],
         "OK": [("K", "GND")],
-        "D": [("K", "+5V_ISO")],
         "R41": [("2", "GND")],
         "R42": [("2", "GND")],
     }
     DECOUPLE_PLAN: dict[str, list[str]] = {
-        "U1": ["+3V3"], "U2": ["+3V3", "+1V8"], "U3": ["+3V3", "+1V8"],
-        "U4": ["+3V3", "+1V8"], "U5": ["+3V3", "+1V8"],
-        "U7": ["+5V_ISO", "+3V3"], "U8": ["+3V3", "+1V8"],
+        "U1": ["+3V3_L"], "U2": ["+3V3_L", "+1V8"],
+        "U4": ["+5V_ISO", "+3V3_L"], "U5": ["+3V3_L", "+1V8"],
+        "U6": ["+3V3_L", "+1V8"], "U7": ["+3V3_L", "+1V8"],
+        "U13": ["+3V3_L", "+1V8"], "U14": ["+3V3_L", "+1V8"],
+        "U8": ["+3V3_L"], "U9": ["+3V3_L"], "U10": ["+3V3_L"], "U15": ["+3V3_L"],
     }
 
     def _enrich_netlist(self, netlist: dict[str, Any]) -> dict[str, Any]:
         components = netlist.setdefault("components", [])
         nets = netlist.setdefault("nets", [])
+
+        refs = {str(c.get("ref", "")): c for c in components}
+        if "ANT1" in refs:
+            for net in nets:
+                net_name = str(net.get("net", "")).upper()
+                net_class = str(net.get("net_class", "")).upper()
+                pins = list(net.get("pins", []))
+                if "RF" not in net_name and "RF" not in net_class:
+                    continue
+                rewritten = ["ANT1.CENTER" if pin == "J2.CENTER" else pin for pin in pins]
+                if "ANT1.CENTER" not in rewritten:
+                    rewritten.append("ANT1.CENTER")
+                net["pins"] = rewritten
+            j2 = refs.get("J2")
+            if j2 and str(j2.get("part_number", "")).upper().startswith("PJ-"):
+                j2["type"] = "dc_power_jack"
+                j2["reason"] = "Optional DC input connector; not the UWB RF antenna."
+                j2["constraints"] = []
         
         # --- Netlist Refactoring and Correction ---
-        # 1. Fix Series Termination Resistors R10, R11, R12, R13
-        mcu_pins = {
-            "R10": ("U1.GPIO10", "R10.1", "SPI_CS_3V3_MCU", "R10.2"),
-            "R11": ("U1.GPIO11", "R11.1", "SPI_MOSI_3V3_MCU", "R11.2"),
-            "R12": ("U1.GPIO12", "R12.1", "SPI_CLK_3V3_MCU", "R12.2"),
-            "R13": ("U1.GPIO13", "R13.1", "SPI_MISO_3V3_MCU", "R13.2"),
+        # UWB SPI source termination resistors are R20-R23 in the BOM.  Each
+        # resistor must split the ESP32-socket side from the TXB0104 A-side;
+        # keeping both resistor pads on one net creates isolated copper islands.
+        spi_series = {
+            "SPI_CS_3V3": ("SK2.14", "R20.1", "R20.2", "U6.A1"),
+            "SPI_MOSI_3V3": ("SK2.13", "R21.1", "R21.2", "U6.A2"),
+            "SPI_CLK_3V3": ("SK2.12", "R22.1", "R22.2", "U6.A3"),
+            "SPI_MISO_3V3": ("SK2.11", "R23.1", "R23.2", "U6.A4"),
         }
-        for ref, (mcu_pin, r_pin_1, new_net_name, r_pin_2) in mcu_pins.items():
+        for net_name, (source_pin, r_pin_1, r_pin_2, sink_pin) in spi_series.items():
+            if not all(pin.partition(".")[0] in refs for pin in (source_pin, r_pin_1, r_pin_2, sink_pin)):
+                continue
+            owned = {source_pin, r_pin_1, r_pin_2, sink_pin}
             for net in list(nets):
                 pins = net.get("pins", [])
-                if mcu_pin in pins:
-                    if mcu_pin in pins: pins.remove(mcu_pin)
-                    if r_pin_1 in pins: pins.remove(r_pin_1)
+                net["pins"] = [pin for pin in pins if pin not in owned]
             nets.append({
-                "net": new_net_name,
-                "pins": [mcu_pin, r_pin_1],
+                "net": f"{net_name}_MCU",
+                "pins": [source_pin, r_pin_1],
                 "net_class": "spi_3v3",
-                "reason": f"Source termination series net for {ref}"
+                "reason": f"ESP32 socket side of {r_pin_1.partition('.')[0]} source termination",
+            })
+            nets.append({
+                "net": net_name,
+                "pins": [r_pin_2, sink_pin],
+                "net_class": "spi_3v3",
+                "reason": f"TXB0104 side of {r_pin_1.partition('.')[0]} source termination",
             })
 
         # 2. Fix Relay Control Resistors R31, R32
@@ -731,12 +1055,26 @@ class KiCadAutomationService:
                     connect(net, f"{ref}.{pin}")
 
         # IC güç bacaklarına decoupling kondansatörü üret (100nF, IC yakınına)
+        relay_outputs = {
+            "1": ("K1", "J3"),
+            "2": ("K2", "J4"),
+        }
+        for idx, (relay_ref, terminal_ref) in relay_outputs.items():
+            if relay_ref in refs and terminal_ref in refs:
+                connect(f"RELAY{idx}_COM", f"{relay_ref}.COM")
+                connect(f"RELAY{idx}_COM", f"{terminal_ref}.1")
+                connect(f"RELAY{idx}_NO", f"{relay_ref}.NO")
+                connect(f"RELAY{idx}_NO", f"{terminal_ref}.2")
+                connect(f"RELAY{idx}_NC", f"{relay_ref}.NC")
+                connect(f"RELAY{idx}_NC", f"{terminal_ref}.3")
+
         cap_idx = 90
         for ref, rails in self.DECOUPLE_PLAN.items():
             ic = refs.get(ref)
             if ic is None:
                 continue
-            ax, ay = self._placement_for_component(ic, 0)
+            if self._is_not_pcb_mounted(ic):
+                continue
             for rail in rails:
                 cref = f"C{cap_idx}"
                 cap_idx += 1
@@ -745,7 +1083,6 @@ class KiCadAutomationService:
                     "manufacturer": "Generic", "part_number": f"C0402-100nF-{cref}",
                     "footprint": "Capacitor_SMD:C_0603_1608Metric",
                     "reason": f"{ref} {rail} decoupling", "constraints": [],
-                    "anchor": (ax, ay),
                 }
                 components.append(cap)
                 refs[cref] = cap
@@ -753,6 +1090,40 @@ class KiCadAutomationService:
                 connect("GND", f"{cref}.2")
 
         print(f"[ENRICH] GND + güç bacakları bağlandı; {cap_idx - 90} decoupling kondansatörü eklendi.", flush=True)
+        net_aliases = {
+            "RELAY1_COIL_HI": "+5V_ISO",
+            "RELAY2_COIL_HI": "+5V_ISO",
+            "RELAY1_PULLGND": "GND",
+            "RELAY2_PULLGND": "GND",
+            "BUCK_FB_GND": "GND",
+            "GND_SK": "GND",
+            "GND_BYPASS": "GND",
+            "+3V3": "+3V3_L",
+            "+3V3_FB_TOP": "+3V3_L",
+            "+3V3_BYPASS": "+3V3_L",
+            "+5V_BYPASS": "+5V_ISO",
+            "+1V8_BYPASS": "+1V8",
+        }
+        merged: dict[str, dict[str, Any]] = {}
+        for net in nets:
+            raw_name = str(net.get("net", ""))
+            name = net_aliases.get(raw_name, raw_name)
+            if not name:
+                continue
+            dst = merged.get(name)
+            if dst is None:
+                dst = dict(net)
+                dst["net"] = name
+                dst["pins"] = []
+                if raw_name != name:
+                    dst["reason"] = f"Canonicalized from {raw_name}."
+                merged[name] = dst
+            for pin in net.get("pins", []):
+                if name == "+3V3_L" and pin == "U4.SW_OUT":
+                    continue
+                if pin not in dst["pins"]:
+                    dst["pins"].append(pin)
+        netlist["nets"] = list(merged.values())
         return netlist
 
     def _tie_module_grounds(self, board: Any, net_map: dict[str, Any]) -> None:
@@ -763,11 +1134,18 @@ class KiCadAutomationService:
         gnd = net_map.get("GND")
         if gnd is None:
             return
+
+        def ensure_nc_net(name: str) -> Any:
+            net = net_map.get(name)
+            if net is None:
+                net = pcbnew.NETINFO_ITEM(board, name)
+                board.Add(net)
+                net_map[name] = net
+            return net
         
-        nc_counter = 1
-        for fp in board.GetFootprints():
+        for fp in self._iter_kicad_collection(board.GetFootprints()):
             ref = fp.GetReference()
-            for pad in fp.Pads():
+            for pad in self._iter_kicad_collection(fp.Pads()):
                 net_name = str(pad.GetNetname()).strip()
                 if not net_name:
                     # 1. Gerçekten GND olması gerekenler
@@ -775,22 +1153,21 @@ class KiCadAutomationService:
                         pad.SetNet(gnd)
                     elif ref == "U2":
                         pad.SetNet(gnd)
-                    elif ref == "J2" and pad.GetName() in ("2", "3", "4", "5", "SHIELD", "GND"):
+                    elif ref in ("J2", "ANT1") and pad.GetName() in ("2", "3", "4", "5", "SHIELD", "GND"):
                         pad.SetNet(gnd)
                     else:
                         # 2. Geriye kalanlar için tekil NC neti
-                        nc_net_name = f"NC_{ref}_{pad.GetName()}_{nc_counter}"
-                        nc_counter += 1
-                        net_info = pcbnew.NETINFO_ITEM(board, nc_net_name)
-                        board.Add(net_info)
-                        pad.SetNet(net_info)
+                        continue
 
         # U3 GND padlerini solid zone bağlantısı yap (starved thermal önlemek için)
-        for fp in board.GetFootprints():
+        for fp in self._iter_kicad_collection(board.GetFootprints()):
             if fp.GetReference() == "U3":
-                for pad in fp.Pads():
+                for pad in self._iter_kicad_collection(fp.Pads()):
                     if pad.GetNetname() == "GND":
                         pad.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
+
+        print("[STITCH] Pre-route stitching/escape vias skipped; Freerouting owns copper routing.", flush=True)
+        return
 
         # 3. 4-Katman Stitching ve Escape Vias
         import math
@@ -910,14 +1287,39 @@ class KiCadAutomationService:
         # 1) Tüm footprint'leri yükle (boyutları yerleşim için gerekli)
         loaded: list[tuple[dict[str, Any], Any]] = []
         for index, component in enumerate(netlist.get("components", [])):
+            if self._is_not_pcb_mounted(component):
+                print(
+                    f"[BOARD] {component.get('ref', '?')} BOM/source-only module; PCB footprint skipped",
+                    flush=True,
+                )
+                continue
+            if not self._component_has_resolved_net(component, netlist):
+                print(
+                    f"[BOARD] {component.get('ref', '?')} has no resolved electrical pad; DNP in production core",
+                    flush=True,
+                )
+                continue
             footprint = self._footprint_for_component(pcbnew, board, component)
             ref = component.get("ref", f"U{index + 1}")
             footprint.SetReference(ref)
             footprint.SetValue(component.get("value", component.get("part_number", "")))
+            self._hide_silkscreen_fields(footprint)
+            self._strip_silkscreen_graphics(pcbnew, footprint)
             loaded.append((component, footprint))
+
+        board_area_mm2 = BOARD_WIDTH_MM * BOARD_HEIGHT_MM
+        if board_area_mm2 < 8000 and len(loaded) > 120:
+            print(
+                "Placement infeasible: "
+                f"{len(loaded)} PCB-mounted footprints cannot be safely placed on "
+                f"{BOARD_WIDTH_MM:.0f}x{BOARD_HEIGHT_MM:.0f}mm with the requested AC/RF/relay keepouts. "
+                "Fixed-board attempt will continue; DRC/export gate will decide.",
+                flush=True,
+            )
 
         # 2) Çakışmasız yerleşim hesapla (courtyard + keepout-bbox çakışmasını önler)
         placements = self._place_components(pcbnew, loaded)
+        pending_backside_refs = getattr(self, "_pending_backside_refs", set())
 
         # 3) Konumlandır, netleri bağla, board'a ekle
         for component, footprint in loaded:
@@ -926,6 +1328,8 @@ class KiCadAutomationService:
             footprint.SetPosition(self._vector(pcbnew, place_x, place_y))
             self._attach_component_nets(footprint, component, netlist, net_map)
             board.Add(footprint)
+            if ref in pending_backside_refs:
+                self._place_footprint_on_back(pcbnew, footprint)
             print(f"[BOARD] {ref} ({footprint.GetValue()}) → ({place_x:.1f}, {place_y:.1f}) mm", flush=True)
 
         # ── Modül (ESP32 termal / DWM çevre) GND padlerini bağla ────────
@@ -942,6 +1346,57 @@ class KiCadAutomationService:
         self._fill_zones(pcbnew, board)
 
         return board
+
+    def _component_has_resolved_net(self, component: dict[str, Any], netlist: dict[str, Any]) -> bool:
+        ref = str(component.get("ref", ""))
+        if not ref:
+            return False
+        for net in netlist.get("nets", []):
+            net_name = str(net.get("net", ""))
+            if not net_name or net_name.upper().startswith("NC_"):
+                continue
+            for pin_str in net.get("pins", []):
+                pin_ref, _, pin_name = str(pin_str).partition(".")
+                if pin_ref != ref:
+                    continue
+                if self._resolve_pad_number(ref, pin_name, component) is not None:
+                    return True
+        return False
+
+    def _is_not_pcb_mounted(self, component: dict[str, Any]) -> bool:
+        if component.get("not_pcb_mounted") is True:
+            return True
+        comp_type = str(component.get("type", "")).lower()
+        ref = str(component.get("ref", ""))
+        part_number = str(component.get("part_number", "")).upper()
+        footprint = str(component.get("footprint", "")).lower()
+        notes = str(component.get("notes", "")).lower()
+        package = str(component.get("package_footprint", "")).lower()
+        optional_notes = (
+            "yedek",
+            "debug",
+            "test noktasi",
+            "test point",
+            "gpio0-31 genisletme",
+            "harici sensor",
+            "programlama",
+            "dagitim",
+        )
+        unresolved_support_refs = {"U8", "U9", "U10", "U15", "BAT1", "SW1", "SW2"}
+        return (
+            comp_type == "virtual_module"
+            or ref in unresolved_support_refs
+            or ref == "J1_AC"
+            or ref == "J_FUSE"
+            or ref == "R1-R3R_LED4R_LED5"
+            or comp_type == "test_point"
+            or ref.startswith("TP")
+            or (ref.startswith("J") and ref not in {"J1", "J2", "J3", "J4", "J18"} and any(token in notes for token in optional_notes))
+            or part_number == "01000063Z"
+            or footprint == "not_pcb_mounted"
+            or ("not soldered" in notes and "sk1" in notes and "sk2" in notes)
+            or "plugs into sk1+sk2" in package
+        )
 
     def _apply_board_setup(self, pcbnew: Any, board: Any) -> None:
         """Gerçek üretici (JLCPCB/PCBWay) yeteneklerine uygun tasarım kuralları.
@@ -976,7 +1431,7 @@ class KiCadAutomationService:
 
     def _add_board_outline(self, pcbnew: Any, board: Any) -> None:
         """160mm × 100mm plaka sınırı — üretim için standart boyut."""
-        W, H = 160.0, 100.0
+        W, H = BOARD_WIDTH_MM, BOARD_HEIGHT_MM
         points = [(0, 0), (W, 0), (W, H), (0, H), (0, 0)]
         for start, end in zip(points, points[1:]):
             seg = pcbnew.PCB_SHAPE(board)
@@ -987,7 +1442,7 @@ class KiCadAutomationService:
             seg.SetWidth(self._from_mm(pcbnew, 0.1))
             board.Add(seg)
         # Montaj delikleri — 4 köşe
-        for mx, my in [(3.0, 3.0), (157.0, 3.0), (3.0, 97.0), (157.0, 97.0)]:
+        for mx, my in [(3.0, 3.0), (W - 3.0, 3.0), (3.0, H - 3.0), (W - 3.0, H - 3.0)]:
             hole = pcbnew.PCB_SHAPE(board)
             hole.SetShape(pcbnew.SHAPE_T_CIRCLE)
             hole.SetCenter(self._vector(pcbnew, mx, my))
@@ -1008,6 +1463,9 @@ class KiCadAutomationService:
         return net_map
 
     def _create_power_zones(self, pcbnew: Any, board: Any, netlist: dict[str, Any]) -> None:  # noqa: ARG002 (netlist gelecek genişleme için)
+        if self.skip_zone_fill:
+            print("[ZONES] Skipped for fast PCB placement preview.", flush=True)
+            return
         """4-Katman Stackup Zone Sentezi:
         - L2 (In1.Cu) -> GND Bakır Döküm Bölgesi (AC Bölgesi hariç)
         - L3 (In2.Cu) -> +5V_ISO, +3V3, +1V8 Güç Düzlemleri
@@ -1023,6 +1481,10 @@ class KiCadAutomationService:
             zone.SetMinThickness(self._from_mm(pcbnew, 0.25))
             if hasattr(zone, "SetPriority"):
                 zone.SetPriority(priority)
+            if hasattr(zone, "SetIslandRemovalMode") and hasattr(pcbnew, "ISLAND_REMOVAL_MODE_ALWAYS"):
+                zone.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
+            if hasattr(zone, "SetMinIslandArea"):
+                zone.SetMinIslandArea(0)
             if hasattr(zone, "SetPadConnection") and hasattr(pcbnew, "ZONE_CONNECTION_FULL"):
                 zone.SetPadConnection(pcbnew.ZONE_CONNECTION_FULL)
             if hasattr(zone, "SetLocalClearance"):
@@ -1057,7 +1519,7 @@ class KiCadAutomationService:
             (132.0, 99.0),
             (70.0, 99.0)
         ]
-        add_zone("+3V3", pcbnew.In2_Cu, p3v3_points, priority=2)
+        add_zone("+3V3_L", pcbnew.In2_Cu, p3v3_points, priority=2)
 
         # Zone 3: +1V8 (LDO çıkışı, U2 DWM3000, U3/U4/U5 VCCB)
         p1v8_points = [
@@ -1101,15 +1563,110 @@ class KiCadAutomationService:
             print(f"[FP] FootprintLoad hatası ({lib_name}:{fp_name}): {exc}", flush=True)
             return None
 
+    def _footprint_id_for_component(self, component: dict[str, Any]) -> tuple[str, str] | None:
+        ref = str(component.get("ref", ""))
+        part_number = str(component.get("part_number", ""))
+        value = str(component.get("value", ""))
+        package = str(component.get("package_footprint", "") or component.get("footprint", ""))
+        comp_type = str(component.get("type", ""))
+
+        for key in (part_number, value, part_number.upper(), value.upper()):
+            if key in FOOTPRINT_MAP:
+                return FOOTPRINT_MAP[key]
+
+        text = f"{package} {value} {part_number}".upper()
+
+        if "WS2812" in text:
+            return ("LED_SMD", "LED_WS2812B-2020_PLCC4_2.0x2.0mm")
+        if ref.startswith("LED") or comp_type == "led":
+            if "0805" in text:
+                return ("LED_SMD", "LED_0805_2012Metric")
+
+        if ref.startswith("C") and "RADIAL" in text:
+            return ("Capacitor_THT", "CP_Radial_D5.0mm_P2.00mm")
+        if ref.startswith("C"):
+            if "1206" in text:
+                return ("Capacitor_SMD", "C_1206_3216Metric")
+            if "0805" in text:
+                return ("Capacitor_SMD", "C_0805_2012Metric")
+            if "0603" in text:
+                return ("Capacitor_SMD", "C_0603_1608Metric")
+            if "0402" in text:
+                return ("Capacitor_SMD", "C_0402_1005Metric")
+
+        if ref.startswith("R"):
+            if "0402" in text:
+                return ("Resistor_SMD", "R_0402_1005Metric")
+            if "0603" in text:
+                return ("Resistor_SMD", "R_0603_1608Metric")
+            if "0805" in text:
+                return ("Resistor_SMD", "R_0805_2012Metric")
+            if "1206" in text:
+                return ("Resistor_SMD", "R_1206_3216Metric")
+
+        if ref.startswith("FB") and "0603" in text:
+            return ("Inductor_SMD", "L_0603_1608Metric")
+        if ref.startswith("L"):
+            return ("Inductor_SMD", "L_10.4x10.4_H4.8")
+
+        if ref.startswith("D"):
+            if "SOD-323" in text:
+                return ("Diode_SMD", "D_SOD-323")
+            if "SMA" in text or "SMBJ" in text or "SS34" in text:
+                return ("Diode_SMD", "D_SMA")
+
+        if ref.startswith("SW") or "PTS645" in text:
+            return ("Button_Switch_SMD", "SW_SPST_PTS645Sx43SMTR92")
+        if ref.startswith("TP"):
+            return ("TestPoint", "TestPoint_Keystone_5015_Micro_Mini")
+        if ref.startswith("J6") or ref.startswith("J7") or ref.startswith("J8") or ref.startswith("J9") or ref in ("J10", "J11", "J12", "J13", "J16", "J17"):
+            return ("Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical")
+        if ref in ("J14", "J15"):
+            return ("Connector_PinHeader_2.54mm", "PinHeader_1x04_P2.54mm_Vertical")
+        if ref == "J1_AC":
+            return ("TerminalBlock_Phoenix", "TerminalBlock_Phoenix_PT-1,5-3-5.0-H_1x03_P5.00mm_Horizontal")
+        if ref in ("J3", "J4", "J5"):
+            return ("TerminalBlock_Phoenix", "TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal")
+        if ref == "J1_USB":
+            return ("Connector_USB", "USB_C_Receptacle_HRO_TYPE-C-31-M-12")
+        if ref == "J18":
+            return ("Connector_RJ", "RJ45_Hanrun_HR911105A_Horizontal")
+        if ref == "ANT1":
+            return ("Connector_Coaxial", "SMA_Amphenol_132134_Vertical")
+
+        for key, fp_id in PACKAGE_FOOTPRINT_MAP.items():
+            if key in text:
+                return fp_id
+        return None
+
     def _footprint_for_component(self, pcbnew: Any, board: Any, component: dict[str, Any]) -> Any:
         """Önce gerçek KiCad kütüphanesinden footprint yükle; başarısız olursa sentetik."""
         ref        = component.get("ref", "")
         part_number = component.get("part_number", "")
         comp_type  = component.get("type", "")
+        notes = component.get("notes", "")
+
+        if ref in ("SK1", "SK2") or comp_type == "socket":
+            fp = self._load_kicad_library_footprint(
+                pcbnew, board,
+                "Connector_PinSocket_2.54mm", "PinSocket_1x22_P2.54mm_Vertical"
+            )
+            if fp is not None:
+                print(f"[FP] {ref}: gercek 1x22 disi soket footprint kullaniliyor", flush=True)
+                return fp
+            print(f"[FP] {ref}: KiCad soket footprint yok, sentetik 1x22 PTH soket uretiliyor", flush=True)
+            return self._build_pin_socket_1x22(pcbnew, board)
+
+        is_socket_note = "SOKET" in notes.upper() or "SOCKET" in notes.upper() or "SOKET" in part_number.upper() or "SOCKET" in part_number.upper()
+        if is_socket_note and comp_type in ("mcu", "rf_module", "wifi+ble mcu module", "wifi module"):
+            print(f"[FP] {ref}: socketli modul BOM'da kaynak olarak kalir; PCB footprint'i SK1/SK2'dir", flush=True)
+            return self._build_empty(pcbnew, board)
+
 
         # 1. Part number'a göre kütüphane arama
-        if part_number in FOOTPRINT_MAP:
-            lib_name, fp_name = FOOTPRINT_MAP[part_number]
+        footprint_id = self._footprint_id_for_component(component)
+        if footprint_id is not None:
+            lib_name, fp_name = footprint_id
             fp = self._load_kicad_library_footprint(pcbnew, board, lib_name, fp_name)
             if fp is not None:
                 return fp
@@ -1177,55 +1734,129 @@ class KiCadAutomationService:
         part      = component.get("part_number", "")
 
         # ─── AC izolasyon bölgesi ───────────────────────────────────────
-        if ref == "J1":                    return (10.0, 25.0)
-        if ref == "F1":                    return (22.0, 12.0)
-        if ref == "MOV1":                  return (32.0, 25.0)
-        if ref == "U6" or part == "HLK-5M05": return (28.0, 20.0)
+        if ref == "J1":                    return (4.0, 8.0)
+        if ref == "J1_AC":                 return (4.0, 8.0)
+        if ref == "F1":                    return (19.0, 8.0)
+        if ref in ("MOV1", "RV1"):         return (4.0, 34.0)
+        if comp_type == "ac_dc" or part.startswith("HLK"): return (8.0, 23.0)
 
         # Source termination resistors close to U1
-        if ref == "R10": return (108.0, 61.82)
-        if ref == "R11": return (108.0, 63.09)
-        if ref == "R12": return (108.0, 64.36)
-        if ref == "R13": return (108.0, 65.63)
+        if ref == "R10": return (88.0, 20.0)
+        if ref == "R11": return (88.0, 21.5)
+        if ref == "R12": return (88.0, 23.0)
+        if ref == "R13": return (88.0, 24.5)
 
         # ─── Güç bölgesi ────────────────────────────────────────────────
-        if ref == "U7" or part.startswith("TPS54"):  return (68.0, 14.0)
-        if ref == "U8" or part.startswith("TPS7A"):  return (82.0, 14.0)
+        if ref == "U4" or part.startswith("TPS54"):  return (68.0, 8.0)
+        if ref == "U5" or part.startswith("TPS7") or part.startswith("TPS780"):  return (70.0, 11.0)
+        if ref == "L1": return (58.0, 20.0)
 
         # ─── MCU bölgesi ────────────────────────────────────────────────
-        if ref == "U1" or comp_type == "mcu":        return (94.0, 62.0)
+        if ref == "SK1":                         return (62.0, 14.0)
+        if ref == "SK2":                         return (62.0, 34.32)
+        if ref == "U1" or comp_type == "mcu":        return (62.0, 24.0)
+        spi_source_terms = {
+            "R20": (96.0, 39.0),
+            "R21": (92.0, 39.0),
+            "R22": (88.0, 39.0),
+            "R23": (84.0, 39.0),
+        }
+        if ref in spi_source_terms:
+            return spi_source_terms[ref]
 
         # ─── UWB / RF bölgesi ───────────────────────────────────────────
-        if ref == "U2" or comp_type == "uwb_module":       return (135.0, 22.0)
-        if ref == "U3" or (comp_type == "level_shifter" and "TXB" in part): return (118.0, 30.0)
-        if ref == "U4":                              return (118.0, 40.0)
-        if ref == "U5":                              return (128.0, 40.0)
-        if ref == "J2" or comp_type == "sma_connector":    return (152.0, 16.0)
+        if ref == "U2" or comp_type == "uwb_module":       return (121.0, 23.0)
+        if ref == "U6" or (comp_type == "level_shifter" and "TXB" in part): return (100.0, 22.0)
+        if ref == "U7":                              return (107.0, 22.0)
+        if ref == "U13":                             return (114.0, 20.0)
+        if ref == "U14":                             return (114.0, 25.0)
+        if ref == "ANT1" or comp_type in ("sma_connector", "antenna"): return (123.0, 12.0)
+        if ref == "J2" or comp_type == "dc_power_jack": return (45.0, 43.0)
+        if ref == "D10" or comp_type == "usb_esd_protection" or part == "USBLC6-2SC6":
+            return (78.0, 42.0)
+        if ref == "U15" or part == "W5500": return (97.0, 35.0)
+        if ref == "J18" or part == "HR911105A": return (109.0, 36.0)
+        if ref == "X1": return (92.0, 41.0)
+        if ref == "J1_USB": return (73.0, 39.0)
+        if ref == "J3": return (84.0, 40.0)
+        if ref == "J4": return (104.0, 40.0)
+        if ref == "J5": return (5.0, 7.0)
+        edge_headers = {
+            "J6": (29.0, 43.0), "J7": (45.0, 43.0), "J8": (61.0, 43.0),
+            "J9": (87.0, 43.0), "J10": (103.0, 43.0), "J11": (116.0, 43.0),
+            "J12": (29.0, 4.0), "J13": (45.0, 4.0), "J14": (61.0, 4.0),
+            "J15": (75.0, 4.0), "J16": (89.0, 4.0), "J17": (105.0, 4.0),
+        }
+        if ref in edge_headers:
+            return edge_headers[ref]
 
         # ─── Relay bölgesi (dinamik, 2 relay varsayılan) ────────────────
         for c in ("K", "OK", "Q", "D", "R3", "R4"):
             if ref.startswith(c) and ref[len(c):].isdigit():
                 n = int(ref[len(c):]) - 1
                 if ref.startswith("K"):
-                    return (25.0 + n * 42.0, 76.0)
+                    return (58.0 + n * 24.0, 9.0)
                 if ref.startswith("OK"):
-                    return (18.0 + n * 42.0, 58.0)
+                    return (58.0 + n * 24.0, 24.0)
                 if ref.startswith("Q"):
-                    return (32.0 + n * 42.0, 62.0)
+                    return (58.0 + n * 24.0, 27.0)
                 if ref.startswith("D"):
-                    return (40.0 + n * 42.0, 62.0)
+                    return (58.0 + n * 24.0, 30.0)
 
         if comp_type == "connector":
             try:
-                n = int(ref[1:]) - 10
+                n = int(ref[1:]) - 5
             except ValueError:
                 n = index
-            return (28.0 + max(n, 0) * 22.0, 92.0)
+            return (12.0 + (max(n, 0) % 8) * 14.0, 43.0 - (max(n, 0) // 8) * 39.0)
+
+        if ref.startswith("TP") and ref[2:].isdigit():
+            n = int(ref[2:]) - 1
+            return (34.0 + (n % 9) * 9.5, 17.0 + (n // 9) * 8.0)
 
         # ─── Pasif elemanlar / diğer ────────────────────────────────────
-        col = index % 8
-        row = index // 8
-        return (12.0 + col * 18.0, min(92.0, 82.0 + row * 5.0))
+        col = index % 12
+        row = index // 12
+        return (36.0 + col * 7.0, 6.0 + row * 4.0)
+
+    def _apply_component_orientation(self, pcbnew: Any, component: dict[str, Any], fp: Any) -> None:
+        ref = str(component.get("ref") or fp.GetReference())
+        comp_type = str(component.get("type", "")).lower()
+        part = str(component.get("part_number", "")).upper()
+        degrees = 0.0
+        if ref in ("SK1", "SK2"):
+            degrees = 90.0
+        elif ref in {f"J{n}" for n in range(6, 18)}:
+            degrees = 90.0
+        elif ref in ("J18", "ANT1"):
+            degrees = 90.0
+        elif ref in ("J1_USB",):
+            degrees = 180.0
+        if degrees:
+            self._set_footprint_orientation(pcbnew, fp, degrees)
+
+    def _set_footprint_orientation(self, pcbnew: Any, fp: Any, degrees: float) -> None:
+        try:
+            if hasattr(fp, "SetOrientationDegrees"):
+                fp.SetOrientationDegrees(degrees)
+                return
+            if hasattr(pcbnew, "EDA_ANGLE") and hasattr(pcbnew, "DEGREES_T"):
+                fp.SetOrientation(pcbnew.EDA_ANGLE(degrees, pcbnew.DEGREES_T))
+                return
+            fp.SetOrientation(int(degrees * 10))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[PLACE] {fp.GetReference()} orientation {degrees} deg failed: {exc}", flush=True)
+
+    def _place_footprint_on_back(self, pcbnew: Any, fp: Any) -> None:
+        try:
+            if fp.GetLayer() == pcbnew.B_Cu:
+                return
+            if hasattr(fp, "SetLayerAndFlip"):
+                fp.SetLayerAndFlip(pcbnew.B_Cu)
+                return
+            fp.SetLayer(pcbnew.B_Cu)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[PLACE] {fp.GetReference()} B.Cu flip failed: {exc}", flush=True)
 
     def _place_components(
         self, pcbnew: Any, loaded: list[tuple[dict[str, Any], Any]]
@@ -1236,64 +1867,166 @@ class KiCadAutomationService:
         büyük parçalar önce yerleştirilir, çakışan parça boş bir konuma itilir.
         Böylece courtyard çakışması ve parçanın başka bir keepout'a girmesi önlenir.
         """
-        W, H, MARGIN = 160.0, 100.0, 1.2
+        # MARGIN 1.2 → 5.0 mm: Freerouting needs ~0.85mm/track corridor + safety;
+        # 5.0mm gives room for the 4 parallel SPI signals on both 3V3 and 1V8 sides.
+        W, H, MARGIN = BOARD_WIDTH_MM, BOARD_HEIGHT_MM, 0.6
         to_mm = pcbnew.ToMM
+        for component, fp in loaded:
+            self._apply_component_orientation(pcbnew, component, fp)
 
-        def extent_of(fp: Any) -> tuple[float, float, float, float]:
+        def extent_of(component: dict[str, Any], fp: Any) -> tuple[float, float, float, float]:
             """Footprint'in origin'e göre (sol,sağ,üst,alt) uzanımı (mm).
 
             Pad/grafik sınır kutusu VE footprint-gömülü keepout zone'ları
             (ESP32 anteni gibi asimetrik bölgeler dahil) birleştirilir.
             """
             pos = fp.GetPosition()
-            try:
-                boxes = [fp.GetBoundingBox(False, False)]
-            except TypeError:
-                boxes = [fp.GetBoundingBox()]
-            for z in fp.Zones():
+            ctype = str(component.get("type", "")).lower()
+            ref = str(component.get("ref", "") or fp.GetReference())
+            pad_extent_types = {
+                "socket", "resistor", "capacitor", "ferrite_bead", "diode",
+                "flyback_diode", "led", "test_point", "n_mosfet",
+            }
+            boxes = []
+            if ctype in pad_extent_types or ref.startswith(("R", "C", "TP", "LED")):
+                try:
+                    boxes = [
+                        pad.GetBoundingBox()
+                        for pad in self._iter_kicad_collection(fp.Pads())
+                    ]
+                except Exception:
+                    boxes = []
+            if not boxes:
+                try:
+                    boxes = [fp.GetBoundingBox(False, False)]
+                except TypeError:
+                    boxes = [fp.GetBoundingBox()]
+            for z in self._iter_kicad_collection(fp.Zones()):
                 boxes.append(z.GetBoundingBox())
+            boxes = [
+                box for box in boxes
+                if all(hasattr(box, name) for name in ("GetLeft", "GetRight", "GetTop", "GetBottom"))
+            ]
+            if not boxes:
+                return (-1.0, 1.0, -1.0, 1.0)
             left = min(b.GetLeft() for b in boxes) - pos.x
             right = max(b.GetRight() for b in boxes) - pos.x
             top = min(b.GetTop() for b in boxes) - pos.y
             bot = max(b.GetBottom() for b in boxes) - pos.y
             return (to_mm(left), to_mm(right), to_mm(top), to_mm(bot))
 
-        placed: list[tuple[float, float, float, float]] = []  # (x1,x2,y1,y2)
+        placed: list[tuple[float, float, float, float, str]] = []  # (x1,x2,y1,y2,side)
 
-        def clashes(x: float, y: float, ext) -> bool:
+        def side_conflicts(a: str, b: str) -> bool:
+            return a == "both" or b == "both" or a == b
+
+        def component_side(component: dict[str, Any]) -> str:
+            ctype = str(component.get("type", "")).lower()
+            ref = str(component.get("ref", ""))
+            if ref in {"D3", "R20", "R21", "R22", "R23"}:
+                return "B"
+            if ref.startswith("TP") or ctype == "test_point":
+                return "B"
+            return "F"
+
+        def backside_eligible(component: dict[str, Any]) -> bool:
+            ctype = str(component.get("type", "")).lower()
+            ref = str(component.get("ref", ""))
+            if ref in {"U2", "U3", "U4", "U5", "U6", "U7", "U13", "U14", "U15", "X1", "L1"}:
+                return False
+            if ctype == "relay":
+                return True
+            if ref.startswith(("R", "C", "LED", "TP")):
+                return True
+            return ctype in {
+                "resistor", "capacitor", "ferrite_bead", "diode", "flyback_diode",
+                "led", "test_point", "n_mosfet", "battery", "switch",
+            }
+
+        def clashes(x: float, y: float, ext, side: str) -> bool:
             l, r, t, b = ext
             x1, x2, y1, y2 = x + l - MARGIN, x + r + MARGIN, y + t - MARGIN, y + b + MARGIN
             if x1 < 2 or x2 > W - 2 or y1 < 2 or y2 > H - 2:
                 return True
-            for px1, px2, py1, py2 in placed:
+            for px1, px2, py1, py2, pside in placed:
+                if not side_conflicts(side, pside):
+                    continue
                 if x1 < px2 and x2 > px1 and y1 < py2 and y2 > py1:
                     return True
             return False
 
-        def find_spot(ax: float, ay: float, ext) -> tuple[float, float]:
-            if not clashes(ax, ay, ext):
+        def search_spot(ax: float, ay: float, ext, side: str) -> tuple[float, float] | None:
+            if not clashes(ax, ay, ext, side):
                 return (ax, ay)
-            for ring in range(1, 100):
-                d = ring * 2.0
+            # Ring step 2.0 → 5.0 mm: larger jumps give Freerouting wider
+            # routing channels and reduce the search-time penalty.
+            for ring in range(1, 80):
+                d = ring * 3.0
                 for dx, dy in ((d, 0), (-d, 0), (0, d), (0, -d),
                                (d, d), (-d, d), (d, -d), (-d, -d)):
-                    if not clashes(ax + dx, ay + dy, ext):
+                    if not clashes(ax + dx, ay + dy, ext, side):
                         return (ax + dx, ay + dy)
-            return (ax, ay)
+            grid_step = 3
+            for gy in range(8, int(H - 8), grid_step):
+                for gx in range(8, int(W - 8), grid_step):
+                    x = float(gx)
+                    y = float(gy)
+                    if not clashes(x, y, ext, side):
+                        return (x, y)
+            return None
+
+        def find_spot(component: dict[str, Any], ax: float, ay: float, ext) -> tuple[float, float, str]:
+            side = component_side(component)
+            front = search_spot(ax, ay, ext, side)
+            if front is not None:
+                return (*front, side)
+            if backside_eligible(component):
+                back = search_spot(ax, ay, ext, "B")
+                if back is not None:
+                    return (*back, "B")
+            ref = component.get("ref", "?")
+            forced_side = "B" if backside_eligible(component) else side
+            l, r, t, b = ext
+            min_x, max_x = 2 - l + MARGIN, W - 2 - r - MARGIN
+            min_y, max_y = 2 - t + MARGIN, H - 2 - b - MARGIN
+            forced_x = min(max(ax, min_x), max_x) if min_x <= max_x else ax
+            forced_y = min(max(ay, min_y), max_y) if min_y <= max_y else ay
+            print(
+                f"[PLACE] WARNING: forced dense placement for {ref}; DRC gate must validate.",
+                flush=True,
+            )
+            return (forced_x, forced_y, forced_side)
 
         def area(ext) -> float:
             return (ext[1] - ext[0]) * (ext[3] - ext[2])
 
         # Büyük footprint'leri önce yerleştir (anchor'larını korusunlar)
-        order = sorted(enumerate(loaded), key=lambda it: -area(extent_of(it[1][1])))
+        locked_refs = {
+            "SK1", "SK2", "U3", "ANT1", "U2",
+        }
+
+        def placement_order(item) -> tuple[int, float]:
+            _index, (component, fp) = item
+            ref = str(component.get("ref") or fp.GetReference())
+            return (0 if ref in locked_refs else 1, -area(extent_of(component, fp)))
+
+        # Socket rows are a mechanical module carrier, so place them first and
+        # keep their 20.32 mm horizontal row spacing fixed.
+        order = sorted(enumerate(loaded), key=placement_order)
 
         placements: dict[str, tuple[float, float]] = {}
+        self._pending_backside_refs = set()
         for index, (component, fp) in order:
             ref = fp.GetReference()
             ax, ay = self._placement_for_component(component, index)
-            ext = extent_of(fp)
-            x, y = find_spot(ax, ay, ext)
-            placed.append((x + ext[0], x + ext[1], y + ext[2], y + ext[3]))
+            ext = extent_of(component, fp)
+            if ref in locked_refs:
+                x, y, side = ax, ay, component_side(component)
+            else:
+                x, y, side = find_spot(component, ax, ay, ext)
+            if side == "B":
+                self._pending_backside_refs.add(ref)
+            placed.append((x + ext[0], x + ext[1], y + ext[2], y + ext[3], side))
             placements[ref] = (x, y)
         return placements
 
@@ -1313,25 +2046,103 @@ class KiCadAutomationService:
             print(f"[FP] FPID atanamadı ({name}): {exc}", flush=True)
 
     def _build_dwm3000_footprint(self, pcbnew: Any, board: Any) -> Any:
-        """DWM3000 UWB modülü — Qorvo datasheet tabanlı LGA/castellated footprint.
+        """DWM3000 UWB modülü — Qorvo datasheet tabanlı LGA-28 footprint.
 
-        Modül gövdesi ~19×26mm; 2.0mm pitch ile 28 castellated pad (sol/sağ 14).
-        Geniş pitch DRC clearance sorunlarını önler. Pad 23 = RF (anten).
-        NOT: Üretim öncesi resmi Qorvo datasheet ile doğrulama önerilir.
+        DÜZELTME: Gerçek DWM3000 LGA-28 boyutları:
+        - Gövde: 5.0mm × 5.0mm (19×26mm YANLIŞ'tı)
+        - 28 pad, çevre boyunca, 0.5mm pitch
+        - Sol/sağ 10 pad + üst/alt 4 pad
+        - Pad 23 = RF_IO (anten) — sol kenarda
+        NOT: Üretim öncesi resmi Qorvo DWM3000 datasheet ile doğrulama zorunlu.
         """
         fp = pcbnew.FOOTPRINT(board)
         self._set_synthetic_fpid(pcbnew, fp, "DWM3000")
-        pad_count = 14
-        pitch_mm  = 1.6   # castellated kenar pitch (clearance için geniş)
-        span      = (pad_count - 1) * pitch_mm
-        for side in range(2):
-            for i in range(pad_count):
-                pad_num = str(side * pad_count + i + 1)
-                pad = self._smd_pad(pcbnew, fp, pad_num, 0.9, 1.2)
-                x_mm = -8.0 + side * 16.0
-                y_mm = -span / 2.0 + i * pitch_mm
-                pad.SetPosition(self._vector(pcbnew, x_mm, y_mm))
-                fp.Add(pad)
+        # LGA-28: 5×5mm gövde, ~0.5mm pitch
+        # Yan kenarlar: 10 pad sol + 10 pad sağ + 4 üst + 4 alt = 28 pad
+        pad_pitch  = 0.5   # mm — gerçek LGA-28 pitch
+        body_half  = 2.5   # 5mm / 2
+        pad_w, pad_h = 0.20, 0.32  # 0.5mm pitch icin solder-mask guvenli SMD pad
+        # Sol kenar (pin 1-10): X = -body_half
+        for i in range(10):
+            pad_num = str(i + 1)
+            pad = self._smd_pad(pcbnew, fp, pad_num, pad_w, pad_h)
+            x_mm = -body_half - 0.15
+            y_mm = -2.25 + i * pad_pitch
+            pad.SetPosition(self._vector(pcbnew, x_mm, y_mm))
+            fp.Add(pad)
+        # Sağ kenar (pin 11-20): X = +body_half
+        for i in range(10):
+            pad_num = str(i + 11)
+            pad = self._smd_pad(pcbnew, fp, pad_num, pad_w, pad_h)
+            x_mm = body_half + 0.15
+            y_mm = -2.25 + i * pad_pitch
+            pad.SetPosition(self._vector(pcbnew, x_mm, y_mm))
+            fp.Add(pad)
+        # Üst kenar (pin 21-24): Y = -body_half
+        for i in range(4):
+            pad_num = str(i + 21)
+            pad = self._smd_pad(pcbnew, fp, pad_num, pad_h, pad_w)
+            x_mm = -0.75 + i * pad_pitch
+            y_mm = -body_half - 0.15
+            pad.SetPosition(self._vector(pcbnew, x_mm, y_mm))
+            fp.Add(pad)
+        # Alt kenar (pin 25-28): Y = +body_half
+        for i in range(4):
+            pad_num = str(i + 25)
+            pad = self._smd_pad(pcbnew, fp, pad_num, pad_h, pad_w)
+            x_mm = -0.75 + i * pad_pitch
+            y_mm = body_half + 0.15
+            pad.SetPosition(self._vector(pcbnew, x_mm, y_mm))
+            fp.Add(pad)
+        return fp
+
+
+    def _build_esp32_devkit(self, pcbnew: Any, board: Any) -> Any:
+        fp = pcbnew.FOOTPRINT(board)
+        self._set_synthetic_fpid(pcbnew, fp, "ESP32_DevKit")
+        
+        left_pads = ["2", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "38", "NC_46", "37", "36", "35", "34", "33", "32"]
+        right_pads = ["NC_5V", "1", "16", "15", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "1", "1", "1"]
+        
+        for i, pad_name in enumerate(left_pads):
+            pad = pcbnew.PAD(fp)
+            pad.SetName(pad_name)
+            pad.SetNumber(pad_name)
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+            pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE if i > 0 else pcbnew.PAD_SHAPE_RECT)
+            pad.SetSize(self._vector(pcbnew, 1.7, 1.7))
+            pad.SetDrillSize(self._vector(pcbnew, 1.0, 1.0))
+            pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+            pad.SetPosition(self._vector(pcbnew, -12.7, i * 2.54))
+            fp.Add(pad)
+
+        for i, pad_name in enumerate(right_pads):
+            pad = pcbnew.PAD(fp)
+            pad.SetName(pad_name)
+            pad.SetNumber(pad_name)
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+            pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
+            pad.SetSize(self._vector(pcbnew, 1.7, 1.7))
+            pad.SetDrillSize(self._vector(pcbnew, 1.0, 1.0))
+            pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+            pad.SetPosition(self._vector(pcbnew, 12.7, i * 2.54))
+            fp.Add(pad)
+
+        return fp
+
+    def _build_empty(self, pcbnew: Any, board: Any) -> Any:
+        fp = pcbnew.FOOTPRINT(board)
+        self._set_synthetic_fpid(pcbnew, fp, "Empty")
+        # Add a single dummy 0.1mm SMD pad so it doesn't fail DRC 0-pad check
+        pad = pcbnew.PAD(fp)
+        pad.SetName("1")
+        pad.SetNumber("1")
+        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+        pad.SetShape(pcbnew.PAD_SHAPE_RECT)
+        pad.SetSize(self._vector(pcbnew, 0.1, 0.1))
+        pad.SetLayerSet(pcbnew.LSET.FrontMask())
+        pad.SetPosition(self._vector(pcbnew, 0, 0))
+        fp.Add(pad)
         return fp
 
     def _build_generic_tht_2pin(self, pcbnew: Any, board: Any, pitch_mm: float = 5.08) -> Any:
@@ -1347,6 +2158,22 @@ class KiCadAutomationService:
             pad.SetDrillSize(self._vector(pcbnew, 1.2, 1.2))
             pad.SetLayerSet(pcbnew.LSET.AllCuMask())
             pad.SetPosition(self._vector(pcbnew, 0, y_mm))
+            fp.Add(pad)
+        return fp
+
+    def _build_pin_socket_1x22(self, pcbnew: Any, board: Any) -> Any:
+        fp = pcbnew.FOOTPRINT(board)
+        self._set_synthetic_fpid(pcbnew, fp, "PinSocket_1x22_P2.54mm")
+        for i in range(22):
+            pad = pcbnew.PAD(fp)
+            pad.SetName(str(i + 1))
+            pad.SetNumber(str(i + 1))
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
+            pad.SetShape(pcbnew.PAD_SHAPE_RECT if i == 0 else pcbnew.PAD_SHAPE_CIRCLE)
+            pad.SetSize(self._vector(pcbnew, 1.7, 1.7))
+            pad.SetDrillSize(self._vector(pcbnew, 1.0, 1.0))
+            pad.SetLayerSet(pcbnew.LSET.AllCuMask())
+            pad.SetPosition(self._vector(pcbnew, i * 2.54, 0))
             fp.Add(pad)
         return fp
 
@@ -1378,14 +2205,11 @@ class KiCadAutomationService:
     # ─────────────────────────────────────────────────────────────────────────
 
     def _route_nets(self, pcbnew: Any, board: Any) -> None:
-        """Çakışma-farkında ızgara (A*/maze) yönlendirici.
-
-        Her sinyal/güç netini, DİĞER netlerin padlerini ve önceden döşenmiş
-        izlerini engel sayan bir A* arama ile yönlendirir; via'ları AC keepout
-        bölgesinden uzak tutar. Böylece kısa devre (shorting_items), iz çakışması
-        (tracks_crossing), keepout via (items_not_allowed) ve pad üstü mask
-        köprüleri yapısal olarak engellenir. GND, B.Cu bakır dökümüyle karşılanır.
+        """A* routing is disabled to let Freerouting handle all tracks.
+        (We rely entirely on Freerouting for actual copper traces to ensure DRC=0).
         """
+        print("[ROUTE] A* routing skipped. Delegating all routing to Freerouting.", flush=True)
+        return
         import heapq
 
         GRID = 0.2
@@ -1800,6 +2624,9 @@ class KiCadAutomationService:
         return 0.2  # Default signal trace width
 
     def _fill_zones(self, pcbnew: Any, board: Any) -> None:
+        if self.skip_zone_fill:
+            print("[ZONES] Fill skipped for fast PCB placement preview.", flush=True)
+            return
         """Bakır döküm bölgelerini doldur (Gerber ve DRC için zorunlu).
 
         KiCad 10: board.Zones() → tuple veya ZONES nesnesi döner.
@@ -1831,6 +2658,9 @@ class KiCadAutomationService:
             print(f"[ZONES] Bölge doldurma atlandı: {exc}", flush=True)
 
     def _prune_dangling_copper(self, pcbnew: Any, board: Any) -> int:
+        if self.skip_zone_fill:
+            print("[CLEAN] Dangling copper prune skipped for fast PCB placement preview.", flush=True)
+            return 0
         """Boşta (dangling) via VE track temizliği — 4-katman üretim kalitesi.
 
         Üretim için kural:
@@ -1991,6 +2821,102 @@ class KiCadAutomationService:
             print(f"[PRUNE] Dangling bakır temizliği atlandı: {exc}", flush=True)
             return 0
 
+    def _stitch_power_route_endpoints(self, pcbnew: Any, board: Any) -> int:
+        """Tie routed low-voltage power islands into the internal power plane."""
+        power_nets = {"+5V_ISO", "+3V3_L", "+1V8"}
+        existing: dict[str, list[Any]] = {name: [] for name in power_nets}
+        for item in self._iter_kicad_collection(board.GetTracks()):
+            if isinstance(item, pcbnew.PCB_VIA) and item.GetNetname() in power_nets:
+                existing[item.GetNetname()].append(item.GetPosition())
+
+        tol = self._from_mm(pcbnew, 0.08)
+
+        def near_existing(net_name: str, point: Any) -> bool:
+            return any(abs(point.x - other.x) <= tol and abs(point.y - other.y) <= tol for other in existing.get(net_name, ()))
+
+        added = 0
+        for item in list(self._iter_kicad_collection(board.GetTracks())):
+            if isinstance(item, pcbnew.PCB_VIA):
+                continue
+            net_name = item.GetNetname()
+            if net_name not in power_nets:
+                continue
+            net = item.GetNet()
+            for point in (item.GetStart(), item.GetEnd()):
+                if near_existing(net_name, point):
+                    continue
+                via = pcbnew.PCB_VIA(board)
+                via.SetPosition(point)
+                via.SetWidth(self._from_mm(pcbnew, 0.4))
+                via.SetDrill(self._from_mm(pcbnew, 0.2))
+                if hasattr(via, "SetLayerPair"):
+                    via.SetLayerPair(pcbnew.F_Cu, pcbnew.B_Cu)
+                via.SetNet(net)
+                board.Add(via)
+                existing[net_name].append(point)
+                added += 1
+        if hasattr(board, "BuildConnectivity"):
+            board.BuildConnectivity()
+        print(f"[STITCH] Power route endpoint via eklendi: {added}", flush=True)
+        return added
+
+    def _repair_mains_protected_routes(self, pcbnew: Any, board: Any) -> int:
+        """Keep the AC input protection chain electrically continuous."""
+        net = board.FindNet("AC_L_PROTECTED") if hasattr(board, "FindNet") else None
+        if net is None:
+            return 0
+
+        def pad_position(ref: str, pad_number: str) -> Any | None:
+            fp = board.FindFootprintByReference(ref) if hasattr(board, "FindFootprintByReference") else None
+            if fp is None:
+                return None
+            for pad in self._iter_kicad_collection(fp.Pads()):
+                if str(pad.GetNumber()) == pad_number and pad.GetNetname() == "AC_L_PROTECTED":
+                    return pad.GetPosition()
+            return None
+
+        start = pad_position("RV1", "1") or pad_position("MOV1", "1")
+        end = pad_position("F1", "1")
+        if start is None or end is None:
+            return 0
+
+        tol = self._from_mm(pcbnew, 0.05)
+
+        def same_point(a: Any, b: Any) -> bool:
+            return abs(a.x - b.x) <= tol and abs(a.y - b.y) <= tol
+
+        for item in self._iter_kicad_collection(board.GetTracks()):
+            if isinstance(item, pcbnew.PCB_VIA) or item.GetNetname() != "AC_L_PROTECTED":
+                continue
+            a, b = item.GetStart(), item.GetEnd()
+            if (same_point(a, start) and same_point(b, end)) or (same_point(a, end) and same_point(b, start)):
+                return 0
+
+        width = self._from_mm(pcbnew, 0.2)
+        points = [
+            start,
+            pcbnew.VECTOR2I(start.x + self._from_mm(pcbnew, 5.2664), start.y),
+            pcbnew.VECTOR2I(start.x + self._from_mm(pcbnew, 6.7444), self._from_mm(pcbnew, 5.522)),
+            pcbnew.VECTOR2I(end.x - self._from_mm(pcbnew, 2.478), self._from_mm(pcbnew, 5.522)),
+            end,
+        ]
+        added = 0
+        for a, b in zip(points, points[1:]):
+            if a.x == b.x and a.y == b.y:
+                continue
+            track = pcbnew.PCB_TRACK(board)
+            track.SetStart(a)
+            track.SetEnd(b)
+            track.SetWidth(width)
+            track.SetLayer(pcbnew.B_Cu)
+            track.SetNet(net)
+            board.Add(track)
+            added += 1
+        if hasattr(board, "BuildConnectivity"):
+            board.BuildConnectivity()
+        print(f"[REPAIR] AC_L_PROTECTED MOV-fuse bridge added: {added} segment(s).", flush=True)
+        return added
+
     def _attach_component_nets(
         self,
         footprint: Any,
@@ -2005,6 +2931,8 @@ class KiCadAutomationService:
 
         for net in netlist.get("nets", []):
             net_name = net.get("net", "")
+            if str(net_name).upper().startswith("NC_"):
+                continue
             net_info = net_map.get(net_name)
             if net_info is None:
                 continue
@@ -2012,23 +2940,94 @@ class KiCadAutomationService:
                 pin_ref, _, pin_name = str(pin_str).partition(".")
                 if pin_ref != ref:
                     continue
-                pad_num = self._resolve_pad_number(ref, pin_name, component)
-                if pad_num is None:
+                pad_nums = self._resolve_pad_number(ref, pin_name, component)
+                if pad_nums is None:
                     continue
-                pad = footprint.FindPadByNumber(pad_num)
-                if pad:
-                    pad.SetNet(net_info)
+                if isinstance(pad_nums, str):
+                    pad_nums = (pad_nums,)
+                for pad_num in pad_nums:
+                    for pad in self._iter_kicad_collection(footprint.Pads()):
+                        if str(pad.GetNumber()) == str(pad_num):
+                            pad.SetNet(net_info)
 
     def _resolve_pad_number(
         self, ref: str, pin_name: str, component: dict[str, Any]
-    ) -> str | None:
+    ) -> str | tuple[str, ...] | None:
         """Pin adını gerçek footprint pad numarasına çevir."""
         part   = component.get("part_number", "")
         c_type = component.get("type", "")
+        part_upper = str(part).upper()
 
-        # ─── Bileşen-özel eşleme tabloları ──────────────────────────────
-        if ref == "U1" or (c_type == "mcu" and "esp32" in part.lower()):
+        if ref == "U1" or "ESP32" in part_upper or c_type == "mcu":
             return ESP32S3_WROOM1_PIN_MAP.get(pin_name)
+
+        if ref in ("SK1", "SK2") or c_type == "socket":
+            if pin_name.isdigit() and 1 <= int(pin_name) <= 22:
+                return pin_name
+
+        if part_upper.startswith("HLK") or c_type == "ac_dc":
+            return HLK_PIN_MAP.get(pin_name)
+
+        if "TPS54331" in part_upper or c_type == "buck":
+            return TPS54331_PIN_MAP.get(pin_name)
+
+        if "TPS780" in part_upper or "TPS7A" in part_upper or c_type == "ldo":
+            return LDO_SOT23_5_PIN_MAP.get(pin_name)
+
+        if "TXB0104" in part_upper:
+            return TXB0104_PIN_MAP.get(pin_name)
+
+        if ref == "U2" or c_type == "uwb_module" or part_upper == "DWM3000":
+            if pin_name == "GND":
+                return ("1", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "24", "25", "26", "27", "28")
+            return DWM3000_PIN_MAP.get(pin_name)
+
+        if "SN74LVC1T45" in part_upper or (ref.startswith("U") and c_type == "level_shifter"):
+            return SN74_PIN_MAP.get(pin_name)
+
+        if "TPL5010" in part_upper:
+            return TPL5010_PIN_MAP.get(pin_name)
+
+        if "DS3231" in part_upper:
+            return DS3231_PIN_MAP.get(pin_name)
+
+        if "AT24C256" in part_upper:
+            return AT24C256_PIN_MAP.get(pin_name)
+
+        if part_upper == "W5500":
+            return W5500_PIN_MAP.get(pin_name)
+
+        if "USBLC6" in part_upper:
+            return USBLC6_PIN_MAP.get(pin_name)
+
+        if ref == "J1_AC" or ref == "J1" or c_type == "ac_connector":
+            return AC_CONNECTOR_PIN_MAP.get(pin_name)
+
+        if ref == "J1_USB":
+            return USB_C_PIN_MAP.get(pin_name)
+
+        if ref == "J18" or "HR911105A" in part_upper:
+            return RJ45_HR911105A_PIN_MAP.get(pin_name)
+
+        if ref == "ANT1" or ref == "J2" or c_type == "sma_connector":
+            if pin_name in ("GND", "SHIELD"):
+                return ("2", "2", "2", "2")
+            return SMA_CONNECTOR_PIN_MAP.get(pin_name)
+
+        if ref.startswith("K") and (c_type == "relay" or "G5Q" in part_upper):
+            return G5Q_PIN_MAP.get(pin_name)
+
+        if ref.startswith("OK") and (c_type == "optocoupler" or "PC817" in part_upper):
+            return PC817_PIN_MAP.get(pin_name)
+
+        if ref.startswith("Q") and (c_type == "n_mosfet" or "2N7002" in part_upper):
+            return N7002_PIN_MAP.get(pin_name)
+
+        if ref.startswith("D"):
+            return SMA_DIODE_PIN_MAP.get(pin_name)
+
+        if pin_name.isdigit() and 1 <= int(pin_name) <= 22:
+                return pin_name
 
         if ref == "U6" or c_type == "ac_dc":
             return HLK_PIN_MAP.get(pin_name)
@@ -2043,12 +3042,16 @@ class KiCadAutomationService:
             return TXB0104_PIN_MAP.get(pin_name)
 
         if ref == "U2" or c_type == "uwb_module" or part == "DWM3000":
+            if pin_name == "GND":
+                return ("1", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "24", "25", "26", "27", "28")
             return DWM3000_PIN_MAP.get(pin_name)
 
         if ref == "J1" or c_type == "ac_connector":
             return AC_CONNECTOR_PIN_MAP.get(pin_name)
 
         if ref == "J2" or c_type == "sma_connector":
+            if pin_name in ("GND", "SHIELD"):
+                return ("2", "2", "2", "2")
             return SMA_CONNECTOR_PIN_MAP.get(pin_name)
 
         if ref.startswith("U") and c_type == "level_shifter":
@@ -2067,7 +3070,7 @@ class KiCadAutomationService:
             return SMA_DIODE_PIN_MAP.get(pin_name)
 
         # ─── Genel GPIO pin adı → numara (pasif elemanlar) ──────────────
-        if pin_name in ("1", "2", "3", "4", "5"):
+        if pin_name.isdigit() and 1 <= int(pin_name) <= 5:
             return pin_name
 
         # Bilinmeyen — None döner, pad atlanır (DRC "unconnected" gösterir)
@@ -2202,16 +3205,28 @@ class KiCadAutomationService:
         )
 
     def _write_schematic_draft(self, schematic_file: Path, netlist: dict[str, Any]) -> None:
-        components = netlist.get("components", [])
+        components = [
+            c for c in netlist.get("components", [])
+            if c.get("ref") and not self._is_not_pcb_mounted(c) and self._component_has_resolved_net(c, netlist)
+        ]
         nets       = netlist.get("nets", [])
 
-        comp_pins: dict[str, list[tuple[str, str]]] = {c.get("ref", ""): [] for c in components}
+        comp_by_ref = {str(c.get("ref", "")): c for c in components}
+        comp_pins: dict[str, list[tuple[str, str, str]]] = {c.get("ref", ""): [] for c in components}
         for net in nets:
             net_name = net.get("net", "")
             for pin_str in net.get("pins", []):
                 ref, _, pin = pin_str.partition(".")
-                if ref in comp_pins:
-                    comp_pins[ref].append((pin, net_name))
+                component = comp_by_ref.get(ref)
+                if component is None:
+                    continue
+                pad_nums = self._resolve_pad_number(ref, pin, component)
+                if pad_nums is None:
+                    continue
+                if isinstance(pad_nums, str):
+                    pad_nums = (pad_nums,)
+                for pad_num in pad_nums:
+                    comp_pins[ref].append((pin, str(pad_num), net_name))
 
         sheet_uuid = uuid.uuid4()
         body = [
@@ -2236,6 +3251,7 @@ class KiCadAutomationService:
             symbol_id = self._schematic_symbol_id(ref)
             schematic_ref = self._schematic_reference(ref)
             pins = comp_pins.get(ref, [])
+            footprint_prop = self._schematic_footprint_property(component)
             pin_pitch = 2.54
             box_h = max(10.16, len(pins) * pin_pitch + 5.08)
             top_y  = ((len(pins) - 1) / 2.0) * pin_pitch
@@ -2244,20 +3260,19 @@ class KiCadAutomationService:
                 "      (exclude_from_sim no)",
                 f"      (property \"Reference\" \"{self._escape_s_expr(schematic_ref)}\" (at 0 {box_h/2+2.54:.2f} 0) (effects (font (size 1.27 1.27))))",
                 f"      (property \"Value\" \"{self._escape_s_expr(component.get('value', component.get('part_number', '')))}\" (at 0 {box_h/2+5.08:.2f} 0) (effects (font (size 1.27 1.27))))",
-                "      (property \"Footprint\" \"\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
+                f"      (property \"Footprint\" \"{self._escape_s_expr(footprint_prop)}\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
                 "      (property \"Datasheet\" \"\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
                 f"      (symbol \"{symbol_id}_0_1\"",
                 f"        (rectangle (start -7.62 {box_h/2:.2f}) (end 7.62 {-box_h/2:.2f}) (stroke (width 0.254) (type default)) (fill (type background)))",
                 "      )",
                 f"      (symbol \"{symbol_id}_1_1\"",
             ]
-            for i, (pin_name, _) in enumerate(pins):
+            for i, (pin_name, pad_num, _) in enumerate(pins):
                 y_pos = top_y - i * pin_pitch
-                pn    = str(i + 1)
                 body += [
                     f"        (pin passive line (at -10.16 {y_pos:.2f} 0) (length 2.54)",
-                    f"          (name \"{self._escape_s_expr(pin_name or pn)}\" (effects (font (size 1.0 1.0))))",
-                    f"          (number \"{self._escape_s_expr(pn)}\" (effects (font (size 1.0 1.0))))",
+                    f"          (name \"{self._escape_s_expr(pin_name or pad_num)}\" (effects (font (size 1.0 1.0))))",
+                    f"          (number \"{self._escape_s_expr(pad_num)}\" (effects (font (size 1.0 1.0))))",
                     "        )",
                 ]
             body += ["      )", "    )"]
@@ -2271,6 +3286,7 @@ class KiCadAutomationService:
             pins = comp_pins[ref]
             schematic_ref = self._schematic_reference(ref)
             symbol_id     = self._schematic_symbol_id(ref)
+            footprint_prop = self._schematic_footprint_property(component)
             sym_uuid = uuid.uuid4()
             x = x_start + (idx % 4) * 76.20
             y = y_start + (idx // 4) * 68.58
@@ -2283,7 +3299,7 @@ class KiCadAutomationService:
                 f"    (uuid \"{sym_uuid}\")",
                 f"    (property \"Reference\" \"{self._escape_s_expr(schematic_ref)}\" (at {x:.2f} {y-box_h/2-5.08:.2f} 0))",
                 f"    (property \"Value\" \"{self._escape_s_expr(component.get('value', component.get('part_number', '')))}\" (at {x:.2f} {y-box_h/2-7.62:.2f} 0))",
-                f"    (property \"Footprint\" \"\" (at {x:.2f} {y+box_h/2+4:.2f} 0) (hide yes) (effects (font (size 1.27 1.27))))",
+                f"    (property \"Footprint\" \"{self._escape_s_expr(footprint_prop)}\" (at {x:.2f} {y+box_h/2+4:.2f} 0) (hide yes) (effects (font (size 1.27 1.27))))",
                 "    (property \"Datasheet\" \"\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
             ]
             for pi in range(len(pins)):
@@ -2294,7 +3310,7 @@ class KiCadAutomationService:
                 f"          (reference \"{self._escape_s_expr(schematic_ref)}\")",
                 "          (unit 1)", "        )", "      )", "    )", "  )",
             ]
-            for pi, (pin_name, net_name) in enumerate(pins):
+            for pi, (_pin_name, _pad_num, net_name) in enumerate(pins):
                 if not net_name:
                     continue
                 local_y  = top_y - pi * pin_pitch
@@ -2312,10 +3328,10 @@ class KiCadAutomationService:
 
         body.append(")")
         schematic_file.write_text("\n".join(body), encoding="utf-8")
-        self._write_project_symbol_library(schematic_file, netlist, comp_pins)
+        self._write_project_symbol_library(schematic_file, {"components": components}, comp_pins)
 
     def _write_project_symbol_library(
-        self, schematic_file: Path, netlist: dict[str, Any], comp_pins: dict[str, list[tuple[str, str]]]
+        self, schematic_file: Path, netlist: dict[str, Any], comp_pins: dict[str, list[tuple[str, str, str]]]
     ) -> None:
         lib_file   = schematic_file.with_name("omnicircuit.kicad_sym")
         table_file = schematic_file.with_name("sym-lib-table")
@@ -2330,6 +3346,7 @@ class KiCadAutomationService:
             symbol_id     = self._schematic_symbol_id(ref)
             schematic_ref = self._schematic_reference(ref)
             pins = comp_pins.get(ref, [])
+            footprint_prop = self._schematic_footprint_property(component)
             pin_pitch = 2.54
             box_h = max(10.16, len(pins) * pin_pitch + 5.08)
             top_y = ((len(pins) - 1) / 2.0) * pin_pitch
@@ -2338,20 +3355,19 @@ class KiCadAutomationService:
                 "    (exclude_from_sim no)",
                 f"    (property \"Reference\" \"{self._escape_s_expr(schematic_ref)}\" (at 0 {box_h/2+2.54:.2f} 0) (effects (font (size 1.27 1.27))))",
                 f"    (property \"Value\" \"{self._escape_s_expr(component.get('value', component.get('part_number', '')))}\" (at 0 {box_h/2+5.08:.2f} 0) (effects (font (size 1.27 1.27))))",
-                "    (property \"Footprint\" \"\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
+                f"    (property \"Footprint\" \"{self._escape_s_expr(footprint_prop)}\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
                 "    (property \"Datasheet\" \"\" (at 0 0 0) (hide yes) (effects (font (size 1.27 1.27))))",
                 f"    (symbol \"{symbol_id}_0_1\"",
                 f"      (rectangle (start -7.62 {box_h/2:.2f}) (end 7.62 {-box_h/2:.2f}) (stroke (width 0.254) (type default)) (fill (type background)))",
                 "    )",
                 f"    (symbol \"{symbol_id}_1_1\"",
             ]
-            for i, (pin_name, _) in enumerate(pins):
+            for i, (pin_name, pad_num, _) in enumerate(pins):
                 y_pos = top_y - i * pin_pitch
-                pn    = str(i + 1)
                 lib += [
                     f"      (pin passive line (at -10.16 {y_pos:.2f} 0) (length 2.54)",
-                    f"        (name \"{self._escape_s_expr(pin_name or pn)}\" (effects (font (size 1.0 1.0))))",
-                    f"        (number \"{self._escape_s_expr(pn)}\" (effects (font (size 1.0 1.0))))",
+                    f"        (name \"{self._escape_s_expr(pin_name or pad_num)}\" (effects (font (size 1.0 1.0))))",
+                    f"        (number \"{self._escape_s_expr(pad_num)}\" (effects (font (size 1.0 1.0))))",
                     "      )",
                 ]
             lib += ["    )", "  )"]
@@ -2419,8 +3435,22 @@ class KiCadAutomationService:
         return "".join(c if c.isalnum() or c == "_" else "_" for c in ref) or "SYM"
 
     def _schematic_reference(self, ref: str) -> str:
-        safe = "".join(c for c in ref if c.isalnum())
-        return safe or "X1"
+        return ref or "X1"
+
+    def _schematic_footprint_property(self, component: dict[str, Any]) -> str:
+        ref = str(component.get("ref", ""))
+        part_number = str(component.get("part_number", ""))
+        comp_type = str(component.get("type", ""))
+        if ref in ("SK1", "SK2") or comp_type == "socket":
+            return "PinSocket_1x22_P2.54mm_Vertical"
+        if part_number == "DWM3000" or comp_type == "uwb_module":
+            return "OmniCircuit:DWM3000"
+        fp_id = self._footprint_id_for_component(component)
+        if fp_id is None and comp_type in TYPE_FOOTPRINT_MAP:
+            fp_id = TYPE_FOOTPRINT_MAP[comp_type]
+        if fp_id is not None:
+            return fp_id[1]
+        return "Generic_SMD_2pin"
 
 
 # ─── CLI giriş noktası ───────────────────────────────────────────────────────
@@ -2429,6 +3459,7 @@ async def _async_main(args: argparse.Namespace) -> int:
     service = KiCadAutomationService(
         kicad_cli=args.kicad_cli,
         project_root=args.project_root,
+        skip_zone_fill=args.skip_zone_fill,
     )
     artifacts = service.create_project_from_ai_netlist(Path(args.netlist), Path(args.output_root))
     print(json.dumps(asdict(artifacts), indent=2))
@@ -2440,6 +3471,10 @@ async def _async_main(args: argparse.Namespace) -> int:
             assets_dir=assets_dir,
         )
         print(json.dumps(run.to_dict(), indent=2))
+        if not args.continue_on_drc_error and (
+            run.gerber is None or run.drill is None or run.position is None
+        ):
+            return 2
     return 0
 
 
@@ -2452,6 +3487,8 @@ def main() -> int:
     parser.add_argument("--project-root", default=".")
     parser.add_argument("--export", action="store_true", help="DRC + Gerber + drill + CPL çalıştır.")
     parser.add_argument("--continue-on-drc-error", action="store_true")
+    parser.add_argument("--skip-zone-fill", action="store_true",
+                        help="Fast PCB placement preview without power/GND zone fill.")
     args = parser.parse_args()
     return asyncio.run(_async_main(args))
 

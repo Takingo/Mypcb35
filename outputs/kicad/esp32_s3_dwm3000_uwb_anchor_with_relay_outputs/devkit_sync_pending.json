@@ -1,0 +1,33 @@
+{
+  "schema": "DEVKIT_SCHEMATIC_PENDING_V1",
+  "generated_at": "2026-06-02T12:32:39+00:00",
+  "action": "add_symbols",
+  "to_add": [
+    {
+      "ref": "U1_Socket_L",
+      "lib_id": "Connector:Conn_01x22_Female"
+    },
+    {
+      "ref": "U1_Socket_R",
+      "lib_id": "Connector:Conn_01x22_Female"
+    }
+  ],
+  "instruction": "Open eeschema, place the two listed symbols, and run 'Update PCB from Schematic' to validate the netlist match. The PCB already has these footprints; KiCad will not move them.",
+  "pin_net_map": {
+    "U1_Socket_L": {
+      "1": "+3V3",
+      "2": "+3V3",
+      "8": "DWM_IRQ_3V3",
+      "9": "DWM_EXT_TX_3V3",
+      "18": "SPI_CS_3V3_MCU",
+      "19": "SPI_MOSI_3V3_MCU",
+      "20": "SPI_CLK_3V3_MCU",
+      "21": "SPI_MISO_3V3_MCU"
+    },
+    "U1_Socket_R": {
+      "1": "GND",
+      "21": "GND",
+      "22": "GND"
+    }
+  }
+}

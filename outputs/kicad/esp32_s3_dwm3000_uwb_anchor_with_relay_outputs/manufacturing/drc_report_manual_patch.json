@@ -1,0 +1,2413 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-06-04T19:49:35",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "schematic_parity": [],
+    "source": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Items not allowed (keepout area)",
+            "items": [
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "782fa636-8b6a-4ece-82fa-33cff20551ab"
+                }
+            ],
+            "severity": "error",
+            "type": "items_not_allowed"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [GND] on B.Cu, length 6.2724 mm",
+                    "pos": {
+                        "x": 42.9526,
+                        "y": 30.7276
+                    },
+                    "uuid": "d103aaa0-467c-4f31-827d-49c352213de3"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 36.2625 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "f160f1fa-c741-4d21-be7c-a94339386c46"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [AC_L_PROTECTED] on B.Cu, length 26.0000 mm",
+                    "pos": {
+                        "x": 57.0,
+                        "y": 7.0
+                    },
+                    "uuid": "5770bf52-7a38-4133-b41d-8366c507b42e"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 36.2625 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "f160f1fa-c741-4d21-be7c-a94339386c46"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                },
+                {
+                    "description": "Track [SPI_CLK_1V8] on B.Cu, length 12.0212 mm",
+                    "pos": {
+                        "x": 103.91,
+                        "y": 33.5977
+                    },
+                    "uuid": "f93a26b1-d4cc-4c60-9c6c-8062b70bfcc0"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 36.2625 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "f160f1fa-c741-4d21-be7c-a94339386c46"
+                },
+                {
+                    "description": "Track [GND] on B.Cu, length 10.7624 mm",
+                    "pos": {
+                        "x": 49.8352,
+                        "y": 13.811
+                    },
+                    "uuid": "fdb8adf2-f97c-4121-b1c5-f01cb7f5a3e1"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 43.9125,
+                        "y": 4.0
+                    },
+                    "uuid": "482f2d30-2567-49c1-8179-d54c4b7a05f7"
+                },
+                {
+                    "description": "Track [+1V8_BYPASS] on F.Cu, length 2.8284 mm",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "eb8cba62-8756-47c1-9578-9b7164701b9c"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MOSI_3V3_MCU] on B.Cu, length 11.7139 mm",
+                    "pos": {
+                        "x": 93.7756,
+                        "y": 23.3241
+                    },
+                    "uuid": "2d7770bc-1ba6-4b3a-8ed2-f32450b81eb1"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and SPI_MOSI_3V3)",
+            "items": [
+                {
+                    "description": "Via [DWM_EXTRX_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 33.15
+                    },
+                    "uuid": "47e0ce06-1c3d-4bea-97b3-a8e4636f8b00"
+                },
+                {
+                    "description": "Track [SPI_MOSI_3V3] on B.Cu, length 2.8974 mm",
+                    "pos": {
+                        "x": 111.589,
+                        "y": 31.6594
+                    },
+                    "uuid": "b5e5d009-d855-4184-81c6-6959c938b4bb"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [SPI_MOSI_3V3] on B.Cu, length 2.8974 mm",
+                    "pos": {
+                        "x": 111.589,
+                        "y": 31.6594
+                    },
+                    "uuid": "b5e5d009-d855-4184-81c6-6959c938b4bb"
+                },
+                {
+                    "description": "Via [DWM_EXTRX_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 33.15
+                    },
+                    "uuid": "47e0ce06-1c3d-4bea-97b3-a8e4636f8b00"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation (zone clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [DWM_EXTRX_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 33.15
+                    },
+                    "uuid": "47e0ce06-1c3d-4bea-97b3-a8e4636f8b00"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 58.0,
+                        "y": 1.0
+                    },
+                    "uuid": "dc12287e-cb5b-46a2-b015-8a5eb7a26943"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [DWM_EXTRX_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 33.15
+                    },
+                    "uuid": "47e0ce06-1c3d-4bea-97b3-a8e4636f8b00"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 58.0,
+                        "y": 1.0
+                    },
+                    "uuid": "dc12287e-cb5b-46a2-b015-8a5eb7a26943"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [RELAY2_NC] on B.Cu, length 8.7800 mm",
+                    "pos": {
+                        "x": 106.4501,
+                        "y": 20.3299
+                    },
+                    "uuid": "35cff788-c0c4-4730-8261-88d9bb0e09cd"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and UART_TX)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 16 [UART_TX] of SK1",
+                    "pos": {
+                        "x": 100.1,
+                        "y": 14.0
+                    },
+                    "uuid": "fd366b06-8a82-441e-a55c-d511406e9dba"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 16 [UART_TX] of SK1",
+                    "pos": {
+                        "x": 100.1,
+                        "y": 14.0
+                    },
+                    "uuid": "fd366b06-8a82-441e-a55c-d511406e9dba"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 17 [<no net>] of SK1",
+                    "pos": {
+                        "x": 102.64,
+                        "y": 14.0
+                    },
+                    "uuid": "cb962026-d958-4bba-82f0-6020fd66d2d5"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 17 [<no net>] of SK1",
+                    "pos": {
+                        "x": 102.64,
+                        "y": 14.0
+                    },
+                    "uuid": "cb962026-d958-4bba-82f0-6020fd66d2d5"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "Track [SPI_CS_3V3_MCU] on B.Cu, length 2.7424 mm",
+                    "pos": {
+                        "x": 103.8503,
+                        "y": 16.0951
+                    },
+                    "uuid": "b5a5949a-3dcb-46d0-915d-2d955702f993"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 18 [<no net>] of SK1",
+                    "pos": {
+                        "x": 105.18,
+                        "y": 14.0
+                    },
+                    "uuid": "dbbfb16a-28f2-49aa-ae1a-0649a38658c2"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 18 [<no net>] of SK1",
+                    "pos": {
+                        "x": 105.18,
+                        "y": 14.0
+                    },
+                    "uuid": "dbbfb16a-28f2-49aa-ae1a-0649a38658c2"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets  and DWM_EXTRX_3V3)",
+            "items": [
+                {
+                    "description": "PTH pad 19 [<no net>] of SK1",
+                    "pos": {
+                        "x": 107.72,
+                        "y": 14.0
+                    },
+                    "uuid": "95d409fe-7d24-44ea-86f4-d69eac6659a7"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 19 [<no net>] of SK1",
+                    "pos": {
+                        "x": 107.72,
+                        "y": 14.0
+                    },
+                    "uuid": "95d409fe-7d24-44ea-86f4-d69eac6659a7"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets  and DWM_EXTRX_3V3)",
+            "items": [
+                {
+                    "description": "PTH pad 20 [<no net>] of SK1",
+                    "pos": {
+                        "x": 110.26,
+                        "y": 14.0
+                    },
+                    "uuid": "7537a0c7-f24a-4c5e-8c6e-de81338bfa37"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 20 [<no net>] of SK1",
+                    "pos": {
+                        "x": 110.26,
+                        "y": 14.0
+                    },
+                    "uuid": "7537a0c7-f24a-4c5e-8c6e-de81338bfa37"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "Track [RELAY2_COM] on B.Cu, length 5.6200 mm",
+                    "pos": {
+                        "x": 101.3701,
+                        "y": 15.2499
+                    },
+                    "uuid": "b923cf4c-8c03-455d-ba1a-d74634ce66d1"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "Track [+5V_BYPASS] on B.Cu, length 4.4398 mm",
+                    "pos": {
+                        "x": 98.7354,
+                        "y": 15.5345
+                    },
+                    "uuid": "efe8f4a1-dce1-4aa1-bb17-c5dce65dff42"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets UART_RX and DWM_EXTRX_3V3)",
+            "items": [
+                {
+                    "description": "PTH pad 15 [UART_RX] of SK1",
+                    "pos": {
+                        "x": 97.56,
+                        "y": 14.0
+                    },
+                    "uuid": "071a683a-703c-44b1-b6f3-2c5dbb1824b2"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 15 [UART_RX] of SK1",
+                    "pos": {
+                        "x": 97.56,
+                        "y": 14.0
+                    },
+                    "uuid": "071a683a-703c-44b1-b6f3-2c5dbb1824b2"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_CLK_3V3] on B.Cu, length 7.4114 mm",
+                    "pos": {
+                        "x": 91.21,
+                        "y": 11.8002
+                    },
+                    "uuid": "a1f287fd-39aa-4309-aa18-4f8dfa41386c"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 13 [<no net>] of SK1",
+                    "pos": {
+                        "x": 92.48,
+                        "y": 14.0
+                    },
+                    "uuid": "fe602ea1-52b1-48bf-8389-063651bd4247"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 13 [<no net>] of SK1",
+                    "pos": {
+                        "x": 92.48,
+                        "y": 14.0
+                    },
+                    "uuid": "fe602ea1-52b1-48bf-8389-063651bd4247"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 14 [<no net>] of SK1",
+                    "pos": {
+                        "x": 95.02,
+                        "y": 14.0
+                    },
+                    "uuid": "d6f58997-7372-4936-8f41-29dfdf9b2c28"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 14 [<no net>] of SK1",
+                    "pos": {
+                        "x": 95.02,
+                        "y": 14.0
+                    },
+                    "uuid": "d6f58997-7372-4936-8f41-29dfdf9b2c28"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [RELAY2_NO] on B.Cu, length 0.7103 mm",
+                    "pos": {
+                        "x": 88.6988,
+                        "y": 14.3204
+                    },
+                    "uuid": "790eb9e1-a50e-4c31-beff-ddddb1c7622a"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 10 [<no net>] of SK1",
+                    "pos": {
+                        "x": 84.86,
+                        "y": 14.0
+                    },
+                    "uuid": "f5460e92-54ea-411b-9481-0c17badd2a47"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 10 [<no net>] of SK1",
+                    "pos": {
+                        "x": 84.86,
+                        "y": 14.0
+                    },
+                    "uuid": "f5460e92-54ea-411b-9481-0c17badd2a47"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets  and DWM_EXTRX_3V3)",
+            "items": [
+                {
+                    "description": "PTH pad 11 [<no net>] of SK1",
+                    "pos": {
+                        "x": 87.4,
+                        "y": 14.0
+                    },
+                    "uuid": "251587ea-dede-4578-b606-94c55c351fba"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 11 [<no net>] of SK1",
+                    "pos": {
+                        "x": 87.4,
+                        "y": 14.0
+                    },
+                    "uuid": "251587ea-dede-4578-b606-94c55c351fba"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets DWM_EXTRX_3V3 and )",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 12 [<no net>] of SK1",
+                    "pos": {
+                        "x": 89.94,
+                        "y": 14.0
+                    },
+                    "uuid": "fb7569d4-a4cb-46ec-a56b-a15217f90785"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 12 [<no net>] of SK1",
+                    "pos": {
+                        "x": 89.94,
+                        "y": 14.0
+                    },
+                    "uuid": "fb7569d4-a4cb-46ec-a56b-a15217f90785"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.1454 mm)",
+            "items": [
+                {
+                    "description": "Track [RELAY2_NO] on B.Cu, length 7.1554 mm",
+                    "pos": {
+                        "x": 83.6392,
+                        "y": 19.38
+                    },
+                    "uuid": "a583d69c-590d-4927-bb08-d5d2b393470c"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                },
+                {
+                    "description": "Track [SPI_CS_3V3] on B.Cu, length 22.6908 mm",
+                    "pos": {
+                        "x": 117.5796,
+                        "y": 16.368
+                    },
+                    "uuid": "c5ac2830-0fee-4ec1-b45c-bc2dd4d96476"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MOSI_1V8] on B.Cu, length 14.1641 mm",
+                    "pos": {
+                        "x": 116.5275,
+                        "y": 22.1447
+                    },
+                    "uuid": "ac769031-32c1-4935-ab1c-c801c2f4b496"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_IRQ_1V8] on B.Cu, length 11.4570 mm",
+                    "pos": {
+                        "x": 108.8313,
+                        "y": 32.663
+                    },
+                    "uuid": "a0813415-4c46-4509-9454-2153b70bb869"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [RELAY2_GATE] on B.Cu, length 25.8438 mm",
+                    "pos": {
+                        "x": 117.1044,
+                        "y": 15.42
+                    },
+                    "uuid": "6f440068-1360-45dc-82e8-e9e5220e334e"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [+3V3_L] on B.Cu, length 9.0660 mm",
+                    "pos": {
+                        "x": 117.1656,
+                        "y": 22.1809
+                    },
+                    "uuid": "7aa1bda3-0090-4347-8875-5733566c8a6c"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MOSI_3V3] on B.Cu, length 8.9743 mm",
+                    "pos": {
+                        "x": 117.9348,
+                        "y": 25.3136
+                    },
+                    "uuid": "97361c24-7c3f-4b78-9d21-f3705c91dcc5"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_1V8] on B.Cu, length 11.9231 mm",
+                    "pos": {
+                        "x": 108.99,
+                        "y": 33.2677
+                    },
+                    "uuid": "3a328002-9e4b-46c5-b02a-aa832ed12ffd"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                },
+                {
+                    "description": "Track [GND_BYPASS] on B.Cu, length 18.9312 mm",
+                    "pos": {
+                        "x": 104.6896,
+                        "y": 30.0808
+                    },
+                    "uuid": "fde1b918-5fc7-4e13-a877-b7a65b287588"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets SPI_MOSI_3V3 and DWM_EXTRX_3V3)",
+            "items": [
+                {
+                    "description": "Track [SPI_MOSI_3V3] on B.Cu, length 2.8974 mm",
+                    "pos": {
+                        "x": 111.589,
+                        "y": 31.6594
+                    },
+                    "uuid": "b5e5d009-d855-4184-81c6-6959c938b4bb"
+                },
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 19.1500 mm",
+                    "pos": {
+                        "x": 111.6625,
+                        "y": 14.0
+                    },
+                    "uuid": "c434a612-2f2b-42c9-bb7e-b52d14d511b9"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0486 mm)",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "61402da1-1024-41ce-9bf6-43fa1fd89a9c"
+                },
+                {
+                    "description": "Track [SPI_CLK_3V3] on F.Cu, length 1.2292 mm",
+                    "pos": {
+                        "x": 99.25,
+                        "y": 41.2625
+                    },
+                    "uuid": "c3638c77-c1dd-493f-856a-5201d98fa916"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0019 mm)",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 43.9125,
+                        "y": 4.0
+                    },
+                    "uuid": "482f2d30-2567-49c1-8179-d54c4b7a05f7"
+                },
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets SPI_MISO_3V3 and SPI_CLK_3V3)",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "61402da1-1024-41ce-9bf6-43fa1fd89a9c"
+                },
+                {
+                    "description": "Pad 4 [SPI_CLK_3V3] of U6 on F.Cu",
+                    "pos": {
+                        "x": 99.25,
+                        "y": 41.2625
+                    },
+                    "uuid": "f1aab73e-a28d-49fa-9ac8-854aa6a1594f"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.1241 mm)",
+            "items": [
+                {
+                    "description": "Track [+5V_ISO] on F.Cu, length 7.0116 mm",
+                    "pos": {
+                        "x": 93.4268,
+                        "y": 42.5616
+                    },
+                    "uuid": "0af332ef-c9db-40c8-8927-cff49b31f222"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "61402da1-1024-41ce-9bf6-43fa1fd89a9c"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [GND] on F.Cu, length 4.7818 mm",
+                    "pos": {
+                        "x": 95.3169,
+                        "y": 42.2099
+                    },
+                    "uuid": "3bfd9016-9ef4-42ea-a7d4-c9f2301cba27"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "61402da1-1024-41ce-9bf6-43fa1fd89a9c"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Items shorting two nets (nets +5V_ISO and SPI_MISO_3V3)",
+            "items": [
+                {
+                    "description": "Track [+5V_ISO] on F.Cu, length 7.0116 mm",
+                    "pos": {
+                        "x": 93.4268,
+                        "y": 42.5616
+                    },
+                    "uuid": "0af332ef-c9db-40c8-8927-cff49b31f222"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0991 mm)",
+            "items": [
+                {
+                    "description": "Track [+5V_ISO] on F.Cu, length 7.0116 mm",
+                    "pos": {
+                        "x": 93.4268,
+                        "y": 42.5616
+                    },
+                    "uuid": "0af332ef-c9db-40c8-8927-cff49b31f222"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets GND and SPI_MISO_3V3)",
+            "items": [
+                {
+                    "description": "Track [GND] on F.Cu, length 4.7818 mm",
+                    "pos": {
+                        "x": 95.3169,
+                        "y": 42.2099
+                    },
+                    "uuid": "3bfd9016-9ef4-42ea-a7d4-c9f2301cba27"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Track [GND] on F.Cu, length 4.7818 mm",
+                    "pos": {
+                        "x": 95.3169,
+                        "y": 42.2099
+                    },
+                    "uuid": "3bfd9016-9ef4-42ea-a7d4-c9f2301cba27"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Tracks crossing",
+            "items": [
+                {
+                    "description": "Track [+3V3_L] on B.Cu, length 8.7717 mm",
+                    "pos": {
+                        "x": 43.775,
+                        "y": 20.3777
+                    },
+                    "uuid": "3ca7fd0c-b350-4b49-a547-80ff6b2849e8"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 36.2625 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "f160f1fa-c741-4d21-be7c-a94339386c46"
+                }
+            ],
+            "severity": "error",
+            "type": "tracks_crossing"
+        },
+        {
+            "description": "Clearance violation (zone clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 58.0,
+                        "y": 1.0
+                    },
+                    "uuid": "dc12287e-cb5b-46a2-b015-8a5eb7a26943"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "3d191f2e-de4b-4be3-a174-12a12ca03bd7"
+                },
+                {
+                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "pos": {
+                        "x": 58.0,
+                        "y": 1.0
+                    },
+                    "uuid": "dc12287e-cb5b-46a2-b015-8a5eb7a26943"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Clearance violation (netclass 'Default' clearance 0.1500 mm; actual 0.0125 mm)",
+            "items": [
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "782fa636-8b6a-4ece-82fa-33cff20551ab"
+                },
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                }
+            ],
+            "severity": "error",
+            "type": "clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.1375 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "782fa636-8b6a-4ece-82fa-33cff20551ab"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Items shorting two nets (nets +1V8 and SPI_MISO_3V3)",
+            "items": [
+                {
+                    "description": "Track [+1V8] on B.Cu, length 2.3257 mm",
+                    "pos": {
+                        "x": 61.5136,
+                        "y": 42.2445
+                    },
+                    "uuid": "7f1c182e-4dd7-4e4b-9b39-dfdad102e342"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 52.8375 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 42.2625
+                    },
+                    "uuid": "b13c7dba-ab17-4e78-a76a-d37a71eac9df"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Items shorting two nets (nets SPI_MISO_3V3 and +1V8)",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 52.8375 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 42.2625
+                    },
+                    "uuid": "b13c7dba-ab17-4e78-a76a-d37a71eac9df"
+                },
+                {
+                    "description": "Track [+1V8] on B.Cu, length 5.3025 mm",
+                    "pos": {
+                        "x": 66.8161,
+                        "y": 42.2445
+                    },
+                    "uuid": "ce69cfac-3099-4572-a7e9-01d03cd03fbc"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Items shorting two nets (nets +1V8 and SPI_MISO_3V3)",
+            "items": [
+                {
+                    "description": "Track [+1V8] on B.Cu, length 4.3718 mm",
+                    "pos": {
+                        "x": 69.9074,
+                        "y": 39.1532
+                    },
+                    "uuid": "7b9cca9a-e017-4e00-9b0d-11c94da00d0c"
+                },
+                {
+                    "description": "Track [SPI_MISO_3V3] on B.Cu, length 52.8375 mm",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 42.2625
+                    },
+                    "uuid": "b13c7dba-ab17-4e78-a76a-d37a71eac9df"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.1375 mm)",
+            "items": [
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                },
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "782fa636-8b6a-4ece-82fa-33cff20551ab"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint C1",
+                    "pos": {
+                        "x": 103.0,
+                        "y": 32.0
+                    },
+                    "uuid": "10fdb6a2-41a0-46c4-877b-ff7b315284f0"
+                },
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint C42",
+                    "pos": {
+                        "x": 64.0,
+                        "y": 16.0
+                    },
+                    "uuid": "288676dd-a7f9-4c55-9ac1-f84bd2c8be9a"
+                },
+                {
+                    "description": "Footprint SK1",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 14.0
+                    },
+                    "uuid": "7663764d-2c3f-494e-a472-a10c68518e52"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint R31",
+                    "pos": {
+                        "x": 99.0,
+                        "y": 16.0
+                    },
+                    "uuid": "363e03c0-fb36-4b8d-935e-c4400783acd7"
+                },
+                {
+                    "description": "Footprint SK1",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 14.0
+                    },
+                    "uuid": "7663764d-2c3f-494e-a472-a10c68518e52"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint J1",
+                    "pos": {
+                        "x": 5.625,
+                        "y": 8.0
+                    },
+                    "uuid": "3752bf98-cd36-43db-a29b-69b8e5ec0154"
+                },
+                {
+                    "description": "Footprint U3",
+                    "pos": {
+                        "x": 8.0,
+                        "y": 23.0
+                    },
+                    "uuid": "70c0777b-3d34-4edc-a45b-78da9fb0f983"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK1",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 14.0
+                    },
+                    "uuid": "7663764d-2c3f-494e-a472-a10c68518e52"
+                },
+                {
+                    "description": "Footprint R41",
+                    "pos": {
+                        "x": 113.0,
+                        "y": 16.0
+                    },
+                    "uuid": "927e02e4-8bb8-403e-9550-c9f8379ddde4"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK1",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 14.0
+                    },
+                    "uuid": "7663764d-2c3f-494e-a472-a10c68518e52"
+                },
+                {
+                    "description": "Footprint R32",
+                    "pos": {
+                        "x": 106.0,
+                        "y": 16.0
+                    },
+                    "uuid": "c313d012-bc36-46a1-b59a-f5bbacb3a349"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK1",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 14.0
+                    },
+                    "uuid": "7663764d-2c3f-494e-a472-a10c68518e52"
+                },
+                {
+                    "description": "Footprint R14",
+                    "pos": {
+                        "x": 59.0,
+                        "y": 14.0
+                    },
+                    "uuid": "d1832d4d-8e18-44f5-97af-0ea7d4571892"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint C92",
+                    "pos": {
+                        "x": 63.0,
+                        "y": 32.0
+                    },
+                    "uuid": "a7195607-4d96-41db-bfdb-58a761726114"
+                },
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint R15",
+                    "pos": {
+                        "x": 96.0,
+                        "y": 32.0
+                    },
+                    "uuid": "b1fae4f0-e272-4296-a2d4-c7bc7d11b422"
+                },
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint C97",
+                    "pos": {
+                        "x": 107.0,
+                        "y": 41.0
+                    },
+                    "uuid": "bd63f33a-8bb9-47c5-97f6-5f502351f87f"
+                },
+                {
+                    "description": "Footprint D3",
+                    "pos": {
+                        "x": 106.0,
+                        "y": 39.0
+                    },
+                    "uuid": "ca8c3353-b08f-4574-8ffd-5d16080cd4bb"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                },
+                {
+                    "description": "Footprint C96",
+                    "pos": {
+                        "x": 91.0,
+                        "y": 32.0
+                    },
+                    "uuid": "c7e5ea2e-ff72-4e34-9996-10cf5ecb63a7"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                },
+                {
+                    "description": "Footprint U7",
+                    "pos": {
+                        "x": 107.0,
+                        "y": 31.0
+                    },
+                    "uuid": "caeb0978-f520-4744-9749-4eaa9a456779"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Courtyards overlap",
+            "items": [
+                {
+                    "description": "Footprint SK2",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 34.32
+                    },
+                    "uuid": "c27eb272-4c63-42ff-b6a8-2f08535f22f1"
+                },
+                {
+                    "description": "Footprint U14",
+                    "pos": {
+                        "x": 114.0,
+                        "y": 31.0
+                    },
+                    "uuid": "def26195-0ac2-4c6c-9112-e57223c66739"
+                }
+            ],
+            "severity": "error",
+            "type": "courtyards_overlap"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 10 [<no net>] of SK1",
+                    "pos": {
+                        "x": 84.86,
+                        "y": 14.0
+                    },
+                    "uuid": "f5460e92-54ea-411b-9481-0c17badd2a47"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 11 [<no net>] of SK1",
+                    "pos": {
+                        "x": 87.4,
+                        "y": 14.0
+                    },
+                    "uuid": "251587ea-dede-4578-b606-94c55c351fba"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 12 [<no net>] of SK1",
+                    "pos": {
+                        "x": 89.94,
+                        "y": 14.0
+                    },
+                    "uuid": "fb7569d4-a4cb-46ec-a56b-a15217f90785"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 13 [<no net>] of SK1",
+                    "pos": {
+                        "x": 92.48,
+                        "y": 14.0
+                    },
+                    "uuid": "fe602ea1-52b1-48bf-8389-063651bd4247"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 14 [<no net>] of SK1",
+                    "pos": {
+                        "x": 95.02,
+                        "y": 14.0
+                    },
+                    "uuid": "d6f58997-7372-4936-8f41-29dfdf9b2c28"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 15 [UART_RX] of SK1",
+                    "pos": {
+                        "x": 97.56,
+                        "y": 14.0
+                    },
+                    "uuid": "071a683a-703c-44b1-b6f3-2c5dbb1824b2"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 16 [UART_TX] of SK1",
+                    "pos": {
+                        "x": 100.1,
+                        "y": 14.0
+                    },
+                    "uuid": "fd366b06-8a82-441e-a55c-d511406e9dba"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 17 [<no net>] of SK1",
+                    "pos": {
+                        "x": 102.64,
+                        "y": 14.0
+                    },
+                    "uuid": "cb962026-d958-4bba-82f0-6020fd66d2d5"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 18 [<no net>] of SK1",
+                    "pos": {
+                        "x": 105.18,
+                        "y": 14.0
+                    },
+                    "uuid": "dbbfb16a-28f2-49aa-ae1a-0649a38658c2"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 43.9125,
+                        "y": 4.0
+                    },
+                    "uuid": "482f2d30-2567-49c1-8179-d54c4b7a05f7"
+                },
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 19 [<no net>] of SK1",
+                    "pos": {
+                        "x": 107.72,
+                        "y": 14.0
+                    },
+                    "uuid": "95d409fe-7d24-44ea-86f4-d69eac6659a7"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [SPI_MISO_3V3] on F.Cu, length 2.2361 mm",
+                    "pos": {
+                        "x": 97.75,
+                        "y": 42.2625
+                    },
+                    "uuid": "61402da1-1024-41ce-9bf6-43fa1fd89a9c"
+                },
+                {
+                    "description": "Pad 4 [SPI_CLK_3V3] of U6 on F.Cu",
+                    "pos": {
+                        "x": 99.25,
+                        "y": 41.2625
+                    },
+                    "uuid": "f1aab73e-a28d-49fa-9ac8-854aa6a1594f"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Rear solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [DWM_EXTRX_3V3] on B.Cu, length 29.3425 mm",
+                    "pos": {
+                        "x": 82.32,
+                        "y": 14.0
+                    },
+                    "uuid": "a854816f-6cc0-4007-9bda-2f9a2a44faf9"
+                },
+                {
+                    "description": "PTH pad 20 [<no net>] of SK1",
+                    "pos": {
+                        "x": 110.26,
+                        "y": 14.0
+                    },
+                    "uuid": "7537a0c7-f24a-4c5e-8c6e-de81338bfa37"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Via [SPI_MISO_3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 44.9125,
+                        "y": 6.0
+                    },
+                    "uuid": "782fa636-8b6a-4ece-82fa-33cff20551ab"
+                },
+                {
+                    "description": "Pad 1 [+1V8_BYPASS] of C27 on F.Cu",
+                    "pos": {
+                        "x": 44.225,
+                        "y": 6.0
+                    },
+                    "uuid": "a860628f-6149-4cdb-8bd9-4d6875fc4f35"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Circle on Edge.Cuts",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 3.0
+                    },
+                    "uuid": "4317ba06-d1b8-4254-a921-65aa8fc75503"
+                },
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 3.005,
+                        "y": 3.88
+                    },
+                    "uuid": "0ccb2621-811b-4d20-931b-04e24dfc9524"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Circle on Edge.Cuts",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 3.0
+                    },
+                    "uuid": "4317ba06-d1b8-4254-a921-65aa8fc75503"
+                },
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 3.005,
+                        "y": 13.12
+                    },
+                    "uuid": "6e293bc4-ec81-46de-b399-d1bcb82c9f34"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Circle on Edge.Cuts",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 43.0
+                    },
+                    "uuid": "5b8963ad-b2de-482f-a1c5-4f4b1dc3cd92"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 42.26
+                    },
+                    "uuid": "5276b594-437e-4b01-bd46-69912dd50c3c"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Circle on Edge.Cuts",
+                    "pos": {
+                        "x": 3.0,
+                        "y": 43.0
+                    },
+                    "uuid": "5b8963ad-b2de-482f-a1c5-4f4b1dc3cd92"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 54.11,
+                        "y": 42.26
+                    },
+                    "uuid": "1079ff24-8cbe-437b-83cb-1eea7620cb18"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Segment of D3 on F.Silkscreen",
+                    "pos": {
+                        "x": 102.49,
+                        "y": 40.65
+                    },
+                    "uuid": "b302546e-eb21-4e87-a4d1-37adbe605195"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 5.325,
+                        "y": 13.12
+                    },
+                    "uuid": "84adf2a9-9798-43c3-b9f2-b277399b18b6"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 22.704
+                    },
+                    "uuid": "ebb23095-3ea2-4cda-bd86-4d5a41c844c3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 3.005,
+                        "y": 11.5
+                    },
+                    "uuid": "00f87edf-fbbf-4b3d-9aa4-7a58d674f99a"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 11.54
+                    },
+                    "uuid": "e25b816c-985c-4767-b428-5b7031e62a8f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 3.005,
+                        "y": 11.5
+                    },
+                    "uuid": "00f87edf-fbbf-4b3d-9aa4-7a58d674f99a"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 22.704
+                    },
+                    "uuid": "ebb23095-3ea2-4cda-bd86-4d5a41c844c3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 3.005,
+                        "y": 12.6
+                    },
+                    "uuid": "8018c652-2ddb-40da-a5b1-54d5c86d89ff"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 22.704
+                    },
+                    "uuid": "ebb23095-3ea2-4cda-bd86-4d5a41c844c3"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 18.245,
+                        "y": 3.88
+                    },
+                    "uuid": "0ed2cd87-69a7-47f7-8b2b-05f955c01f3a"
+                },
+                {
+                    "description": "Segment of U3 on F.Silkscreen",
+                    "pos": {
+                        "x": 4.39,
+                        "y": 11.54
+                    },
+                    "uuid": "e25b816c-985c-4767-b428-5b7031e62a8f"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        }
+    ]
+}

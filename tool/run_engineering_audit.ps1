@@ -3,6 +3,8 @@ $ErrorActionPreference = "Stop"
 $KiCadRoot = "C:\Program Files\KiCad\10.0\bin"
 $KiCadPython = Join-Path $KiCadRoot "python.exe"
 
+$env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb;C:\Mypcb\engine"
+
 if (Test-Path $KiCadPython) {
   $Project = "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
   $PcbFile = "outputs\kicad\$Project\$Project.kicad_pcb"

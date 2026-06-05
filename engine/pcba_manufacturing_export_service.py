@@ -10,6 +10,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import sys
+sys.path.append(str(Path(__file__).parent))
+
 from board_verification_manifest import manifest_gate_failure
 from design_evidence_gate import audit_design_evidence_gate
 from production_model_gate import audit_production_model_gate
@@ -629,7 +632,7 @@ DO NOT START FABRICATION until:
         if gerber_dir.exists():
             gerber_output = output_dir / "gerber"
             gerber_output.mkdir(exist_ok=True)
-            for gbr_file in gerber_dir.glob("*.gbr"):
+            for gbr_file in sorted(path for path in gerber_dir.iterdir() if path.is_file()):
                 dest = gerber_output / gbr_file.name
                 dest.write_bytes(gbr_file.read_bytes())
                 files.append(ManufacturingFile(
@@ -785,19 +788,63 @@ DO NOT START FABRICATION until:
 
 
 def main() -> int:
+    def resolve_from_manifest(manifest_file: Path) -> dict[str, Path]:
+        if not manifest_file.exists():
+            return {}
+        try:
+            data = json.loads(manifest_file.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+        pcb = Path(str(data.get("pcb_file", "")))
+        drc = Path(str(data.get("drc_report_file", "")))
+        manufacturing_dir = drc.parent if drc else Path()
+        position_candidates = [
+            manufacturing_dir / "position" / "pick_and_place.csv",
+            manufacturing_dir / "position" / "position.csv",
+        ]
+        position = next((candidate for candidate in position_candidates if candidate.exists()), Path())
+        resolved: dict[str, Path] = {}
+        if pcb.exists():
+            resolved["pcb_file"] = pcb
+        if drc.exists():
+            resolved["drc_report_file"] = drc
+            resolved["gerber_dir"] = manufacturing_dir / "gerber"
+            resolved["position_file"] = position
+        return resolved
+
     parser = argparse.ArgumentParser(description="Generate complete PCBA manufacturing export package.")
     parser.add_argument("--output-dir", default="outputs/pcba_manufacturing")
-    parser.add_argument("--pcb-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb")
+    parser.add_argument("--pcb-file", default="")
     parser.add_argument("--bom-file", default="BOM.csv")
     parser.add_argument("--netlist-file", default="outputs/phase1/AI_NETLIST_V1.json")
-    parser.add_argument("--layout-status-file", default="outputs/phase4/layout_optimization_status.json")
-    parser.add_argument("--drc-report-file", default="outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/manufacturing/drc_report.json")
-    parser.add_argument("--verification-manifest-file", default="outputs/engineering/board_verification_manifest.json")
-    parser.add_argument("--gerber-dir", default="outputs/phase4/gerber")
-    parser.add_argument("--position-file", default="outputs/phase4/position/position.csv")
+    parser.add_argument("--layout-status-file", default="")
+    parser.add_argument("--drc-report-file", default="")
+    parser.add_argument("--verification-manifest-file", default="assets/generated/board_verification_manifest.json")
+    parser.add_argument("--gerber-dir", default="")
+    parser.add_argument("--position-file", default="")
     parser.add_argument("--manufacturer", default="PCBWay", choices=list(MANUFACTURER_SPECS.keys()))
     parser.add_argument("--asset-output", default="assets/generated/pcba_manufacturing_package.json")
     args = parser.parse_args()
+
+    manifest_path = Path(args.verification_manifest_file)
+    resolved = resolve_from_manifest(manifest_path)
+    pcb_file = Path(args.pcb_file) if args.pcb_file else resolved.get(
+        "pcb_file",
+        Path("outputs/kicad/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb"),
+    )
+    drc_report_file = Path(args.drc_report_file) if args.drc_report_file else resolved.get(
+        "drc_report_file",
+        pcb_file.parent / "manufacturing" / "drc_report.json",
+    )
+    gerber_dir = Path(args.gerber_dir) if args.gerber_dir else resolved.get(
+        "gerber_dir",
+        drc_report_file.parent / "gerber",
+    )
+    position_file = Path(args.position_file) if args.position_file else resolved.get(
+        "position_file",
+        drc_report_file.parent / "position" / "pick_and_place.csv",
+    )
+    layout_status_file = Path(args.layout_status_file) if args.layout_status_file else Path("__missing_layout_status__")
 
     bom_csv = ""
     bom_path = Path(args.bom_file)
@@ -808,17 +855,17 @@ def main() -> int:
     service.validate_export_gate(
         netlist_file=Path(args.netlist_file),
         bom_file=bom_path,
-        layout_status_file=Path(args.layout_status_file),
-        pcb_file=Path(args.pcb_file),
-        drc_report_file=Path(args.drc_report_file),
-        verification_manifest_file=Path(args.verification_manifest_file),
+        layout_status_file=layout_status_file,
+        pcb_file=pcb_file,
+        drc_report_file=drc_report_file,
+        verification_manifest_file=manifest_path,
     )
     package = service.create_complete_package(
         output_dir=Path(args.output_dir),
-        pcb_file=Path(args.pcb_file),
+        pcb_file=pcb_file,
         bom_csv=bom_csv,
-        gerber_dir=Path(args.gerber_dir),
-        position_file=Path(args.position_file) if args.position_file else None,
+        gerber_dir=gerber_dir,
+        position_file=position_file if position_file.exists() else None,
         netlist_file=Path(args.netlist_file) if args.netlist_file else None,
     )
 

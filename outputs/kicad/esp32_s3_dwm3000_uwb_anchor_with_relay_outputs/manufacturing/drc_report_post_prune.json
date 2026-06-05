@@ -1,0 +1,3661 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-30T07:38:45",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "schematic_parity": [
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C90",
+                    "pos": {
+                        "x": 94.0,
+                        "y": 82.0
+                    },
+                    "uuid": "40a0273e-a54d-43cf-ac92-13fb19c24ab5"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C91",
+                    "pos": {
+                        "x": 123.0,
+                        "y": 22.0
+                    },
+                    "uuid": "4083bd77-3452-4b9e-89f3-c560cf2bbee6"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C92",
+                    "pos": {
+                        "x": 147.0,
+                        "y": 34.0
+                    },
+                    "uuid": "6426c8ec-6694-43e2-b274-6af98c86d28d"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C93",
+                    "pos": {
+                        "x": 118.0,
+                        "y": 26.0
+                    },
+                    "uuid": "b4dab6c2-8f46-489d-bcca-54289894ff72"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C94",
+                    "pos": {
+                        "x": 122.0,
+                        "y": 34.0
+                    },
+                    "uuid": "a121c34f-e87b-48a2-822b-ef538e4b2c31"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C95",
+                    "pos": {
+                        "x": 122.0,
+                        "y": 44.0
+                    },
+                    "uuid": "6e7451c4-82d6-4d46-abe6-a06a3ae52a5b"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C96",
+                    "pos": {
+                        "x": 126.0,
+                        "y": 48.0
+                    },
+                    "uuid": "71140f31-98e6-4aa0-82e2-1b15f18688cb"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C97",
+                    "pos": {
+                        "x": 128.0,
+                        "y": 44.0
+                    },
+                    "uuid": "c070a74a-d845-4883-8413-cb55b7424327"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "C_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint C98",
+                    "pos": {
+                        "x": 128.0,
+                        "y": 36.0
+                    },
+                    "uuid": "4376ddee-33ed-4d6c-8837-e84e2411857e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Fuse_1206_3216Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint F1",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 12.0
+                    },
+                    "uuid": "13b0f393-7abd-436b-af27-01413f7214be"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_F1_2_88] of F1 on F.Cu",
+                    "pos": {
+                        "x": 21.4,
+                        "y": 12.0
+                    },
+                    "uuid": "0b725905-5782-4e45-9597-1a6fc46daf27"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint J1",
+                    "pos": {
+                        "x": 10.0,
+                        "y": 25.0
+                    },
+                    "uuid": "8f0dc934-e87e-4fe8-8963-7da9765c76aa"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [NC_J1_2_1] of J1",
+                    "pos": {
+                        "x": 13.5,
+                        "y": 25.0
+                    },
+                    "uuid": "15b57052-2c0f-40f5-8d8b-56570f3660b7"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SMA_Amphenol_901-144_Vertical doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint J2",
+                    "pos": {
+                        "x": 152.0,
+                        "y": 16.0
+                    },
+                    "uuid": "a145a006-76e4-4ee0-b67f-327fb311129b"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [GND] of J2",
+                    "pos": {
+                        "x": 149.46,
+                        "y": 13.46
+                    },
+                    "uuid": "9bc60a05-cc9b-4630-b529-7c7ebdd3ec90"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [GND] of J2",
+                    "pos": {
+                        "x": 149.46,
+                        "y": 18.54
+                    },
+                    "uuid": "74939957-9cd5-4a99-ac05-7289aa71ba02"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [GND] of J2",
+                    "pos": {
+                        "x": 154.54,
+                        "y": 13.46
+                    },
+                    "uuid": "b17bec33-62a9-494d-9596-b3900bd2e24a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [GND] of J2",
+                    "pos": {
+                        "x": 154.54,
+                        "y": 18.54
+                    },
+                    "uuid": "deebcea3-9be3-416d-95cf-29d384f09774"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Relay_SPDT_Omron-G5Q-1 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint K1",
+                    "pos": {
+                        "x": 25.0,
+                        "y": 76.0
+                    },
+                    "uuid": "6d04c50f-706f-4eea-b77f-60ec6c5e16c0"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [NC_K1_2_65] of K1",
+                    "pos": {
+                        "x": 35.16,
+                        "y": 76.0
+                    },
+                    "uuid": "bf36d9c9-8507-4b5b-b1ea-2433c1becbb2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 3 [NC_K1_3_66] of K1",
+                    "pos": {
+                        "x": 42.78,
+                        "y": 76.0
+                    },
+                    "uuid": "082c2bf2-267c-434d-b554-bd23748cb53f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 4 [NC_K1_4_67] of K1",
+                    "pos": {
+                        "x": 40.24,
+                        "y": 68.38
+                    },
+                    "uuid": "8504cd6b-3f0b-4e61-909e-9f03d9d4486f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 5 [NC_K1_5_68] of K1",
+                    "pos": {
+                        "x": 25.0,
+                        "y": 68.38
+                    },
+                    "uuid": "3554982a-11a1-457f-a408-a634239f865f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Relay_SPDT_Omron-G5Q-1 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint K2",
+                    "pos": {
+                        "x": 67.0,
+                        "y": 88.0
+                    },
+                    "uuid": "d3fe2a8d-2057-48a2-840b-640852e4f24b"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [NC_K2_2_61] of K2",
+                    "pos": {
+                        "x": 77.16,
+                        "y": 88.0
+                    },
+                    "uuid": "7013a1b4-67a5-4308-92eb-1d8e15df0586"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 3 [NC_K2_3_62] of K2",
+                    "pos": {
+                        "x": 84.78,
+                        "y": 88.0
+                    },
+                    "uuid": "9de00f01-0a38-4690-80fe-428548de11fe"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 4 [NC_K2_4_63] of K2",
+                    "pos": {
+                        "x": 82.24,
+                        "y": 80.38
+                    },
+                    "uuid": "b9f690ac-a071-4456-818c-0ed3955a6c30"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 5 [NC_K2_5_64] of K2",
+                    "pos": {
+                        "x": 67.0,
+                        "y": 80.38
+                    },
+                    "uuid": "f8bec893-69dc-45aa-b3ea-2c61f2c0684c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "RV_Disc_D15.5mm_W4.5mm_P7.5mm doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint MOV1",
+                    "pos": {
+                        "x": 32.0,
+                        "y": 39.0
+                    },
+                    "uuid": "095ce366-e245-45ef-8de8-c8fed88f94ef"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 2 [NC_MOV1_2_87] of MOV1",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 41.0
+                    },
+                    "uuid": "781b8346-6609-4a1b-8108-2285f75fbb9d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R1",
+                    "pos": {
+                        "x": 90.0,
+                        "y": 87.0
+                    },
+                    "uuid": "ea50c1dc-3e7c-4e1d-9822-c9d436258088"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R1_1_59] of R1 on F.Cu",
+                    "pos": {
+                        "x": 89.175,
+                        "y": 87.0
+                    },
+                    "uuid": "bed2439f-22ae-4106-b573-281762baab3f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R1_2_60] of R1 on F.Cu",
+                    "pos": {
+                        "x": 90.825,
+                        "y": 87.0
+                    },
+                    "uuid": "8c197f6d-a230-4576-897d-73e35f40a03c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R2",
+                    "pos": {
+                        "x": 102.0,
+                        "y": 87.0
+                    },
+                    "uuid": "c4a44100-7bf3-4d67-9804-0c586aaf8b64"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R2_1_57] of R2 on F.Cu",
+                    "pos": {
+                        "x": 101.175,
+                        "y": 87.0
+                    },
+                    "uuid": "32c2d3c6-e53d-4ebd-9c29-d6c3f7ed6ee1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R2_2_58] of R2 on F.Cu",
+                    "pos": {
+                        "x": 102.825,
+                        "y": 87.0
+                    },
+                    "uuid": "211aef5e-0f2d-49b6-8f6f-417b7ecc53af"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R3",
+                    "pos": {
+                        "x": 120.0,
+                        "y": 87.0
+                    },
+                    "uuid": "cbe9c87a-54f3-45fc-9234-c7f9eb41146c"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R3_1_55] of R3 on F.Cu",
+                    "pos": {
+                        "x": 119.175,
+                        "y": 87.0
+                    },
+                    "uuid": "0c93eb06-0249-412a-80d6-70f7f847a9da"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R3_2_56] of R3 on F.Cu",
+                    "pos": {
+                        "x": 120.825,
+                        "y": 87.0
+                    },
+                    "uuid": "b9791539-e529-4cb5-aa9f-146af535664c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R4",
+                    "pos": {
+                        "x": 138.0,
+                        "y": 87.0
+                    },
+                    "uuid": "ef466832-eefc-4ce7-9e98-863efa40398f"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R4_1_53] of R4 on F.Cu",
+                    "pos": {
+                        "x": 137.175,
+                        "y": 87.0
+                    },
+                    "uuid": "839c7c86-40bd-4d1f-b1c8-3f0b7eb20871"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R4_2_54] of R4 on F.Cu",
+                    "pos": {
+                        "x": 138.825,
+                        "y": 87.0
+                    },
+                    "uuid": "04dbab15-b4a0-4fb2-a65d-146f77c115c4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R5",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 92.0
+                    },
+                    "uuid": "c2556dda-a39e-492e-a89c-9f13e1e94305"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R5_1_51] of R5 on F.Cu",
+                    "pos": {
+                        "x": 11.175,
+                        "y": 92.0
+                    },
+                    "uuid": "2b7ef3a9-2577-45a8-9e09-d63ae014c054"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R5_2_52] of R5 on F.Cu",
+                    "pos": {
+                        "x": 12.825,
+                        "y": 92.0
+                    },
+                    "uuid": "6e0d8e00-5f5a-4aeb-98f3-4353cd2b19b4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R6",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 92.0
+                    },
+                    "uuid": "a7a7e14d-dbd2-4c64-bb70-43ce358f3e31"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R6_1_49] of R6 on F.Cu",
+                    "pos": {
+                        "x": 29.175,
+                        "y": 92.0
+                    },
+                    "uuid": "fe53f46f-246e-496e-847e-4637fda31d26"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R6_2_50] of R6 on F.Cu",
+                    "pos": {
+                        "x": 30.825,
+                        "y": 92.0
+                    },
+                    "uuid": "c5f8d83c-8fd6-4da9-a328-80ce74d40801"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R7",
+                    "pos": {
+                        "x": 48.0,
+                        "y": 92.0
+                    },
+                    "uuid": "38a4f7a1-e267-41b6-87ba-c7b9f547ac88"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R7_1_47] of R7 on F.Cu",
+                    "pos": {
+                        "x": 47.175,
+                        "y": 92.0
+                    },
+                    "uuid": "c84e0bff-d99b-46f6-80e5-fbf131ef4842"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R7_2_48] of R7 on F.Cu",
+                    "pos": {
+                        "x": 48.825,
+                        "y": 92.0
+                    },
+                    "uuid": "a3bd2f79-a566-472e-b04a-b713fdcf5b07"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R8",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 92.0
+                    },
+                    "uuid": "d33aa7d0-85ae-46cd-a68f-df6084111fdc"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R8_1_45] of R8 on F.Cu",
+                    "pos": {
+                        "x": 65.175,
+                        "y": 92.0
+                    },
+                    "uuid": "4c3d987b-ca84-40b1-9bc5-7d832b860b27"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R8_2_46] of R8 on F.Cu",
+                    "pos": {
+                        "x": 66.825,
+                        "y": 92.0
+                    },
+                    "uuid": "b72fec32-8fd9-499c-b1fd-e4aa7301cb23"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R9",
+                    "pos": {
+                        "x": 84.0,
+                        "y": 92.0
+                    },
+                    "uuid": "ce8b5a83-6ff1-4eef-8385-34d8ee62d9f7"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R9_1_43] of R9 on F.Cu",
+                    "pos": {
+                        "x": 83.175,
+                        "y": 92.0
+                    },
+                    "uuid": "139f654e-dec4-4ab7-b9ec-fa6eb56de5c7"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R9_2_44] of R9 on F.Cu",
+                    "pos": {
+                        "x": 84.825,
+                        "y": 92.0
+                    },
+                    "uuid": "cd7db812-3860-4fde-93a6-5e3ca017620c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R10",
+                    "pos": {
+                        "x": 122.0,
+                        "y": 61.82
+                    },
+                    "uuid": "dd4234ed-bec0-41b2-a78c-cd4673c6bec1"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (SPI_CS_3V3_MCU) doesn't match net given by schematic (SPI_CS_3V3)",
+            "items": [
+                {
+                    "description": "Pad 1 [SPI_CS_3V3_MCU] of R10 on F.Cu",
+                    "pos": {
+                        "x": 121.175,
+                        "y": 61.82
+                    },
+                    "uuid": "7de24321-dc76-4e69-bcae-f6b78384d545"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (SPI_CS_3V3) doesn't match net given by schematic (SPI_CS_3V3_MCU)",
+            "items": [
+                {
+                    "description": "Pad 2 [SPI_CS_3V3] of R10 on F.Cu",
+                    "pos": {
+                        "x": 122.825,
+                        "y": 61.82
+                    },
+                    "uuid": "d63ed134-a104-4b15-9980-fb27c553c0b2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R11",
+                    "pos": {
+                        "x": 122.0,
+                        "y": 77.09
+                    },
+                    "uuid": "4d81bb56-e302-40ea-b597-c85e32edad64"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R11_2_42] of R11 on F.Cu",
+                    "pos": {
+                        "x": 122.825,
+                        "y": 77.09
+                    },
+                    "uuid": "6c3a64b3-7f5a-4f0e-ba14-ac19106cc1a1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R12",
+                    "pos": {
+                        "x": 108.0,
+                        "y": 78.36
+                    },
+                    "uuid": "605ec0fe-ee4c-4674-9ece-8fb83fac4089"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R12_2_41] of R12 on F.Cu",
+                    "pos": {
+                        "x": 108.825,
+                        "y": 78.36
+                    },
+                    "uuid": "3c05507a-727e-4c84-8226-517ccd6979ae"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R13",
+                    "pos": {
+                        "x": 96.0,
+                        "y": 77.63
+                    },
+                    "uuid": "0a139f05-edd0-4395-b261-caf8d16c1f5a"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R13_2_40] of R13 on F.Cu",
+                    "pos": {
+                        "x": 96.825,
+                        "y": 77.63
+                    },
+                    "uuid": "37c53b25-6f07-46c9-b9c6-5f536412e40d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R16",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 96.0
+                    },
+                    "uuid": "7fe83591-d588-49bb-8ea0-48f268bbaacf"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R16_1_38] of R16 on F.Cu",
+                    "pos": {
+                        "x": 29.175,
+                        "y": 96.0
+                    },
+                    "uuid": "16c3b04f-237e-4d2d-9a41-f874a7492415"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R16_2_39] of R16 on F.Cu",
+                    "pos": {
+                        "x": 30.825,
+                        "y": 96.0
+                    },
+                    "uuid": "eca72fd4-59b5-4cb8-b903-3268ed5bd0d9"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R17",
+                    "pos": {
+                        "x": 48.0,
+                        "y": 96.0
+                    },
+                    "uuid": "22da1540-cb29-47f7-bf80-aaf79865b5db"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R17_1_36] of R17 on F.Cu",
+                    "pos": {
+                        "x": 47.175,
+                        "y": 96.0
+                    },
+                    "uuid": "52637418-aad7-44c1-bab6-ec46e546ecf5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R17_2_37] of R17 on F.Cu",
+                    "pos": {
+                        "x": 48.825,
+                        "y": 96.0
+                    },
+                    "uuid": "8c520563-9da2-411c-ab8b-5c689e3a2de6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R18",
+                    "pos": {
+                        "x": 66.0,
+                        "y": 96.0
+                    },
+                    "uuid": "55fc28ec-bd8a-44ac-b6a5-677276c44303"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R18_1_34] of R18 on F.Cu",
+                    "pos": {
+                        "x": 65.175,
+                        "y": 96.0
+                    },
+                    "uuid": "62fd188f-c20a-430e-8f3d-a3ef58ed0cf3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R18_2_35] of R18 on F.Cu",
+                    "pos": {
+                        "x": 66.825,
+                        "y": 96.0
+                    },
+                    "uuid": "ed4f3746-96e9-43f7-bbfd-7c429033849c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R19",
+                    "pos": {
+                        "x": 84.0,
+                        "y": 96.0
+                    },
+                    "uuid": "e0a9effd-afac-4a19-974b-8c501b01baa5"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R19_1_32] of R19 on F.Cu",
+                    "pos": {
+                        "x": 83.175,
+                        "y": 96.0
+                    },
+                    "uuid": "d8594be2-2b5a-4780-a923-be2768176ac8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R19_2_33] of R19 on F.Cu",
+                    "pos": {
+                        "x": 84.825,
+                        "y": 96.0
+                    },
+                    "uuid": "96099b99-b4a2-452c-90e8-9ada538b64f6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R20",
+                    "pos": {
+                        "x": 102.0,
+                        "y": 92.0
+                    },
+                    "uuid": "694aa3b3-b74f-42e4-b6ab-94fd9918982e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R20_1_30] of R20 on F.Cu",
+                    "pos": {
+                        "x": 101.175,
+                        "y": 92.0
+                    },
+                    "uuid": "77c017a3-78cf-4973-b341-6496dde3d1d4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R20_2_31] of R20 on F.Cu",
+                    "pos": {
+                        "x": 102.825,
+                        "y": 92.0
+                    },
+                    "uuid": "071f0486-6e8e-4748-8ca1-e37ca8b325a2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R21",
+                    "pos": {
+                        "x": 120.0,
+                        "y": 92.0
+                    },
+                    "uuid": "d2be3c97-3e31-4c45-87f6-8bc8f9fd81fb"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R21_1_28] of R21 on F.Cu",
+                    "pos": {
+                        "x": 119.175,
+                        "y": 92.0
+                    },
+                    "uuid": "1e061e5e-90c8-44cc-b16e-8f7b638e4b56"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R21_2_29] of R21 on F.Cu",
+                    "pos": {
+                        "x": 120.825,
+                        "y": 92.0
+                    },
+                    "uuid": "59686bfd-044e-43dd-9a99-c200f000601e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R22",
+                    "pos": {
+                        "x": 138.0,
+                        "y": 92.0
+                    },
+                    "uuid": "2a4cfb62-5b61-4cf6-a9ca-83c0933efd5b"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R22_1_26] of R22 on F.Cu",
+                    "pos": {
+                        "x": 137.175,
+                        "y": 92.0
+                    },
+                    "uuid": "f53adf0d-511c-465a-9b98-6f839b6acf75"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R22_2_27] of R22 on F.Cu",
+                    "pos": {
+                        "x": 138.825,
+                        "y": 92.0
+                    },
+                    "uuid": "f42f0d0b-4ba0-4a7c-94bf-6608bbc1ee13"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R23",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 96.0
+                    },
+                    "uuid": "f69d03ff-8d40-45ac-913f-014f3b8d7026"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R23_1_24] of R23 on F.Cu",
+                    "pos": {
+                        "x": 11.175,
+                        "y": 96.0
+                    },
+                    "uuid": "830e06b4-de9e-42c0-956e-c3517c0c20cb"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R23_2_25] of R23 on F.Cu",
+                    "pos": {
+                        "x": 12.825,
+                        "y": 96.0
+                    },
+                    "uuid": "9b36c5ca-4c1b-4d36-9b05-e4eaa6e96522"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R24",
+                    "pos": {
+                        "x": 30.0,
+                        "y": 88.0
+                    },
+                    "uuid": "7571cf47-40ec-4094-8109-ff37f977040a"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R24_1_22] of R24 on F.Cu",
+                    "pos": {
+                        "x": 29.175,
+                        "y": 88.0
+                    },
+                    "uuid": "1ccee05a-197a-4b74-b4c2-a88d705a15c5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R24_2_23] of R24 on F.Cu",
+                    "pos": {
+                        "x": 30.825,
+                        "y": 88.0
+                    },
+                    "uuid": "43b314f3-2eeb-49ed-9cfe-eba48fb7ce89"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R25",
+                    "pos": {
+                        "x": 48.0,
+                        "y": 88.0
+                    },
+                    "uuid": "20848455-e61f-49ad-b947-3e9d128aca3d"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R25_1_20] of R25 on F.Cu",
+                    "pos": {
+                        "x": 47.175,
+                        "y": 88.0
+                    },
+                    "uuid": "c78edf2c-2060-4bbd-bab0-5acd4e04ea5b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R25_2_21] of R25 on F.Cu",
+                    "pos": {
+                        "x": 48.825,
+                        "y": 88.0
+                    },
+                    "uuid": "a380bbd1-8784-425d-b626-a61023727e84"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R26",
+                    "pos": {
+                        "x": 62.0,
+                        "y": 88.0
+                    },
+                    "uuid": "21e72d01-d6ba-403a-8407-d5c5982e5a86"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R26_1_18] of R26 on F.Cu",
+                    "pos": {
+                        "x": 61.175,
+                        "y": 88.0
+                    },
+                    "uuid": "74bb53b2-82ed-4ce7-ac18-9ce2dd81f311"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R26_2_19] of R26 on F.Cu",
+                    "pos": {
+                        "x": 62.825,
+                        "y": 88.0
+                    },
+                    "uuid": "ecf1ad86-b5d4-4340-985a-27ed18e135b0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R27",
+                    "pos": {
+                        "x": 90.0,
+                        "y": 92.0
+                    },
+                    "uuid": "03e2b98f-ad58-43c8-a8f8-597e5de67301"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R27_1_16] of R27 on F.Cu",
+                    "pos": {
+                        "x": 89.175,
+                        "y": 92.0
+                    },
+                    "uuid": "e50f05ce-9e1c-40b9-896f-7bee9b1f93f5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R27_2_17] of R27 on F.Cu",
+                    "pos": {
+                        "x": 90.825,
+                        "y": 92.0
+                    },
+                    "uuid": "40ac164e-85d3-4826-849d-7263063ca223"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R34",
+                    "pos": {
+                        "x": 102.0,
+                        "y": 96.0
+                    },
+                    "uuid": "07d2e61d-69bf-452d-b6d2-75a9a7c099df"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R34_1_14] of R34 on F.Cu",
+                    "pos": {
+                        "x": 101.175,
+                        "y": 96.0
+                    },
+                    "uuid": "0ba8257e-ac9b-4333-891d-be49c6ba2015"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R34_2_15] of R34 on F.Cu",
+                    "pos": {
+                        "x": 102.825,
+                        "y": 96.0
+                    },
+                    "uuid": "cbb46a29-71e7-45d2-a58e-0334dfb2e352"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R35",
+                    "pos": {
+                        "x": 120.0,
+                        "y": 96.0
+                    },
+                    "uuid": "42175a4f-900b-4d5b-a3fc-098ce90e74b0"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R35_1_12] of R35 on F.Cu",
+                    "pos": {
+                        "x": 119.175,
+                        "y": 96.0
+                    },
+                    "uuid": "76692038-001d-4a23-91b4-8f1ac9616ccc"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R35_2_13] of R35 on F.Cu",
+                    "pos": {
+                        "x": 120.825,
+                        "y": 96.0
+                    },
+                    "uuid": "18b4f831-48fc-4787-b7c4-cf7feba6a7ec"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R36",
+                    "pos": {
+                        "x": 138.0,
+                        "y": 96.0
+                    },
+                    "uuid": "6f3e38be-06a0-45fd-8838-ab398cb7fbe5"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R36_1_10] of R36 on F.Cu",
+                    "pos": {
+                        "x": 137.175,
+                        "y": 96.0
+                    },
+                    "uuid": "849ff552-2386-4e00-8266-f2b115593420"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R36_2_11] of R36 on F.Cu",
+                    "pos": {
+                        "x": 138.825,
+                        "y": 96.0
+                    },
+                    "uuid": "3fc5bab0-eaf7-4fdc-bbea-eb3e52c80821"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R37",
+                    "pos": {
+                        "x": 12.0,
+                        "y": 88.0
+                    },
+                    "uuid": "b4d75a3d-4c66-4dd6-ae89-b9205413628a"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R37_1_8] of R37 on F.Cu",
+                    "pos": {
+                        "x": 11.175,
+                        "y": 88.0
+                    },
+                    "uuid": "f78beb26-5cc2-4054-9060-dce5e14f0b07"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R37_2_9] of R37 on F.Cu",
+                    "pos": {
+                        "x": 12.825,
+                        "y": 88.0
+                    },
+                    "uuid": "5ae6f729-931c-4ada-bbcd-eef53e49b915"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R38",
+                    "pos": {
+                        "x": 36.0,
+                        "y": 92.0
+                    },
+                    "uuid": "6c2b0b4a-99c2-45eb-9c7e-c183b3026fd5"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R38_1_6] of R38 on F.Cu",
+                    "pos": {
+                        "x": 35.175,
+                        "y": 92.0
+                    },
+                    "uuid": "86018fea-1a22-4c16-b544-5d2bd3fa88b8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R38_2_7] of R38 on F.Cu",
+                    "pos": {
+                        "x": 36.825,
+                        "y": 92.0
+                    },
+                    "uuid": "8d0981aa-71f9-44a8-837b-861173bdf273"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R39",
+                    "pos": {
+                        "x": 54.0,
+                        "y": 92.0
+                    },
+                    "uuid": "898507d2-8155-4e10-9e31-02d429be0a96"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R39_1_4] of R39 on F.Cu",
+                    "pos": {
+                        "x": 53.175,
+                        "y": 92.0
+                    },
+                    "uuid": "b4bbf7d2-28fb-49b4-a610-8a082f771b06"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R39_2_5] of R39 on F.Cu",
+                    "pos": {
+                        "x": 54.825,
+                        "y": 92.0
+                    },
+                    "uuid": "63bbe06e-eb79-4f24-867f-2d8c2d60dfba"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint R40",
+                    "pos": {
+                        "x": 72.0,
+                        "y": 92.0
+                    },
+                    "uuid": "efcd6bd1-c85a-44e3-9c27-790cbea49aff"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_R40_1_2] of R40 on F.Cu",
+                    "pos": {
+                        "x": 71.175,
+                        "y": 92.0
+                    },
+                    "uuid": "8f36924e-3c91-48d0-af91-51bbd74900d0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 2 [NC_R40_2_3] of R40 on F.Cu",
+                    "pos": {
+                        "x": 72.825,
+                        "y": 92.0
+                    },
+                    "uuid": "55e00c13-a647-4310-887e-468fd32bb7ee"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "ESP32-S3-WROOM-1 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U1",
+                    "pos": {
+                        "x": 94.0,
+                        "y": 62.0
+                    },
+                    "uuid": "5a20eb8d-1f3d-4115-9b37-7bcda3ffad62"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (+3V3)",
+            "items": [
+                {
+                    "description": "Pad 1 [GND] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 56.74
+                    },
+                    "uuid": "a9c6d094-77f5-4dac-8e62-fac4929c60c8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+3V3) doesn't match net given by schematic (DWM_IRQ_3V3)",
+            "items": [
+                {
+                    "description": "Pad 3 [+3V3] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 59.28
+                    },
+                    "uuid": "d26855a2-784d-4242-8e95-726abf67e855"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_4_98) doesn't match net given by schematic (DWM_EXT_TX_3V3)",
+            "items": [
+                {
+                    "description": "Pad 4 [NC_U1_4_98] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 60.55
+                    },
+                    "uuid": "67ed9ee4-3cdd-4b3f-a154-6db4c303c289"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_5_99) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 5 [NC_U1_5_99] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 61.82
+                    },
+                    "uuid": "d0d8fd2f-8538-4bb4-b8fe-b010150aa5ec"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_6_100) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 6 [NC_U1_6_100] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 63.09
+                    },
+                    "uuid": "b67097dd-6cce-4610-a8e6-4adf3fafa972"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_7_101) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 7 [NC_U1_7_101] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 64.36
+                    },
+                    "uuid": "4a522150-cf50-400f-aa2f-28ba974e181a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (DWM_EXT_TX_3V3) doesn't match net given by schematic (SPI_CS_3V3_MCU)",
+            "items": [
+                {
+                    "description": "Pad 8 [DWM_EXT_TX_3V3] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 65.63
+                    },
+                    "uuid": "11bd41c2-53be-4336-8295-9fb84c91bda5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_9_102) doesn't match net given by schematic (SPI_MOSI_3V3_MCU)",
+            "items": [
+                {
+                    "description": "Pad 9 [NC_U1_9_102] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 66.9
+                    },
+                    "uuid": "5ce5dd82-0667-41bb-8ae0-dddd8a3d6e8a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_10_103) doesn't match net given by schematic (SPI_CLK_3V3_MCU)",
+            "items": [
+                {
+                    "description": "Pad 10 [NC_U1_10_103] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 68.17
+                    },
+                    "uuid": "b512ac0d-8618-4a6b-8f36-b8f03121269e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U1_11_104) doesn't match net given by schematic (SPI_MISO_3V3_MCU)",
+            "items": [
+                {
+                    "description": "Pad 11 [NC_U1_11_104] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 69.44
+                    },
+                    "uuid": "87aad6b2-24b5-45ba-ba72-7a3ce9f6a344"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 12 [NC_U1_12_105] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 70.71
+                    },
+                    "uuid": "a2f2f876-3a20-4799-b445-df7909f6baca"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 13 [NC_U1_13_106] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 71.98
+                    },
+                    "uuid": "8989f3c8-a9b5-4fef-ac10-fba6917b07ca"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 14 [NC_U1_14_107] of U1 on F.Cu",
+                    "pos": {
+                        "x": 85.25,
+                        "y": 73.25
+                    },
+                    "uuid": "6fd9aedc-1928-4814-8ccb-049a762cd30c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 15 [NC_U1_15_108] of U1 on F.Cu",
+                    "pos": {
+                        "x": 87.015,
+                        "y": 74.5
+                    },
+                    "uuid": "c528db07-2c55-432c-b963-66adb642c1b5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 16 [NC_U1_16_109] of U1 on F.Cu",
+                    "pos": {
+                        "x": 88.285,
+                        "y": 74.5
+                    },
+                    "uuid": "87740646-8503-4a99-be8c-b5824155153e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 17 [NC_U1_17_110] of U1 on F.Cu",
+                    "pos": {
+                        "x": 89.555,
+                        "y": 74.5
+                    },
+                    "uuid": "4b5412b2-f799-4ce9-8187-1fe934170cd6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 18 [NC_U1_18_111] of U1 on F.Cu",
+                    "pos": {
+                        "x": 90.825,
+                        "y": 74.5
+                    },
+                    "uuid": "14a55591-1fb7-49a5-87ad-22f942b6b5b7"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 19 [NC_U1_19_112] of U1 on F.Cu",
+                    "pos": {
+                        "x": 92.095,
+                        "y": 74.5
+                    },
+                    "uuid": "717cfe6b-c93d-49ec-a19a-4d74f7b85060"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 20 [NC_U1_20_113] of U1 on F.Cu",
+                    "pos": {
+                        "x": 93.365,
+                        "y": 74.5
+                    },
+                    "uuid": "2c30cd42-8fa8-442c-849e-2588e0bebe87"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 21 [NC_U1_21_114] of U1 on F.Cu",
+                    "pos": {
+                        "x": 94.635,
+                        "y": 74.5
+                    },
+                    "uuid": "988a0e4f-fe19-4e1f-9ce3-16c1a7f288a1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 22 [NC_U1_22_115] of U1 on F.Cu",
+                    "pos": {
+                        "x": 95.905,
+                        "y": 74.5
+                    },
+                    "uuid": "f3c87349-3092-4ab1-ad1a-7ac8ca4d56fb"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 23 [NC_U1_23_116] of U1 on F.Cu",
+                    "pos": {
+                        "x": 97.175,
+                        "y": 74.5
+                    },
+                    "uuid": "488f6f9a-059a-4495-b87a-a221fd8768af"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 24 [NC_U1_24_117] of U1 on F.Cu",
+                    "pos": {
+                        "x": 98.445,
+                        "y": 74.5
+                    },
+                    "uuid": "aba3607f-ab9e-450d-ae8d-33fb5c2af623"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 25 [NC_U1_25_118] of U1 on F.Cu",
+                    "pos": {
+                        "x": 99.715,
+                        "y": 74.5
+                    },
+                    "uuid": "e6e3b249-f125-4a2d-8be5-4c75a08af7e9"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 26 [NC_U1_26_119] of U1 on F.Cu",
+                    "pos": {
+                        "x": 100.985,
+                        "y": 74.5
+                    },
+                    "uuid": "b7e786a4-d64c-49e5-aa9f-72099735f924"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 27 [NC_U1_27_120] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 73.25
+                    },
+                    "uuid": "2d6c2320-82e0-4dd8-befc-5ec725c1488c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 28 [NC_U1_28_121] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 71.98
+                    },
+                    "uuid": "19542cfd-4fee-42a2-9700-53e0d463d1ff"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 29 [NC_U1_29_122] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 70.71
+                    },
+                    "uuid": "3e800d9f-f3e2-4640-9d68-fd7c5149bbe1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 30 [NC_U1_30_123] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 69.44
+                    },
+                    "uuid": "090a3cf1-edf2-4081-bf9b-89c696553229"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 31 [NC_U1_31_124] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 68.17
+                    },
+                    "uuid": "000ed5b4-5d1d-4d76-9565-c642a5fbabec"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 32 [DWM_IRQ_3V3] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 66.9
+                    },
+                    "uuid": "51530723-72b7-4cbf-b4d9-37f397d0d465"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 33 [SPI_MISO_3V3_MCU] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 65.63
+                    },
+                    "uuid": "8b62a0ef-2c8d-4497-8fbb-3294b3f7dcd3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 34 [SPI_CLK_3V3_MCU] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 64.36
+                    },
+                    "uuid": "6075e6dd-e652-4b8d-a3cb-e76de7f3e4e2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 35 [SPI_MOSI_3V3_MCU] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 63.09
+                    },
+                    "uuid": "6dd2d8aa-1e8d-4287-a482-583819c8dec8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 36 [SPI_CS_3V3_MCU] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 61.82
+                    },
+                    "uuid": "9a66b90c-e683-4147-a917-bef3244770ab"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 37 [NC_U1_37_125] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 60.55
+                    },
+                    "uuid": "9e3596d0-f712-4025-a41b-4db8660de3cd"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 38 [NC_U1_38_126] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 59.28
+                    },
+                    "uuid": "d46de7c7-1c66-4ccf-8bc8-15ae985a546d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 39 [GND] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 58.01
+                    },
+                    "uuid": "6d24f60b-39e4-4462-b328-d9f650c8affd"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 40 [GND] of U1 on F.Cu",
+                    "pos": {
+                        "x": 102.75,
+                        "y": 56.74
+                    },
+                    "uuid": "b1f9c1c3-f7ff-400c-a31b-b8282d2eb59f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 91.1,
+                        "y": 63.76
+                    },
+                    "uuid": "6e805dfd-934d-4348-81e8-e9ba4d07d66a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 91.1,
+                        "y": 65.16
+                    },
+                    "uuid": "93494f2b-b462-4c77-9cf9-4a974e96a246"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 91.8,
+                        "y": 63.06
+                    },
+                    "uuid": "75b27617-95e5-4f17-87d2-7ff2da8537f0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 91.8,
+                        "y": 64.46
+                    },
+                    "uuid": "19e6a418-8b31-43d7-81c0-77aa12e624bd"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 91.8,
+                        "y": 65.86
+                    },
+                    "uuid": "38dc828f-e3c7-4d55-a568-9a9271a9a02f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 92.5,
+                        "y": 63.76
+                    },
+                    "uuid": "b76f5e80-d680-4362-a42f-1509d2ff967b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 41 [GND] of U1 on F.Cu",
+                    "pos": {
+                        "x": 92.5,
+                        "y": 64.46
+                    },
+                    "uuid": "118aa350-f552-4e50-b27c-718a0ea12db2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 92.5,
+                        "y": 65.16
+                    },
+                    "uuid": "2b28dd69-dcda-4d70-b98b-12b98f4adb1c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 93.2,
+                        "y": 63.06
+                    },
+                    "uuid": "dc7b9888-d1a9-41d5-aaa9-131da1f230f3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 93.2,
+                        "y": 64.46
+                    },
+                    "uuid": "38d21e0e-a05b-4cc1-8867-5115ed1e0f23"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 93.2,
+                        "y": 65.86
+                    },
+                    "uuid": "61b5b81a-43e0-40c8-bb9b-1f5aebf161a2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 93.9,
+                        "y": 63.76
+                    },
+                    "uuid": "2d90e7d2-4d87-4ed9-ae3a-ad02463acce3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 41 [GND] of U1",
+                    "pos": {
+                        "x": 93.9,
+                        "y": 65.16
+                    },
+                    "uuid": "50e32e9e-6ee3-4410-9fb7-564b5c39f6fc"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "OmniCircuit:DWM3000 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U2",
+                    "pos": {
+                        "x": 135.0,
+                        "y": 22.0
+                    },
+                    "uuid": "8ff6ed00-976f-4f61-ad17-fc82cf817579"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (+1V8)",
+            "items": [
+                {
+                    "description": "Pad 1 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 11.6
+                    },
+                    "uuid": "214fccd8-9f87-49e4-b2b7-d6bb169a140a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+1V8) doesn't match net given by schematic (SPI_CS_1V8)",
+            "items": [
+                {
+                    "description": "Pad 2 [+1V8] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 13.2
+                    },
+                    "uuid": "85847eda-d26a-4b04-86b8-ef444c9ad1a0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (SPI_CS_1V8) doesn't match net given by schematic (DWM_IRQ_1V8)",
+            "items": [
+                {
+                    "description": "Pad 3 [SPI_CS_1V8] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 14.8
+                    },
+                    "uuid": "5c10f584-4166-4713-a5f3-91716c5c16b7"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (DWM_EXT_TX_1V8)",
+            "items": [
+                {
+                    "description": "Pad 4 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 16.4
+                    },
+                    "uuid": "823f5e5a-4ad7-4708-acd0-9776d4081cef"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (UWB_RF_50R)",
+            "items": [
+                {
+                    "description": "Pad 5 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 18.0
+                    },
+                    "uuid": "42ec9a1a-536b-4311-a793-b3b1a4b4c19d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 7 [DWM_IRQ_1V8] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 21.200001
+                    },
+                    "uuid": "68489337-4577-4c76-ae44-590c61d69a83"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 8 [DWM_EXT_TX_1V8] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 22.8
+                    },
+                    "uuid": "63ab17c4-d8e1-41f1-9126-99dbf3dbf682"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 9 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 24.4
+                    },
+                    "uuid": "4e3f9a39-2ed9-4c39-b6fb-afaefa8d3bf9"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 10 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 26.0
+                    },
+                    "uuid": "60a105e6-8cfd-4bb2-b02e-4b8c2d2bbcd8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 11 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 27.6
+                    },
+                    "uuid": "12fdcfaf-03c6-4c6b-9f20-a26797233659"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 12 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 29.2
+                    },
+                    "uuid": "b6ed7a1d-26e1-4670-8e0e-732ac2aa2247"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 13 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 30.8
+                    },
+                    "uuid": "9754b5f9-74f5-4ad5-b9cc-ff225e3de3fc"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 14 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 127.0,
+                        "y": 32.4
+                    },
+                    "uuid": "c49ac394-dcb3-445d-a498-130a271a535c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 15 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 11.6
+                    },
+                    "uuid": "6741f7de-9f2f-419f-a926-e15b96a77e79"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 16 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 13.2
+                    },
+                    "uuid": "ea922e88-5c24-45e1-b9e0-b256ec9d5d74"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 17 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 14.8
+                    },
+                    "uuid": "fe4b0866-63c0-4dcf-86b5-d7ee19aea9e6"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 18 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 16.4
+                    },
+                    "uuid": "c02cd80a-418d-431a-99bf-0c938851acce"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 19 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 18.0
+                    },
+                    "uuid": "3378f6e7-5587-44c6-bd3d-5f7e128b117a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 20 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 19.6
+                    },
+                    "uuid": "1303e19d-40ab-4602-ab34-7dcb6ff63248"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 21 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 21.200001
+                    },
+                    "uuid": "2ff1a6a1-8470-4d4e-9f63-7423d8337915"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 22 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 22.8
+                    },
+                    "uuid": "ccc298a3-e5c9-4f5a-a5ce-ba441984087e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 23 [UWB_RF_50R] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 24.4
+                    },
+                    "uuid": "1245775d-6ae6-4889-9579-5d0c7fac64ee"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 24 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 26.0
+                    },
+                    "uuid": "be1bdc88-db96-4f83-9742-0465144b184c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 25 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 27.6
+                    },
+                    "uuid": "a6783e3a-876e-4982-81e2-ee00eb1c73d8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 26 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 29.2
+                    },
+                    "uuid": "04a7a638-cc21-46eb-8333-62527328cc86"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 27 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 30.8
+                    },
+                    "uuid": "39be69ef-190d-427b-926d-9f29b3a8144f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 28 [GND] of U2 on F.Cu",
+                    "pos": {
+                        "x": 143.0,
+                        "y": 32.4
+                    },
+                    "uuid": "925fb51b-9f56-4d07-bd35-1e5c83f22c54"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "WQFN-14-1EP_2.5x2.5mm_P0.5mm_EP1.45x1.45mm doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U3",
+                    "pos": {
+                        "x": 118.0,
+                        "y": 30.0
+                    },
+                    "uuid": "035a4644-2f11-475d-9929-e4d36e478958"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (SPI_CS_3V3) doesn't match net given by schematic (+3V3)",
+            "items": [
+                {
+                    "description": "Pad 2 [SPI_CS_3V3] of U3 on F.Cu",
+                    "pos": {
+                        "x": 116.7375,
+                        "y": 30.0
+                    },
+                    "uuid": "91af42ee-c5ba-473b-8324-f8dc1062b8ad"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U3_3_73) doesn't match net given by schematic (+1V8)",
+            "items": [
+                {
+                    "description": "Pad 3 [NC_U3_3_73] of U3 on F.Cu",
+                    "pos": {
+                        "x": 116.7375,
+                        "y": 30.5
+                    },
+                    "uuid": "0e4b2af0-5ab6-4cf1-9485-b59f54b8631e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U3_4_74) doesn't match net given by schematic (SPI_CS_3V3)",
+            "items": [
+                {
+                    "description": "Pad 4 [NC_U3_4_74] of U3 on F.Cu",
+                    "pos": {
+                        "x": 117.25,
+                        "y": 31.2625
+                    },
+                    "uuid": "6c0440c1-6d21-424e-94fa-a8aa8e50b695"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U3_5_75) doesn't match net given by schematic (SPI_CS_1V8)",
+            "items": [
+                {
+                    "description": "Pad 5 [NC_U3_5_75] of U3 on F.Cu",
+                    "pos": {
+                        "x": 117.75,
+                        "y": 31.2625
+                    },
+                    "uuid": "cf515c70-5dbe-4f77-aab8-361ce7ebd1f2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U3_6_76) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 6 [NC_U3_6_76] of U3 on F.Cu",
+                    "pos": {
+                        "x": 118.25,
+                        "y": 31.2625
+                    },
+                    "uuid": "223cafe7-7a23-4490-a751-db60adbc590d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 8 [+3V3] of U3 on F.Cu",
+                    "pos": {
+                        "x": 119.2625,
+                        "y": 30.5
+                    },
+                    "uuid": "5561ecc1-bba9-4e25-9776-cd7c550ceec9"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 9 [NC_U3_9_77] of U3 on F.Cu",
+                    "pos": {
+                        "x": 119.2625,
+                        "y": 30.0
+                    },
+                    "uuid": "4e749ed4-a996-49f2-9575-5d6e17e40de5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 10 [NC_U3_10_78] of U3 on F.Cu",
+                    "pos": {
+                        "x": 119.2625,
+                        "y": 29.5
+                    },
+                    "uuid": "67bab2eb-6e06-44c3-96e6-e16da2c8a119"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 11 [NC_U3_11_79] of U3 on F.Cu",
+                    "pos": {
+                        "x": 118.75,
+                        "y": 28.7375
+                    },
+                    "uuid": "7137cb46-e9b1-4bdc-85c6-37ab2b71bcf2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 12 [NC_U3_12_80] of U3 on F.Cu",
+                    "pos": {
+                        "x": 118.25,
+                        "y": 28.7375
+                    },
+                    "uuid": "8e4fb003-3912-4bc5-a4d4-35faae37ef23"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 13 [SPI_CS_1V8] of U3 on F.Cu",
+                    "pos": {
+                        "x": 117.75,
+                        "y": 28.7375
+                    },
+                    "uuid": "67b7859c-9adb-422f-9602-7194db21e7a8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 14 [+1V8] of U3 on F.Cu",
+                    "pos": {
+                        "x": 117.25,
+                        "y": 28.7375
+                    },
+                    "uuid": "9996c697-3174-4e0d-8b20-113199efc940"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 15 [GND] of U3 on F.Cu",
+                    "pos": {
+                        "x": 118.0,
+                        "y": 30.0
+                    },
+                    "uuid": "fe7e518d-26eb-455e-b553-ed8b8a1cab8c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SOT-363_SC-70-6 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U4",
+                    "pos": {
+                        "x": 122.0,
+                        "y": 40.0
+                    },
+                    "uuid": "a2d292a7-ddb4-4a4e-95b9-fa3453f93c4f"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (+1V8)",
+            "items": [
+                {
+                    "description": "Pad 2 [GND] of U4 on F.Cu",
+                    "pos": {
+                        "x": 121.1625,
+                        "y": 40.0
+                    },
+                    "uuid": "f13de788-d0d1-4acf-8fdc-4073bf32dbf9"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+1V8) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 6 [+1V8] of U4 on F.Cu",
+                    "pos": {
+                        "x": 122.8375,
+                        "y": 39.35
+                    },
+                    "uuid": "b4ae2684-11d4-4d84-bec3-2d3a103f580d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SOT-363_SC-70-6 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U5",
+                    "pos": {
+                        "x": 128.0,
+                        "y": 40.0
+                    },
+                    "uuid": "87f1a73f-786d-43a8-85ac-fbe871198265"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (+1V8)",
+            "items": [
+                {
+                    "description": "Pad 2 [GND] of U5 on F.Cu",
+                    "pos": {
+                        "x": 127.1625,
+                        "y": 40.0
+                    },
+                    "uuid": "8647aee5-c918-495f-84a6-0d5dd857b7e4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+1V8) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 6 [+1V8] of U5 on F.Cu",
+                    "pos": {
+                        "x": 128.8375,
+                        "y": 39.35
+                    },
+                    "uuid": "041fa953-1c0a-40ff-a139-94619338bbd4"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Converter_ACDC_Hi-Link_HLK-5Mxx doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U6",
+                    "pos": {
+                        "x": 28.0,
+                        "y": 20.0
+                    },
+                    "uuid": "4c33fdd7-6d73-406c-a745-647ac5853925"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (NC_U6_2_86) doesn't match net given by schematic (+5V_ISO)",
+            "items": [
+                {
+                    "description": "PTH pad 2 [NC_U6_2_86] of U6",
+                    "pos": {
+                        "x": 28.0,
+                        "y": 26.0
+                    },
+                    "uuid": "37da5dff-cb97-41d4-a004-1af7240d1f44"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+5V_ISO) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "PTH pad 3 [+5V_ISO] of U6",
+                    "pos": {
+                        "x": 61.6,
+                        "y": 14.0
+                    },
+                    "uuid": "3b19e2a0-fd5b-4c62-adbc-20efd0152283"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "PTH pad 4 [GND] of U6",
+                    "pos": {
+                        "x": 61.6,
+                        "y": 32.0
+                    },
+                    "uuid": "4fd1563c-4f93-494a-932c-87212ec58285"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SOIC-8_3.9x4.9mm_P1.27mm doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U7",
+                    "pos": {
+                        "x": 72.0,
+                        "y": 14.0
+                    },
+                    "uuid": "d175007d-d6bd-44bc-b3a3-161e55d3c4b5"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (NC_U7_1_82) doesn't match net given by schematic (+5V_ISO)",
+            "items": [
+                {
+                    "description": "Pad 1 [NC_U7_1_82] of U7 on F.Cu",
+                    "pos": {
+                        "x": 69.525,
+                        "y": 12.095
+                    },
+                    "uuid": "6d4e0197-631b-4a91-8657-37bde1d52f4f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+5V_ISO) doesn't match net given by schematic (+3V3)",
+            "items": [
+                {
+                    "description": "Pad 3 [+5V_ISO] of U7 on F.Cu",
+                    "pos": {
+                        "x": 69.525,
+                        "y": 14.635
+                    },
+                    "uuid": "dd241b9c-2ad3-470e-b230-fcf184497a00"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U7_4_83) doesn't match net given by schematic (+3V3)",
+            "items": [
+                {
+                    "description": "Pad 4 [NC_U7_4_83] of U7 on F.Cu",
+                    "pos": {
+                        "x": 69.525,
+                        "y": 15.905
+                    },
+                    "uuid": "271d2f60-1840-4468-bb31-df884e923f00"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (+3V3) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 5 [+3V3] of U7 on F.Cu",
+                    "pos": {
+                        "x": 74.475,
+                        "y": 15.905
+                    },
+                    "uuid": "61b503a1-44bd-4d74-a57d-ae490460bce2"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 6 [NC_U7_6_84] of U7 on F.Cu",
+                    "pos": {
+                        "x": 74.475,
+                        "y": 14.635
+                    },
+                    "uuid": "a6c5b42d-2c20-412f-9331-9b545fb94c4f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 7 [GND] of U7 on F.Cu",
+                    "pos": {
+                        "x": 74.475,
+                        "y": 13.365
+                    },
+                    "uuid": "a8054e08-3cbf-4141-b608-0b36b8a6a4b1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 8 [NC_U7_8_85] of U7 on F.Cu",
+                    "pos": {
+                        "x": 74.475,
+                        "y": 12.095
+                    },
+                    "uuid": "bdee76f1-d806-4dcb-8a65-eb55c1a7e80b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SOT-23-5 doesn't match footprint given by symbol ()",
+            "items": [
+                {
+                    "description": "Footprint U8",
+                    "pos": {
+                        "x": 82.0,
+                        "y": 14.0
+                    },
+                    "uuid": "8363760c-59d3-45ef-b412-68739f3637cc"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "Pad net (GND) doesn't match net given by schematic (+3V3)",
+            "items": [
+                {
+                    "description": "Pad 2 [GND] of U8 on F.Cu",
+                    "pos": {
+                        "x": 80.8625,
+                        "y": 14.0
+                    },
+                    "uuid": "4cfa6e18-3f7f-4a19-97ec-49d757eb3a8d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "Pad net (NC_U8_4_81) doesn't match net given by schematic (GND)",
+            "items": [
+                {
+                    "description": "Pad 4 [NC_U8_4_81] of U8 on F.Cu",
+                    "pos": {
+                        "x": 83.1375,
+                        "y": 14.95
+                    },
+                    "uuid": "f08372c2-a337-4175-8598-1b0befccbdcd"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "No corresponding pin found in schematic",
+            "items": [
+                {
+                    "description": "Pad 5 [+3V3] of U8 on F.Cu",
+                    "pos": {
+                        "x": 83.1375,
+                        "y": 13.05
+                    },
+                    "uuid": "7254de2e-e2e1-4aa3-b63e-1ee4f0b9a415"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        }
+    ],
+    "source": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Via [+3V3] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 80.8625,
+                        "y": 13.05
+                    },
+                    "uuid": "d4db6184-59d1-43c8-b94b-74e57afe3476"
+                },
+                {
+                    "description": "Pad 5 [+3V3] of U7 on F.Cu",
+                    "pos": {
+                        "x": 74.475,
+                        "y": 15.905
+                    },
+                    "uuid": "61b503a1-44bd-4d74-a57d-ae490460bce2"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": []
+}

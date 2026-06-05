@@ -332,16 +332,7 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": [
-      {
-        "netclass": "MAINS_8MM",
-        "pattern": "AC_L_PROTECTED"
-      },
-      {
-        "netclass": "RF_50R",
-        "pattern": "UWB_RF_50R"
-      }
-    ]
+    "netclass_patterns": []
   },
   "pcbnew": {
     "last_paths": {

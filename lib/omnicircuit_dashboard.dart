@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'controllers/netlist_controller.dart';
-import 'kicad_pipeline_panel.dart';
+import 'hitl_decision_panel.dart';
+import 'full_pipeline_panel.dart';
 import 'manufacturing_dashboard.dart';
 import 'models/ai_netlist.dart';
 import 'models/design_package.dart';
@@ -99,7 +100,9 @@ class _DashboardScaffold extends StatelessWidget {
     final designPackage = context.read<NetlistController>().designPackage;
     if (designPackage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Once tasarim paketi uretin.')),
+        const SnackBar(
+          content: Text('Once Guvenilir Tasarimi Uret akisini calistirin.'),
+        ),
       );
       return;
     }
@@ -136,8 +139,8 @@ class _WideLayout extends StatelessWidget {
     return const Column(
       children: [
         _WorkflowPanel(),
-        SizedBox(height: 16),
-        KiCadPipelinePanel(),
+        HitlDecisionPanel(),
+        FullPipelinePanel(),
         SizedBox(height: 16),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,8 +181,8 @@ class _CompactLayout extends StatelessWidget {
     return const Column(
       children: [
         _WorkflowPanel(),
-        SizedBox(height: 16),
-        KiCadPipelinePanel(),
+        HitlDecisionPanel(),
+        FullPipelinePanel(),
         SizedBox(height: 16),
         _InputPanel(),
         SizedBox(height: 16),
@@ -356,27 +359,10 @@ class _InputPanel extends StatelessWidget {
           ),
           _ImportStatus(fileName: controller.technicalNotesFileName),
           const SizedBox(height: 12),
-          _AiStatusBanner(controller: controller),
-          const SizedBox(height: 12),
           Wrap(
             spacing: 10,
             runSpacing: 10,
             children: [
-              FilledButton.icon(
-                onPressed: controller.isGenerating ? null : controller.generate,
-                icon: controller.isGenerating
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.auto_awesome),
-                label: Text(
-                  controller.isGenerating
-                      ? 'Sentezleniyor'
-                      : 'Tasarim Paketi Uret',
-                ),
-              ),
               OutlinedButton.icon(
                 onPressed: () =>
                     controller.updateRequest(NetlistController.defaultRequest),
@@ -831,10 +817,7 @@ class _InputEvidencePanel extends StatelessWidget {
                       style: const TextStyle(fontSize: 12),
                     ),
                     Expanded(
-                      child: Text(
-                        q.ask,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                      child: Text(q.ask, style: const TextStyle(fontSize: 12)),
                     ),
                   ],
                 ),
@@ -844,7 +827,10 @@ class _InputEvidencePanel extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   '… ve ${report.questions.length - 6} madde daha',
-                  style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
           ],
@@ -991,12 +977,12 @@ class _OutputWorkspace extends StatelessWidget {
     final controller = context.watch<NetlistController>();
     final designPackage = controller.designPackage;
     return _Panel(
-      title: 'Sematik / PCB / PCBA / Export',
+      title: 'Gercek Sematik / PCB / PCBA / Export',
       icon: Icons.precision_manufacturing,
       child: designPackage == null
           ? const _EmptyState(
               message:
-                  'Tasarim paketi uretildiginde sematik bloklar, PCB kurallari, PCBA ve export dosyalari burada acilir.',
+                  'Guvenilir Tasarimi Uret akisi tamamlandiginda gercek KiCad sematik, PCB, PCBA ve export dosyalari burada acilir.',
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1405,7 +1391,9 @@ class _SchematicPreview extends StatefulWidget {
 }
 
 class _SchematicPreviewState extends State<_SchematicPreview> {
-  static const _svgAssetPath =
+  static const _liveSvgPath =
+      r'C:\Mypcb\assets\generated\schematic.svg\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.svg';
+  static const _bundleFallback =
       'assets/generated/schematic.svg/esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.svg';
 
   String? _cleanedSvg;
@@ -1419,21 +1407,16 @@ class _SchematicPreviewState extends State<_SchematicPreview> {
   }
 
   Future<void> _loadSvg() async {
-    try {
-      final raw = await rootBundle.loadString(_svgAssetPath);
-      if (mounted) {
-        setState(() {
-          _cleanedSvg = _cleanKiCadSvgText(raw);
-          _loading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _error = e.toString();
-          _loading = false;
-        });
-      }
+    final svg = await _loadLiveSvg(
+      _liveSvgPath,
+      bundleFallback: _bundleFallback,
+    );
+    if (mounted) {
+      setState(() {
+        _cleanedSvg = svg;
+        _error = svg == null ? 'Schematic SVG bulunamadi.' : null;
+        _loading = false;
+      });
     }
   }
 
@@ -1448,19 +1431,18 @@ class _SchematicPreviewState extends State<_SchematicPreview> {
           margin: const EdgeInsets.only(bottom: 10),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFF3CD),
+            color: const Color(0xFFE8F5E9),
             borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: const Color(0xFFFFD966)),
+            border: Border.all(color: const Color(0xFFA5D6A7)),
           ),
           child: const Row(
             children: [
-              Icon(Icons.warning_amber, color: Color(0xFF856404), size: 18),
+              Icon(Icons.verified, color: Color(0xFF2E7D32), size: 18),
               SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Bu şematik AI + KiCad CLI tarafından üretilmiştir. '
-                  'Gerçek üretimden önce footprint ve netlist doğrulaması gerekmektedir.',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF856404)),
+                  'Gercek KiCad sematik artefakti gosteriliyor; guven durumu DRC, input evidence ve manifest raporlarindan gelir.',
+                  style: TextStyle(fontSize: 12, color: Color(0xFF2E7D32)),
                 ),
               ),
             ],
@@ -2348,89 +2330,6 @@ class _SectionTitle extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// AI Durum Banneri — Ollama bağlantı durumunu ve son sentez kaynağını gösterir
-// ---------------------------------------------------------------------------
-
-class _AiStatusBanner extends StatelessWidget {
-  const _AiStatusBanner({required this.controller});
-
-  final NetlistController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final status = controller.ollamaStatus;
-    final source = controller.lastSynthesisSource;
-
-    // Son sentezden sonra göster
-    final showSource = source.isNotEmpty;
-    final realAi = source == 'ai';
-
-    Color bgColor;
-    Color borderColor;
-    IconData icon;
-    String label;
-
-    if (status == null) {
-      bgColor = const Color(0xFFF4F7F8);
-      borderColor = Colors.grey.shade400;
-      icon = Icons.radio_button_unchecked;
-      label =
-          'AI durumu kontrol ediliyor... '
-          '(${controller.configuredProvider.toUpperCase()} / ${controller.configuredModel})';
-    } else if (status.connected) {
-      bgColor = showSource && realAi
-          ? const Color(0xFFE8F5E9)
-          : const Color(0xFFEAF7EF);
-      borderColor = Colors.green.shade400;
-      icon = Icons.smart_toy;
-      final modelLine = status.availableModels.isEmpty
-          ? status.model
-          : '${status.model} (${status.availableModels.length} model mevcut)';
-      label =
-          '${status.provider.toUpperCase()} bağlı — $modelLine'
-          '${showSource ? (realAi ? " ✓ Son sentez GERÇEK AI" : " ⚡ Son sentez deterministik motor") : ""}';
-    } else {
-      bgColor = const Color(0xFFFFF7E5);
-      borderColor = Colors.orange.shade400;
-      icon = Icons.wifi_off;
-      label =
-          '${status.provider.toUpperCase()} bağlanamadı'
-          '${status.error != null ? " — ${status.error}" : ""}'
-          '. Deterministik motor kullanılacak.';
-    }
-
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: borderColor),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: borderColor),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-            ),
-          ),
-          IconButton(
-            tooltip: 'AI bağlantısını yenile',
-            constraints: const BoxConstraints(maxHeight: 28, maxWidth: 28),
-            padding: EdgeInsets.zero,
-            icon: const Icon(Icons.refresh, size: 16),
-            onPressed: controller.refreshOllamaStatus,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// AI Hata Düzeltme Önerileri Paneli
 class _AiCorrectionProposalsPanel extends StatelessWidget {
   const _AiCorrectionProposalsPanel();
@@ -2477,25 +2376,36 @@ class _AiCorrectionProposalsPanel extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => controller.approveAllLowRisk(),
               icon: const Icon(Icons.auto_fix_high),
-              label: Text('${report.autoApplicableCount} Düşük Riskli Öneyi Onayla'),
+              label: Text(
+                '${report.autoApplicableCount} Düşük Riskli Öneyi Onayla',
+              ),
             ),
           if (report.autoApplicable.isNotEmpty) const SizedBox(height: 12),
           // Per-proposal cards
-          for (final proposal in report.proposals) _ProposalCard(proposal: proposal, controller: controller),
+          for (final proposal in report.proposals)
+            _ProposalCard(proposal: proposal, controller: controller),
           const SizedBox(height: 12),
           // Apply button
           if (report.proposals.any((p) => p.status == 'approved'))
             FilledButton.tonal(
-              onPressed: controller.isApplyingCorrections ? null : controller.applyApprovedCorrections,
+              onPressed: controller.isApplyingCorrections
+                  ? null
+                  : controller.applyApprovedCorrections,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   controller.isApplyingCorrections
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
                       : const Icon(Icons.check_circle),
                   const SizedBox(width: 8),
                   Text(
-                    controller.isApplyingCorrections ? 'Uygulanıyor...' : 'Onaylanan Önerileri Uygula',
+                    controller.isApplyingCorrections
+                        ? 'Uygulanıyor...'
+                        : 'Onaylanan Önerileri Uygula',
                   ),
                 ],
               ),
@@ -2508,10 +2418,7 @@ class _AiCorrectionProposalsPanel extends StatelessWidget {
 
 /// Tek bir düzeltme önerisinin kartı
 class _ProposalCard extends StatefulWidget {
-  const _ProposalCard({
-    required this.proposal,
-    required this.controller,
-  });
+  const _ProposalCard({required this.proposal, required this.controller});
 
   final AiCorrectionProposal proposal;
   final NetlistController controller;
@@ -2540,17 +2447,24 @@ class _ProposalCardState extends State<_ProposalCard> {
               children: [
                 Chip(
                   label: Text(p.errorCategory),
-                  backgroundColor: p.isSafetyCritical ? Colors.red.shade100 : Colors.orange.shade100,
+                  backgroundColor: p.isSafetyCritical
+                      ? Colors.red.shade100
+                      : Colors.orange.shade100,
                   labelStyle: TextStyle(
                     fontSize: 11,
-                    color: p.isSafetyCritical ? Colors.red.shade900 : Colors.orange.shade900,
+                    color: p.isSafetyCritical
+                        ? Colors.red.shade900
+                        : Colors.orange.shade900,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     p.humanReadable,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -2565,7 +2479,11 @@ class _ProposalCardState extends State<_ProposalCard> {
               ),
               child: Text(
                 p.aiProposalText,
-                style: TextStyle(fontSize: 12, color: Colors.blue.shade900, fontStyle: FontStyle.italic),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.blue.shade900,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -2574,9 +2492,15 @@ class _ProposalCardState extends State<_ProposalCard> {
               onTap: () => setState(() => _showReasoning = !_showReasoning),
               child: Row(
                 children: [
-                  Icon(_showReasoning ? Icons.expand_less : Icons.expand_more, size: 18),
+                  Icon(
+                    _showReasoning ? Icons.expand_less : Icons.expand_more,
+                    size: 18,
+                  ),
                   const SizedBox(width: 4),
-                  const Text('AI Gerekçesi', style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic)),
+                  const Text(
+                    'AI Gerekçesi',
+                    style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
+                  ),
                 ],
               ),
             ),
@@ -2598,8 +2522,8 @@ class _ProposalCardState extends State<_ProposalCard> {
                     color: p.confidence >= 0.8
                         ? Colors.green
                         : p.confidence >= 0.6
-                            ? Colors.orange
-                            : Colors.red,
+                        ? Colors.orange
+                        : Colors.red,
                     minHeight: 6,
                   ),
                 ),
@@ -2623,7 +2547,10 @@ class _ProposalCardState extends State<_ProposalCard> {
               Chip(
                 label: const Text('❓ Emin Değilim'),
                 backgroundColor: Colors.amber.shade100,
-                labelStyle: TextStyle(fontSize: 11, color: Colors.amber.shade900),
+                labelStyle: TextStyle(
+                  fontSize: 11,
+                  color: Colors.amber.shade900,
+                ),
               ),
             ],
             const SizedBox(height: 8),
@@ -2640,8 +2567,12 @@ class _ProposalCardState extends State<_ProposalCard> {
                   FilledButton(
                     onPressed: p.isSafetyCritical
                         ? () => ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Güvenlik kritik — manuel inceleme zorunlu')),
-                            )
+                            const SnackBar(
+                              content: Text(
+                                'Güvenlik kritik — manuel inceleme zorunlu',
+                              ),
+                            ),
+                          )
                         : () => widget.controller.approveProposal(p.id),
                     child: const Text('Onayla'),
                   ),
@@ -2653,14 +2584,14 @@ class _ProposalCardState extends State<_ProposalCard> {
                   p.status == 'approved'
                       ? '✓ Onaylandı'
                       : p.status == 'rejected'
-                          ? '✗ Reddedildi'
-                          : p.status,
+                      ? '✗ Reddedildi'
+                      : p.status,
                 ),
                 backgroundColor: p.status == 'approved'
                     ? Colors.green.shade100
                     : p.status == 'rejected'
-                        ? Colors.grey.shade300
-                        : Colors.blue.shade100,
+                    ? Colors.grey.shade300
+                    : Colors.blue.shade100,
               ),
           ],
         ),

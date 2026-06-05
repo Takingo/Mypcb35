@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'production_gate_service.dart';
+
 class PcbaManufacturingExportResult {
   const PcbaManufacturingExportResult({
     required this.success,
@@ -31,10 +33,12 @@ class PcbaManufacturingService {
   const PcbaManufacturingService({
     this.projectRoot = r'C:\Mypcb',
     this.kicadPython = r'C:\Program Files\KiCad\10.0\bin\python.exe',
+    this.productionGateService,
   });
 
   final String projectRoot;
   final String kicadPython;
+  final ProductionGateService? productionGateService;
 
   /// Generate complete PCBA manufacturing package for direct online submission.
   /// Supports: PCBWay, JLCPCB, Seeed Fusion
@@ -44,6 +48,37 @@ class PcbaManufacturingService {
     void Function(String)? onProgress,
   }) async {
     onProgress?.call('Starting PCBA manufacturing export for $manufacturer...');
+
+    final gateService =
+        productionGateService ??
+        ProductionGateService(projectRoot: projectRoot);
+    final gate = await gateService.loadSnapshot();
+    if (gate == null) {
+      return PcbaManufacturingExportResult(
+        success: false,
+        manufacturer: manufacturer,
+        outputDir: outputDir,
+        fileCount: 0,
+        boardWidthMm: 0,
+        boardHeightMm: 0,
+        componentCount: 0,
+        error:
+            'Production gate manifest not found. Run board verification before PCBA export.',
+      );
+    }
+    if (!gate.allowsManufacturing) {
+      return PcbaManufacturingExportResult(
+        success: false,
+        manufacturer: manufacturer,
+        outputDir: outputDir,
+        fileCount: 0,
+        boardWidthMm: 0,
+        boardHeightMm: 0,
+        componentCount: 0,
+        error:
+            'Production gate is locked: ${gate.blockers.join(' | ')}. ${gate.evidenceSummary}',
+      );
+    }
 
     final scriptPath =
         '$projectRoot\\engine\\pcba_manufacturing_export_service.py';

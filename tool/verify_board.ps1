@@ -12,7 +12,7 @@ $KiCadCli    = Join-Path $KiCadRoot "kicad-cli.exe"
 $env:KICAD_CONFIG_HOME = "C:\Mypcb\.kicad_config"
 $env:HOME              = "C:\Mypcb"
 $env:USERPROFILE       = "C:\Mypcb"
-$env:PYTHONPATH        = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
+$env:PYTHONPATH        = "$KiCadRoot\Lib\site-packages;C:\Mypcb;C:\Mypcb\engine"
 
 & $KiCadPython -m engine.kicad_automation_service `
   --netlist $Netlist --output-root $OutputRoot `

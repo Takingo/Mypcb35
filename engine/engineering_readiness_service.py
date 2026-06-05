@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import json
@@ -7,6 +7,9 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+import sys
+sys.path.append(str(Path(__file__).parent))
 
 from board_verification_manifest import manifest_gate_failure
 from design_evidence_gate import audit_design_evidence_gate

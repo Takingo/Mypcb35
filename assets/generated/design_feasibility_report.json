@@ -1,0 +1,70 @@
+{
+  "schema": "DESIGN_FEASIBILITY_V1",
+  "generated_at": "2026-06-05T04:10:07+00:00",
+  "status": "review",
+  "board_size_mm": [
+    130.0,
+    46.0
+  ],
+  "board_area_mm2": 5980.0,
+  "pcb_mounted_count": 180,
+  "total_component_count": 181,
+  "estimated_component_area_mm2": 8930.0,
+  "estimated_routing_utilization": 1.493,
+  "fixed_board_constraint": true,
+  "high_risk_blocks": {
+    "uwb_module": 1,
+    "ac_dc": 1,
+    "relay": 2,
+    "connector": 18,
+    "socket": 2,
+    "antenna": 1
+  },
+  "optional_reduction_candidates": {
+    "connector": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10",
+      "J11",
+      "J12",
+      "J13",
+      "J14",
+      "J15",
+      "J16",
+      "J17"
+    ],
+    "led": [
+      "LED1",
+      "LED2",
+      "LED3",
+      "LED4",
+      "LED5",
+      "LED6"
+    ],
+    "test_point": [
+      "TP1",
+      "TP2",
+      "TP3",
+      "TP4",
+      "TP5",
+      "TP6",
+      "TP7",
+      "TP8",
+      "TP9",
+      "TP10",
+      "TP11",
+      "TP12",
+      "TP13",
+      "TP14",
+      "TP15",
+      "TP16",
+      "TP17",
+      "TP18"
+    ]
+  },
+  "blocker_summary": "180 PCB-mounted components are dense for 130x46mm; estimated utilization=1.49, engineering review required.",
+  "recommended_actions": []
+}

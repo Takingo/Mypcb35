@@ -301,7 +301,16 @@ class EngineeringGateTest(unittest.TestCase):
             root = Path(tmp)
             bom = root / "BOM.csv"
             bom.write_text(
-                "ESP32-S3-WROOM-1,DWM3000,HLK-5M05,TXB0104",
+                "\n".join(
+                    [
+                        "Reference,Quantity,Value,Manufacturer,Part Number",
+                        "U1,1,MCU,Espressif,ESP32-S3-WROOM-1",
+                        "U2,1,UWB,Qorvo,DWM3000",
+                        "U6,1,AC/DC,Hi-Link,HLK-5M05",
+                        "U3,1,Level shifter,Texas Instruments,TXB0104",
+                        "SK1-SK2,2,Socket,Wurth,61302211821",
+                    ]
+                ),
                 encoding="utf-8",
             )
             netlist = root / "AI_NETLIST_V1.json"
@@ -330,7 +339,16 @@ class EngineeringGateTest(unittest.TestCase):
             root = Path(tmp)
             bom = root / "BOM.csv"
             bom.write_text(
-                "ESP32-S3-WROOM-1,DWM3000,HLK-5M05,TXB0104",
+                "\n".join(
+                    [
+                        "Reference,Quantity,Value,Manufacturer,Part Number",
+                        "U1,1,MCU,Espressif,ESP32-S3-WROOM-1",
+                        "U2,1,UWB,Qorvo,DWM3000",
+                        "U6,1,AC/DC,Hi-Link,HLK-5M05",
+                        "U3,1,Level shifter,Texas Instruments,TXB0104",
+                        "SK1-SK2,2,Socket,Wurth,61302211821",
+                    ]
+                ),
                 encoding="utf-8",
             )
             netlist = root / "AI_NETLIST_V1.json"
@@ -364,6 +382,7 @@ class EngineeringGateTest(unittest.TestCase):
                         "U3,1,Level shifter,Texas Instruments,TXB0104",
                         "U6,1,AC/DC,Hi-Link,HLK-5M05",
                         "K1-K2,2,Relay,Omron,G5Q-14-DC5",
+                        "SK1-SK2,2,Socket,Wurth,61302211821",
                         "R10-R13,4,100R,Yageo,RC0603FR-07100RL",
                         "OK1,1,Optocoupler,Sharp,PC817X2CSP9F",
                         "Q1,1,MOSFET,Onsemi,2N7002",
@@ -487,6 +506,18 @@ def _valid_netlist_json() -> str:
                     "type": "level_shifter",
                     "manufacturer": "Texas Instruments",
                     "part_number": "TXB0104",
+                },
+                {
+                    "ref": "SK1",
+                    "type": "socket",
+                    "manufacturer": "Wurth",
+                    "part_number": "61302211821",
+                },
+                {
+                    "ref": "SK2",
+                    "type": "socket",
+                    "manufacturer": "Wurth",
+                    "part_number": "61302211821",
                 },
             ],
             "nets": [

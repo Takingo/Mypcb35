@@ -1,0 +1,175 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-06-03T05:22:06",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.3",
+    "schematic_parity": [],
+    "source": "quantum_mind_uwb_rtls_anchor_v3_0.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [GND] on In2.Cu, length 1.1851 mm",
+                    "pos": {
+                        "x": 25.912,
+                        "y": 109.0
+                    },
+                    "uuid": "5d5dd4c2-6deb-4375-b278-8d3cac0fddd9"
+                },
+                {
+                    "description": "Track [GND] on F.Cu, length 0.0005 mm",
+                    "pos": {
+                        "x": 26.75,
+                        "y": 108.162
+                    },
+                    "uuid": "c26cc859-befb-4af0-b9f2-8a900542554d"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [GND] on In1.Cu, length 0.7248 mm",
+                    "pos": {
+                        "x": 28.75,
+                        "y": 21.2625
+                    },
+                    "uuid": "97ee8fa0-da61-49ca-ae74-b63563b9b05d"
+                },
+                {
+                    "description": "Pad 7 [GND] of U6 on F.Cu",
+                    "pos": {
+                        "x": 28.75,
+                        "y": 21.2625
+                    },
+                    "uuid": "11511cfd-2b05-4ec8-9d81-8828c947adbc"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [GND] on In2.Cu, length 33.0125 mm",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.5
+                    },
+                    "uuid": "5786371f-7745-42ba-9048-adf48ba82e6b"
+                },
+                {
+                    "description": "Pad 8 [GND] of U6 on F.Cu",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.5
+                    },
+                    "uuid": "9876e680-226d-477a-b91d-e5565f56d338"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Track [GND] on In1.Cu, length 0.2500 mm",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.75
+                    },
+                    "uuid": "dc5d4a33-4332-4733-be9b-07101fac377b"
+                },
+                {
+                    "description": "Track [GND] on In2.Cu, length 33.0125 mm",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.5
+                    },
+                    "uuid": "5786371f-7745-42ba-9048-adf48ba82e6b"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [GND] on In1.Cu, length 0.7248 mm",
+                    "pos": {
+                        "x": 28.75,
+                        "y": 21.2625
+                    },
+                    "uuid": "97ee8fa0-da61-49ca-ae74-b63563b9b05d"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [GND] on In1.Cu, length 0.2500 mm",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.75
+                    },
+                    "uuid": "dc5d4a33-4332-4733-be9b-07101fac377b"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        },
+        {
+            "description": "Track has unconnected end",
+            "items": [
+                {
+                    "description": "Track [GND] on In2.Cu, length 33.0125 mm",
+                    "pos": {
+                        "x": 29.2625,
+                        "y": 20.5
+                    },
+                    "uuid": "5786371f-7745-42ba-9048-adf48ba82e6b"
+                }
+            ],
+            "severity": "warning",
+            "type": "track_dangling"
+        }
+    ]
+}

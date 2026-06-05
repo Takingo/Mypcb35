@@ -1,6 +1,6 @@
 # Simulation Report
 
-Generated: 2026-05-27T14:36:19+00:00
+Generated: 2026-05-30T08:03:35+00:00
 Overall status: pass
 
 ## Power Budget
@@ -10,8 +10,8 @@ Overall status: pass
 - Evidence: First-order current budget from BOM assumptions.
 - Recommendation: Power rails have first-order current margin.
 - Metrics:
-  - relay_count: 0
-  - five_volt_load_ma: 420.0
+  - relay_count: 1
+  - five_volt_load_ma: 500.0
   - hlk_5m05_capacity_ma: 1000.0
   - three_v_three_load_ma: 440.0
   - tps54331_capacity_ma: 3000.0
@@ -49,13 +49,13 @@ Overall status: pass
 
 - Domain: PI
 - Status: pass
-- Evidence: Ilk-derece decoupling kapsama analizi (board): 13 kondansator / 8 aktif IC.
+- Evidence: Ilk-derece decoupling kapsama analizi (board): 9 kondansator / 8 aktif IC.
 - Recommendation: Decoupling kapsama ilk-derece yeterli; yerlesim mesafesi PCB'de dogrulanmali.
 - Metrics:
   - source: board
   - active_ic_count: 8
-  - decoupling_caps: 13
-  - ratio_caps_per_ic: 1.62
+  - decoupling_caps: 9
+  - ratio_caps_per_ic: 1.12
 
 ## AC Safety Clearance & Engineering Reality
 

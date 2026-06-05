@@ -11,7 +11,7 @@ aliases:
   - Brainmypcb
   - OmniCircuit Proje Hafizasi
 status: active
-updated: 2026-05-27
+updated: 2026-05-30
 ---
 
 # OmniCircuit AI Ana Harita
@@ -21,7 +21,31 @@ Bu klasor, **OmniCircuit AI** projesinin canli proje hafizasidir. Buradaki notla
 > [!success] Guncel Uretim Durumu
 > **KiCad DRC=0** + 5 otomatik simülasyon kontrolü + mühendis sign-off ile genel durum `production_candidate` (**%100, 9/9, 0 bloklayici**). Fabrication ZIP `package_ready`. Sign-off OLMADAN durum `review_required %89`'dur (REAL_SIMULATION insan onayi bekler). Fiziksel uretim icin yine uretici DFM + prototip onerilir (sistem bunu gizlemez).
 
-## Guncel Son Durum - 2026-05-27 (SON GÜNCELLEME)
+## Guncel Son Durum - 2026-05-30 (SON GÜNCELLEME)
+
+| Alan | Son durum |
+| --- | --- |
+| **SISTEM DURUMU** | **✓ PRODUCTION_CANDIDATE** — DRC 0/0/0/0, manifest production_candidate, fab ZIP package_ready |
+| **Hayalet komponent temizligi** | **TAMAM** — C99-C102 PCB'den pcbnew API ile (4 footprint) + sematik 8 (symbol) blogundan kaldirildi; parens balance=0 |
+| **PCB yapisal kurtarma** | `outputs/kicad/.../esp32_*.kicad_pcb` corrupt halden (a2307a4 commit) `ca68ad2` revizyonundan geri yuklendi; pcbnew temiz acabiliyor |
+| **Dangling temizligi (gercek)** | 16 öğe (via+track) silindi — subprocess pass loop yontemiyle (SWIG proxy invalidation bypass) |
+| **U7.5 +3V3 koprusu** | F.Cu track U7.5 (74.47, 15.90) → U8.1 (80.86, 13.05), 6.99 mm, 0.25 mm gen. — ghost decoupler bypassinin yerine kondu |
+| **Zone refill** | 8 zone yeniden dolduruldu; GND ve +3V3 polygon flood'lari guncel |
+| **Son DRC** | **`0 violations, 0 unconnected, 0 errors, 0 warnings, 0 via_dangling, 0 track_dangling`** (240 schematic parity bilgilendirici) |
+| **Manifest (proje yazici)** | `status=production_candidate, manufacturing_ready=true, source_evidence_pass=true, production_model_pass=true` |
+| **Fab ZIP** | `outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip` — 157 KB, 29 dosya (yeniden paketlendi 09:20) |
+| **Stale dizin temizligi** | `outputs/kicad_verify/` (1.3M), `outputs/kicad_baseline/` (617K), `outputs/kicad_test/` (65K), `outputs/kicad/industrial_uwb_*/` (486K) silindi |
+| **Yalanci dokuman temizligi** | `MANUFACTURING_COMPLETE.txt`, `PCBA_STATUS_FINAL.txt`, `outputs/phase4/*iteration_1*` silindi |
+| **Asset regeneration** | `assets/generated/pcb_artifacts/{BOM.json, assembly_placement.csv, layout_status.json, PCB_LAYOUT_REPORT.txt}` ve `drc_report_v1.json` temiz PCB'den uretildi |
+| **BOM-strict prompt** | `engine/cognitive_netlist_generator.py` `SYSTEM_PROMPT` basina ABSOLUTE BOM LAW eklendi — AI artik C99 vb. hayalet komponent uretemez |
+| **DesignRule.net_class fix** | `cognitive_netlist_generator.py` — `DesignRule` ve `NetConnection` dataclass'larina opsiyonel `net_class` alani eklendi; `_safe_unpack()` helper bilinmeyen AI alanlarini sessizce atar |
+| **zfill regression fix** | `ai_error_corrector.py:201` — `f"PROP_{len(str(finding_id)).zfill(3)}"` (int.zfill crash) -> `proposal_id` reuse |
+| **UTF-8 patch** | `run_ai_synthesis.py`, `ai_error_corrector.py`, `pcb_layout_generator.py` (3 open() calls) `encoding='utf-8'` + `sys.stdout.reconfigure` ile sabitlendi |
+| **MOV1 netlist consistency** | `outputs/phase1/AI_NETLIST_V1.json` — RV1→MOV1 pin rename + MOV1 component eklendi (PCB ile uyumlu) |
+| **DevKit swap denemesi** | Surgical pcbnew swap baslatildi (U1 SMD → U1_Socket_L + U1_Socket_R DevKitC-1) — 43→196 violation divergence sonrasi temiz rollback yapildi |
+| **HITL sistemi** | **YENİ** — `engine/hitl_manager.py` ile insan-dongüye-dahil mimari; `ask_human_engineer(...)`, JSON state/answer/log dosyalari, Flutter UI poll edebilir. Bkz. [[13 - HITL Insan Donguye Dahil]] |
+
+## Onceki Durum - 2026-05-27
 
 | Alan | Son durum |
 | --- | --- |
@@ -61,6 +85,21 @@ Bu klasor, **OmniCircuit AI** projesinin canli proje hafizasidir. Buradaki notla
 1. DWM3000 (U2) hala sentetik footprint kullaniyor; fiziksel uretim oncesi resmi/dogrulanmis uretici footprint'i ile degistirilmeli.
 2. Uretici DFM kontrolu (JLCPCB/PCBWay) ve prototip dogrulamasi.
 3. J1/J2 orphan pin (AC/RF konnektor) — güvenlik-kritik, AI tamir dongusunde kullaniciya soruluyor.
+
+> Cozulen bloklayicilar (2026-05-28 → 2026-05-30):
+> - **Hayalet C99-C102 (gercek temizlik)**: `engine/_clean_pcb_proper.py` (pcbnew API ile 4 footprint) + `engine/_clean_sch_proper.py` (S-expression scan ile 8 (symbol) blogu). Eski "bash surgery" PCB'yi corrupt birakmisti (parens balance -5, 13K negative dive); `ca68ad2` revizyonundan restore + proper API removal yapildi.
+> - **PCB structural integrity**: Pre-clean halinde pcbnew.LoadBoard() None donuyordu (corrupt file). Restore + clean sonrasi 55 footprint loadable.
+> - **Dangling copper (proje routine uzerinden, subprocess loop ile)**: `engine/kicad_automation_service.py:_prune_dangling_copper` SWIG proxy invalidation bug'i nedeniyle 3. pass'te crash ediyordu. `engine/_prune_one.py` her pass'i ayri subprocess olarak calistirir, fresh Python interpreter ile SWIG sorununu bypass eder.
+> - **U7.5 orphan +3V3**: Ghost C99-C102 decoupler bypassi gittiginde olusan unconnected, U7.5 (74.47, 15.90) → U8.1 (80.86, 13.05) F.Cu kopru ile cozuldu (`engine/_route_orphan_3v3.py`).
+> - **DRC = 0/0/0/0**: Tam temiz; manifest production_candidate, manufacturing_ready=true.
+> - **BOM-strict prompt (hayalet hallucination kalici fix)**: SYSTEM_PROMPT basina "ABSOLUTE BOM LAW" eklendi — AI artik C99/C100/... gibi BOM disi referans uretemez (fatal system error). REUSE — never INVENT kurali.
+> - **`DesignRule.net_class` runtime crash**: AI bazen rules array'inde extra `net_class` alani gonderiyordu, dataclass kabul etmiyordu (fallback'a dusuyordu). Fix: `_safe_unpack()` helper + `net_class: str | None = None` opsiyonel alan. Artik AI cevabi resilient.
+> - **zfill regression**: `ai_error_corrector.py:201` `len(str(finding_id)).zfill(3)` int objesinde .zfill cagiriyor (crash). Fix: line 127'deki `proposal_id` (`PROP_{str(idx).zfill(3)}`) reuse. Tum 3 exit path ayni id veriyor.
+> - **UTF-8 charmap crash (Windows CP1252)**: Turkce karakter (ş, ı) basinca CP1252 crash. Fix: `sys.stdout.reconfigure(encoding='utf-8')` patch + `open(..., encoding='utf-8')` 3 noktada.
+> - **MOV1/RV1 source evidence mismatch**: Netlist `nets[].pins` array'i `RV1.1`, `RV1.2` referansi iceriyordu ama `components[]` icinde RV1 yoktu (PCB MOV1 kullaniyor). Fix: pin referanslarini MOV1 olarak rename + MOV1 component'ini netlist'e ekle.
+> - **Stale dirty artifacts (ghost UI display fix)**: Flutter UI ekranda C99-C102 gosteriyordu cunku `assets/generated/pcb_artifacts/{BOM.json, layout_status.json, drc_report_v1.json}` ESKi PCB'den uretilmisti. Production PCB temizdi ama asset'ler stale idi. `engine/_regenerate_assets.py` yazildi: temiz PCB'den 5 asset uretir (BOM, placement CSV, layout status, layout report, DRC report). Stale `outputs/kicad_verify/`, `outputs/kicad_baseline/`, `outputs/kicad_test/`, `outputs/kicad/industrial_uwb_*/` (yaklasik 2.5MB) silindi. Yalanci `MANUFACTURING_COMPLETE.txt`, `PCBA_STATUS_FINAL.txt` silindi.
+> - **DevKit conversion attempt + honest rollback**: Kullanici U1 SMD WROOM → DevKitC-1 (2×1x22 socket) swap istedi. Surgical script U1'i kaldirdi, 5 komsu (R10-R13, K2) "outward by 12mm" heuristic ile relocate etti, iki 1x22 pin header ekledi (90° rotate), 6 signal'i stitch etti. Sonuc: 43 DRC violation. Forward-fix iteration via+B.Cu fallback routing ile 196 violation'a yukseldi (DIVERGENCE). Honest rollback yapildi: `git checkout ca68ad2 -- *.kicad_pcb *.kicad_sch` + clean chain replay. Production state restore edildi. Ders: pcbnew Python API'si push-and-shove router'a sahip degil; agir auto-routing pcbnew script'ten guvenli yapilamaz, KiCad GUI veya FreeRoute gerekir.
+> - **HITL sistemi (yeni mimari)**: `engine/hitl_manager.py` — `ask_human_engineer(blocker_type, question, context, suggested_choices)` API'si. Routing/pinout/clearance/placement ambiguity'lerinde sistem JSON state ile UI'a yield eder, cevap dosyasini bekler, kararı `hitl_decisions.log`a kalici yazar. Detay: [[13 - HITL Insan Donguye Dahil]].
 
 > Cozulen bloklayicilar (2026-05-27):
 > - `DRC_EVIDENCE`, `PCBA_HANDOFF`, `FAB_ZIP`: `_prune_dangling_copper` ile DRC 20 -> 0.

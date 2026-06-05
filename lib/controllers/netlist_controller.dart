@@ -22,7 +22,8 @@ class NetlistController extends ChangeNotifier {
   }) : _service = service ?? CognitiveNetlistService(),
        _fileImportService = fileImportService ?? InputFileImportService(),
        _ollamaService = ollamaService ?? const OllamaNetlistService(),
-       _manufacturingService = manufacturingService ?? const PcbaManufacturingService() {
+       _manufacturingService =
+           manufacturingService ?? const PcbaManufacturingService() {
     loadConfiguredAI();
     _checkOllamaStatus();
   }
@@ -97,6 +98,136 @@ class NetlistController extends ChangeNotifier {
 
   Future<void> refreshOllamaStatus() => _checkOllamaStatus();
 
+  Future<void> refreshProductionArtifacts() async {
+    drcReport = await _loadDrcReport();
+    layoutOptimizationStatus = await _loadLayoutOptimizationStatus();
+    engineeringReadinessReport = await _loadEngineeringReadinessReport();
+    inputEvidenceReport = await _loadInputEvidenceReport();
+    correctionProposals = await _loadCorrectionProposals();
+
+    final netlistFile = File(
+      '$_projectRoot\\outputs\\phase1\\AI_NETLIST_V1.json',
+    );
+    if (await netlistFile.exists()) {
+      try {
+        final raw =
+            jsonDecode(await netlistFile.readAsString())
+                as Map<String, dynamic>;
+        final aiNetlist = AiNetlist.fromPythonJson(raw);
+        netlist = aiNetlist;
+        final generated = _service.synthesizeFromAiNetlist(
+          aiNetlist,
+          requestText,
+          bomText: bomText,
+          technicalNotes: technicalNotes,
+        );
+        designPackage = _productionPackage(generated);
+      } catch (e) {
+        liveLog.add(
+          ReasoningEntry(
+            level: 'warning',
+            message: 'UYARI: Uretim netlist artefakti okunamadi: $e',
+            outcome: 'artifact-load-fail',
+          ),
+        );
+      }
+    }
+
+    lastSynthesisSource = 'pipeline';
+    selectedStage = DesignStage.schematic;
+    liveLog.add(
+      const ReasoningEntry(
+        level: 'info',
+        message:
+            'Uretim artefaktlari yuklendi: gercek netlist, KiCad sematik/PCB, DRC ve evidence raporlari aktif.',
+        outcome: 'production-artifacts',
+      ),
+    );
+    notifyListeners();
+  }
+
+  DesignPackage _productionPackage(DesignPackage generated) {
+    final drcClean = drcReport?.totalViolations == 0;
+    final evidenceClean =
+        inputEvidenceReport == null || inputEvidenceReport!.status == 'pass';
+    final ready = drcClean && evidenceClean;
+    return DesignPackage(
+      netlist: generated.netlist,
+      stages: [
+        StageStatus(
+          stage: DesignStage.analysis,
+          title: 'Kanıtlı Analiz',
+          state: evidenceClean ? StageState.ready : StageState.requiresReview,
+          detail: evidenceClean
+              ? 'BOM, netlist ve kaynak kanıtı güncel rapordan geçti.'
+              : 'BOM/netlist kanıt raporu inceleme istiyor.',
+        ),
+        const StageStatus(
+          stage: DesignStage.schematic,
+          title: 'Gerçek KiCad Şematik',
+          state: StageState.ready,
+          detail:
+              'Diskteki KiCad şematik/SVG artefaktı üretim akışından okunuyor.',
+        ),
+        StageStatus(
+          stage: DesignStage.pcb,
+          title: 'Gerçek KiCad PCB',
+          state: drcClean ? StageState.ready : StageState.requiresReview,
+          detail: drcClean
+              ? 'Aktif KiCad PCB, DRC raporunda sıfır ihlal ile doğrulandı.'
+              : 'Aktif PCB için DRC raporu temiz değil.',
+        ),
+        StageStatus(
+          stage: DesignStage.pcba,
+          title: 'Gerçek PCBA Görünümü',
+          state: ready ? StageState.ready : StageState.requiresReview,
+          detail:
+              'PCBA montaj görünümü ve komponent listesi üretim çıktılarından gelir.',
+        ),
+        StageStatus(
+          stage: DesignStage.simulation,
+          title: 'Mühendislik Kanıtları',
+          state: engineeringReadinessReport?.overallStatus == 'pass' || ready
+              ? StageState.ready
+              : StageState.requiresReview,
+          detail:
+              engineeringReadinessReport?.summary ??
+              'DRC ve evidence raporları üretim kapısı için ana kanıttır.',
+        ),
+        StageStatus(
+          stage: DesignStage.drc,
+          title: 'DRC Doğrulama',
+          state: drcClean ? StageState.ready : StageState.requiresReview,
+          detail: drcClean ? 'DRC=0.' : 'DRC ihlalleri var.',
+        ),
+        StageStatus(
+          stage: DesignStage.export,
+          title: 'Üretim Export',
+          state: ready ? StageState.ready : StageState.requiresReview,
+          detail: ready
+              ? 'Manifest ve üretim paketi güvenilir çıktı olarak ele alınabilir.'
+              : 'Export için önce DRC/evidence temizlenmeli.',
+        ),
+      ],
+      schematicBlocks: generated.schematicBlocks,
+      pcbConstraints: generated.pcbConstraints,
+      pcbaItems: generated.pcbaItems,
+      simulationChecks: generated.simulationChecks,
+      exportArtifacts: [
+        for (final artifact in generated.exportArtifacts)
+          ExportArtifact(
+            name: artifact.name,
+            format: artifact.format,
+            path: artifact.path,
+            state: ready ? ArtifactState.generated : artifact.state,
+            note: ready
+                ? 'Üretim akışı temiz DRC/evidence ile doğrulandı.'
+                : artifact.note,
+          ),
+      ],
+    );
+  }
+
   Future<void> generate() async {
     if (isGenerating) return;
     await loadConfiguredAI();
@@ -111,6 +242,30 @@ class NetlistController extends ChangeNotifier {
     lastSynthesisSource = '';
     notifyListeners();
 
+    // Kullanıcının UI'dan girdiği BOM verisini KiCad pipeline'ı için diske kaydet
+    if (bomText.trim().isNotEmpty) {
+      try {
+        final bomFile = File('$_projectRoot\\BOM.csv');
+        await bomFile.writeAsString(bomText);
+        liveLog.add(
+          const ReasoningEntry(
+            level: 'info',
+            message: '✓ Kullanici BOM listesi diske kaydedildi (BOM.csv)',
+            outcome: 'disk-write',
+          ),
+        );
+      } catch (e) {
+        liveLog.add(
+          ReasoningEntry(
+            level: 'warning',
+            message: 'UYARI: Kullanici BOM listesi diske kaydedilemedi: $e',
+            outcome: 'disk-write-fail',
+          ),
+        );
+      }
+      notifyListeners();
+    }
+
     // ---------- Gerçek AI çağrısı (Python engine → Ollama) ----------
     bool usedRealAi = false;
     try {
@@ -120,11 +275,7 @@ class NetlistController extends ChangeNotifier {
         notes: technicalNotes,
         onLog: (line) {
           liveLog.add(
-            ReasoningEntry(
-              level: 'info',
-              message: line,
-              outcome: 'ai-log',
-            ),
+            ReasoningEntry(level: 'info', message: line, outcome: 'ai-log'),
           );
           notifyListeners();
         },
@@ -186,7 +337,8 @@ class NetlistController extends ChangeNotifier {
       liveLog.add(
         ReasoningEntry(
           level: 'warning',
-          message: 'UYARI: AI cagrisi basarisiz ($e). Deterministik motor devreye aliniyor.',
+          message:
+              'UYARI: AI cagrisi basarisiz ($e). Deterministik motor devreye aliniyor.',
           outcome: 'fallback',
         ),
       );
@@ -253,12 +405,15 @@ class NetlistController extends ChangeNotifier {
           const JsonEncoder.withIndent('  ').convert(enriched),
           encoding: const Utf8Codec(),
         );
-        liveLog.add(ReasoningEntry(
-          level: 'info',
-          message: '✓ AI netlist (ham) diske yazıldı → KiCad pipeline hazır'
-              ' (${aiNetlist.components.length} bileşen)',
-          outcome: 'disk-write',
-        ));
+        liveLog.add(
+          ReasoningEntry(
+            level: 'info',
+            message:
+                '✓ AI netlist (ham) diske yazıldı → KiCad pipeline hazır'
+                ' (${aiNetlist.components.length} bileşen)',
+            outcome: 'disk-write',
+          ),
+        );
         notifyListeners();
         return;
       }
@@ -277,33 +432,49 @@ class NetlistController extends ChangeNotifier {
           'DWM3000 logic and RF module domain is 1.8V.',
           'Relay coils are 5V and must not be driven directly from MCU pins.',
         ],
-        'components': aiNetlist.components.map((c) => {
-          'ref': c.ref,
-          'type': c.type,
-          'value': c.value,
-          'manufacturer': _inferManufacturer(c.partNumber),
-          'part_number': c.partNumber,
-          'footprint': _inferFootprintHint(c.type, c.partNumber),
-          'reason': c.reason,
-          'constraints': _inferConstraints(c.type, c.partNumber),
-        }).toList(),
-        'nets': aiNetlist.nets.map((n) => {
-          'net': n.net,
-          'pins': n.pins,
-          'net_class': n.netClass,
-          'reason': n.reason,
-        }).toList(),
-        'rules': aiNetlist.rules.map((r) => {
-          'id': r.id,
-          'severity': r.severity,
-          'description': r.description,
-          'applies_to': <String>[],
-        }).toList(),
-        'reasoning_log': aiNetlist.reasoningLog.map((e) => {
-          'level': e.level,
-          'message': e.message,
-          'outcome': e.outcome,
-        }).toList(),
+        'components': aiNetlist.components
+            .map(
+              (c) => {
+                'ref': c.ref,
+                'type': c.type,
+                'value': c.value,
+                'manufacturer': _inferManufacturer(c.partNumber),
+                'part_number': c.partNumber,
+                'footprint': _inferFootprintHint(c.type, c.partNumber),
+                'reason': c.reason,
+                'constraints': _inferConstraints(c.type, c.partNumber),
+              },
+            )
+            .toList(),
+        'nets': aiNetlist.nets
+            .map(
+              (n) => {
+                'net': n.net,
+                'pins': n.pins,
+                'net_class': n.netClass,
+                'reason': n.reason,
+              },
+            )
+            .toList(),
+        'rules': aiNetlist.rules
+            .map(
+              (r) => {
+                'id': r.id,
+                'severity': r.severity,
+                'description': r.description,
+                'applies_to': <String>[],
+              },
+            )
+            .toList(),
+        'reasoning_log': aiNetlist.reasoningLog
+            .map(
+              (e) => {
+                'level': e.level,
+                'message': e.message,
+                'outcome': e.outcome,
+              },
+            )
+            .toList(),
         'erc_summary': {
           'status': 'pass_with_engineering_review_required',
           'checks': aiNetlist.ercChecks,
@@ -311,19 +482,24 @@ class NetlistController extends ChangeNotifier {
       });
 
       await File(outputPath).writeAsString(json, encoding: const Utf8Codec());
-      liveLog.add(ReasoningEntry(
-        level: 'info',
-        message: '✓ Netlist KiCad pipeline için diske yazıldı: outputs/phase1/AI_NETLIST_V1.json'
-            ' (${aiNetlist.components.length} bileşen, ${aiNetlist.nets.length} net)',
-        outcome: 'disk-write',
-      ));
+      liveLog.add(
+        ReasoningEntry(
+          level: 'info',
+          message:
+              '✓ Netlist KiCad pipeline için diske yazıldı: outputs/phase1/AI_NETLIST_V1.json'
+              ' (${aiNetlist.components.length} bileşen, ${aiNetlist.nets.length} net)',
+          outcome: 'disk-write',
+        ),
+      );
       notifyListeners();
     } catch (e) {
-      liveLog.add(ReasoningEntry(
-        level: 'warning',
-        message: 'UYARI: Netlist diske yazılamadı: $e',
-        outcome: 'disk-write-fail',
-      ));
+      liveLog.add(
+        ReasoningEntry(
+          level: 'warning',
+          message: 'UYARI: Netlist diske yazılamadı: $e',
+          outcome: 'disk-write-fail',
+        ),
+      );
       notifyListeners();
     }
   }
@@ -333,6 +509,8 @@ class NetlistController extends ChangeNotifier {
     const map = {
       'ESP32-S3-WROOM-1': 'Espressif',
       'ESP32-S3-WROOM-2': 'Espressif',
+      'ESP32-DEVKIT': 'Espressif',
+      'ESP32-S3-DEVKIT': 'Espressif',
       'DWM3000': 'Qorvo',
       'HLK-5M05': 'Hi-Link',
       'TPS54331DR': 'Texas Instruments',
@@ -354,8 +532,14 @@ class NetlistController extends ChangeNotifier {
   /// Bileşen tipi/part'tan footprint kategorisi ipucu
   static String _inferFootprintHint(String type, String partNumber) {
     if (partNumber == 'ESP32-S3-WROOM-1') return 'RF_Module:ESP32-S3-WROOM-1';
-    if (partNumber == 'HLK-5M05') return 'Converter_ACDC:Converter_ACDC_Hi-Link_HLK-5Mxx';
-    if (partNumber == 'TPS54331DR') return 'Package_SO:SOIC-8_3.9x4.9mm_P1.27mm';
+    if (partNumber == 'ESP32-DEVKIT')
+      return 'Connector_PinSocket_2.54mm:PinSocket_2x19_P2.54mm_Vertical';
+    if (partNumber == 'ESP32-S3-DEVKIT')
+      return 'Connector_PinSocket_2.54mm:PinSocket_2x22_P2.54mm_Vertical';
+    if (partNumber == 'HLK-5M05')
+      return 'Converter_ACDC:Converter_ACDC_Hi-Link_HLK-5Mxx';
+    if (partNumber == 'TPS54331DR')
+      return 'Package_SO:SOIC-8_3.9x4.9mm_P1.27mm';
     if (type == 'relay') return 'Relay_THT:Relay_SPDT_Omron-G5Q-1';
     if (type == 'optocoupler') return 'Package_DIP:DIP-4_W7.62mm';
     if (type == 'n_mosfet') return 'Package_TO_SOT_SMD:SOT-23';
@@ -368,8 +552,14 @@ class NetlistController extends ChangeNotifier {
 
   /// Kritik mühendislik kısıtları
   static List<String> _inferConstraints(String type, String partNumber) {
-    if (partNumber == 'DWM3000') return ['1V8 logic', 'RF launch requires 50 ohm net class', '1.0mm pitch'];
-    if (partNumber.startsWith('ESP32')) return ['3V3 logic', 'place away from AC isolation slot'];
+    if (partNumber == 'DWM3000')
+      return [
+        '1V8 logic',
+        'RF launch requires 50 ohm net class',
+        '1.0mm pitch',
+      ];
+    if (partNumber.startsWith('ESP32'))
+      return ['3V3 logic', 'place away from AC isolation slot'];
     if (type == 'ac_dc') return ['AC primary side — 8mm creepage to secondary'];
     if (type == 'relay') return ['5V coil', 'no direct GPIO drive'];
     return [];
@@ -505,7 +695,9 @@ class NetlistController extends ChangeNotifier {
   }
 
   Future<LayoutOptimizationStatus?> _loadLayoutOptimizationStatus() async {
-    final jsonText = await _readGeneratedJson('layout_optimization_status.json');
+    final jsonText = await _readGeneratedJson(
+      'layout_optimization_status.json',
+    );
     if (jsonText == null) return null;
     try {
       return LayoutOptimizationStatus.fromJson(
@@ -517,8 +709,9 @@ class NetlistController extends ChangeNotifier {
   }
 
   Future<EngineeringReadinessReport?> _loadEngineeringReadinessReport() async {
-    final jsonText =
-        await _readGeneratedJson('engineering_readiness_report.json');
+    final jsonText = await _readGeneratedJson(
+      'engineering_readiness_report.json',
+    );
     if (jsonText == null) return null;
     try {
       return EngineeringReadinessReport.fromJson(
@@ -568,7 +761,7 @@ class NetlistController extends ChangeNotifier {
         'Boyut: ${result.boardWidthMm.toStringAsFixed(1)} × ${result.boardHeightMm.toStringAsFixed(1)} mm, '
         'Bileşen: ${result.componentCount}, '
         'Maliyet: \$${result.costEstimateUsd.toStringAsFixed(2)}, '
-        'Teslimat: ${result.leadTimeDays} gün'
+        'Teslimat: ${result.leadTimeDays} gün',
       );
     } else {
       manufacturingLog.add('✗ Hata: ${result.error}');
@@ -594,9 +787,13 @@ class NetlistController extends ChangeNotifier {
     decisions[proposalId] = 'approved';
     await _correctionService.writeApprovals(decisions);
     if (correctionProposals != null) {
-      final idx = correctionProposals!.proposals.indexWhere((p) => p.id == proposalId);
+      final idx = correctionProposals!.proposals.indexWhere(
+        (p) => p.id == proposalId,
+      );
       if (idx >= 0) {
-        final updatedProposals = List<AiCorrectionProposal>.from(correctionProposals!.proposals);
+        final updatedProposals = List<AiCorrectionProposal>.from(
+          correctionProposals!.proposals,
+        );
         updatedProposals[idx] = AiCorrectionProposal(
           id: updatedProposals[idx].id,
           sourceFindingId: updatedProposals[idx].sourceFindingId,
@@ -631,9 +828,13 @@ class NetlistController extends ChangeNotifier {
     decisions[proposalId] = 'rejected';
     await _correctionService.writeApprovals(decisions);
     if (correctionProposals != null) {
-      final idx = correctionProposals!.proposals.indexWhere((p) => p.id == proposalId);
+      final idx = correctionProposals!.proposals.indexWhere(
+        (p) => p.id == proposalId,
+      );
       if (idx >= 0) {
-        final updatedProposals = List<AiCorrectionProposal>.from(correctionProposals!.proposals);
+        final updatedProposals = List<AiCorrectionProposal>.from(
+          correctionProposals!.proposals,
+        );
         updatedProposals[idx] = AiCorrectionProposal(
           id: updatedProposals[idx].id,
           sourceFindingId: updatedProposals[idx].sourceFindingId,
@@ -670,7 +871,9 @@ class NetlistController extends ChangeNotifier {
 
     lastCorrectionResult = await _correctionService.applyApproved(
       onLog: (line) {
-        liveLog.add(ReasoningEntry(level: 'info', message: line, outcome: 'correction'));
+        liveLog.add(
+          ReasoningEntry(level: 'info', message: line, outcome: 'correction'),
+        );
         notifyListeners();
       },
     );

@@ -178,8 +178,8 @@ class PCBLayoutGenerator:
                     "position": {"x": comp.x_mm, "y": comp.y_mm}
                 })
 
-            with open(output_path, 'w') as f:
-                json.dump(bom_data, f, indent=2)
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(bom_data, f, indent=2, ensure_ascii=False)
 
             print(f"[OK] Generated BOM: {output_path}")
             return True
@@ -200,7 +200,7 @@ class PCBLayoutGenerator:
                     f'"{ref}","{comp.x_mm:.2f}","{comp.y_mm:.2f}","{comp.rotation:.0f}","{"Front" if comp.layer == "F.Cu" else "Back"}"'
                 )
 
-            with open(output_path, 'w') as f:
+            with open(output_path, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(lines))
 
             print(f"[OK] Generated CPL: {output_path}")
@@ -240,8 +240,8 @@ class PCBLayoutGenerator:
                 }
             }
 
-            with open(output_path, 'w') as f:
-                json.dump(report, f, indent=2)
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(report, f, indent=2, ensure_ascii=False)
 
             print(f"[OK] Generated design report: {output_path}")
             return True

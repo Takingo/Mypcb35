@@ -18,7 +18,7 @@ $env:KICAD_CONFIG_HOME    = "C:\Mypcb\.kicad_config"
 $env:KICAD_DOCUMENTS_HOME = "C:\Mypcb\.kicad_docs"
 $env:HOME                 = "C:\Mypcb"
 $env:USERPROFILE          = "C:\Mypcb"
-$env:PYTHONPATH           = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
+$env:PYTHONPATH           = "$KiCadRoot\Lib\site-packages;C:\Mypcb;C:\Mypcb\engine"
 
 # Netlist selection: prefer the user-generated design, fall back to the sample.
 # Flutter writes AI_NETLIST_V1.json after Generate.
@@ -56,6 +56,10 @@ if ($ContinueOnDrcError) { $ArgsList += "--continue-on-drc-error" }
 Write-Host "[PHASE2] Starting KiCad automation..." -ForegroundColor Cyan
 & $KiCadPython @ArgsList
 $ExitCode = $LASTEXITCODE
+if ($ExitCode -ne 0) {
+    Write-Host "[PHASE2] KiCad automation failed. Stale DRC/manifest will not be reused." -ForegroundColor Red
+    exit $ExitCode
+}
 
 # Copy the real DRC report into Flutter assets when available.
 # kicad_automation_service also writes this, but this keeps export=false useful.
@@ -98,8 +102,16 @@ if ($DrcSource) {
         $DrcColor = if ($TotalV -eq 0) { "Green" } else { "Yellow" }
         Write-Host "[PHASE2] DRC report written to assets: $TotalV violation(s)" -ForegroundColor $DrcColor
 
+        $ProjectDir = Split-Path -Parent (Split-Path -Parent $DrcSource.FullName)
+        $PcbSource = Get-ChildItem $ProjectDir -Filter "*.kicad_pcb" -ErrorAction SilentlyContinue |
+                     Sort-Object LastWriteTime -Descending |
+                     Select-Object -First 1
+        if (!$PcbSource) {
+            throw "PCB file not found beside DRC report: $ProjectDir"
+        }
+
         & $KiCadPython -m engine.board_verification_manifest `
-            --pcb-file "$OutputRoot\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb" `
+            --pcb-file $PcbSource.FullName `
             --drc-report-file $DrcSource.FullName `
             --netlist-file $Netlist `
             --bom-file "BOM.csv" `

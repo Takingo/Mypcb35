@@ -9,17 +9,15 @@ class AiCorrectionService {
 
   final String projectRoot;
 
-  static const _kicadPythonPaths = [
-    r'C:\Program Files\KiCad\10.0\bin\python.exe',
-  ];
-
   /// Proposals dosyasını diskten yükler.
   Future<AiCorrectionProposalsReport?> loadProposals() async {
-    final file =
-        File('$projectRoot\\assets\\generated\\ai_correction_proposals.json');
+    final file = File(
+      '$projectRoot\\assets\\generated\\ai_correction_proposals.json',
+    );
     if (!await file.exists()) return null;
     try {
-      final data = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+      final data =
+          jsonDecode(await file.readAsString()) as Map<String, dynamic>;
       return AiCorrectionProposalsReport.fromJson(data);
     } catch (_) {
       return null;
@@ -31,22 +29,22 @@ class AiCorrectionService {
     // decisions: {proposalId -> 'approved' | 'rejected'}
     final now = DateTime.now().toUtc().toIso8601String();
     final decisionList = decisions.entries
-        .map((e) => {
-              'proposal_id': e.key,
-              'decision': e.value,
-              'decided_at': now,
-            })
+        .map(
+          (e) => {'proposal_id': e.key, 'decision': e.value, 'decided_at': now},
+        )
         .toList();
 
     final approvalsData = {
       'schema': 'AI_CORRECTION_APPROVALS_V1',
       'generated_at': now,
-      'proposals_file': '$projectRoot\\assets\\generated\\ai_correction_proposals.json',
+      'proposals_file':
+          '$projectRoot\\assets\\generated\\ai_correction_proposals.json',
       'decisions': decisionList,
     };
 
-    final file =
-        File('$projectRoot\\assets\\generated\\ai_correction_approvals.json');
+    final file = File(
+      '$projectRoot\\assets\\generated\\ai_correction_approvals.json',
+    );
     await file.writeAsString(
       const JsonEncoder.withIndent('  ').convert(approvalsData),
       encoding: const Utf8Codec(),
@@ -58,19 +56,15 @@ class AiCorrectionService {
     void Function(String line)? onLog,
   }) async {
     final scriptPath = '$projectRoot\\tool\\run_ai_correction.ps1';
-    final process = await Process.start(
-      'powershell.exe',
-      [
-        '-NonInteractive',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-File',
-        scriptPath,
-        '-ProjectRoot',
-        projectRoot
-      ],
-      workingDirectory: projectRoot,
-    );
+    final process = await Process.start('powershell.exe', [
+      '-NonInteractive',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-File',
+      scriptPath,
+      '-ProjectRoot',
+      projectRoot,
+    ], workingDirectory: projectRoot);
 
     process.stderr
         .transform(utf8.decoder)
@@ -85,8 +79,10 @@ class AiCorrectionService {
     final exitCode = await process.exitCode;
 
     // Parse JSON result from stdout
-    final jsonLine = stdoutLines.reversed
-        .firstWhere((l) => l.trim().startsWith('{'), orElse: () => '{}');
+    final jsonLine = stdoutLines.reversed.firstWhere(
+      (l) => l.trim().startsWith('{'),
+      orElse: () => '{}',
+    );
 
     if (jsonLine.isEmpty || jsonLine == '{}') {
       return AiCorrectionResult(
@@ -107,7 +103,7 @@ class AiCorrectionService {
         reverifyStatus: data['reverify'] as String?,
       );
     } catch (_) {
-      return AiCorrectionResult(
+      return const AiCorrectionResult(
         success: false,
         status: 'parse_error',
         appliedCount: 0,

@@ -3,8 +3,8 @@
   "domain": "PI",
   "status": "pass",
   "metrics": {
-    "relay_count": 0,
-    "five_volt_load_ma": 420.0,
+    "relay_count": 1,
+    "five_volt_load_ma": 500.0,
     "hlk_5m05_capacity_ma": 1000.0,
     "three_v_three_load_ma": 440.0,
     "tps54331_capacity_ma": 3000.0,

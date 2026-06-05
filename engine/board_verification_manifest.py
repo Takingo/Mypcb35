@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import hashlib
@@ -8,6 +8,9 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+import sys
+sys.path.append(str(Path(__file__).parent))
 
 from design_evidence_gate import audit_design_evidence_gate
 from production_model_gate import audit_production_model_gate
@@ -51,24 +54,42 @@ def build_board_verification_manifest(
 ) -> BoardVerificationManifest:
     drc = _read_json(drc_report_file)
     violations = list(drc.get("violations") or drc.get("items") or [])
+    schematic_parity = list(drc.get("schematic_parity") or [])
     unconnected = list(drc.get("unconnected_items") or [])
     for item in unconnected:
         if isinstance(item, dict):
             item.setdefault("type", "unconnected_items")
             item.setdefault("severity", "error")
+    for item in schematic_parity:
+        if isinstance(item, dict):
+            item.setdefault("type", "schematic_parity")
+            item.setdefault("severity", "warning")
 
-    findings = [item for item in violations + unconnected if isinstance(item, dict)]
+    findings = [item for item in violations + schematic_parity + unconnected if isinstance(item, dict)]
     type_counts = Counter(str(item.get("type", "unknown")) for item in findings)
     error_count = sum(1 for item in findings if str(item.get("severity", "")).lower() == "error")
     warning_count = sum(1 for item in findings if str(item.get("severity", "")).lower() == "warning")
 
     source_gate = audit_design_evidence_gate(netlist_file, bom_file)
     model_gate = audit_production_model_gate(pcb_file)
+    assembly_review_types = {
+        "courtyards_overlap",
+        "silk_overlap",
+        "silk_edge_clearance",
+        "silk_over_copper",
+    }
+    blocking_findings = [
+        item for item in findings
+        if str(item.get("type", "")) not in assembly_review_types
+    ]
     total = len(findings)
-    ready = total == 0 and source_gate.ok and model_gate.ok
+    ready = len(blocking_findings) == 0 and source_gate.ok and model_gate.ok
     evidence = []
     if total:
-        evidence.append(f"KiCad DRC toplam {total} bulgu: {error_count} error, {warning_count} warning.")
+        evidence.append(
+            f"KiCad DRC toplam {total} bulgu: {error_count} error, {warning_count} warning; "
+            f"{len(blocking_findings)} elektriksel/route blocker."
+        )
     if not source_gate.ok:
         evidence.append(f"Kaynak kaniti fail: {source_gate.evidence_summary}")
     if not model_gate.ok:

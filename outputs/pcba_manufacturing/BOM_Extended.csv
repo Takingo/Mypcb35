@@ -1,27 +1,45 @@
 Reference,Value,Part Number,Manufacturer,Quantity,Unit Cost USD,Total Cost USD,Lead Time Days,Stock Status,Component Type,Package,Datasheet URL
-ANT1,"SMA Connector Female Edge Mount",132134,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-D1,"Schottky Diode 3A 40V",SS34-E3/57T,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-D2,"Diode 100V 300mA",1N4148TR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-D3,"Diode 100V 300mA",1N4148TR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-D5,"TVS Diode 3.3V 600W",SMBJ3.3A,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-D8,"TVS Diode 1.8V 600W",SMBJ1.8A,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-F1,"Glass Fuse 1A 250V 5x20mm",0215001.MXP,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-F2,"Polyfuse 500mA 1206",0ZCJ0050FF2G,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+D1,"Buck flyback diode",SS34-E3/57T,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+D2,"Schottky flyback diode",1N5819,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+D3,"Schottky flyback diode",1N5819,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+F1,"500mA fuse",0451.500MRL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
 K1,"Relay SPDT 5V 10A",G5Q-14-DC5,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
 K2,"Relay SPDT 5V 10A",G5Q-14-DC5,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-Q1,"N-Channel MOSFET 60V 300mA",2N7002,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-Q2,"N-Channel MOSFET 60V 300mA",2N7002,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-RV1,"Varistor 470V 14mm",14D471K,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U10,"EEPROM 256Kbit I2C",AT24C256C-SSHL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U11,"Optocoupler 2500V",PC817X2CSP9F,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U12,"Optocoupler 2500V",PC817X2CSP9F,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U13,"Single Channel Level Shifter 3.3V to 1.8V",SN74LVC1T45DBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U1_Socket_L,"1x22 Female Pin Header 2.54mm",1x22-FH,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U1_Socket_R,"1x22 Female Pin Header 2.54mm",1x22-FH,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U2,"DWM3000 UWB Module",DWM3000,Decawave,1,18.5,18.5,21,Limited,RF Module,LGA-64,https://www.decawave.com/wp-content/uploads/2021/04/DWM3000_Datasheet_v1p0.pdf
-U3,"AC-DC 5V 5W Power Module",HLK-5M05,HLK,1,2.3,2.3,7,In Stock,SMPS Module,SIP-4,https://www.hlktech.net/uploads/file/20200410/HLK-5M05.pdf
-U5,"1.8V LDO 200mA",TPS780180200DRV,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U6,"4-bit Bidirectional Voltage Translator 3.3V to 1.8V",TXB0104RGYR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U7,"Single Channel Level Shifter 1.8V to 3.3V",SN74LVC1T45DBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U8,"Watchdog Timer 60s",TPL5010DDCR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
-U9,"RTC Real Time Clock",DS3231SN,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+L1,"Inductor 22uH 3A",CDRH104R-220NC,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED1,"Red LED 0805",KP-2012SURCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED2,"Red LED 0805",KP-2012SURCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED3,"Red LED 0805",KP-2012SURCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED4,"Red LED 0805",KP-2012SURCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED5,"Red LED 0805",KP-2012SURCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+LED6,"WS2812B RGB LED",WS2812B-2020,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+MOV1,"AC varistor",MOV-14D471K,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+OK1,"Optocoupler PC817",PC817,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+OK2,"Optocoupler PC817",PC817,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+Q3,"N-Channel MOSFET 60V 300mA",2N7002,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+Q4,"N-Channel MOSFET 60V 300mA",2N7002,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R1,"220R",RC0805FR-07220RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R10,"100R",RC0603FR-07100RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R11,"100R",RC0603FR-07100RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R12,"100R",RC0603FR-07100RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R13,"100R",RC0603FR-07100RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R14,"100K",RC0805FR-07100KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R15,"312K",RC0805FR-07312KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R16,"330R",RC0805FR-07330RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R17,"330R",RC0805FR-07330RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R18,"10K",RC0805FR-0710KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R19,"10K",RC0805FR-0710KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R2,"220R",RC0805FR-07220RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R20,"10K",RC0603FR-0710KL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R21,"33R",RC0603FR-0733RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R3,"220R",RC0805FR-07220RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R4,"220R",RC0805FR-07220RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+R5,"220R",RC0805FR-07220RL,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U1,"ESP32-S3 module",ESP32-S3-WROOM-1,Espressif,1,4.85,4.85,14,In Stock,MCU,QFN-56,https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
+U14,"Single-bit level shifter",SN74LVC1T45DBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U2,"UWB module",DWM3000,Decawave,1,18.5,18.5,21,Limited,RF Module,LGA-64,https://www.decawave.com/wp-content/uploads/2021/04/DWM3000_Datasheet_v1p0.pdf
+U3,"4-bit level shifter",TXB0104RUT,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U4,"Single-bit level shifter",SN74LVC1T45DCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U5,"Single-bit level shifter",SN74LVC1T45DCK,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U6,"5V isolated AC/DC",HLK-10M05,HLK,1,2.3,2.3,7,In Stock,SMPS Module,SIP-4,https://www.hlktech.net/uploads/file/20200410/HLK-5M05.pdf
+U7,"3.3V buck",TPS54331DR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A
+U8,"1.8V low-noise LDO",TPS7A2018PDBVR,Various,1,0.15,0.15,5,In Stock,Passive,0603/0805,N/A

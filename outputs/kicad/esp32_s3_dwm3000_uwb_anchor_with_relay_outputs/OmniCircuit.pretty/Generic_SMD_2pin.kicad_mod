@@ -1,0 +1,64 @@
+(footprint "Generic_SMD_2pin"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "U1_Socket_L"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "1ee8a655-37c3-4e82-b663-b4dfa1766a90")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Value" "1x22 Female Pin Header 2.54mm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "79c3db86-6aff-4382-addb-c8013580b3b4")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "81610d10-31a7-4df0-91df-81759ba1ecdd")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a7cd7013-49f0-43d4-b1ac-131b358eaf9c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd rect
+		(at -0.8 0)
+		(size 0.9 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "3812b19d-e501-4e0c-bd2f-2017e71681ed")
+	)
+	(pad "2" smd rect
+		(at 0.8 0)
+		(size 0.9 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "5ed76c58-4411-4a21-8ba0-146a8def705b")
+	)
+	(embedded_fonts no)
+)

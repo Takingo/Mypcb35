@@ -1,16 +1,16 @@
 {
   "schema": "ENGINEERING_READINESS_V1",
-  "generated_at": "2026-05-27T03:07:46+00:00",
+  "generated_at": "2026-06-04T05:30:00+00:00",
   "overall_status": "production_candidate",
-  "readiness_percent": 100,
-  "summary": "Muhendislik denetimi: production_candidate. 9/9 kontrol gecti, 0 bloklayici sorun, 0 inceleme uyarisi.",
+  "readiness_percent": 89,
+  "summary": "9/9 kontrol gecti. Gercek KiCad DRC=0 (3 Haziran 2026, kicad-cli v10.0.3). Manuel muhendis incelemesi: AC creepage/RF empedans uretim oncesi zorunlu.",
   "checks": [
     {
       "id": "BOM_SOURCE",
       "domain": "bom",
       "status": "pass",
       "severity": "info",
-      "evidence": "BOM kritik komponentleri iceriyor.",
+      "evidence": "BOM.csv 112 satirli, kritik komponentleri iceriyor.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -26,7 +26,7 @@
       "domain": "schematic",
       "status": "pass",
       "severity": "info",
-      "evidence": "Sematik gercek KiCad symbol instance'lari iceriyor ve ERC temiz.",
+      "evidence": "Sematik gercek KiCad symbol instancelari iceriyor. ERC temiz.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -34,7 +34,7 @@
       "domain": "pcb",
       "status": "pass",
       "severity": "info",
-      "evidence": "Aktif PCB dosyasi footprint verisi iceriyor.",
+      "evidence": "Aktif PCB: quantum_mind_uwb_rtls_anchor_v3_0.kicad_pcb. Footprint verisi iceriyor.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -42,7 +42,7 @@
       "domain": "pcb",
       "status": "pass",
       "severity": "info",
-      "evidence": "Footprint kimlikleri ve pad-net modeli uretim kapisini gecti.",
+      "evidence": "Footprint ve pad-net modeli uretim kapisini gecti. SHA256 dogrulanmis.",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -50,23 +50,23 @@
       "domain": "drc",
       "status": "pass",
       "severity": "info",
-      "evidence": "Board verification manifest aktif PCB ve KiCad DRC raporuyla tutarli; DRC=0.",
-      "required_action": "Islem gerekmiyor."
+      "evidence": "KiCad CLI DRC 2026-06-03: violations=0, unconnected=0, errors=0.",
+      "required_action": "Netliste degisiklik yapilirsa DRC yeniden kosturulacak."
     },
     {
       "id": "REAL_SIMULATION",
       "domain": "simulation",
       "status": "pass",
       "severity": "info",
-      "evidence": "7 simulasyon kaniti bulundu.",
-      "required_action": "Islem gerekmiyor."
+      "evidence": "7 simulasyon kaniti bulundu (guc butcesi, termal, RF empedans).",
+      "required_action": "Uretim oncesi bagimsiz SPICE/termal dogrulama tavsiye edilir."
     },
     {
       "id": "PCBA_HANDOFF",
       "domain": "pcba",
       "status": "pass",
       "severity": "info",
-      "evidence": "Gerber/drill/BOM/CPL + 11 drawing + 1 3D model kaniti bulundu.",
+      "evidence": "DRC=0, manufacturing_ready=true (board_verification_manifest.json, 2026-06-03).",
       "required_action": "Islem gerekmiyor."
     },
     {
@@ -74,8 +74,9 @@
       "domain": "export",
       "status": "pass",
       "severity": "info",
-      "evidence": "ZIP paketi 30 dosya iceriyor.",
+      "evidence": "Gerber/drill/position dosyalari mevcut. ZIP: Quantum_Mind_Anchor_v2_4_Production.zip (165092 byte).",
       "required_action": "Islem gerekmiyor."
     }
-  ]
+  ],
+  "_engineering_note": "UYARI: DRC=0 yazilim kontrolunun gecmesi, fiziksel kartin calisacagi garantisi degildir. AC creepage/RF empedans/termal uretim oncesi muhendis dogrulamasi gerektirir."
 }

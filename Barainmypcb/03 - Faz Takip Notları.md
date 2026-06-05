@@ -6,14 +6,53 @@ tags:
   - kicad
   - manufacturing
 status: active
-updated: 2026-05-26
+updated: 2026-05-30
 ---
 
 # Faz Takip Notlari
 
 Bu dosya projenin faz bazli son gercek durumunu takip eder. Tek dogru kaynak, ayni kosuda yeniden uretilen netlist -> KiCad proje -> KiCad DRC -> layout status -> engineering audit zinciridir.
 
-## Guncel Gercek Durum - 2026-05-26
+## Guncel Gercek Durum - 2026-05-30
+
+```text
+overall_status:       production_candidate
+manufacturing_ready:  true
+violation_count:      0
+unconnected_count:    0
+error_count:          0
+warning_count:        0
+via_dangling:         0
+track_dangling:       0
+source_evidence_pass: true
+production_model_pass: true
+schematic_parity:     240 (informational, not blocking)
+fab_zip:              outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip (157 KB, 29 dosya)
+hitl_state:           assets/generated/hitl_state.json (DevKit placement blocker pending)
+```
+
+### Bu Oturumda (2026-05-28 → 2026-05-30) Yapilanlar
+
+Hayalet komponent eradikasyonu + production state restoration + HITL sistemi:
+
+1. **PCB yapisal kurtarma**: `git checkout ca68ad2` ile structurally valid revision'a geri donus (corrupt -5 parens hali a2307a4 commit'inde idi).
+2. **C99-C102 PCB temizligi**: `engine/_clean_pcb_proper.py` pcbnew API ile 4 footprint sildi.
+3. **C99-C102 sematik temizligi**: `engine/_clean_sch_proper.py` 8 (symbol) blogu sildi (parens balance=0).
+4. **Dangling copper prune (subprocess loop)**: `engine/_prune_one.py` SWIG bug bypass ile 16 oge silindi.
+5. **U7.5 +3V3 koprusu**: `engine/_route_orphan_3v3.py` F.Cu 6.99mm track ekledi.
+6. **Zone refill**: `engine/_zone_fill.py` 8 zone yeniden dolduruldu.
+7. **Asset regeneration**: `engine/_regenerate_assets.py` Flutter UI asset'lerini temiz PCB'den uretti.
+8. **Stale dir purge**: ~2.5MB stale dosya silindi.
+9. **Manifest + fab repack**: production_candidate, ZIP 157 KB.
+10. **BOM-strict prompt** (kalıcı fix): SYSTEM_PROMPT basinda ABSOLUTE BOM LAW.
+11. **DesignRule.net_class resilience**: `_safe_unpack()` helper.
+12. **zfill regression**: `ai_error_corrector.py:201` reuse proposal_id.
+13. **UTF-8 patch**: 3 engine script'inde charmap crash giderildi.
+14. **MOV1 netlist consistency**: RV1→MOV1 rename + component add.
+15. **DevKit conversion attempt + rollback**: 43→196 divergence kanitlandi; honest rollback yapildi.
+16. **HITL module**: `engine/hitl_manager.py` insan-dongüye-dahil mimari.
+
+## Onceki Durum - 2026-05-26
 
 ```text
 overall_status: production_candidate   (mühendis sign-off kaydedildikten sonra)

@@ -1,0 +1,189 @@
+{
+  "schema": "PIPELINE_PROGRESS_V1",
+  "status": "awaiting_human",
+  "current_phase": null,
+  "phases": [
+    {
+      "name": "design_feasibility",
+      "status": "review",
+      "duration_s": 0.02,
+      "repair_attempts": 0,
+      "notes": "180 PCB-mounted components are dense for 130x46mm; estimated utilization=1.49, engineering review required.",
+      "started_at": "2026-06-05T04:10:07+00:00",
+      "ended_at": "2026-06-05T04:10:07+00:00"
+    },
+    {
+      "name": "kicad_generation",
+      "status": "success",
+      "duration_s": 32.72,
+      "repair_attempts": 0,
+      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
+      "started_at": "2026-06-05T04:10:07+00:00",
+      "ended_at": "2026-06-05T04:10:40+00:00"
+    },
+    {
+      "name": "drc_cleanup",
+      "status": "success",
+      "duration_s": 0.01,
+      "repair_attempts": 0,
+      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
+      "started_at": "2026-06-05T04:10:40+00:00",
+      "ended_at": "2026-06-05T04:10:40+00:00"
+    },
+    {
+      "name": "drc_verify",
+      "status": "failed",
+      "duration_s": 2.79,
+      "repair_attempts": 0,
+      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
+      "started_at": "2026-06-05T04:10:40+00:00",
+      "ended_at": "2026-06-05T04:10:43+00:00"
+    },
+    {
+      "name": "kicad_generation",
+      "status": "success",
+      "duration_s": 32.68,
+      "repair_attempts": 0,
+      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
+      "started_at": "2026-06-05T04:10:43+00:00",
+      "ended_at": "2026-06-05T04:11:15+00:00"
+    },
+    {
+      "name": "drc_cleanup",
+      "status": "success",
+      "duration_s": 0.0,
+      "repair_attempts": 0,
+      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
+      "started_at": "2026-06-05T04:11:15+00:00",
+      "ended_at": "2026-06-05T04:11:15+00:00"
+    },
+    {
+      "name": "drc_verify",
+      "status": "failed",
+      "duration_s": 2.6,
+      "repair_attempts": 0,
+      "notes": "violations=183 (critical=4, assembly_review=179), schematic_parity=0, unconnected=0",
+      "started_at": "2026-06-05T04:11:15+00:00",
+      "ended_at": "2026-06-05T04:11:18+00:00"
+    },
+    {
+      "name": "kicad_generation",
+      "status": "success",
+      "duration_s": 36.5,
+      "repair_attempts": 0,
+      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
+      "started_at": "2026-06-05T04:11:18+00:00",
+      "ended_at": "2026-06-05T04:11:54+00:00"
+    },
+    {
+      "name": "drc_cleanup",
+      "status": "success",
+      "duration_s": 0.0,
+      "repair_attempts": 0,
+      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
+      "started_at": "2026-06-05T04:11:54+00:00",
+      "ended_at": "2026-06-05T04:11:54+00:00"
+    },
+    {
+      "name": "drc_verify",
+      "status": "failed",
+      "duration_s": 2.56,
+      "repair_attempts": 0,
+      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
+      "started_at": "2026-06-05T04:11:54+00:00",
+      "ended_at": "2026-06-05T04:11:57+00:00"
+    },
+    {
+      "name": "kicad_generation",
+      "status": "success",
+      "duration_s": 37.99,
+      "repair_attempts": 0,
+      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
+      "started_at": "2026-06-05T04:11:57+00:00",
+      "ended_at": "2026-06-05T04:12:35+00:00"
+    },
+    {
+      "name": "drc_cleanup",
+      "status": "success",
+      "duration_s": 0.0,
+      "repair_attempts": 0,
+      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
+      "started_at": "2026-06-05T04:12:35+00:00",
+      "ended_at": "2026-06-05T04:12:35+00:00"
+    },
+    {
+      "name": "drc_verify",
+      "status": "failed",
+      "duration_s": 2.28,
+      "repair_attempts": 0,
+      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
+      "started_at": "2026-06-05T04:12:35+00:00",
+      "ended_at": "2026-06-05T04:12:37+00:00"
+    },
+    {
+      "name": "kicad_generation",
+      "status": "success",
+      "duration_s": 34.65,
+      "repair_attempts": 0,
+      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
+      "started_at": "2026-06-05T04:12:37+00:00",
+      "ended_at": "2026-06-05T04:13:12+00:00"
+    },
+    {
+      "name": "drc_cleanup",
+      "status": "success",
+      "duration_s": 0.0,
+      "repair_attempts": 0,
+      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
+      "started_at": "2026-06-05T04:13:12+00:00",
+      "ended_at": "2026-06-05T04:13:12+00:00"
+    },
+    {
+      "name": "drc_verify",
+      "status": "failed",
+      "duration_s": 2.57,
+      "repair_attempts": 0,
+      "notes": "violations=182 (critical=3, assembly_review=179), schematic_parity=0, unconnected=0",
+      "started_at": "2026-06-05T04:13:12+00:00",
+      "ended_at": "2026-06-05T04:13:14+00:00"
+    }
+  ],
+  "final_artifact": null,
+  "hitl_blocker": {
+    "schema": "HITL_STATE_V1",
+    "status": "awaiting_human_input",
+    "blocker_type": "routing",
+    "session_id": "6bf57cf1-4f79-477a-a815-4e230999600b",
+    "raised_at": "2026-06-05T04:13:14+00:00",
+    "context": {
+      "phase": "drc_verify",
+      "violation_types": {
+        "tracks_crossing": 1,
+        "pth_inside_courtyard": 2
+      },
+      "unconnected_count": 0,
+      "drc_report": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\drc_report.json"
+    },
+    "question": "DRC verify found 3 violation(s), 0 schematic parity item(s), and 0 unconnected item(s) after auto-cleanup. These require routing decisions the auto-pipeline cannot safely make.",
+    "suggested_choices": [
+      {
+        "id": "manual_route",
+        "label": "Open in KiCad GUI and route manually",
+        "consequence": "Engineer fixes layout; re-run pipeline from drc_verify"
+      },
+      {
+        "id": "force_pack",
+        "label": "Force-pack ZIP anyway (NOT recommended)",
+        "consequence": "Production ZIP with known issues; explicit override"
+      },
+      {
+        "id": "abort",
+        "label": "Abort and investigate",
+        "consequence": "Stop here, review DRC report manually"
+      }
+    ],
+    "answer_path": "assets\\generated\\hitl_answer.json"
+  },
+  "started_at": "2026-06-05T04:10:07+00:00",
+  "updated_at": "2026-06-05T04:13:14+00:00"
+}

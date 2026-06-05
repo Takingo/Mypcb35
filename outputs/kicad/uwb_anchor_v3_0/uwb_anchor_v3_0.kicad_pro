@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "version": 1
+  },
+  "project": {
+    "name": "uwb_anchor_v3_0"
+  },
+  "schematic": {},
+  "board": {}
+}

@@ -285,17 +285,44 @@ class OllamaClient:
                     f"Model adi dogru mu? URL: {url}. Detay: {error_body[:300]}"
                 ) from e
             elif status == 429:
-                # insufficient_quota vs rate_limit ayrimi
-                if "insufficient_quota" in error_body or "billing" in error_body.lower():
+                # Provider-specific quota/rate-limit message — detect from URL,
+                # NOT from error body keywords (Gemini's 429 message contains
+                # the substring "billing" too, which used to incorrectly trigger
+                # the OpenAI-specific error message).
+                lurl = url.lower()
+                if "googleapis.com" in lurl:
                     raise ConnectionError(
-                        f"OpenAI hesabinda kredi yetersiz (insufficient_quota). "
-                        f"https://platform.openai.com/account/billing adresinden kredi yukleyin. "
-                        f"Alternatif: Ayarlar'dan Ollama (lokal) veya Claude/Gemini secin."
+                        f"Gemini API kotasi asildi (HTTP 429). "
+                        f"https://aistudio.google.com/app/apikey adresinden plan/kullanimi kontrol edin. "
+                        f"Alternatif: Ayarlar'dan farkli bir Gemini model (gemini-2.5-flash, gemini-1.5-flash) "
+                        f"veya provider (Ollama/Claude) secin. Detay: {error_body[:200]}"
                     ) from e
-                raise ConnectionError(
-                    f"API rate limit asildi (HTTP 429). Birkaç saniye bekleyip tekrar deneyin. "
-                    f"Detay: {error_body[:300]}"
-                ) from e
+                elif "openai.com" in lurl:
+                    if "insufficient_quota" in error_body:
+                        raise ConnectionError(
+                            f"OpenAI hesabinda kredi yetersiz (insufficient_quota). "
+                            f"https://platform.openai.com/account/billing adresinden kredi yukleyin. "
+                            f"Alternatif: Ayarlar'dan Ollama (lokal) veya Claude/Gemini secin."
+                        ) from e
+                    raise ConnectionError(
+                        f"OpenAI API rate limit asildi (HTTP 429). Birkac saniye bekleyip tekrar deneyin. "
+                        f"Detay: {error_body[:200]}"
+                    ) from e
+                elif "anthropic.com" in lurl:
+                    raise ConnectionError(
+                        f"Anthropic Claude API rate limit asildi (HTTP 429). "
+                        f"Detay: {error_body[:200]}"
+                    ) from e
+                elif "nvidia.com" in lurl or "build.nvidia" in lurl:
+                    raise ConnectionError(
+                        f"Nvidia NIM rate limit asildi (HTTP 429). "
+                        f"Detay: {error_body[:200]}"
+                    ) from e
+                else:
+                    raise ConnectionError(
+                        f"API rate limit asildi (HTTP 429). URL: {url}. "
+                        f"Birkac saniye bekleyip tekrar deneyin. Detay: {error_body[:200]}"
+                    ) from e
             else:
                 raise ConnectionError(
                     f"HTTP {status} hatasi. URL: {url}. Detay: {error_body[:500]}"

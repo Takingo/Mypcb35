@@ -5,21 +5,53 @@ tags:
   - blockers
   - production
 status: active
-updated: 2026-05-26
+updated: 2026-05-30
 ---
 
 # Sonraki Isler
 
-> [!success] Sistem Durumu
-> Otomasyon kapilari temiz: `review_required`, readiness `%89` (8/9), board manifest DRC total `0`, `manufacturing_ready=true`. 0 bloklayici. Fiziksel uretim oncesi tek kalan: `REAL_SIMULATION` muhendis incelemesi + DWM3000 footprint + uretici DFM.
+> [!success] Sistem Durumu (2026-05-30)
+> Production state: `production_candidate`, DRC `0/0/0/0`, `manufacturing_ready=true`, ZIP `package_ready` (157 KB, 29 dosya, 09:20 itibariyla disk uzerinde). Hayalet C99-C102 PCB+sematik+asset+manifest seviyesinde gercek olarak temizlendi. HITL sistemi ([[13 - HITL Insan Donguye Dahil]]) devrede.
+
+## 2026-05-30 Aktif Blocker
+
+- **DevKit Conversion (placement)**: HITL pause durumunda. `assets/generated/hitl_state.json` icinde A/B/C/D secenekleri muhendis cevabini bekliyor. Production ZIP (SMD WROOM) bu pause'dan etkilenmez.
+- **240 schematic parity warning**: PCB net listesi ile sematik arasinda C99-C102 cleanup sonrasi divergence. Bilgilendirici; KiCad GUI'de eeschema "Update PCB from Schematic" ile cozulebilir. DRC error olarak sayilmiyor (manufacturing_ready=true devam).
 
 ## P0 - Once Gercegi Tekilleştir
 
 - [x] `board_verification_manifest.json` ekle: netlist hash, PCB hash, KiCad version, DRC count, unconnected count.
 - [x] `run_kicad_phase2.ps1` ve `engineering_readiness_report.json` board manifest ile beslensin.
+- [x] **Stale asset purge** (2026-05-30): `outputs/kicad_verify/`, `outputs/kicad_baseline/`, `outputs/kicad_test/`, `outputs/kicad/industrial_uwb_*/` silindi (~2.5MB). `assets/generated/pcb_artifacts/*` ve `drc_report_v1.json` temiz PCB'den `engine/_regenerate_assets.py` ile yeniden uretildi. Flutter UI artik C99-C102 hayalet komponentlerini gostermeyecek.
+- [x] **Yalanci dokuman silme** (2026-05-30): `MANUFACTURING_COMPLETE.txt`, `PCBA_STATUS_FINAL.txt`, `outputs/phase4/*iteration_1*` silindi.
 - [ ] `verify_board.ps1` ve UI stale-status gostergesi manifest politikasina tamamen baglansin.
 - [ ] Brainmypcb otomatik rapor yazici ekle; eski `331`, `6`, `26/25` gibi stale sayilar tekrar kalmasin.
 - [ ] UI'da stale asset varsa "gecersiz/eski rapor" olarak goster.
+
+## P0 - 2026-05-30 Yapilanlar (Hayalet Temizligi + HITL)
+
+- [x] **C99-C102 PCB temizligi (pcbnew API)**: `engine/_clean_pcb_proper.py` — `pcbnew.LoadBoard().Remove(footprint)` ile yapisal integriteyi koruyarak 4 footprint silindi. Eski bash surgery'nin yarattigi corruption (parens -5, 13K negative dive) `ca68ad2` restore + proper API removal ile cozuldu.
+- [x] **C99-C102 sematik temizligi**: `engine/_clean_sch_proper.py` — S-expression scanner ile 8 (symbol) blogu (4 lib_symbols entry + 4 instance) snip edildi; parens balance=0.
+- [x] **Dangling copper prune (subprocess loop)**: SWIG proxy invalidation bug'i nedeniyle in-process loop crash ediyordu. `engine/_prune_one.py` her pass'i fresh subprocess olarak calistirir. 4+8+11+9+4+4+7+7=70 oge silindi (full chain) ya da 6+2+2+3+2+1=16 oge (post-rollback chain).
+- [x] **U7.5 orphan +3V3 koprusu**: `engine/_route_orphan_3v3.py` — F.Cu 0.25mm track U7.5 → U8.1 (6.99mm). Ghost C99-C102 decoupler bypass'inin yerine kondu.
+- [x] **Zone refill**: `engine/_zone_fill.py` — `pcbnew.ZONE_FILLER(board).Fill(zones)`. GND ve +3V3 polygon flood'lari same-net island'leri otomatik birlestiriyor.
+- [x] **DRC = 0**: Tam temiz. `outputs/kicad/.../manufacturing/drc_report.json` SHA: `48de90ef...` (oturum icinde degisebilir).
+- [x] **Manifest project's-own-writer**: `PYTHONPATH="engine"` + KiCad Python ile `engine/board_verification_manifest.py` calistirildi. `production_model_pass=true`, `source_evidence_pass=true`, manufacturing_ready=true.
+- [x] **Fab ZIP repack**: `engine/fabrication_api_service.py` package_ready, `outputs/fabrication/Quantum_Mind_Anchor_v2_4_Production.zip` (157 KB, 29 dosya).
+- [x] **BOM-strict prompt**: `engine/cognitive_netlist_generator.py:SYSTEM_PROMPT` basinda "ABSOLUTE BOM LAW" — AI artik BOM disi component ref uretemez (FATAL SYSTEM ERROR). REUSE — never INVENT kurali.
+- [x] **DesignRule.net_class resilience**: `_safe_unpack()` helper + `net_class: str | None = None` optional alan. AI extra alanlari sessizce dropluyor; fallback'a dusmuyor.
+- [x] **zfill regression squash**: `ai_error_corrector.py:201` `f"PROP_{len(str(finding_id)).zfill(3)}"` (int.zfill crash) -> `proposal_id` reuse. PROP_007 dogru uretiliyor.
+- [x] **UTF-8 patch**: `run_ai_synthesis.py` + `ai_error_corrector.py` `sys.stdout.reconfigure(encoding='utf-8')` ile basina enjekte. `pcb_layout_generator.py` 3 noktada `open(..., encoding='utf-8')`. Turkce karakter charmap crash'i bitti.
+- [x] **MOV1 netlist consistency**: `outputs/phase1/AI_NETLIST_V1.json` icinde RV1.* pin referanslari MOV1.* olarak rename + MOV1 component eklendi. Source evidence gate gecti.
+- [x] **HITL module**: `engine/hitl_manager.py` — `ask_human_engineer(blocker_type, question, context, suggested_choices)`. JSON state/answer/log dosyalari. Detay: [[13 - HITL Insan Donguye Dahil]].
+
+## P1 - DevKit Conversion (HITL pause)
+
+- [x] **Surgical pcbnew swap denemesi**: U1 SMD WROOM kaldirildi, 2× PinHeader_1x22_P2.54mm_Vertical (90° rotate) eklendi, 6 signal stitch edildi, 5 komsu (R10-R13, K2) relocate edildi. **Sonuc**: 43 DRC violation.
+- [x] **Forward-fix iteration 1**: via-drop + B.Cu fallback routing ile auto-route denendi. **Sonuc**: 196 violation (DIVERGENCE — 4.5x kotulesti). Durduruldu.
+- [x] **Honest rollback**: `git checkout ca68ad2 -- *.kicad_pcb *.kicad_sch` + clean chain replay. Production state restore edildi.
+- [x] **HITL blocker emit**: DevKit placement icin A/B/C/D secenekleri ile `hitl_state.json` yazildi. Engineer cevabi bekleniyor.
+- [ ] **Dersler**: pcbnew Python API push-and-shove router'a sahip degil. Dense layout'ta agir auto-routing pcbnew script'ten guvenli yapilamaz. Cozum yollari: (a) KiCad GUI'de manuel route, (b) FreeRoute integration, (c) HITL ile her routing kararini muhendise sor.
 
 ## P0 - Source Evidence Gate
 

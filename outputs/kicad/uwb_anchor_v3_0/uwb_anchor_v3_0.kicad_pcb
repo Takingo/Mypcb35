@@ -1,0 +1,5 @@
+(kicad_pcb (version 20240108) (generator "OmniCircuit AI")
+  (general (thickness 1.6))
+  (comment 1 "pcbnew kullanılamıyor: in method 'new_VECTOR2I', argument 1 of type 'int'")
+  (comment 2 "Proje: UWB Anchor v3.0")
+)

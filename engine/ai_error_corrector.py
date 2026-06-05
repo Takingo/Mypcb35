@@ -5,6 +5,12 @@ from pathlib import Path
 from typing import Any
 from datetime import datetime
 
+# ── UTF-8 PATCH ──
+if hasattr(sys.stdout, "reconfigure") and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure") and sys.stderr.encoding.lower() != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8")
+
 from ollama_client import OllamaClient
 from input_evidence_validator import InputEvidenceValidator
 from ai_repair_service import SAFETY_NET_PATTERNS, ALLOWED_OPS
@@ -192,7 +198,7 @@ Yanıtın tamamen JSON olmalı, başka metin yok:
         )
 
         return {
-            "id": f"PROP_{len(str(finding_id)).zfill(3)}",
+            "id": proposal_id,  # reuse the canonical id computed at function entry (was: f"PROP_{len(str(finding_id)).zfill(3)}" — int has no .zfill, also semantically wrong)
             "source_finding_id": finding_id,
             "error_category": category,
             "error_severity": severity,

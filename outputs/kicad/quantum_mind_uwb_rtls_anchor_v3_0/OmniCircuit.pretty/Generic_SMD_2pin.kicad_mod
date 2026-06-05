@@ -1,0 +1,64 @@
+(footprint "Generic_SMD_2pin"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "U5"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "094a2e70-989f-4b14-aaa1-d0d0b5bad0e2")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Value" "TPS780180200DRV"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "18f44a88-f369-4281-a004-04c5830be28c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c51e7116-0dc2-4c97-bb15-98f1461eef7e")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c4ce1b7f-6449-4e24-a3eb-92ea19e8c96b")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd rect
+		(at -0.8 0)
+		(size 0.9 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "432375a6-04fc-448b-bbe4-dcf6ac1ff1a9")
+	)
+	(pad "2" smd rect
+		(at 0.8 0)
+		(size 0.9 0.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "da09a08d-b63e-43a0-928b-414f2a2a9b89")
+	)
+	(embedded_fonts no)
+)

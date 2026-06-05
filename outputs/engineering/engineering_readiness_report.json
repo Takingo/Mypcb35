@@ -1,9 +1,9 @@
 {
   "schema": "ENGINEERING_READINESS_V1",
-  "generated_at": "2026-05-27T03:07:46+00:00",
-  "overall_status": "production_candidate",
-  "readiness_percent": 100,
-  "summary": "Muhendislik denetimi: production_candidate. 9/9 kontrol gecti, 0 bloklayici sorun, 0 inceleme uyarisi.",
+  "generated_at": "2026-05-31T11:10:16+00:00",
+  "overall_status": "blocked",
+  "readiness_percent": 67,
+  "summary": "Muhendislik denetimi: blocked. 6/9 kontrol gecti, 3 bloklayici sorun, 0 inceleme uyarisi.",
   "checks": [
     {
       "id": "BOM_SOURCE",
@@ -48,10 +48,10 @@
     {
       "id": "DRC_EVIDENCE",
       "domain": "drc",
-      "status": "pass",
-      "severity": "info",
-      "evidence": "Board verification manifest aktif PCB ve KiCad DRC raporuyla tutarli; DRC=0.",
-      "required_action": "Islem gerekmiyor."
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": "KiCad DRC toplam 98 bulgu: 39 error, 59 warning.",
+      "required_action": "DRC sonucunu aktif board dosyasiyla ayni kosuda yeniden uret."
     },
     {
       "id": "REAL_SIMULATION",
@@ -64,18 +64,18 @@
     {
       "id": "PCBA_HANDOFF",
       "domain": "pcba",
-      "status": "pass",
-      "severity": "info",
-      "evidence": "Gerber/drill/BOM/CPL + 11 drawing + 1 3D model kaniti bulundu.",
-      "required_action": "Islem gerekmiyor."
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": "PCBA paketi guncel DRC kapisini gecemez: KiCad DRC toplam 98 bulgu: 39 error, 59 warning.",
+      "required_action": "DRC=0 ve manufacturing_ready=true olmadan PCBA handoff'u gecirme."
     },
     {
       "id": "FAB_ZIP",
       "domain": "export",
-      "status": "pass",
-      "severity": "info",
-      "evidence": "ZIP paketi 30 dosya iceriyor.",
-      "required_action": "Islem gerekmiyor."
+      "status": "fail",
+      "severity": "blocker",
+      "evidence": "ZIP paketi guncel DRC kapisini gecemez: KiCad DRC toplam 98 bulgu: 39 error, 59 warning.",
+      "required_action": "DRC=0 ve manufacturing_ready=true olmadan uretim ZIP'i gecer sayma."
     }
   ]
 }

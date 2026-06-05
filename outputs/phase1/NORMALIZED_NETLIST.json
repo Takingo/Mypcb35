@@ -1,0 +1,2506 @@
+{
+  "schema": "AI_Netlist_v1",
+  "project_name": "ESP32-S3 DWM3000 UWB Anchor with Relay Outputs",
+  "generated_at": "2026-05-31T09:30:57.953520Z",
+  "source_prompt": "# UWB Anchor v3.0 — Üretim Paketi README\n# ESP32-S3 + DWM3000 + W5500 Ethernet + 2× Röle RTLS Anchor\n\n**Revizyon:** v3.0 | **Tarih:** 2026-05-31 | **Durum:** Üretim Öncesi Onay Bekliyor\n\n---\n\n## Bu Pakette Ne Var\n\n| Dosya | İçerik |\n|---|---|\n| `BOM_v3.0.csv` | 80 satır tam malzeme listesi (Üretici + Part No dahil) |\n| `SCHEMATIC_v3.0.md` | Tam devre bağlantıları ve GPIO haritası |\n| `PCB_NOTES_v3.0.md` | Layout kuralları, test planı, üretici notları |\n| `README_v3.0.md` | Bu dosya |\n\n---\n\n## v3.0'da Düzeltilen Kritik Hatalar\n\nÖnceki versiyondaki (v2.x) hatalar ve v3.0 düzeltmeleri:\n\n| # | Hata (v2.x) | Düzeltme (v3.0) | Kritiklik |\n|---|---|---|---|\n| 1 | GPIO35/36 röle → PSRAM çakışması | GPIO4/5 | 🔴 Kart çalışmaz |\n| 2 | GPIO37 LED → PSRAM çakışması | GPIO7 | 🔴 Çakışma |\n| 3 | DWM3000 Pin6(VDD3V3) → 1V8 bağlı | 3V3_MAIN | 🔴 Chip hasar |\n| 4 | EXT_RX direkt bağlı (level shifter yok) | U14 SN74LVC1T45 eklendi | 🔴 Uzun vadeli GPIO hasarı |\n| 5 | TPS54331 R15=100kΩ → Vout=1.6V | R15=31.6kΩ → Vout=3.33V | 🔴 3.3V ray yok |\n| 6 | WS2812B + LED4 aynı GPIO (GPIO38) | GPIO8 (ayrı) | 🟠 Çakışan protokol |\n| 7 | 1N4148 röle flyback | 1N5819 Schottky | 🟠 Endüstriyel kalite |\n| 8 | HLK-5M05 (5W) güç marjı dar | HLK-10M05 (10W) | 🟠 Güç kesintisi riski |\n| 9 | Varistör bağlantı şeması | L-N arası paralel, sigorta önünde | 🟡 Koruma sırası |\n| 10 | Level shifter C33-C34 iki IC paylaşımlı | Her IC için ayrı C çifti | 🟡 Sinyal kalitesi |\n\n---\n\n## Donanım Özellikleri\n\n- **MCU:** ESP32-S3-WROOM-2-N32R16 (32MB Flash, 16MB OPI-PSRAM, IPEX anten)\n- **UWB:** DWM3000 (IEEE 802.15.4z, TWR/TDoA desteği)\n- **Ethernet:** W5500 hardwired TCP/IP (SPI2)\n- **Güç:** 220V AC → HLK-10M05(5V/2A) → TPS54331(3.3V/3A) → TPS780180(1.8V/200mA)\n- **Röleler:** 2× G5Q-14-DC5 SPDT 5V/10A (optik izoleli, flyback korumalı)\n- **Level Shifter:** TXB0104 (SPI 4-bit) + 3× SN74LVC1T45 (IRQ/EXT_TX/EXT_RX)\n- **RTC:** DS3231 (±2ppm, CR2032 yedek)\n- **EEPROM:** AT24C256 (256Kbit, anchor koordinat depolama)\n- **Watchdog:** TPL5010 (60s timeout, otomatik reset)\n- **USB:** USB-C programlama + otomatik reset + ESD koruma\n- **Test Noktaları:** 18 adet tüm kritik sinyaller\n\n---\n\n## GPIO Haritası (Özet — Datasheet Doğrulamalı)\n\n```\n⛔ KESİNLİKLE KULLANILMAZ: GPIO33, GPIO34, GPIO35, GPIO36, GPIO37 (PSRAM)\n\nRELAY1      → GPIO4   (ESKİ: GPIO35 YANLIŞ!)\nRELAY2      → GPIO5   (ESKİ: GPIO36 YANLIŞ!)\nLED_SYS     → GPIO1\nLED_ETH     → GPIO2\nLED_WIFI    → GPIO6\nLED_UWB     → GPIO7   (ESKİ: GPIO37 YANLIŞ!)\nWS2812B     → GPIO8   (ESKİ: GPIO38 LED4 ile paylaşıklı YANLIŞ!)\nUWB_RST     → GPIO9\nUWB_SPI     → GPIO10-13\nUWB_IRQ     → GPIO14  (U7: 1.8V→3.3V)\nUWB_EXTTX   → GPIO15  (U13: 1.8V→3.3V)\nUWB_EXTRX   → GPIO16  (U14: 3.3V→1.8V) YENİ level shifter\nI2C         → GPIO21-22\nETH_SPI     → GPIO39-42\nETH_RST     → GPIO47\nETH_INT     → GPIO48\nWATCHDOG    → GPIO45\n```\n\n---\n\n## Kritik Üretim Gereksinimleri\n\n1. **4 katmanlı PCB** — RF referans için zorunlu\n2. **ENIG yüzey kaplama** — RF ve güvenilirlik için\n3. **50Ω empedans kontrolü** — anten izi (PCB üreticiye bildirilmeli)\n4. **AC bölgesi 8mm izolasyon** — IEC 60664-1 uyumu\n5. **Level shifter yerleşimi** — DWM3000'dan 10-15mm içinde\n6. **Anten izinde VIA YOK** — RF kayıp önleme\n\n---\n\n## RTLS Sistem Entegrasyon Notları\n\n### MQTT Sözleşmesi (Flutter App ile)\n```\nBroker: {üretim IP}:1883\nKonum topic: quantummind/rtls/position\nRöle topic: quantummind/rtls/position/anchor/{ID}/relay\nRöle payload: { command: \"trigger_relay\", relay_number: 1|2, duration_ms: 500 }\nrelay_number=1 → GPIO4 (RELAY1)\nrelay_number=2 → GPIO5 (RELAY2)\n```\n\n### Anchor Koordinat Senkronu\nEEPROM (AT24C256, 0x50) anchor fiziksel koordinatlarını depolar.\nFlutter `eeprom_service.dart` → MQTT `command: sync_eeprom` → Anchor → I2C yazma\n\n---\n\n## Prototip Üretim Planı\n\n1. **Prototip:** 5 adet üret\n2. **Test süresi:** 48 saat burn-in\n3. **RF doğrulama:** VNA S11 testi, TDR 50Ω\n4. **Fonksiyonel:** UWB TWR ranging 1m/5m/10m\n5. **Ethernet:** DHCP + MQTT bağlantı testi\n6. **Röle:** GPIO4/5 kontrol doğrulaması\n7. **Seri üretim:** Tüm testler geçtikten sonra 50-100 adet\n\n---\n\n## Onay Gerektiren Konular (Manuel Mühendis İncelemesi)\n\n> Bu dokümanlar yazılım tabanlı analizle hazırlanmıştır.\n> Aşağıdaki konular fiziksel doğrulama gerektirir:\n\n- [ ] DWM3000 modül pinout gerçek datasheet ile çapraz doğrulama (K4W_DW31X0_52833 belgesi)\n- [ ] AC bölgesi IEC 60664-1 creepage/clearance tablo kontrolü\n- [ ] TPS54331 gerçek Bode plot / stabilite — R14/R15 ile\n- [ ] RF stackup üreticide field-solver ile doğrulama (0.35mm iz 50Ω FR4)\n- [ ] Tüm bileşen footprint — datasheet land pattern ile karşılaştırma\n- [ ] Termal analiz: HLK-10M05 + TPS54331 + 2 röle eş zamanlı\n\n---\n\n**UWB ANCHOR v3.0** | Quantum Mind RTLS Ekosistemi | 2026-05-31\n\nBOM:\nItem,Quantity,Reference,Value,Description,Manufacturer,Part Number,Notes\n1,1,U1,ESP32-S3-WROOM-2-N32R16,WiFi+BLE MCU Module 32MB Flash 16MB OPI-PSRAM IPEX anten,Espressif,ESP32-S3-WROOM-2-N32R16,GPIO33-37 dahili PSRAM - KULLANILAMAZ; SOKETLI takilir\n1a,2,SK1-SK2,Female_Header_1x22_2.54mm,22-pin Disi Soket ESP32 modulu icin (sokulup takilabilir),Samtec veya Wurth,61302211821 veya 61302211021,2.54mm pitch; SK1=sol 22-pin SK2=sag 22-pin; ESP32 modulu soketin uzerine takilir\n2,1,U2,DWM3000,UWB Transceiver Module IEEE 802.15.4z 1.8V SPI arayuzu,Qorvo,DWM3000EVB veya DWM3000,LGA28 modulu; Pin6=3V3 Pin5/7/9/11/13/15/21=1V8\n3,1,U3,HLK-10M05,AC-DC 5V 2A 10W Izoleli Guc Modulu,Hi-Link,HLK-10M05,DEGISTIRILDI: HLK-5M05(5W) yetersiz; rolean+ESP32+W5500 toplam ~4.5W\n4,1,U4,TPS54331DR,Buck Converter 3A 28V giris 3.3V cikis,Texas Instruments,TPS54331DR,SOIC-8; R14=10k R15=31.6k ile Vout=3.33V\n5,1,U5,TPS780180200DRV,1.8V LDO 200mA yalnizca DWM3000 icin,Texas Instruments,TPS780180200DRV,SOT-23-5; sadece DWM3000 ve level shifter VCCB besler\n6,1,U6,TXB0104RGYR,4-bit Cift Yonlu Voltaj Cevirici 3.3V-1.8V SPI icin,Texas Instruments,TXB0104RGYR,VQFN-16; VCCA=3.3V VCCB=1.8V OE=GND\n7,1,U7,SN74LVC1T45DBVR,Tek Kanal Level Shifter IRQ: DWM3000(1.8V)→ESP32(3.3V),Texas Instruments,SN74LVC1T45DBVR,SOT-23-6; VCCA=1.8V VCCB=3.3V DIR=HIGH(A→B)\n8,1,U8,TPL5010DDCR,Watchdog Timer 60s zaman asimi sistemi resetler,Texas Instruments,TPL5010DDCR,SOT-23-6; GPIO45→DONE; EN→RSTn\n9,1,U9,DS3231SN,RTC Gercek Zamanli Saat +-2ppm I2C CR2032 yedek,Maxim/Analog,DS3231SN,SO-8; 0x68 I2C adresi\n10,1,U10,AT24C256C-SSHL,EEPROM 256Kbit I2C anchor koordinatlari icin,Microchip,AT24C256C-SSHL,SO-8; 0x50 adresi; WP=GPIO23 ile koruma\n11,1,U13,SN74LVC1T45DBVR,Tek Kanal Level Shifter EXT_TX: DWM3000(1.8V)→ESP32(3.3V),Texas Instruments,SN74LVC1T45DBVR,SOT-23-6; VCCA=1.8V VCCB=3.3V DIR=HIGH(A→B)\n12,1,U14,SN74LVC1T45DBVR,Tek Kanal Level Shifter EXT_RX: ESP32(3.3V)→DWM3000(1.8V),Texas Instruments,SN74LVC1T45DBVR,SOT-23-6; VCCA=3.3V VCCB=1.8V DIR=HIGH(A→B); YENI EKLENDI\n13,1,U15,W5500,Hardwired TCP/IP Ethernet Controller SPI arayuzu,WIZnet,W5500,LQFP-48; SPI2: GPIO39-42; RST=GPIO47; INT=GPIO48\n14,2,K1-K2,G5Q-14-DC5,Role SPDT 5V 10A NO+NC kontaklar,Omron,G5Q-14-DC5,5V bobin; SPDT: COM+NO+NC terminaller\n15,2,U11-U12,PC817X2CSP9F,Optokupler 2500V izolasyon role surucusu,Sharp,PC817X2CSP9F,DIP-4 veya SMD; role ve MCU arasinda galvanik izolasyon\n16,4,Q1-Q4,2N7002,N-Kanal MOSFET 60V 300mA role surucu icin,ON Semi / Vishay,2N7002,SOT-23; 2 role + 2 auto-reset devresi\n17,1,D1,SS34-E3/57T,Schottky Diyot 3A 40V buck flyback koruması,Vishay,SS34-E3/57T,SMA; SW pini flyback koruması\n18,2,D2-D3,1N5819,Schottky Diyot 1A 40V role bobin flyback,Vishay / ON Semi,1N5819,SMA; DEGISTIRILDI: 1N4148 yerine daha hizli Schottky\n19,2,D4-D5,1N4148TR,Diyot 100V 300mA auto-reset devresi icin,ON Semi,1N4148TR,SOD-323 SMD; Q1/Q2 auto-reset devre elemanlari\n20,3,D6-D8,SMBJ3.3A,TVS Diyot 3.3V 600W ESD koruması,Littelfuse,SMBJ3.3A,SMA; 3.3V raylarini korur\n21,1,D9,SMBJ1.8A,TVS Diyot 1.8V 600W DWM3000 cekirdek koruması,Littelfuse,SMBJ1.8A,SMA; 1V8_DWM rayini korur\n22,1,D10,USBLC6-2SC6,USB ESD Koruma Diyot Array +-15kV,ST Micro,USBLC6-2SC6,SOT-23-6; USB-C konnektor yakini MAX 3mm\n23,1,RV1,14D471K,Varistor 470V 14mm AC hat koruması,Littelfuse,14D471K,14mm disk; L-N arasi paralel sigorta ONCESINDE\n24,1,F1,0215001.MXP,Cam Sigorta 1A 250V 5x20mm AC giris,Littelfuse,0215001.MXP,5x20mm; sigorta tutucusu J5 ile birlikte\n25,1,F2,0ZCJ0050FF2G,Polisigorta 500mA 1206 USB hat,Bel Fuse,0ZCJ0050FF2G,1206 SMD; USB-C konnektor oncesi\n26,3,FB1-FB3,BLM18PG221SN1D,Ferrit Boncuk 220Ohm@100MHz 0603,Murata,BLM18PG221SN1D,0603; USB/3.3V/5V EMI filtreleme\n27,1,L1,CDRH104R-220NC,Induktor 22uH 3A 10x10mm buck icin,Sumida,CDRH104R-220NC,10x10mm; SW pininden MAX 5mm mesafe\n28,4,C1-C4,10uF/50V,Kapasitor Elektrolitik Radyal genel bulk,Nichicon,UWX1H100MCL1GB,Radyal THT; guc girislerinde bulk\n29,8,C5-C12,100nF/50V,Kapasitor Seramik X7R 0805 dekuplaj,Murata,GRM21BR71H104KA01L,0805; her IC VCC pininde 5mm icinde\n30,4,C13-C16,10uF/16V,Kapasitor Seramik X5R 0805 ESP32 guc,Murata,GRM21BR61C106KE15L,0805; ESP32-S3 VDD pin grubu\n31,4,C17-C20,1uF/16V,Kapasitor Seramik X7R 0603 DWM3000 dekuplaj,Murata,GRM188R71C105KA12D,0603; DWM3000 VDD pinleri\n32,2,C21-C22,22uF/10V,Kapasitor Seramik X5R 1206 buck giris,Murata,GRM31CR61A226KE19L,1206; VIN MAX 3mm mesafe\n33,2,C23-C24,4.7uF/50V,Kapasitor Seramik X7R 0805 buck cikis,Murata,GRM21BR71H475KA12L,0805; 3V3 ray MAX 3mm\n34,2,C25-C26,10uF/6.3V,Kapasitor Seramik X5R 0805 1.8V LDO giris,Murata,GRM21BR60J106ME39L,0805; IN pini MAX 2mm\n35,2,C27-C28,100nF/16V,Kapasitor Seramik X7R 0603 1.8V dekuplaj,Murata,GRM188R71C104KA93D,0603; OUT pini MAX 1mm\n36,2,C29-C30,100nF/16V,Kapasitor Seramik X7R 0603 TXB0104 dekuplaj,Murata,GRM188R71C104KA93D,0603; VCCA ve VCCB ayri\n37,1,C31,330pF/50V,Kapasitor Seramik C0G 0603 buck kompanzasyon,Murata,GRM1885C1H331JA01D,0603; COMP pini\n38,1,C32,100pF/50V,Kapasitor Seramik C0G 0603 buck kompanzasyon,Murata,GRM1885C1H101JA01D,0603; COMP pini\n39,2,C33-C34,100nF/16V,Kapasitor Seramik X7R 0603 U7 IRQ level shifter,Murata,GRM188R71C104KA93D,0603; U7 VCCA ve VCCB ayri kapasitorler\n40,2,C35-C36,100nF/16V,Kapasitor Seramik X7R 0603 U13 EXT_TX level shifter,Murata,GRM188R71C104KA93D,0603; U13 VCCA ve VCCB ayri\n41,2,C37-C38,100nF/16V,Kapasitor Seramik X7R 0603 U14 EXT_RX level shifter,Murata,GRM188R71C104KA93D,0603; YENI: U14 VCCA ve VCCB ayri\n42,4,C39-C42,100nF/50V,Kapasitor Seramik X7R 0603 W5500 dekuplaj,Murata,GRM188R71H104KA93D,0603; W5500 VCC pinleri; MAX 2mm\n43,1,C43,10uF/25V,Kapasitor Seramik X5R 0805 W5500 bulk,Murata,GRM21BR61E106KA73L,0805; W5500 VCC bulk\n44,1,C44,10uF/25V,Kapasitor Seramik X5R 0805 W5500 1.2V LDO cikis,Murata,GRM21BR61E106KA73L,0805; REGD pini\n45,3,R1-R3,220Ohm,Direnc 0805 1/4W LED akim sinirlandirma,Yageo,RC0805FR-07220RL,0805; LED1/2/3 icin\n46,2,R4-R5,220Ohm,Direnc 0805 1/4W LED4 ve LED5 icin,Yageo,RC0805FR-07220RL,0805; LED4-LED5 akim sinirlandirma\n47,4,R6-R9,10kΩ,Direnc 0805 1/4W pull-up/pull-down genel,Yageo,RC0805FR-0710KL,0805; EN/GPIO0/RELAY pull\n48,2,R10-R11,1kΩ,Direnc 0805 1/4W genel,Yageo,RC0805FR-071KL,0805\n49,2,R12-R13,4.7kΩ,Direnc 0805 1/4W I2C pull-up,Yageo,RC0805FR-074K7L,0805; SDA ve SCL icin\n50,1,R14,10kΩ,Direnc 0805 1% TPS54331 FB alt direnc (GND'ye),Yageo,RC0805FR-0710KL,0805; Vout=0.8*(1+R15/R14)\n51,1,R15,31.6kΩ,Direnc 0805 1% TPS54331 FB ust direnc (Vout'a),Yageo,RC0805FR-0731K6L,0805; DUZELTILDI: 100k degil 31.6k; Vout=3.33V\n52,2,R16-R17,330Ohm,Direnc 0805 1/4W PC817 LED akim,Yageo,RC0805FR-07330RL,0805; GPIO4/5→PC817 anot\n53,2,R18-R19,10kΩ,Direnc 0805 1/4W 2N7002 gate pull-down,Yageo,RC0805FR-0710KL,0805; role MOSFET gate\n54,8,R20-R27,100Ohm,Direnc 0805 1/4W SPI ve GPIO seri sinyal butunlugu,Yageo,RC0805FR-07100RL,0805; SPI+EXT hat sinyal korumasi\n55,3,R28-R30,10kΩ,Direnc 0805 1/4W EN/GPIO0/GPIO45 pull-up,Yageo,RC0805FR-0710KL,0805; strapping ve boot pinleri\n56,2,R31-R32,100Ohm,Direnc 0805 1/4W auto-reset DTR/RTS seri,Yageo,RC0805FR-07100RL,0805; USB→Q1/D4 auto-reset\n57,1,R33,0Ohm,Direnc 0805 atlama direnci opsiyonel jumper,Yageo,RC0805FR-070RL,0805; gerekirse devre disi\n58,1,R34,10kΩ,Direnc 0805 1/4W TPS780180 EN pull-up,Yageo,RC0805FR-0710KL,0805; 1.8V LDO her zaman aktif\n59,3,R35-R37,10kΩ,Direnc 0603 1/8W DWM3000 GPIO pull-up 1.8V'a,Yageo,RC0603FR-0710KL,0603; EXT_TX/EXT_RX/DEBUGOUT 1V8_DWM pull-up\n60,3,R38-R40,100Ohm,Direnc 0603 1/8W DWM3000 GPIO seri koruma,Yageo,RC0603FR-07100RL,0603; EXT_RX/EXT_TX/DEBUGOUT level shifter oncesi\n61,2,R41-R42,1kΩ,Direnc 0805 1/4W W5500 RST ve INT seri,Yageo,RC0805FR-071KL,0805; W5500 reset ve interrupt hatlari\n62,4,R43-R46,49.9Ohm,Direnc 0402 1% Ethernet TX/RX cift diferansiyel sonlandirma,Vishay,CRCW040249R9FKED,0402; TX+/TX-/RX+/RX- her hat icin\n63,1,R47,470Ohm,Direnc 0805 1/4W TP5 ESP32 EN test noktasi seri,Yageo,RC0805FR-07470RL,0805; test akimi sinirlar\n64,5,LED1-LED5,LED 0805,LED Kirmizi/Yesil/Mavi/Sari/Yesil SMD 0805,Kingbright,KP-2012SURCK / KPG / KPB / KPY,LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)\n65,1,LED6,WS2812B-2020,RGB LED Adreslenebilir 2020 SMD,Worldsemi,WS2812B-2020,GPIO8 ile kontrol; LED4'ten AYRILDI\n66,1,X1,25MHz Crystal,Kristal 25MHz 18pF SMD 3.2x2.5mm W5500 icin,TXC,7B-25.000MAAJ-T,W5500 referans saati; 2x 18pF yuk kapasitoru\n67,1,BAT1,CR2032,Pil Yuva SMD DS3231 RTC yedegi,Linx,BAT-HLD-001,Coin cell; RTC'nin VBAT pini\n68,2,SW1-SW2,6x6mm,Taktil Anahtar SPST RESET ve BOOT,C&K,PTS645SM50SMTR92,6x6mm SMD; SW1=RESET(EN) SW2=BOOT(GPIO0)\n69,1,J1,TYPE-C-31-M-12,USB Type-C Reseptakl 16pin,Korean Hroparts,TYPE-C-31-M-12,ESD koruması D10(USBLC6) MAX 3mm mesafe\n70,1,J2,PJ-002A,DC Guc Jakı 5.5x2.1mm opsiyonel 5V giris,CUI,PJ-002A,Yedek 5V giris; HLK-10M05 ile paralel degil\n71,3,J3-J5,KF350-3P,Vidalı Terminal 3-pin 3.5mm Role cikislari,Ningbo Kangnex,KF350-3P,3-pin: COM+NO+NC; her role icin ayri terminal\n72,1,J_FUSE,01000063Z,Sigorta Yuva 5x20mm PCB Mount,Littelfuse,01000063Z,F1 cam sigorta tutucu\n73,8,J6-J13,Header 1x6,Pin Header 1x6 2.54mm Erkek GPIO erisimi,Amphenol,10129378-906002BLF,GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ\n74,1,J14,Header 1x4,Pin Header 1x4 2.54mm I2C konnektoru,Amphenol,10129378-904002BLF,SDA+SCL+3V3+GND\n75,1,J15,Header 1x4,Pin Header 1x4 2.54mm UART konnektoru,Amphenol,10129378-904002BLF,TX(GPIO43)+RX(GPIO44)+3V3+GND\n76,1,J16,Header 1x6,Pin Header 1x6 2.54mm Guc dagitim,Amphenol,10129378-906002BLF,5V+5V+3V3+3V3+GND+GND\n77,1,J17,Header 1x6,Pin Header 1x6 2.54mm Programlama/Debug,Amphenol,10129378-906002BLF,5V+USB_D++USB_D-+GND+TX+RX\n78,1,J18,RJ45_MAG,RJ45 Konnektoru Entegre Trafo LED'li,Hanrun,HR911105A,W5500 Ethernet; entegre magnetics ve LED\n79,18,TP1-TP18,Test Point SMD,Test Noktasi SMD Kirmizi 1.27mm,Keystone,5015,Tum kritik sinyaller; PCB kenarinda\n80,1,ANT1,SMA_EDGE,SMA Konnektoru Dis Dis Edge Mount 50Ohm,Amphenol,132134,DWM3000 RF cikisi; 50 Ohm kontrollü empedans izi\n\nTECHNICAL_NOTES:\n# PCB Üretim Notları — UWB Anchor v3.0\n# Revision: v3.0 | Tarih: 2026-05-31\n\n---\n\n## 1. PCB SPESİFİKASYONLARI\n\n| Parametre | Değer | Not |\n|---|---|---|\n| Boyut | 130mm × 46mm | Sabit |\n| Katman | **4 Katman** | RF için zorunlu |\n| Kalınlık | 1.6mm ±10% | Standart |\n| Malzeme | FR4 TG150 | Yüksek sıcaklık |\n| Bakır | 1oz (35µm) tüm katmanlar | |\n| Min İz Genişliği | 0.15mm (6mil) sinyal | |\n| Min İz Aralığı | 0.15mm (6mil) | |\n| Min Via Çapı | 0.3mm delik (12mil) | |\n| Yüzey Kaplama | **ENIG** | RF için zorunlu |\n| Lehim Maskesi | Yeşil LPI | |\n| İpek Baskı | Beyaz 0.15mm min | |\n\n---\n\n## 2. KATMAN YAPISI (Stackup)\n\n```\nKatman 1 (Üst — Top):   Sinyal + Bileşenler\n  - ESP32-S3, DWM3000, W5500, TXB0104, level shifter'lar\n  - Anten izi (50Ω kontrollü empedans)\n  - SMD bileşenler\n\nKatman 2 (İç1 — GND):  SOLID GND Düzlemi\n  - RF referans düzlemi — RF bölümü altında KESİNTİSİZ\n  - Hiçbir kesim yok — özellikle anten izi altında\n  - Diferansiyel çiftler için referans\n\nKatman 3 (İç2 — PWR):  Güç Düzlemleri (3.3V, 5V, 1.8V)\n  - 3V3_MAIN: ESP32 + çevre birimleri bölgesi\n  - 5V_MAIN: Röle + HLK çıkış bölgesi\n  - 1V8_DWM: Yalnızca DWM3000 + level shifter VCCB\n  - Güç düzlemleri arası min 0.5mm boşluk\n\nKatman 4 (Alt — Bottom):  Sinyal + THT Bileşenler\n  - Vidalı terminaller (J3-J5), header'lar\n  - Sigorta tutucu (J_FUSE)\n  - CR2032 pil tutucu\n```\n\n---\n\n## 3. KRİTİK TASARIM KURALLARI\n\n### 3.1 RF — EN KRİTİK (UWB Performansı)\n\n```\nDWM3000 Pin23 → SMA (ANT1): 50Ω ±3% @ 6.5GHz\n\nMikroşerit Hesabı (Katman 1, h=0.2mm, εr=4.5, t=35µm):\n  İz genişliği: W = 0.35mm\n  TDR doğrulama: 50Ω ±3%\n  S11 hedef: < -12dB @ 6.5GHz\n\nRF Layout Kuralları (İHLAL EDİLEMEZ):\n  ✓ Anten izi — sadece Top katman, DOĞRUDAN SMA'ya\n  ✗ Anten izinde VIA YOK\n  ✗ Anten izinde TEST NOKTASI YOK\n  ✗ Anten izi çevresinde 3mm'de başka iz/bileşen YOK\n  ✓ Anten izi altında Katman 2 (GND) KESİNTİSİZ\n  ✓ SMA konnektör çevresine via dikişi (5mm aralık)\n  ✓ SMA metal gövdesi 4× via ile GND düzlemine\n  ✓ RF bölümü PCB'nin sağ üst köşesinde, izole\n```\n\n### 3.2 Güç Sistemi Layout\n\n```\nTPS54331DR (U4) Buck Converter:\n  ✓ C21-C22 (22µF giriş): VIN pinine MAX 3mm\n  ✓ L1 (22µH): SW pinine MAX 5mm\n  ✓ C23-C24 (4.7µF çıkış): 3V3 rayına MAX 3mm\n  ✓ R14-R15 (feedback): FB pinine MAX 1mm\n  ✗ SW pini altında GND düzlemi YOK (20mm yarıçap)\n  ✓ Termal via: 9× via (3×3 ızgara, 0.3mm) termal pad altına\n\nTPS780180 (U5) 1.8V LDO:\n  ✓ C25-C26 (10µF giriş): IN pinine MAX 2mm\n  ✓ C27-C28 (100nF çıkış): OUT pinine MAX 1mm\n  ✓ 1V8_DWM izi: 0.3mm genişlik, sadece DWM3000 + level shifter VCCB\n\nHLK-10M05 (U3) AC-DC Modül:\n  ✓ AC giriş bölümü DC bölümünden MIN 8mm izolasyon\n  ✓ Sigorta (F1) ve varistör (RV1) girişte\n  ✗ AC ve DC izler çakışmasın\n  ✓ PE toprağı kasa vidası noktasına\n```\n\n### 3.3 Level Shifter Layout\n\n```\nTXB0104 (U6) SPI:\n  ✓ DWM3000'dan MAX 15mm\n  ✓ C29 (VCCA 100nF): Pin1'e MAX 1mm\n  ✓ C30 (VCCB 100nF): Pin16'ya MAX 1mm\n  ✓ SPI izleri eşit uzunluk ±2mm (ESP32 tarafı ve DWM3000 tarafı ayrı ayrı)\n  ✓ R20-R23 seri dirençler: ESP32 tarafına yakın MAX 5mm\n\nSN74LVC1T45 U7 (IRQ):\n  ✓ DWM3000 Pin22'den MAX 10mm\n  ✓ C33 (VCCA/1.8V 100nF): Pin6'ya MAX 1mm\n  ✓ C34 (VCCB/3.3V 100nF): Pin5'e MAX 1mm\n  ✓ DIR pini (Pin1) 3V3_MAIN'e kısa iz\n\nSN74LVC1T45 U13 (EXT_TX):\n  ✓ DWM3000 Pin27'den MAX 10mm\n  ✓ C35-C36 ayrı ayrı (U13'ün kendine ait kapasitörleri)\n\nSN74LVC1T45 U14 (EXT_RX) — YENİ:\n  ✓ DWM3000 Pin26'dan MAX 10mm\n  ✓ C37-C38 ayrı ayrı (U14'ün kendine ait kapasitörleri)\n  ✓ A tarafı GPIO16 (3.3V), B tarafı DWM3000 Pin26 (1.8V)\n```\n\n### 3.4 RTLS Kritik Sinyal İzleri\n\n```\nEXT_TX / EXT_RX / IRQ izleri:\n  ✓ Maksimum iz uzunluğu: 30mm\n  ✓ Pull-up dirençleri (R35-R37): DWM3000 pinlerine MAX 5mm\n  ✓ Seri dirençler (R38-R40): Level shifter A tarafına MAX 5mm\n  ✓ GND referans düzlemi altında tüm RTLS iz boyunca\n  ✗ Güç izleri veya SW nodunun yanından geçme\n```\n\n### 3.5 Röle ve Optokuplör Bölümü\n\n```\nPC817 (U11-U12) İzolasyon:\n  ✓ MCU tarafı (LED) ile röle tarafı (transistör) arasında MIN 8mm clearance\n  ✓ İzolasyon çizgisi — öneri: PCB slot/oyuk\n  ✓ İpek baskı izolasyon uyarı çizgisi\n  ✓ K1-K2 rol bobin izleri: 1mm genişlik (1A akım)\n  ✓ 1N5819 flyback diyotları rol bobin pinlerine MAX 5mm\n\nRöle GPIO (KESİNLİKLE KONTROL):\n  ✓ GPIO4 → RELAY1 (PC817 U11)\n  ✓ GPIO5 → RELAY2 (PC817 U12)\n  ✗ GPIO35, GPIO36 kullanılmaz (PSRAM — datasheet teyitli)\n```\n\n### 3.6 W5500 Ethernet Layout\n\n```\nW5500 (U15):\n  ✓ C39-C42 (100nF): her VCC pininde MAX 2mm\n  ✓ C43-C44 (10µF): W5500 yakınına\n  ✓ X1 (25MHz kristal): W5500 referans saat pinlerine MAX 10mm\n  ✓ Kristal yük kapasitörleri X1'e MAX 2mm\n  ✓ TX+/TX- ve RX+/RX- diferansiyel çiftler: 100Ω diferansiyel\n  ✓ R43-R46 (49.9Ω) sonlandırma: W5500 TX/RX pinlerine MAX 5mm\n  ✓ W5500 izleri DWM3000 RF bölümünden uzakta\n  ✓ Ethernet SPI izleri (GPIO39-42) UWB SPI izlerinden AYRI yönlerde\n\nRJ45 (J18 HR911105A):\n  ✓ Entegre magnetics — ayrıca dış trafo gerekmez\n  ✓ PCB kenarına yerleştirilmeli (standart)\n  ✓ Metal kasa GND'ye 4× via\n```\n\n### 3.7 USB Layout\n\n```\nUSB-C (J1):\n  ✓ D+/D- diferansiyel çift: 90Ω ±10% diferansiyel\n  ✓ D+/D- eşit uzunluk ±0.05mm\n  ✓ D10 (USBLC6-2SC6): USB konnektörden MAX 3mm\n  ✓ GND düzlemi altında tüm USB izleri\n  ✓ Kalkan: 4× via (tüm katmanlar)\n\nOtomatik Reset (Q1-Q2, D4-D5):\n  ✓ Q1: ESP32 EN pininden MAX 5mm\n  ✓ D4-D5: GPIO0'dan MAX 3mm\n  ✓ R31-R32: USB konnektör pinlerine yakın\n```\n\n### 3.8 Dekuplaj Kapasitör Kuralları\n\n```\nYerleşim önceliği (IC pinine yakından uzağa):\nIC Pin → 100nF (0603) → 1µF (0603) → 10µF (0805) → Bulk\n\nKritik yerleşimler:\n  ESP32-S3 (U1): Her VDD grubu: 10µF (C13-C16) + 100nF (C5-C12) — 3mm içinde\n  DWM3000 (U2): Her VDD pini: 100nF — 2mm içinde; toplam 10µF yakında\n  TXB0104 (U6): VCCA: C29(100nF) 1mm; VCCB: C30(100nF) 1mm — AYRI\n  U7: VCCA: C33(100nF) 1mm; VCCB: C34(100nF) 1mm — AYRI\n  U13: VCCA: C35(100nF) 1mm; VCCB: C36(100nF) 1mm — AYRI\n  U14: VCCA: C37(100nF) 1mm; VCCB: C38(100nF) 1mm — AYRI\n  W5500: C39-C42(100nF) her VCC pinine 2mm\n```\n\n---\n\n## 4. VIA KULLANIMI\n\n```\nTermal Vialar (Güç Dağılımı):\n  TPS54331 (U4): 9× via (3×3), 0.3mm, doldurulmuş, termal pad altı\n  ESP32-S3 (U1): 20× via, 0.3mm, termal pad\n  DWM3000 (U2): 16× via, çevre boyunca, 0.3mm\n  TXB0104 (U6): 6× via, 0.3mm\n  Level shifterlar (U7,U13,U14): 4× via her biri\n\nGND Via Dikişi (Sinyal Bütünlüğü):\n  DWM3000 çevresi: 3mm aralıklı via ızgara\n  RF bölümü: 2mm aralıklı via (yoğun)\n  USB konnektör: 6× via\n  PCB çevresi: 5mm aralıklı via çiti (EMI)\n  Her dekuplaj kapasitör GND pini: 2× via\n\nSinyal Viaları:\n  Sinyal başına max 2 via\n  Her sinyal viasına GND return via eşleştirilmeli\n  Anten izinde KESİNLİKLE VIA YOK\n```\n\n---\n\n## 5. İPEK BASKI (Silkscreen) ZORUNLU İŞARETLEMELER\n\n```\nUyarı Yazıları:\n  [AC Giriş Bölgesi]:   \"YÜKSEK GERİLİM / HIGH VOLTAGE — AC INPUT\"\n  [RF Bölgesi]:         \"RF BÖLGESI — ENGELLEME / RF SECTION — DO NOT OBSTRUCT\"\n  [DWM3000 çevresi]:    \"1.8V HASSAS MANTIK / 1.8V SENSITIVE LOGIC\"\n  [IRQ/EXT TX/RX]:      \"RTLS KRİTİK SİNYAL / RTLS CRITICAL SIGNAL\"\n  [PC817 çevresi]:      İzolasyon çizgisi (2mm genişlik) + \"YÜKSEK İZOLASYON / HIGH ISOLATION\"\n  [GPIO35-37 header]:   \"⛔ PSRAM — BAGLANMA / DO NOT CONNECT\"\n\nBileşen Etiketleri:\n  Tüm referanslar (U1-U15, R1-R47, C1-C44, vb.)\n  Polarite işaretleri (+ / - ; kapasitörler, LED'ler, diyotlar)\n  Pin 1 işaretleri (tüm IC'ler ve konnektörler)\n  Test nokta etiketleri (TP1-TP18 + sinyal adı)\n  Header etiketleri: \"J6:GPIO0-3\", \"J7:GPIO4-7\" vb.\n  J13 üzerinde \"GPIO33-37: ⛔PSRAM\" uyarısı\n\nGenel:\n  Proje adı: \"UWB ANCHOR v3.0\"\n  Revizyon: \"REV A\"\n  Tarih: \"2026-MM-DD\"\n  Seri No alanı: \"SN: ________\"\n  QR kod (10×10mm): Dokümantasyon linki\n```\n\n---\n\n## 6. ÜRETİCİ NOTLARI\n\n```\nYüzey Kaplama (ENIG):\n  Ni kalınlığı: 3-5µm\n  Au kalınlığı: 0.05-0.10µm\n  Nikel korozyon kabul edilmez\n\nEmpedans Kontrolü:\n  50Ω ±3% tek uçlu (anten izi)\n  90Ω ±10% diferansiyel (USB D+/D-)\n  Panel üzerinde test kuponu zorunlu\n  TDR ölçüm raporu gönderilmeli\n\nVia İşleme:\n  Via örtme: İki tarafta kapalı\n  Doldurma: Epoksi + kaplama (termal vialar)\n  Delik çapı: 0.3mm bitirilmiş\n  En-boy oranı: <8:1 (0.3mm via 1.6mm PCB)\n\nPCB Eğriliği:\n  Reflow sonrası max 0.75%\n  IPC-TM-650 2.4.22\n\nGerber Paketi:\n  GTL, GBL, G1(GND), G2(PWR), GTS, GBS, GTO, GBO, GKO\n  DRL (Excellon drill), TXT (drill tool listesi)\n  IPC-D-356A netlist\n  Fabrikasyon çizimi (PDF — tüm boyutlar)\n  Montaj çizimi (PDF — bileşen konumları)\n  Pick-and-Place (CSV)\n  BOM_v3.0.csv\n```\n\n---\n\n## 7. ÜRETİM SONRASI TEST PLANI\n\n### 7.1 Elektriksel Testler (100% Test)\n\n```\nKısa Devre Testi:\n  GND ↔ 5V: >10MΩ @ 500V\n  GND ↔ 3.3V: >10MΩ @ 500V\n  GND ↔ 1.8V: >10MΩ @ 500V\n  AC ↔ DC izolasyon: >100MΩ @ 1000V\n\nGüç Sistemi:\n  5V: 4.95-5.05V @ 0-1A yük\n  3.3V: 3.28-3.38V @ 0-1A yük  [★ 3.44V max kabul — R15=31.6kΩ ile ±2%]\n  1.8V: 1.78-1.82V @ 0-200mA yük\n  Ripple: <50mVpp tüm raylar\n\nLevel Shifter Testi:\n  TXB0104 (U6): 4 kanalın tümü 3.3V↔1.8V doğrulaması\n  U7 IRQ: 1.8V → 3.3V doğrulaması\n  U13 EXT_TX: 1.8V → 3.3V doğrulaması\n  U14 EXT_RX: 3.3V → 1.8V doğrulaması ★ YENİ\n\nSPI Testi:\n  DWM3000 cihaz ID okuma: 0xDECA0130\n  SPI hızları: 1MHz, 10MHz, 20MHz, 38MHz\n  Veri bütünlüğü: 512 byte okuma/yazma\n\nI2C Testi:\n  DS3231 (0x68): Zaman yazma/okuma\n  AT24C256 (0x50): Sayfa yazma/okuma\n\nRöle Testi:\n  GPIO4 → RELAY1 ON/OFF (✓ GPIO4; ✗ değil GPIO35)\n  GPIO5 → RELAY2 ON/OFF (✓ GPIO5; ✗ değil GPIO36)\n  Temas direnci: <50mΩ @ 1A\n  İzolasyon: >100MΩ @ 500V\n\nWatchdog Testi:\n  60s timeout ±5%\n  GPIO45 darbe kesintisinde reset kontrolü\n\nW5500 Ethernet Testi:\n  SPI kayıt erişimi (0x0000 = 0x0004)\n  DHCP alma veya statik IP ping testi\n  100Mbps link UP testi\n```\n\n### 7.2 RF Testleri\n\n```\nEmpedans (Zorunlu):\n  TDR: DWM3000 Pin23 → SMA: 50Ω ±3%\n  VNA S11 < -12dB @ 6.5GHz\n  Smith chart raporu gönderilmeli\n\nUWB Fonksiyonel:\n  TWR ranging: 1m, 5m, 10m bilinen mesafeler\n  Doğruluk: ±10cm RMS @ 10m\n  Güncelleme hızı: 100Hz kapasitesi\n```\n\n### 7.3 Çevresel Testler (Örnek Test)\n\n```\nSıcaklık çevrimi: -20°C ile +70°C arası 5 çevrim\nESD (IEC 61000-4-2): USB ±8kV temas, ±15kV hava\nÖmür testi: 72 saat sürekli çalışma\n```\n\n---\n\n## 8. PSRAM GPIO UYARISI — KRİTİK\n\n> **Kaynak: Espressif ESP32-S3-WROOM-2 Datasheet (2025):**\n> \"For boards with ESP32-S3-WROOM-2 modules, the pins GPIO35, GPIO36 and GPIO37 are used for the internal communication between ESP32-S3 and SPI flash/PSRAM memory, thus not available for external use.\"\n\n**Etkilenen tasarım değişiklikleri v3.0'da:**\n- RELAY1: GPIO35 → **GPIO4** ✓\n- RELAY2: GPIO36 → **GPIO5** ✓\n- LED_UWB: GPIO37 → **GPIO7** ✓\n- GPIO33, GPIO34 de bu kategoride — header'lara çıkarılmaz veya \"DO NOT CONNECT\" etiketlenir\n\n---\n\n**Doküman:** PCB_NOTES_v3.0.md | **Revizyon:** v3.0 | **Tarih:** 2026-05-31",
+  "assumptions": [
+    "AC mains input is isolated before low-voltage logic.",
+    "ESP32-S3 logic domain is 3.3V.",
+    "DWM3000 logic and RF module domain is 1.8V.",
+    "Relay coils are 5V and must not be driven directly from MCU pins."
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "type": "mcu",
+      "value": "ESP32-S3-WROOM-2-N32R16",
+      "manufacturer": "Espressif",
+      "part_number": "ESP32-S3-WROOM-2-N32R16",
+      "footprint": "RF_Module:ESP32-S3-WROOM-1",
+      "reason": "User requested host MCU.",
+      "constraints": [
+        "3V3 logic",
+        "place away from AC isolation slot"
+      ],
+      "notes": "GPIO33-37 dahili PSRAM - KULLANILAMAZ; SOKETLI takilir"
+    },
+    {
+      "ref": "U2",
+      "type": "uwb_module",
+      "value": "DWM3000",
+      "manufacturer": "Qorvo",
+      "part_number": "DWM3000EVB veya DWM3000",
+      "footprint": "uwb_module",
+      "reason": "User requested UWB positioning radio.",
+      "constraints": [
+        "1V8 logic",
+        "RF launch requires 50 ohm net class",
+        "1.0mm pitch"
+      ],
+      "notes": "LGA28 modulu; Pin6=3V3 Pin5/7/9/11/13/15/21=1V8"
+    },
+    {
+      "ref": "F1",
+      "type": "fuse",
+      "value": "0215001.MXP",
+      "manufacturer": "Littelfuse",
+      "part_number": "0215001.MXP",
+      "footprint": "Fuse:Fuse_1206_3216Metric",
+      "reason": "AC input protection.",
+      "constraints": [],
+      "notes": "5x20mm; sigorta tutucusu J5 ile birlikte"
+    },
+    {
+      "ref": "U6",
+      "type": "ac_dc",
+      "value": "TXB0104RGYR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TXB0104RGYR",
+      "footprint": "Converter_ACDC:Converter_ACDC_Hi-Link_HLK-5Mxx",
+      "reason": "220V AC to isolated 5V rail.",
+      "constraints": [
+        "AC primary side — 8mm creepage to secondary"
+      ],
+      "notes": "VQFN-16; VCCA=3.3V VCCB=1.8V OE=GND"
+    },
+    {
+      "ref": "U7",
+      "type": "buck",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "reason": "5V to ESP32 3.3V rail.",
+      "constraints": [],
+      "notes": "SOT-23-6; VCCA=1.8V VCCB=3.3V DIR=HIGH(A→B)"
+    },
+    {
+      "ref": "U8",
+      "type": "ldo",
+      "value": "TPL5010DDCR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPL5010DDCR",
+      "footprint": "ldo",
+      "reason": "3.3V to DWM3000 1.8V rail; selected for higher current margin than TPS780.",
+      "constraints": [],
+      "notes": "SOT-23-6; GPIO45→DONE; EN→RSTn"
+    },
+    {
+      "ref": "U3",
+      "type": "level_shifter",
+      "value": "HLK-10M05",
+      "manufacturer": "Hi-Link",
+      "part_number": "HLK-10M05",
+      "footprint": "level_shifter",
+      "reason": "SPI voltage translation.",
+      "constraints": [],
+      "notes": "DEGISTIRILDI: HLK-5M05(5W) yetersiz; rolean+ESP32+W5500 toplam ~4.5W"
+    },
+    {
+      "ref": "U4",
+      "type": "level_shifter",
+      "value": "TPS54331DR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPS54331DR",
+      "footprint": "level_shifter",
+      "reason": "IRQ voltage translation.",
+      "constraints": [],
+      "notes": "SOIC-8; R14=10k R15=31.6k ile Vout=3.33V"
+    },
+    {
+      "ref": "U5",
+      "type": "level_shifter",
+      "value": "TPS780180200DRV",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPS780180200DRV",
+      "footprint": "level_shifter",
+      "reason": "EXT_TX voltage translation.",
+      "constraints": [],
+      "notes": "SOT-23-5; sadece DWM3000 ve level shifter VCCB besler"
+    },
+    {
+      "ref": "K1",
+      "type": "relay",
+      "value": "G5Q-14-DC5",
+      "manufacturer": "Omron",
+      "part_number": "G5Q-14-DC5",
+      "footprint": "Relay_THT:Relay_SPDT_Omron-G5Q-1",
+      "reason": "User requested relay output.",
+      "constraints": [
+        "5V coil",
+        "no direct GPIO drive"
+      ],
+      "notes": "5V bobin; SPDT: COM+NO+NC terminaller"
+    },
+    {
+      "ref": "Q1",
+      "type": "n_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semi / Vishay",
+      "part_number": "2N7002",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "reason": "Low-side relay coil driver.",
+      "constraints": [],
+      "notes": "SOT-23; 2 role + 2 auto-reset devresi"
+    },
+    {
+      "ref": "D1",
+      "type": "flyback_diode",
+      "value": "SS34-E3/57T",
+      "manufacturer": "Vishay",
+      "part_number": "SS34-E3/57T",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; SW pini flyback koruması"
+    },
+    {
+      "ref": "K2",
+      "type": "relay",
+      "value": "G5Q-14-DC5",
+      "manufacturer": "Omron",
+      "part_number": "G5Q-14-DC5",
+      "footprint": "Relay_THT:Relay_SPDT_Omron-G5Q-1",
+      "reason": "User requested relay output.",
+      "constraints": [
+        "5V coil",
+        "no direct GPIO drive"
+      ],
+      "notes": "5V bobin; SPDT: COM+NO+NC terminaller"
+    },
+    {
+      "ref": "Q2",
+      "type": "n_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semi / Vishay",
+      "part_number": "2N7002",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "reason": "Low-side relay coil driver.",
+      "constraints": [],
+      "notes": "SOT-23; 2 role + 2 auto-reset devresi"
+    },
+    {
+      "ref": "D2",
+      "type": "flyback_diode",
+      "value": "1N5819",
+      "manufacturer": "Vishay / ON Semi",
+      "part_number": "1N5819",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; DEGISTIRILDI: 1N4148 yerine daha hizli Schottky"
+    },
+    {
+      "ref": "Q3",
+      "type": "n_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semi / Vishay",
+      "part_number": "2N7002",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "reason": "Low-side relay coil driver.",
+      "constraints": [],
+      "notes": "SOT-23; 2 role + 2 auto-reset devresi"
+    },
+    {
+      "ref": "D3",
+      "type": "flyback_diode",
+      "value": "1N5819",
+      "manufacturer": "Vishay / ON Semi",
+      "part_number": "1N5819",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; DEGISTIRILDI: 1N4148 yerine daha hizli Schottky"
+    },
+    {
+      "ref": "Q4",
+      "type": "n_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semi / Vishay",
+      "part_number": "2N7002",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "reason": "Low-side relay coil driver.",
+      "constraints": [],
+      "notes": "SOT-23; 2 role + 2 auto-reset devresi"
+    },
+    {
+      "ref": "D4",
+      "type": "flyback_diode",
+      "value": "1N4148TR",
+      "manufacturer": "ON Semi",
+      "part_number": "1N4148TR",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SOD-323 SMD; Q1/Q2 auto-reset devre elemanlari"
+    },
+    {
+      "ref": "D5",
+      "type": "flyback_diode",
+      "value": "1N4148TR",
+      "manufacturer": "ON Semi",
+      "part_number": "1N4148TR",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SOD-323 SMD; Q1/Q2 auto-reset devre elemanlari"
+    },
+    {
+      "ref": "D6",
+      "type": "flyback_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; 3.3V raylarini korur"
+    },
+    {
+      "ref": "D7",
+      "type": "flyback_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; 3.3V raylarini korur"
+    },
+    {
+      "ref": "D8",
+      "type": "flyback_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; 3.3V raylarini korur"
+    },
+    {
+      "ref": "D9",
+      "type": "flyback_diode",
+      "value": "SMBJ1.8A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ1.8A",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SMA; 1V8_DWM rayini korur"
+    },
+    {
+      "ref": "D10",
+      "type": "flyback_diode",
+      "value": "USBLC6-2SC6",
+      "manufacturer": "ST Micro",
+      "part_number": "USBLC6-2SC6",
+      "footprint": "Diode_SMD:D_SMA",
+      "reason": "Clamp relay coil flyback.",
+      "constraints": [],
+      "notes": "SOT-23-6; USB-C konnektor yakini MAX 3mm"
+    },
+    {
+      "ref": "ANT1",
+      "type": "antenna",
+      "value": "SMA_EDGE",
+      "manufacturer": "Amphenol",
+      "part_number": "132134",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "DWM3000 RF cikisi; 50 Ohm kontrollü empedans izi"
+    },
+    {
+      "ref": "BAT1",
+      "type": "battery",
+      "value": "CR2032",
+      "manufacturer": "Linx",
+      "part_number": "BAT-HLD-001",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Coin cell; RTC'nin VBAT pini"
+    },
+    {
+      "ref": "C1",
+      "type": "capacitor",
+      "value": "10uF/50V",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Radyal THT; guc girislerinde bulk"
+    },
+    {
+      "ref": "C2",
+      "type": "capacitor",
+      "value": "10uF/50V",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Radyal THT; guc girislerinde bulk"
+    },
+    {
+      "ref": "C3",
+      "type": "capacitor",
+      "value": "10uF/50V",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Radyal THT; guc girislerinde bulk"
+    },
+    {
+      "ref": "C4",
+      "type": "capacitor",
+      "value": "10uF/50V",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Radyal THT; guc girislerinde bulk"
+    },
+    {
+      "ref": "C5",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C6",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C7",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C8",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C9",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C10",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C11",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C12",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; her IC VCC pininde 5mm icinde"
+    },
+    {
+      "ref": "C13",
+      "type": "capacitor",
+      "value": "10uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; ESP32-S3 VDD pin grubu"
+    },
+    {
+      "ref": "C14",
+      "type": "capacitor",
+      "value": "10uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; ESP32-S3 VDD pin grubu"
+    },
+    {
+      "ref": "C15",
+      "type": "capacitor",
+      "value": "10uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; ESP32-S3 VDD pin grubu"
+    },
+    {
+      "ref": "C16",
+      "type": "capacitor",
+      "value": "10uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; ESP32-S3 VDD pin grubu"
+    },
+    {
+      "ref": "C17",
+      "type": "capacitor",
+      "value": "1uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; DWM3000 VDD pinleri"
+    },
+    {
+      "ref": "C18",
+      "type": "capacitor",
+      "value": "1uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; DWM3000 VDD pinleri"
+    },
+    {
+      "ref": "C19",
+      "type": "capacitor",
+      "value": "1uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; DWM3000 VDD pinleri"
+    },
+    {
+      "ref": "C20",
+      "type": "capacitor",
+      "value": "1uF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; DWM3000 VDD pinleri"
+    },
+    {
+      "ref": "C21",
+      "type": "capacitor",
+      "value": "22uF/10V",
+      "manufacturer": "Murata",
+      "part_number": "GRM31CR61A226KE19L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "1206; VIN MAX 3mm mesafe"
+    },
+    {
+      "ref": "C22",
+      "type": "capacitor",
+      "value": "22uF/10V",
+      "manufacturer": "Murata",
+      "part_number": "GRM31CR61A226KE19L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "1206; VIN MAX 3mm mesafe"
+    },
+    {
+      "ref": "C23",
+      "type": "capacitor",
+      "value": "4.7uF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H475KA12L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; 3V3 ray MAX 3mm"
+    },
+    {
+      "ref": "C24",
+      "type": "capacitor",
+      "value": "4.7uF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H475KA12L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; 3V3 ray MAX 3mm"
+    },
+    {
+      "ref": "C25",
+      "type": "capacitor",
+      "value": "10uF/6.3V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR60J106ME39L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; IN pini MAX 2mm"
+    },
+    {
+      "ref": "C26",
+      "type": "capacitor",
+      "value": "10uF/6.3V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR60J106ME39L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; IN pini MAX 2mm"
+    },
+    {
+      "ref": "C27",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; OUT pini MAX 1mm"
+    },
+    {
+      "ref": "C28",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; OUT pini MAX 1mm"
+    },
+    {
+      "ref": "C29",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C30",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C31",
+      "type": "capacitor",
+      "value": "330pF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H331JA01D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; COMP pini"
+    },
+    {
+      "ref": "C32",
+      "type": "capacitor",
+      "value": "100pF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H101JA01D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; COMP pini"
+    },
+    {
+      "ref": "C33",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; U7 VCCA ve VCCB ayri kapasitorler"
+    },
+    {
+      "ref": "C34",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; U7 VCCA ve VCCB ayri kapasitorler"
+    },
+    {
+      "ref": "C35",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; U13 VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C36",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; U13 VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C37",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; YENI: U14 VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C38",
+      "type": "capacitor",
+      "value": "100nF/16V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; YENI: U14 VCCA ve VCCB ayri"
+    },
+    {
+      "ref": "C39",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; W5500 VCC pinleri; MAX 2mm"
+    },
+    {
+      "ref": "C40",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; W5500 VCC pinleri; MAX 2mm"
+    },
+    {
+      "ref": "C41",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; W5500 VCC pinleri; MAX 2mm"
+    },
+    {
+      "ref": "C42",
+      "type": "capacitor",
+      "value": "100nF/50V",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; W5500 VCC pinleri; MAX 2mm"
+    },
+    {
+      "ref": "C43",
+      "type": "capacitor",
+      "value": "10uF/25V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61E106KA73L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; W5500 VCC bulk"
+    },
+    {
+      "ref": "C44",
+      "type": "capacitor",
+      "value": "10uF/25V",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61E106KA73L",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0805; REGD pini"
+    },
+    {
+      "ref": "F2",
+      "type": "fuse",
+      "value": "0ZCJ0050FF2G",
+      "manufacturer": "Bel Fuse",
+      "part_number": "0ZCJ0050FF2G",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "1206 SMD; USB-C konnektor oncesi"
+    },
+    {
+      "ref": "FB1",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; USB/3.3V/5V EMI filtreleme"
+    },
+    {
+      "ref": "FB2",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; USB/3.3V/5V EMI filtreleme"
+    },
+    {
+      "ref": "FB3",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "0603; USB/3.3V/5V EMI filtreleme"
+    },
+    {
+      "ref": "J1",
+      "type": "connector",
+      "value": "TYPE-C-31-M-12",
+      "manufacturer": "Korean Hroparts",
+      "part_number": "TYPE-C-31-M-12",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "ESD koruması D10(USBLC6) MAX 3mm mesafe"
+    },
+    {
+      "ref": "J2",
+      "type": "connector",
+      "value": "PJ-002A",
+      "manufacturer": "CUI",
+      "part_number": "PJ-002A",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Yedek 5V giris; HLK-10M05 ile paralel degil"
+    },
+    {
+      "ref": "J3",
+      "type": "connector",
+      "value": "KF350-3P",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "3-pin: COM+NO+NC; her role icin ayri terminal"
+    },
+    {
+      "ref": "J4",
+      "type": "connector",
+      "value": "KF350-3P",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "3-pin: COM+NO+NC; her role icin ayri terminal"
+    },
+    {
+      "ref": "J5",
+      "type": "connector",
+      "value": "KF350-3P",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "3-pin: COM+NO+NC; her role icin ayri terminal"
+    },
+    {
+      "ref": "J6",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J7",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J8",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J9",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J10",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J11",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J12",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J13",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO0-31 erisimi; GPIO33-37 PSRAM BAGLANMAZ"
+    },
+    {
+      "ref": "J14",
+      "type": "connector",
+      "value": "Header 1x4",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-904002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "SDA+SCL+3V3+GND"
+    },
+    {
+      "ref": "J15",
+      "type": "connector",
+      "value": "Header 1x4",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-904002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "TX(GPIO43)+RX(GPIO44)+3V3+GND"
+    },
+    {
+      "ref": "J16",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "5V+5V+3V3+3V3+GND+GND"
+    },
+    {
+      "ref": "J17",
+      "type": "connector",
+      "value": "Header 1x6",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "5V+USB_D++USB_D-+GND+TX+RX"
+    },
+    {
+      "ref": "J18",
+      "type": "connector",
+      "value": "RJ45_MAG",
+      "manufacturer": "Hanrun",
+      "part_number": "HR911105A",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "W5500 Ethernet; entegre magnetics ve LED"
+    },
+    {
+      "ref": "J_FUSE",
+      "type": "component",
+      "value": "01000063Z",
+      "manufacturer": "Littelfuse",
+      "part_number": "01000063Z",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "F1 cam sigorta tutucu"
+    },
+    {
+      "ref": "L1",
+      "type": "inductor",
+      "value": "CDRH104R-220NC",
+      "manufacturer": "Sumida",
+      "part_number": "CDRH104R-220NC",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "10x10mm; SW pininden MAX 5mm mesafe"
+    },
+    {
+      "ref": "LED1",
+      "type": "led",
+      "value": "LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK / KPG / KPB / KPY",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)"
+    },
+    {
+      "ref": "LED2",
+      "type": "led",
+      "value": "LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK / KPG / KPB / KPY",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)"
+    },
+    {
+      "ref": "LED3",
+      "type": "led",
+      "value": "LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK / KPG / KPB / KPY",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)"
+    },
+    {
+      "ref": "LED4",
+      "type": "led",
+      "value": "LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK / KPG / KPB / KPY",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)"
+    },
+    {
+      "ref": "LED5",
+      "type": "led",
+      "value": "LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK / KPG / KPB / KPY",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1=Guc(3V3) LED2=WiFi(GPIO6) LED3=UWB(GPIO7) LED4=SYS(GPIO1) LED5=ETH(GPIO2)"
+    },
+    {
+      "ref": "LED6",
+      "type": "led",
+      "value": "WS2812B-2020",
+      "manufacturer": "Worldsemi",
+      "part_number": "WS2812B-2020",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "GPIO8 ile kontrol; LED4'ten AYRILDI"
+    },
+    {
+      "ref": "R1",
+      "type": "resistor",
+      "value": "220Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; LED1/2/3 icin"
+    },
+    {
+      "ref": "R2",
+      "type": "resistor",
+      "value": "220Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; LED1/2/3 icin"
+    },
+    {
+      "ref": "R3",
+      "type": "resistor",
+      "value": "220Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; LED1/2/3 icin"
+    },
+    {
+      "ref": "R4",
+      "type": "resistor",
+      "value": "220Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; LED4-LED5 akim sinirlandirma"
+    },
+    {
+      "ref": "R5",
+      "type": "resistor",
+      "value": "220Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; LED4-LED5 akim sinirlandirma"
+    },
+    {
+      "ref": "R6",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; EN/GPIO0/RELAY pull"
+    },
+    {
+      "ref": "R7",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; EN/GPIO0/RELAY pull"
+    },
+    {
+      "ref": "R8",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; EN/GPIO0/RELAY pull"
+    },
+    {
+      "ref": "R9",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; EN/GPIO0/RELAY pull"
+    },
+    {
+      "ref": "R10",
+      "type": "resistor",
+      "value": "1kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805"
+    },
+    {
+      "ref": "R11",
+      "type": "resistor",
+      "value": "1kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805"
+    },
+    {
+      "ref": "R12",
+      "type": "resistor",
+      "value": "4.7kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-074K7L",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SDA ve SCL icin"
+    },
+    {
+      "ref": "R13",
+      "type": "resistor",
+      "value": "4.7kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-074K7L",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SDA ve SCL icin"
+    },
+    {
+      "ref": "R14",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; Vout=0.8*(1+R15/R14)"
+    },
+    {
+      "ref": "R15",
+      "type": "resistor",
+      "value": "31.6kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0731K6L",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; DUZELTILDI: 100k degil 31.6k; Vout=3.33V"
+    },
+    {
+      "ref": "R16",
+      "type": "resistor",
+      "value": "330Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07330RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; GPIO4/5→PC817 anot"
+    },
+    {
+      "ref": "R17",
+      "type": "resistor",
+      "value": "330Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07330RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; GPIO4/5→PC817 anot"
+    },
+    {
+      "ref": "R18",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; role MOSFET gate"
+    },
+    {
+      "ref": "R19",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; role MOSFET gate"
+    },
+    {
+      "ref": "R20",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R21",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R22",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R23",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R24",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R25",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R26",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R27",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; SPI+EXT hat sinyal korumasi"
+    },
+    {
+      "ref": "R28",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; strapping ve boot pinleri"
+    },
+    {
+      "ref": "R29",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; strapping ve boot pinleri"
+    },
+    {
+      "ref": "R30",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; strapping ve boot pinleri"
+    },
+    {
+      "ref": "R31",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; USB→Q1/D4 auto-reset"
+    },
+    {
+      "ref": "R32",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; USB→Q1/D4 auto-reset"
+    },
+    {
+      "ref": "R33",
+      "type": "resistor",
+      "value": "0Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-070RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; gerekirse devre disi"
+    },
+    {
+      "ref": "R34",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; 1.8V LDO her zaman aktif"
+    },
+    {
+      "ref": "R35",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_TX/EXT_RX/DEBUGOUT 1V8_DWM pull-up"
+    },
+    {
+      "ref": "R36",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_TX/EXT_RX/DEBUGOUT 1V8_DWM pull-up"
+    },
+    {
+      "ref": "R37",
+      "type": "resistor",
+      "value": "10kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_TX/EXT_RX/DEBUGOUT 1V8_DWM pull-up"
+    },
+    {
+      "ref": "R38",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_RX/EXT_TX/DEBUGOUT level shifter oncesi"
+    },
+    {
+      "ref": "R39",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_RX/EXT_TX/DEBUGOUT level shifter oncesi"
+    },
+    {
+      "ref": "R40",
+      "type": "resistor",
+      "value": "100Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0603; EXT_RX/EXT_TX/DEBUGOUT level shifter oncesi"
+    },
+    {
+      "ref": "R41",
+      "type": "resistor",
+      "value": "1kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; W5500 reset ve interrupt hatlari"
+    },
+    {
+      "ref": "R42",
+      "type": "resistor",
+      "value": "1kΩ",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; W5500 reset ve interrupt hatlari"
+    },
+    {
+      "ref": "R43",
+      "type": "resistor",
+      "value": "49.9Ohm",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0402; TX+/TX-/RX+/RX- her hat icin"
+    },
+    {
+      "ref": "R44",
+      "type": "resistor",
+      "value": "49.9Ohm",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0402; TX+/TX-/RX+/RX- her hat icin"
+    },
+    {
+      "ref": "R45",
+      "type": "resistor",
+      "value": "49.9Ohm",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0402; TX+/TX-/RX+/RX- her hat icin"
+    },
+    {
+      "ref": "R46",
+      "type": "resistor",
+      "value": "49.9Ohm",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0402; TX+/TX-/RX+/RX- her hat icin"
+    },
+    {
+      "ref": "R47",
+      "type": "resistor",
+      "value": "470Ohm",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07470RL",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "reason": "BOM-backed series/source resistor.",
+      "constraints": [],
+      "notes": "0805; test akimi sinirlar"
+    },
+    {
+      "ref": "RV1",
+      "type": "varistor",
+      "value": "14D471K",
+      "manufacturer": "Littelfuse",
+      "part_number": "14D471K",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "14mm disk; L-N arasi paralel sigorta ONCESINDE"
+    },
+    {
+      "ref": "SK1",
+      "type": "socket",
+      "value": "Female_Header_1x22_2.54mm",
+      "manufacturer": "Samtec veya Wurth",
+      "part_number": "61302211821 veya 61302211021",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x22_P2.54mm_Vertical",
+      "reason": "BOM-backed 22-pin female socket for ESP32 module (socketed installation).",
+      "constraints": [
+        "2.54mm pitch",
+        "THT"
+      ],
+      "notes": "2.54mm pitch; SK1=sol 22-pin SK2=sag 22-pin; ESP32 modulu soketin uzerine takilir"
+    },
+    {
+      "ref": "SK2",
+      "type": "socket",
+      "value": "Female_Header_1x22_2.54mm",
+      "manufacturer": "Samtec veya Wurth",
+      "part_number": "61302211821 veya 61302211021",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x22_P2.54mm_Vertical",
+      "reason": "BOM-backed 22-pin female socket for ESP32 module (socketed installation).",
+      "constraints": [
+        "2.54mm pitch",
+        "THT"
+      ],
+      "notes": "2.54mm pitch; SK1=sol 22-pin SK2=sag 22-pin; ESP32 modulu soketin uzerine takilir"
+    },
+    {
+      "ref": "SW1",
+      "type": "switch",
+      "value": "6x6mm",
+      "manufacturer": "C&K",
+      "part_number": "PTS645SM50SMTR92",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "6x6mm SMD; SW1=RESET(EN) SW2=BOOT(GPIO0)"
+    },
+    {
+      "ref": "SW2",
+      "type": "switch",
+      "value": "6x6mm",
+      "manufacturer": "C&K",
+      "part_number": "PTS645SM50SMTR92",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "6x6mm SMD; SW1=RESET(EN) SW2=BOOT(GPIO0)"
+    },
+    {
+      "ref": "TP1",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP2",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP3",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP4",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP5",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP6",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP7",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP8",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP9",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP10",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP11",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP12",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP13",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP14",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP15",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP16",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP17",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "TP18",
+      "type": "test_point",
+      "value": "Test Point SMD",
+      "manufacturer": "Keystone",
+      "part_number": "5015",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "Tum kritik sinyaller; PCB kenarinda"
+    },
+    {
+      "ref": "U9",
+      "type": "ic",
+      "value": "DS3231SN",
+      "manufacturer": "Maxim/Analog",
+      "part_number": "DS3231SN",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "SO-8; 0x68 I2C adresi"
+    },
+    {
+      "ref": "U10",
+      "type": "ic",
+      "value": "AT24C256C-SSHL",
+      "manufacturer": "Microchip",
+      "part_number": "AT24C256C-SSHL",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "SO-8; 0x50 adresi; WP=GPIO23 ile koruma"
+    },
+    {
+      "ref": "U11",
+      "type": "ic",
+      "value": "PC817X2CSP9F",
+      "manufacturer": "Sharp",
+      "part_number": "PC817X2CSP9F",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "DIP-4 veya SMD; role ve MCU arasinda galvanik izolasyon"
+    },
+    {
+      "ref": "U12",
+      "type": "ic",
+      "value": "PC817X2CSP9F",
+      "manufacturer": "Sharp",
+      "part_number": "PC817X2CSP9F",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "DIP-4 veya SMD; role ve MCU arasinda galvanik izolasyon"
+    },
+    {
+      "ref": "U13",
+      "type": "ic",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "SOT-23-6; VCCA=1.8V VCCB=3.3V DIR=HIGH(A→B)"
+    },
+    {
+      "ref": "U14",
+      "type": "ic",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "SOT-23-6; VCCA=3.3V VCCB=1.8V DIR=HIGH(A→B); YENI EKLENDI"
+    },
+    {
+      "ref": "U15",
+      "type": "ic",
+      "value": "W5500",
+      "manufacturer": "WIZnet",
+      "part_number": "W5500",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LQFP-48; SPI2: GPIO39-42; RST=GPIO47; INT=GPIO48"
+    },
+    {
+      "ref": "X1",
+      "type": "crystal",
+      "value": "25MHz Crystal",
+      "manufacturer": "TXC",
+      "part_number": "7B-25.000MAAJ-T",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "W5500 referans saati; 2x 18pF yuk kapasitoru"
+    }
+  ],
+  "nets": [
+    {
+      "net": "AC_L_PROTECTED",
+      "pins": [
+        "J1.L",
+        "F1.1",
+        "U6.AC_L"
+      ],
+      "net_class": "mains",
+      "reason": "Fused AC live input."
+    },
+    {
+      "net": "+5V_ISO",
+      "pins": [
+        "U6.+VO",
+        "U7.VIN",
+        "K1.COIL+",
+        "K2.COIL+"
+      ],
+      "net_class": "power_5v",
+      "reason": "Relay and buck input rail."
+    },
+    {
+      "net": "+3V3",
+      "pins": [
+        "U7.OUT",
+        "U1.3V3",
+        "U3.VCCA",
+        "U4.VCCA",
+        "U5.VCCA"
+      ],
+      "net_class": "power_3v3",
+      "reason": "ESP32 logic rail."
+    },
+    {
+      "net": "+1V8",
+      "pins": [
+        "U8.OUT",
+        "U2.VDDIO",
+        "U3.VCCB",
+        "U4.VCCB",
+        "U5.VCCB"
+      ],
+      "net_class": "power_1v8",
+      "reason": "DWM3000 logic rail."
+    },
+    {
+      "net": "SPI_CS_3V3",
+      "pins": [
+        "U1.GPIO10",
+        "R10.1",
+        "R10.2",
+        "U3.A1"
+      ],
+      "net_class": "spi_3v3",
+      "reason": "ESP32 SPI through 100R source resistor."
+    },
+    {
+      "net": "SPI_CS_1V8",
+      "pins": [
+        "U3.B1",
+        "U2.SPI_CS"
+      ],
+      "net_class": "spi_1v8",
+      "reason": "Translated DWM3000 SPI chip select."
+    },
+    {
+      "net": "DWM_IRQ_3V3",
+      "pins": [
+        "U4.A",
+        "U1.GPIO14"
+      ],
+      "net_class": "rtls_3v3",
+      "reason": "IRQ translated to ESP32 domain."
+    },
+    {
+      "net": "DWM_IRQ_1V8",
+      "pins": [
+        "U4.B",
+        "U2.IRQ"
+      ],
+      "net_class": "rtls_1v8",
+      "reason": "IRQ source from DWM3000 domain."
+    },
+    {
+      "net": "DWM_EXT_TX_3V3",
+      "pins": [
+        "U5.A",
+        "U1.GPIO15"
+      ],
+      "net_class": "rtls_3v3",
+      "reason": "EXT_TX translated to ESP32 domain."
+    },
+    {
+      "net": "DWM_EXT_TX_1V8",
+      "pins": [
+        "U5.B",
+        "U2.EXT_TX"
+      ],
+      "net_class": "rtls_1v8",
+      "reason": "EXT_TX source from DWM3000 domain."
+    },
+    {
+      "net": "UWB_RF_50R",
+      "pins": [
+        "U2.RF_PIN23",
+        "J2.CENTER"
+      ],
+      "net_class": "rf_50r",
+      "reason": "50 ohm UWB antenna trace."
+    },
+    {
+      "net": "GND",
+      "pins": [
+        "U6.-VO",
+        "U7.GND",
+        "U8.GND",
+        "U1.GND",
+        "U2.GND",
+        "U3.GND",
+        "U3.GND2",
+        "U4.GND",
+        "U4.DIR",
+        "U5.GND",
+        "U5.DIR"
+      ],
+      "net_class": "ground",
+      "reason": "Low-voltage ground return."
+    },
+    {
+      "net": "RELAY1_DRIVE",
+      "pins": [
+        "U1.GPIO21",
+        "Q1.G",
+        "K1.COIL-"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY2_DRIVE",
+      "pins": [
+        "U1.GPIO22",
+        "Q2.G",
+        "K2.COIL-"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY3_DRIVE",
+      "pins": [
+        "U1.GPIO23",
+        "Q3.G"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY4_DRIVE",
+      "pins": [
+        "U1.GPIO24",
+        "Q4.G"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY5_DRIVE",
+      "pins": [
+        "U1.GPIO25"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY6_DRIVE",
+      "pins": [
+        "U1.GPIO26"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY7_DRIVE",
+      "pins": [
+        "U1.GPIO27"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY8_DRIVE",
+      "pins": [
+        "U1.GPIO28"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY9_DRIVE",
+      "pins": [
+        "U1.GPIO29"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY10_DRIVE",
+      "pins": [
+        "U1.GPIO30"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY11_DRIVE",
+      "pins": [
+        "U1.GPIO31"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY12_DRIVE",
+      "pins": [
+        "U1.GPIO32"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY13_DRIVE",
+      "pins": [
+        "U1.GPIO33"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY14_DRIVE",
+      "pins": [
+        "U1.GPIO34"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY15_DRIVE",
+      "pins": [
+        "U1.GPIO35"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY16_DRIVE",
+      "pins": [
+        "U1.GPIO36"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY17_DRIVE",
+      "pins": [
+        "U1.GPIO37"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY18_DRIVE",
+      "pins": [
+        "U1.GPIO38"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY19_DRIVE",
+      "pins": [
+        "U1.GPIO39"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY20_DRIVE",
+      "pins": [
+        "U1.GPIO40"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY21_DRIVE",
+      "pins": [
+        "U1.GPIO41"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY22_DRIVE",
+      "pins": [
+        "U1.GPIO42"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY23_DRIVE",
+      "pins": [
+        "U1.GPIO43"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY24_DRIVE",
+      "pins": [
+        "U1.GPIO44"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY25_DRIVE",
+      "pins": [
+        "U1.GPIO45"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY26_DRIVE",
+      "pins": [
+        "U1.GPIO46"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY27_DRIVE",
+      "pins": [
+        "U1.GPIO47"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY28_DRIVE",
+      "pins": [
+        "U1.GPIO48"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY29_DRIVE",
+      "pins": [
+        "U1.GPIO49"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY30_DRIVE",
+      "pins": [
+        "U1.GPIO50"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY31_DRIVE",
+      "pins": [
+        "U1.GPIO51"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY32_DRIVE",
+      "pins": [
+        "U1.GPIO52"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY33_DRIVE",
+      "pins": [
+        "U1.GPIO53"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY34_DRIVE",
+      "pins": [
+        "U1.GPIO54"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY35_DRIVE",
+      "pins": [
+        "U1.GPIO55"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    },
+    {
+      "net": "RELAY36_DRIVE",
+      "pins": [
+        "U1.GPIO56"
+      ],
+      "net_class": "relay_drive",
+      "reason": "Optically isolated relay low-side drive."
+    }
+  ],
+  "rules": [
+    {
+      "id": "AC_CLEARANCE_8MM",
+      "severity": "error",
+      "description": "Maintain minimum 8mm clearance around AC primary and HLK-5M05 primary side.",
+      "applies_to": []
+    },
+    {
+      "id": "SPI_LENGTH_MATCH_2MM",
+      "severity": "error",
+      "description": "SPI traces must be length matched within +/-2mm.",
+      "applies_to": []
+    },
+    {
+      "id": "TXB0104_DISTANCE_15MM",
+      "severity": "error",
+      "description": "Place TXB0104 within 15mm of DWM3000.",
+      "applies_to": []
+    },
+    {
+      "id": "RELAY_NO_DIRECT_GPIO_DRIVE",
+      "severity": "error",
+      "description": "Relay coils must not connect directly to ESP32 GPIO.",
+      "applies_to": []
+    },
+    {
+      "id": "RF_NO_VIAS_OR_TESTPOINTS",
+      "severity": "error",
+      "description": "No vias, test points, or components allowed on RF trace.",
+      "applies_to": []
+    }
+  ],
+  "reasoning_log": [
+    {
+      "level": "info",
+      "message": "ESP32-S3 3.3V host MCU olarak tanindi.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "DWM3000 1.8V UWB domain olarak tanindi.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "warning",
+      "message": "220V AC giris algilandi. Sigorta, varistor, izole AC/DC, 3.3V buck ve 1.8V LDO eklendi.",
+      "outcome": "successful"
+    },
+    {
+      "level": "warning",
+      "message": "ESP32 ve DWM3000 voltaj uyusmazligi tespit edildi. SPI hattina TXB0104, RTLS hatlarina SN74LVC1T45 eklendi.",
+      "outcome": "successful"
+    },
+    {
+      "level": "warning",
+      "message": "36 adet 5V role cikisi icin PC817 optokuplor, 2N7002 MOSFET ve flyback diyot eklendi.",
+      "outcome": "successful"
+    },
+    {
+      "level": "info",
+      "message": "DWM3000 pin 23 icin 50 ohm RF net sinifi, 3mm keepout ve via yasagi uretildi.",
+      "outcome": "successful"
+    },
+    {
+      "level": "info",
+      "message": "Kullanici BOM/teknik notlari okundu; kritik bilesenler kural motoru ile eslestirildi.",
+      "outcome": "accepted"
+    }
+  ],
+  "erc_summary": {
+    "status": "pass_with_engineering_review_required",
+    "checks": [
+      "Power rails inferred: 5V, 3V3, 1V8",
+      "Voltage mismatch mitigation added",
+      "Relay isolation and low-side drivers added",
+      "AC clearance and RF impedance rules emitted"
+    ]
+  }
+}

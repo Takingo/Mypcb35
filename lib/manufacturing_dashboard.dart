@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,30 +7,40 @@ import 'package:provider/provider.dart';
 
 import 'controllers/netlist_controller.dart';
 import 'services/pcba_manufacturing_service.dart';
+import 'services/production_gate_service.dart';
 
 class ManufacturingDashboard extends StatefulWidget {
-  const ManufacturingDashboard({super.key});
+  const ManufacturingDashboard({super.key, this.initialTabIndex = 0});
+
+  final int initialTabIndex;
 
   @override
   State<ManufacturingDashboard> createState() => _ManufacturingDashboardState();
 }
 
 class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
-  late final Future<FabricationPackage> _packageFuture = _loadPackage();
+  late final Future<_ManufacturingPackageState> _packageFuture = _loadPackage();
   int _quantity = 5;
   String _manufacturer = 'PCBWay';
   String _solderMaskColor = 'Green';
 
-  Future<FabricationPackage> _loadPackage() async {
-    final raw = await rootBundle.loadString(
-      'assets/generated/fabrication_package.json',
-    );
+  Future<_ManufacturingPackageState> _loadPackage() async {
+    final raw = await _readGeneratedJson('fabrication_package.json');
     final jsonMap = jsonDecode(raw) as Map<String, dynamic>;
     final package = FabricationPackage.fromJson(jsonMap);
+    final gate = await const ProductionGateService().loadSnapshot();
     _quantity = package.checkout.quantity;
     _manufacturer = package.checkout.manufacturer;
     _solderMaskColor = package.checkout.solderMaskColor;
-    return package;
+    return _ManufacturingPackageState(package: package, gate: gate);
+  }
+
+  Future<String> _readGeneratedJson(String name) async {
+    final liveFile = File(r'C:\Mypcb\assets\generated\' + name);
+    if (await liveFile.exists()) {
+      return liveFile.readAsString(encoding: utf8);
+    }
+    return rootBundle.loadString('assets/generated/$name');
   }
 
   @override
@@ -39,6 +50,7 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
       body: SafeArea(
         child: DefaultTabController(
           length: 2,
+          initialIndex: widget.initialTabIndex,
           child: Column(
             children: [
               const TabBar(
@@ -60,7 +72,7 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
   }
 
   Widget _buildBasicPackageView() {
-    return FutureBuilder<FabricationPackage>(
+    return FutureBuilder<_ManufacturingPackageState>(
       future: _packageFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
@@ -78,17 +90,24 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
             ),
           );
         }
-        final package = snapshot.data!;
+        final state = snapshot.data!;
+        final package = state.package;
+        final gate = state.gate;
         return LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 980;
             final content = compact
                 ? Column(
                     children: [
-                      _PackagePreview(package: package),
+                      if (gate != null) ...[
+                        _ProductionGateBanner(gate: gate),
+                        const SizedBox(height: 16),
+                      ],
+                      _PackagePreview(package: package, gate: gate),
                       const SizedBox(height: 16),
                       _CheckoutPanel(
                         package: package,
+                        gate: gate,
                         quantity: _quantity,
                         manufacturer: _manufacturer,
                         solderMaskColor: _solderMaskColor,
@@ -106,13 +125,22 @@ class _ManufacturingDashboardState extends State<ManufacturingDashboard> {
                     children: [
                       Expanded(
                         flex: 5,
-                        child: _PackagePreview(package: package),
+                        child: Column(
+                          children: [
+                            if (gate != null) ...[
+                              _ProductionGateBanner(gate: gate),
+                              const SizedBox(height: 16),
+                            ],
+                            _PackagePreview(package: package, gate: gate),
+                          ],
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         flex: 4,
                         child: _CheckoutPanel(
                           package: package,
+                          gate: gate,
                           quantity: _quantity,
                           manufacturer: _manufacturer,
                           solderMaskColor: _solderMaskColor,
@@ -271,9 +299,10 @@ class _PcbaExportPanel extends StatelessWidget {
 }
 
 class _PackagePreview extends StatelessWidget {
-  const _PackagePreview({required this.package});
+  const _PackagePreview({required this.package, required this.gate});
 
   final FabricationPackage package;
+  final ProductionGateSnapshot? gate;
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +318,14 @@ class _PackagePreview extends StatelessWidget {
         children: [
           _GerberPreview(package: package),
           const SizedBox(height: 16),
-          _StatusRow(icon: Icons.verified, text: package.message),
+          _StatusRow(
+            icon: gate?.allowsManufacturing == true
+                ? Icons.verified
+                : Icons.lock,
+            text: gate?.allowsManufacturing == true
+                ? package.message
+                : 'Uretim kilitli: canli manifest uretim kapisini gecmedi.',
+          ),
           _StatusRow(icon: Icons.archive, text: package.productionZip),
           _StatusRow(
             icon: Icons.straighten,
@@ -348,6 +384,7 @@ class _GerberPreview extends StatelessWidget {
 class _CheckoutPanel extends StatelessWidget {
   const _CheckoutPanel({
     required this.package,
+    required this.gate,
     required this.quantity,
     required this.manufacturer,
     required this.solderMaskColor,
@@ -357,6 +394,7 @@ class _CheckoutPanel extends StatelessWidget {
   });
 
   final FabricationPackage package;
+  final ProductionGateSnapshot? gate;
   final int quantity;
   final String manufacturer;
   final String solderMaskColor;
@@ -439,13 +477,23 @@ class _CheckoutPanel extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           FilledButton.icon(
-            onPressed: () => _copyPackagePath(context, package),
-            icon: const Icon(Icons.copy),
-            label: const Text('Paket yolunu kopyala'),
+            onPressed: gate?.allowsManufacturing == true
+                ? () => _copyPackagePath(context, package)
+                : null,
+            icon: gate?.allowsManufacturing == true
+                ? const Icon(Icons.copy)
+                : const Icon(Icons.lock),
+            label: Text(
+              gate?.allowsManufacturing == true
+                  ? 'Paket yolunu kopyala'
+                  : 'Uretim kapisi kilitli',
+            ),
           ),
           const SizedBox(height: 10),
           Text(
-            'Not: Bu ekran dis servise veri gondermez. Uretim ZIP paketi hazirdir; son fiyat ve siparis uretici panelinde dogrulanir.',
+            gate?.allowsManufacturing == true
+                ? 'Not: Bu ekran dis servise veri gondermez. Uretim ZIP paketi hazirdir; son fiyat ve siparis uretici panelinde dogrulanir.'
+                : 'Not: Canli manifest DRC/source/model kapilarini gecmeden ZIP yolu paylasilmaz ve uretim exportu baslatilmaz.',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -480,6 +528,70 @@ class _CheckoutPanel extends StatelessWidget {
       const SnackBar(content: Text('Uretim paketi yolu kopyalandi.')),
     );
   }
+}
+
+class _ProductionGateBanner extends StatelessWidget {
+  const _ProductionGateBanner({required this.gate});
+
+  final ProductionGateSnapshot gate;
+
+  @override
+  Widget build(BuildContext context) {
+    final passed = gate.allowsManufacturing;
+    final color = passed ? Colors.green : Colors.red;
+    final title = passed ? 'Uretim Kapisi Acik' : 'Uretim Kapisi Kilitli';
+    final details = passed
+        ? 'Manifest production_candidate. DRC=0, source evidence ve production model kapilari gecti.'
+        : gate.blockers.join(' | ');
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: color.shade50,
+        border: Border.all(color: color.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                passed ? Icons.shield : Icons.report_gmailerrorred,
+                color: color.shade700,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: color.shade800,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(details),
+          if (gate.evidenceSummary.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              gate.evidenceSummary,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ManufacturingPackageState {
+  const _ManufacturingPackageState({required this.package, required this.gate});
+
+  final FabricationPackage package;
+  final ProductionGateSnapshot? gate;
 }
 
 class _EstimateBox extends StatelessWidget {

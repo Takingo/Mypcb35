@@ -20,7 +20,7 @@ if (!(Test-Path $KiCadPython)) {
   exit 1
 }
 
-$env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb"
+$env:PYTHONPATH = "$KiCadRoot\Lib\site-packages;C:\Mypcb;C:\Mypcb\engine"
 
 Write-Host "▶ Starting PCBA manufacturing export service..."
 Write-Host ""

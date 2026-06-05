@@ -1,0 +1,4724 @@
+{
+  "schema": "AI_Netlist_v1",
+  "project_name": "Quantum Mind UWB RTLS Anchor v3.0",
+  "generated_at": "2026-06-02T14:45:14+00:00",
+  "source_prompt": "Design the Quantum Mind UWB RTLS Anchor v3.0 exactly from the provided BOM and manufacturing notes. Use ESP32-S3-WROOM-2 as a socketed module on SK1+SK2 female headers, not soldered directly.\n\nBOM:\nItem,Qty,Reference,Value,Description,Manufacturer,Part Number,Package / Footprint,Critical Placement Distance,Notes\n,,,,,,,,,,\n,,== MODULES ====,,,,,,,,\n1,1,U1,ESP32-S3-WROOM-2-N32R16,WiFi + BLE MCU Module 32MB Flash 16MB OPI-PSRAM IPEX Antenna,Espressif,ESP32-S3-WROOM-2-N32R16,Module (plugs into SK1+SK2),Centered on SK1+SK2 sockets — module edges must align with socket rows,\"NOT soldered to PCB directly. Plugs into SK1+SK2 sockets. GPIO33/34/35/36/37 = PSRAM internal - DO NOT connect externally.\"\n2,1,U2,DWM3000,UWB Transceiver Module IEEE 802.15.4z TWR/TDoA,Qorvo,DWM3000,LGA-28,RF keep-out: 3mm all sides of antenna trace. SMA connector within 15mm.,\"Hybrid power: Pin6(VDD3V3)=3.3V; All other VDD pins=1.8V. VDDIO(Pin21)=1.8V — level shifters required on ALL SPI/GPIO signals.\"\n3,1,U3,HLK-10M05,AC-DC Isolated Power Module 5V 2A 10W,Hi-Link,HLK-10M05,PCB Module,AC section: MIN 8mm from all DC components. Varistor RV1 and fuse F1 within 15mm.,\"Input: 100-240V AC. Output: 5V/2A. UPGRADED from HLK-5M05(5W) — insufficient margin.\"\n,,,,,,,,,,\n,,== ESP32 SOCKET (Removable Module) ==,,,,,,,,\n4,2,SK1-SK2,PinSocket_1x22_P2.54mm,2×22-pin Female Socket (2 rows) for ESP32 Module,Wurth Elektronik,61302211821,Connector_PinSocket_2.54mm:PinSocket_2x22_P2.54mm_Vertical,SK1 and SK2 parallel rows — spacing must exactly match ESP32-S3-WROOM-2 module pin pitch (2.54mm × 22 pins),\"SK1=left row(22pin) SK2=right row(22pin). GPIO33-37 pads MUST NOT be connected.\"\n,,,,,,,,,,\n,,== POWER MANAGEMENT ==,,,,,,,,\n5,1,U4,TPS54331DR,Synchronous Step-Down Converter 3A 3.3V,Texas Instruments,TPS54331DR,SOIC-8,\"C21/C22 MAX 3mm from VIN(Pin8). L1 MAX 5mm from SW(Pin1). C23/C24 MAX 3mm from output rail. R14/R15 MAX 1mm from FB(Pin3). NO GND plane within 20mm radius of SW pin.\",\"R14=10kΩ(GND), R15=31.6kΩ(Vout) → Vout=3.33V. CORRECTED: R15 was 100kΩ → 1.6V output.\"\n6,1,U5,TPS780180200DRV,LDO Regulator 1.8V 200mA (DWM3000 only),Texas Instruments,TPS780180200DRV,SOT-23-5,C25/C26 MAX 2mm from IN pin. C27/C28 MAX 1mm from OUT pin. Place close to DWM3000 VDD pins.,\"1V8_DWM rail: ONLY DWM3000 VDD + TXB0104 VCCB + U7/U13/U14 VCCB. No other loads.\"\n,,,,,,,,,,\n,,== LEVEL SHIFTERS (3.3V ↔ 1.8V) ==,,,,,,,,\n7,1,U6,TXB0104RGYR,4-bit Bidirectional Voltage Translator SPI Bus,Texas Instruments,TXB0104RGYR,VQFN-16,\"MAX 15mm from DWM3000. C29(VCCA) MAX 1mm from Pin1. C30(VCCB) MAX 1mm from Pin16. R20-R23 series resistors MAX 5mm from ESP32 GPIO side. SPI traces equal length ±2mm.\",\"VCCA=3.3V(ESP32 side), VCCB=1.8V(DWM3000 side), OE=GND.\"\n8,1,U7,SN74LVC1T45DBVR,Single-Bit Voltage Translator IRQ: 1.8V→3.3V,Texas Instruments,SN74LVC1T45DBVR,SOT-23-6,\"MAX 10mm from DWM3000 Pin22(IRQ). C33(VCCA/1.8V) MAX 1mm from Pin6. C34(VCCB/3.3V) MAX 1mm from Pin5. Trace to GPIO14 MAX 30mm.\",\"Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH.\"\n9,1,U13,SN74LVC1T45DBVR,Single-Bit Voltage Translator EXT_TX: 1.8V→3.3V,Texas Instruments,SN74LVC1T45DBVR,SOT-23-6,\"MAX 10mm from DWM3000 Pin27(EXT_TX). C35(VCCA/1.8V) MAX 1mm from Pin6. C36(VCCB/3.3V) MAX 1mm from Pin5. Trace to GPIO15 MAX 30mm.\",\"Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH.\"\n10,1,U14,SN74LVC1T45DBVR,Single-Bit Voltage Translator EXT_RX: 3.3V→1.8V,Texas Instruments,SN74LVC1T45DBVR,SOT-23-6,\"MAX 10mm from DWM3000 Pin26(EXT_RX). C37(VCCA/3.3V) MAX 1mm from Pin6. C38(VCCB/1.8V) MAX 1mm from Pin5. Trace from GPIO16 MAX 30mm.\",\"NEW. Direction A→B. VCCA=3.3V, VCCB=1.8V, DIR=HIGH.\"\n,,,,,,,,,,\n,,== SUPPORT ICs ==,,,,,,,,\n11,1,U8,TPL5010DDCR,Nano-Power Watchdog Timer 60s Timeout,Texas Instruments,TPL5010DDCR,SOT-23-6,No specific distance constraint. Place near ESP32 EN pin to keep reset trace short (<20mm).,\"GPIO45→DONE. Pulse every 30s. Resets ESP32 EN on 60s timeout.\"\n12,1,U9,DS3231SN,Real-Time Clock ±2ppm with Crystal,Maxim / Analog Devices,DS3231SN,SO-8,\"Place near I2C pull-up resistors R12/R13. BAT1(CR2032) within 20mm. SCL/SDA traces MAX 50mm.\",\"I2C 0x68. SDA=GPIO21, SCL=GPIO22. VBAT=CR2032.\"\n13,1,U10,AT24C256C-SSHL,EEPROM 256Kbit I2C,Microchip,AT24C256C-SSHL,SO-8,Place on same I2C bus as U9(DS3231). Within 30mm of U9 preferred.,\"I2C 0x50. Stores anchor XY coordinates. WP=GPIO23.\"\n14,1,U15,W5500,Hardwired TCP/IP Ethernet Controller,WIZnet,W5500,LQFP-48,\"Crystal X1 MAX 10mm from W5500 clock pins. C39-C42(decoupling) MAX 2mm from VCC pins. C43-C44 MAX 5mm. J18(RJ45) on PCB edge — MAX 30mm from W5500. Keep W5500 traces away from UWB RF section MIN 20mm.\",\"SPI2: GPIO39-42. RST=GPIO47, INT=GPIO48.\"\n,,,,,,,,,,\n,,== RELAY DRIVERS ==,,,,,,,,\n15,2,U11-U12,PC817X2CSP9F,Optocoupler 2500V Isolation,Sharp,PC817X2CSP9F,DIP-4,\"MIN 8mm clearance between U11/U12 LED side (MCU) and transistor side (relay). PCB slot/cutout recommended between isolated sections. R16/R17 MAX 5mm from GPIO pins.\",\"U11: GPIO4→K1. U12: GPIO5→K2. CORRECTED from GPIO35/36.\"\n16,4,Q1-Q4,2N7002,N-Channel MOSFET 60V 300mA,ON Semiconductor,2N7002,SOT-23,\"Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin. Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins.\",Q1/Q2=auto-reset. Q3=Relay1 driver. Q4=Relay2 driver.\n,,,,,,,,,,\n,,== RELAYS ==,,,,,,,,\n17,2,K1-K2,G5Q-14-DC5,Relay SPDT 5V Coil 10A Contacts,Omron,G5Q-14-DC5,PCB-THT,\"D2/D3 flyback diodes MAX 5mm from relay coil pins. J3/J4 screw terminals adjacent to K1/K2 (within 10mm). Keep relay section MIN 10mm from RF section.\",\"SPDT: COM+NO+NC. K1=GPIO4 path. K2=GPIO5 path.\"\n,,,,,,,,,,\n,,== PROTECTION ==,,,,,,,,\n18,1,D1,SS34-E3/57T,Schottky Diode 3A 40V Buck Flyback,Vishay,SS34-E3/57T,SMA,MAX 3mm from TPS54331 SW pin(Pin1).,TPS54331 SW node flyback protection.\n19,2,D2-D3,1N5819,Schottky Diode 1A 40V Relay Flyback,Vishay,1N5819,SMA,\"MAX 5mm from relay coil pins K1/K2. D2 parallel with K1 coil. D3 parallel with K2 coil.\",\"CORRECTED from 1N4148 to Schottky.\"\n20,2,D4-D5,1N4148TR,Switching Diode 100V 300mA Auto-Reset,ON Semiconductor,1N4148TR,SOD-323,\"D4 MAX 3mm from GPIO0 pin. D5 MAX 3mm from ESP32 EN pin.\",Auto-reset circuit diodes.\n21,3,D6-D8,SMBJ3.3A,TVS Diode 3.3V 600W ESD,Littelfuse,SMBJ3.3A,SMA,Each TVS MAX 5mm from its respective protected 3.3V rail connection point.,3.3V rail ESD clamping (3 locations).\n22,1,D9,SMBJ1.8A,TVS Diode 1.8V 600W ESD,Littelfuse,SMBJ1.8A,SMA,\"MAX 5mm from DWM3000 VDD pins. Place on 1V8_DWM rail, close to DWM3000.\",1.8V rail (DWM3000 core) ESD clamping.\n23,1,D10,USBLC6-2SC6,USB ESD Protection ±15kV,STMicroelectronics,USBLC6-2SC6,SOT-23-6,⚠ MAX 3mm from USB-C connector J1_USB — mandatory for ESD effectiveness.,Place BEFORE USB signal reaches ESP32.\n24,1,RV1,14D471K,Varistor 470V 14mm AC Surge,Littelfuse,14D471K,14mm Disc,On AC input — L-N parallel connection BEFORE fuse F1. Within 15mm of J1_AC.,\"L-N parallel, BEFORE F1.\"\n25,1,F1,0215001.MXP,Glass Fuse 1A 250V 5×20mm,Littelfuse,0215001.MXP,5×20mm + Holder,First component on L (Line) after J1_AC. Within 20mm of AC input connector.,\"AC input fuse. Holder: Littelfuse 01000063Z\"\n26,1,F2,0ZCJ0050FF2G,PTC Resettable Fuse 500mA 1206,Bel Fuse,0ZCJ0050FF2G,1206 SMD,On USB VBUS line — between USB-C connector and FB1. MAX 10mm from connector.,USB VBUS overcurrent protection.\n27,3,FB1-FB3,BLM18PG221SN1D,Ferrite Bead 220Ω@100MHz,Murata,BLM18PG221SN1D,0603,\"FB1: on USB VBUS rail, MAX 10mm from F2. FB2: on 3V3 rail before DWM3000 section. FB3: on 5V rail before relay section.\",\"FB1=USB, FB2=3V3→DWM3000, FB3=5V→relays.\"\n,,,,,,,,,,\n,,== PASSIVE — INDUCTORS ==,,,,,,,,\n28,1,L1,CDRH104R-220NC,Power Inductor 22µH 3A,Sumida,CDRH104R-220NC,10×10mm,⚠ MAX 5mm from TPS54331 SW pin(Pin1). Place on direct path SW→L1→output caps.,Buck converter inductor — current loop must be tight.\n,,,,,,,,,,\n,,== PASSIVE — CRYSTAL ==,,,,,,,,\n29,1,X1,25MHz / 18pF,SMD Crystal 25MHz 3.2×2.5mm,TXC,7B-25.000MAAJ-T,3.2×2.5mm SMD,⚠ MAX 10mm from W5500 clock pins(X1/X2). Load caps C_X1A/C_X1B MAX 2mm from crystal pins. Keep away from high-current traces.,\"W5500 reference clock. Load caps: 2× 18pF.\"\n,,,,,,,,,,\n,,== PASSIVE — CAPACITORS ==,,,,,,,,\n30,4,C1-C4,10µF/50V Electrolytic,Capacitor Electrolytic Radial Bulk,Nichicon,UWX1H100MCL1GB,Radial THT,Near power entry points. MAX 15mm from each power rail input.,General bulk capacitors at power rails.\n31,8,C5-C12,100nF/50V X7R 0805,Ceramic Capacitor Decoupling,Murata,GRM21BR71H104KA01L,0805,⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness.,One per VCC pin on every IC.\n32,4,C13-C16,10µF/16V X5R 0805,Ceramic Capacitor ESP32 Power,Murata,GRM21BR61C106KE15L,0805,MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins).,ESP32 VDD pin group bulk decoupling.\n33,4,C17-C20,1µF/16V X7R 0603,Ceramic Capacitor DWM3000 Decoupling,Murata,GRM188R71C105KA12D,0603,⚠ MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability.,DWM3000 VDD pin decoupling.\n34,2,C21-C22,22µF/10V X5R 1206,Ceramic Capacitor Buck Input,Murata,GRM31CR61A226KE19L,1206,⚠ MAX 3mm from TPS54331 VIN pin(Pin8).,Buck converter input capacitors.\n35,2,C23-C24,4.7µF/50V X7R 0805,Ceramic Capacitor Buck Output,Murata,GRM21BR71H475KA12L,0805,⚠ MAX 3mm from 3V3 output rail after inductor L1.,Buck converter output capacitors.\n36,2,C25-C26,10µF/6.3V X5R 0805,Ceramic Capacitor 1.8V LDO Input,Murata,GRM21BR60J106ME39L,0805,⚠ MAX 2mm from TPS780180 IN pin.,1.8V LDO input capacitors.\n37,2,C27-C28,100nF/16V X7R 0603,Ceramic Capacitor 1.8V LDO Output,Murata,GRM188R71C104KA93D,0603,⚠ MAX 1mm from TPS780180 OUT pin — very tight.,1.8V LDO output decoupling.\n38,2,C29-C30,100nF/16V X7R 0603,Ceramic Capacitor TXB0104 Decoupling,Murata,GRM188R71C104KA93D,0603,\"⚠ C29 MAX 1mm from TXB0104 VCCA(Pin1). C30 MAX 1mm from VCCB(Pin16). SEPARATE caps — do not share.\",\"VCCA(3.3V) and VCCB(1.8V) — SEPARATE.\"\n39,1,C31,330pF/50V C0G 0603,Ceramic Capacitor Buck Compensation,Murata,GRM1885C1H331JA01D,0603,MAX 2mm from TPS54331 COMP pin(Pin4).,TPS54331 compensation network.\n40,1,C32,100pF/50V C0G 0603,Ceramic Capacitor Buck Compensation,Murata,GRM1885C1H101JA01D,0603,MAX 2mm from TPS54331 COMP pin(Pin4).,TPS54331 compensation network.\n41,2,C33-C34,100nF/16V X7R 0603,Ceramic Capacitor U7 (IRQ) Decoupling,Murata,GRM188R71C104KA93D,0603,\"⚠ C33 MAX 1mm from U7 VCCA(Pin6/1.8V). C34 MAX 1mm from U7 VCCB(Pin5/3.3V). SEPARATE caps.\",\"U7 VCCA+VCCB — separate caps each side.\"\n42,2,C35-C36,100nF/16V X7R 0603,Ceramic Capacitor U13 (EXT_TX) Decoupling,Murata,GRM188R71C104KA93D,0603,\"⚠ C35 MAX 1mm from U13 VCCA(1.8V). C36 MAX 1mm from U13 VCCB(3.3V). SEPARATE caps.\",\"U13 VCCA+VCCB — separate caps each side.\"\n43,2,C37-C38,100nF/16V X7R 0603,Ceramic Capacitor U14 (EXT_RX) Decoupling,Murata,GRM188R71C104KA93D,0603,\"⚠ C37 MAX 1mm from U14 VCCA(3.3V). C38 MAX 1mm from U14 VCCB(1.8V). SEPARATE caps.\",\"NEW. U14 VCCA+VCCB — separate caps each side.\"\n44,4,C39-C42,100nF/50V X7R 0603,Ceramic Capacitor W5500 Decoupling,Murata,GRM188R71H104KA93D,0603,⚠ MAX 2mm from each W5500 VCC pin — one cap per pin.,W5500 VCC pin decoupling.\n45,1,C43,10µF/25V X5R 0805,Ceramic Capacitor W5500 Bulk,Murata,GRM21BR61E106KA73L,0805,MAX 5mm from W5500 VCC pins.,W5500 bulk decoupling capacitor.\n46,1,C44,10µF/25V X5R 0805,Ceramic Capacitor W5500 REGD,Murata,GRM21BR61E106KA73L,0805,MAX 3mm from W5500 REGD pin.,W5500 internal 1.2V LDO output decoupling.\n47,2,C_X1A-C_X1B,18pF/50V C0G 0603,Ceramic Capacitor Crystal Load,Murata,GRM1885C1H180JA01D,0603,⚠ MAX 2mm from X1 crystal pins — one cap per pin.,\"25MHz crystal load caps.\"\n,,,,,,,,,,\n,,== PASSIVE — RESISTORS ==,,,,,,,,\n48,5,R1-R3 R_LED4 R_LED5,220Ω 0805 1/4W,Resistor LED Current Limit,Yageo,RC0805FR-07220RL,0805,MAX 5mm from each LED anode. Between GPIO pin and LED.,\"LED1-LED5 current limiting — 10mA @ 3.3V.\"\n49,4,R6-R9,10kΩ 0805 1/4W,Resistor General Pull-up/Pull-down,Yageo,RC0805FR-0710KL,0805,Within 5mm of associated IC pin.,Various pull-up/pull-down applications.\n50,2,R10-R11,1kΩ 0805 1/4W,Resistor General Series,Yageo,RC0805FR-071KL,0805,Near associated signal pin.,General series resistors.\n51,2,R12-R13,4.7kΩ 0805 1/4W,Resistor I2C Pull-up,Yageo,RC0805FR-074K7L,0805,MAX 10mm from I2C bus. Place near U9(DS3231) or U10(AT24C256).,\"SDA(GPIO21) and SCL(GPIO22) pull-up to 3.3V.\"\n52,1,R14,10kΩ 0805 1%,Resistor TPS54331 FB Bottom,Yageo,RC0805FR-0710KL,0805,⚠ MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight.,\"Vout = 0.8×(1 + 31.6k/10k) = 3.33V.\"\n53,1,R15,31.6kΩ 0805 1%,Resistor TPS54331 FB Top,Yageo,RC0805FR-0731K6L,0805,⚠ MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight.,\"CORRECTED: was 100kΩ → 1.6V. Now 31.6kΩ → 3.33V.\"\n54,2,R16-R17,330Ω 0805 1/4W,Resistor PC817 LED Current,Yageo,RC0805FR-07330RL,0805,\"R16 between GPIO4 and U11 Pin1. R17 between GPIO5 and U12 Pin1. MAX 5mm from GPIO.\",\"R16: GPIO4→U11. R17: GPIO5→U12.\"\n55,2,R18-R19,10kΩ 0805 1/4W,Resistor MOSFET Gate Pull-down,Yageo,RC0805FR-0710KL,0805,MAX 3mm from Q3/Q4 gate pin.,Q3/Q4 relay MOSFET gate pull-down.\n56,4,R20-R23,100Ω 0805 1/4W,Resistor SPI Signal Integrity,Yageo,RC0805FR-07100RL,0805,⚠ MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source.,\"SPI_CS/MOSI/CLK/MISO series. Source-side placement.\"\n57,3,R28-R30,10kΩ 0805 1/4W,Resistor Strapping Pin Pull-up,Yageo,RC0805FR-0710KL,0805,\"R28: MAX 5mm from EN pin. R29: MAX 5mm from GPIO0 pin. R30: MAX 5mm from GPIO45.\",\"R28=EN, R29=GPIO0(BOOT), R30=GPIO45(WDG).\"\n58,2,R31-R32,100Ω 0805 1/4W,Resistor Auto-Reset DTR/RTS,Yageo,RC0805FR-07100RL,0805,MAX 5mm from USB-C connector DTR/RTS lines.,USB auto-reset circuit.\n59,1,R33,0Ω 0805,Resistor Solder Jumper,Yageo,RC0805FR-070RL,0805,No critical placement.,Optional circuit jumper.\n60,1,R34,10kΩ 0805 1/4W,Resistor TPS780180 Enable Pull-up,Yageo,RC0805FR-0710KL,0805,MAX 3mm from TPS780180 EN pin(Pin1).,1.8V LDO always-enabled.\n61,3,R35-R37,10kΩ 0603 1/8W,Resistor DWM3000 GPIO Pull-up to 1.8V,Yageo,RC0603FR-0710KL,0603,⚠ MAX 5mm from DWM3000 Pin26/27/28.,\"EXT_TX/EXT_RX/DEBUGOUT pull-up to 1V8_DWM.\"\n62,3,R38-R40,100Ω 0603 1/8W,Resistor DWM3000 GPIO Series,Yageo,RC0603FR-07100RL,0603,⚠ MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side.,\"EXT_RX/EXT_TX/DEBUGOUT series protection.\"\n63,2,R41-R42,1kΩ 0805 1/4W,Resistor W5500 RST and INT Series,Yageo,RC0805FR-071KL,0805,\"R41: between GPIO47 and W5500 nRESET. R42: between GPIO48 and W5500 INTn. MAX 10mm.\",W5500 reset and interrupt protection.\n64,4,R43-R46,49.9Ω 0402 1%,Resistor Ethernet Termination,Vishay,CRCW040249R9FKED,0402,⚠ MAX 5mm from W5500 TX+/TX-/RX+/RX- pins.,\"TX+/TX-/RX+/RX- termination — 49.9Ω ±1%.\"\n65,1,R47,470Ω 0805 1/4W,Resistor EN Test Point Series,Yageo,RC0805FR-07470RL,0805,Between EN pin and TP5. MAX 5mm from EN.,TP5 test point current limiting.\n66,1,R_RST1,10kΩ 0603 1/8W,Resistor Reset Voltage Divider Top,Yageo,RC0603FR-0710KL,0603,Both R_RST1 and R_RST2 within 5mm of DWM3000 Pin3(RSTn) and each other.,\"GPIO9→(R_RST1+R_RST2 divider)→Pin3. 3.3V→1.65V.\"\n67,1,R_RST2,10kΩ 0603 1/8W,Resistor Reset Voltage Divider Bottom,Yageo,RC0603FR-0710KL,0603,Adjacent to R_RST1 — voltage divider pair must be close together.,Voltage divider lower leg to GND.\n68,1,R_WDG,100kΩ 0805 1/4W,Resistor TPL5010 Timeout Setting,Yageo,RC0805FR-07100KL,0805,MAX 3mm from TPL5010 DELAY pin(Pin5).,\"Sets 60s timeout. Verify with TPL5010 datasheet Table 1.\"\n,,,,,,,,,,\n,,== LEDs ==,,,,,,,,\n69,1,LED1,Green LED 0805,Power Indicator LED,Kingbright,KP-2012SGC,0805,Near 3.3V power area. Visible from board edge preferred.,Always-on power indicator.\n70,1,LED2,Blue LED 0805,WiFi Status LED,Kingbright,KP-2012SUBC,0805,MAX 20mm from ESP32 GPIO6. Board edge preferred for visibility.,GPIO6 → R2 → LED2.\n71,1,LED3,Red LED 0805,UWB Activity LED,Kingbright,KP-2012SURCK,0805,MAX 20mm from ESP32 GPIO7. CORRECTED: was GPIO37(PSRAM).,GPIO7 → R3 → LED3.\n72,1,LED4,Yellow LED 0805,System Status LED,Kingbright,KP-2012SYC,0805,MAX 20mm from GPIO1. CORRECTED: GPIO38 now reserved for WS2812B.,GPIO1 → R_LED4 → LED4.\n73,1,LED5,Green LED 0805,Ethernet Activity LED,Kingbright,KP-2012SGC,0805,MAX 20mm from GPIO2. Near W5500 or board edge.,GPIO2 → R_LED5 → LED5.\n74,1,LED6,WS2812B-2020,Addressable RGB LED,Worldsemi,WS2812B-2020,2020 SMD,MAX 20mm from GPIO8. Keep away from high-frequency signals. 100nF decoupling cap within 1mm.,\"GPIO8→DIN. CORRECTED: was sharing GPIO38 with LED4.\"\n,,,,,,,,,,\n,,== CONNECTORS ==,,,,,,,,\n75,1,BAT1,CR2032 Holder SMD,Coin Cell Battery Holder,Linx Technologies,BAT-HLD-001,SMD,Within 20mm of DS3231 U9 VBAT pin. Accessible for battery replacement.,DS3231 RTC VBAT backup.\n76,2,SW1-SW2,Tactile Switch 6×6mm SMD,Push Button SPST,C&K,PTS645SM50SMTR92,6×6mm SMD,Near board edge — user accessible. SW1(RESET) and SW2(BOOT) within 20mm of ESP32 EN/GPIO0 pins.,\"SW1=RESET(EN). SW2=BOOT(GPIO0).\"\n77,1,J1_AC,Screw Terminal 3-pin 5.0mm,AC Power Input L/N/PE,Phoenix Contact,1935161,5.0mm THT,\"Board edge. AC section MIN 8mm from all DC components. F1(fuse) and RV1(varistor) within 15mm.\",\"L/N/PE. HIGH VOLTAGE — 100-240V AC.\"\n78,1,J1_USB,USB Type-C Receptacle 16-pin,USB-C Connector,Korean Hroparts,TYPE-C-31-M-12,SMD,\"Board edge. D10(USBLC6) MAX 3mm away — mandatory. F2(polyfuse) within 10mm. Auto-reset circuit (Q1/Q2/D4/D5) within 20mm.\",\"USB2.0 + VBUS.\"\n79,1,J2,DC Power Jack 5.5×2.1mm,Optional 5V Input,CUI Devices,PJ-002A,THT,Board edge. No specific critical distance.,Alternative 5V supply.\n80,3,J3-J5,Screw Terminal 3-pin 3.5mm,Relay Output COM/NO/NC,Ningbo Kangnex,KF350-3P,3.5mm THT,\"J3 adjacent to K1 — MAX 10mm from relay contacts. J4 adjacent to K2. Board edge preferred for cable access.\",\"J3=K1(Relay1). J4=K2(Relay2). J5=spare.\"\n81,1,J_FUSE,Fuse Holder 5×20mm,Glass Fuse Holder,Littelfuse,01000063Z,PCB Mount,On AC L line — between J1_AC and HLK-10M05. Accessible for fuse replacement. Within 20mm of J1_AC.,Holds F1 glass fuse.\n82,8,J6-J13,Pin Header 1×6 2.54mm Male,GPIO Expansion Headers,Amphenol,10129378-906002BLF,2.54mm THT,Board edge preferred. No critical distance for passive headers.,\"GPIO0-31 expansion. ⚠ GPIO33-37 = DO NOT CONNECT.\"\n83,1,J14,Pin Header 1×4 2.54mm Male,I2C Expansion Header,Amphenol,10129378-904002BLF,2.54mm THT,Near I2C bus (U9/U10). No critical distance constraint.,I2C external sensor header.\n84,1,J15,Pin Header 1×4 2.54mm Male,UART Debug Header,Amphenol,10129378-904002BLF,2.54mm THT,Near ESP32 GPIO43/44. No critical distance constraint.,UART debug/programming.\n85,1,J16,Pin Header 1×6 2.54mm Male,Power Distribution Header,Amphenol,10129378-906002BLF,2.54mm THT,Near power rails. No critical distance.,5V/3.3V/GND distribution.\n86,1,J17,Pin Header 1×6 2.54mm Male,Programming/Debug Header,Amphenol,10129378-906002BLF,2.54mm THT,Near USB-C connector and ESP32. MAX 30mm from ESP32.,Programming debug header.\n87,1,J18,HR911105A,RJ45 with Integrated Magnetics,Hanrun Electronics,HR911105A,THT,\"⚠ Board edge — mandatory for RJ45. MAX 30mm from W5500. R43-R46(termination) MAX 5mm from W5500 side. Keep MIN 20mm from DWM3000 RF section.\",W5500 Ethernet port.\n,,,,,,,,,,\n,,== TEST POINTS ==,,,,,,,,\n88,18,TP1-TP18,Test Point SMD 1.27mm Red,SMD Test Points,Keystone Electronics,5015,1.27mm SMD,\"PCB edge preferred — 1.27mm pitch, accessible for probes. TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing.\",\"TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS\"\n,,,,,,,,,,\n,,== RF CONNECTOR ==,,,,,,,,\n89,1,ANT1,SMA Female Edge Mount 50Ω,SMA RF Connector UWB Antenna,Amphenol,132134,Edge Mount,\"⚠ Board edge — mandatory. MAX 15mm from DWM3000 Pin23(RF_IO). 50Ω trace: 0.35mm width, top layer only, NO vias, 3mm keep-out on both sides, solid GND plane (Layer2) underneath entire trace length. SMA metal body: 4× GND vias. Via stitching around SMA: 5mm spacing.\",\"DWM3000 Pin23 → 50Ω trace → ANT1.\"\n(RSTn) and each other.,\"GPIO9→(R_RST1+R_RST2 divider)→Pin3. 3.3V→1.65V.\"\n67,1,R_RST2,10kΩ 0603 1/8W,Resistor Reset Voltage Divider Bottom,Yageo,RC0603FR-0610KL,0603,Adjacent to R_RST1 — voltage divider pair must be close together.,Voltage divider lower leg to GND.\n68,1,R_WDG,100kΩ 0805 1/4W,Resistor TPL5010 Timeout Setting,Yageo,RC0805FR-07100KL,0805,MAX 3mm from TPL5010 DELAY pin(Pin5).,\"Sets 60s timeout. Verify with TPL5010 datasheet Table 1.\"\n,,,,,,,,,,\n,,== LEDs ==,,,,,,,,\n69,1,LED1,Green LED 0805,Power Indicator LED (always on),Kingbright,KP-2012SGC,0805,Near 3.3V power area. Visible from board edge preferred.,Always-on power indicator.\n70,1,LED2,Blue LED 0805,WiFi Status LED,Kingbright,KP-2012SUBC,0805,MAX 20mm from ESP32 GPIO6. Board edge preferred.,GPIO6 → R2 → LED2.\n71,1,LED3,Red LED 0805,UWB Activity LED,Kingbright,KP-2012SURCK,0805,\"MAX 20mm from GPIO7. CORRECTED: was GPIO37(PSRAM).\",GPIO7 → R3 → LED3.\n72,1,LED4,Yellow LED 0805,System Status LED,Kingbright,KP-2012SYC,0805,\"MAX 20mm from GPIO1. CORRECTED: GPIO38 reserved for WS2812B.\",GPIO1 → R_LED4 → LED4.\n73,1,LED5,Green LED 0805,Ethernet Activity LED,Kingbright,KP-2012SGC,0805,MAX 20mm from GPIO2. Near W5500 or board edge.,GPIO2 → R_LED5 → LED5.\n74,1,LED6,WS2812B-2020,Addressable RGB LED,Worldsemi,WS2812B-2020,2020 SMD,\"MAX 20mm from GPIO8. 100nF decoupling cap within 1mm.\",\"GPIO8→DIN. CORRECTED: was sharing GPIO38 with LED4.\"\n,,,,,,,,,,\n,,== CONNECTORS ==,,,,,,,,\n75,1,BAT1,CR2032 Holder SMD,Coin Cell Battery Holder,Linx Technologies,BAT-HLD-001,SMD,Within 20mm of DS3231 U9 VBAT pin. Accessible for battery replacement.,DS3231 RTC VBAT backup.\n76,2,SW1-SW2,Tactile Switch 6×6mm SMD,Push Button SPST RESET and BOOT,C&K,PTS645SM50SMTR92,6×6mm SMD,\"Near board edge. SW1(RESET) MAX 20mm from ESP32 EN. SW2(BOOT) MAX 20mm from GPIO0.\",\"SW1=RESET(EN). SW2=BOOT(GPIO0).\"\n77,1,J1_AC,Screw Terminal 3-pin 5.0mm,AC Power Input L/N/PE,Phoenix Contact,1935161,5.0mm THT,\"LEFT BOARD EDGE — mandatory. AC section MIN 8mm from all DC. F1 and RV1 within 15mm.\",\"L/N/PE. HIGH VOLTAGE 100-240V AC.\"\n78,1,J1_USB,USB Type-C Receptacle 16-pin,USB-C Programming + Power,Korean Hroparts,TYPE-C-31-M-12,SMD,\"Board edge. D10(USBLC6) MAX 3mm. F2 within 10mm. Auto-reset (Q1/Q2/D4/D5) within 20mm.\",\"USB2.0 + VBUS.\"\n79,1,J2,DC Power Jack 5.5×2.1mm,Optional 5V DC Input,CUI Devices,PJ-002A,THT,Board edge. No critical distance.,Alternative 5V supply — not simultaneous with AC.\n80,3,J3-J5,Screw Terminal 3-pin 3.5mm,Relay Output COM/NO/NC,Ningbo Kangnex,KF350-3P,3.5mm THT,\"J3 MAX 10mm from K1. J4 MAX 10mm from K2. Board edge for cable access.\",\"J3=K1(Relay1). J4=K2(Relay2). J5=spare.\"\n81,1,J_FUSE,Fuse Holder 5×20mm PCB,Glass Fuse Holder,Littelfuse,01000063Z,PCB Mount,\"On AC L line between J1_AC and HLK-10M05. MAX 20mm from J1_AC.\",Holds F1 glass fuse.\n82,8,J6-J13,Pin Header 1×6 2.54mm Male,GPIO Expansion Headers,Amphenol,10129378-906002BLF,2.54mm THT,Board edge preferred. No critical distance.,\"J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT\"\n83,1,J14,Pin Header 1×4 2.54mm Male,I2C Expansion Header,Amphenol,10129378-904002BLF,2.54mm THT,Near I2C bus (U9/U10).,I2C external sensor header.\n84,1,J15,Pin Header 1×4 2.54mm Male,UART Debug Header,Amphenol,10129378-904002BLF,2.54mm THT,Near ESP32 GPIO43/44.,UART debug/programming.\n85,1,J16,Pin Header 1×6 2.54mm Male,Power Distribution Header,Amphenol,10129378-906002BLF,2.54mm THT,Near power rails.,5V/3.3V/GND distribution.\n86,1,J17,Pin Header 1×6 2.54mm Male,Programming/Debug Header,Amphenol,10129378-906002BLF,2.54mm THT,Near USB-C and ESP32. MAX 30mm from ESP32.,Programming debug header.\n87,1,J18,HR911105A,RJ45 with Integrated Magnetics + LEDs,Hanrun Electronics,HR911105A,THT,\"⚠ RIGHT BOARD EDGE — mandatory. MAX 30mm from W5500. R43-R46 MAX 5mm from W5500 side. MIN 20mm from DWM3000 RF section.\",W5500 Ethernet port.\n,,,,,,,,,,\n,,== TEST POINTS ==,,,,,,,,\n88,18,TP1-TP18,Test Point SMD 1.27mm Red,SMD Test Points,Keystone Electronics,5015,1.27mm SMD,\"PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing.\",\"TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS\"\n,,,,,,,,,,\n,,== RF CONNECTOR ==,,,,,,,,\n89,1,ANT1,SMA Female Edge Mount 50Ω,SMA RF Connector UWB Antenna,Amphenol,132134,Edge Mount,\"⚠ RIGHT BOARD EDGE X=130mm — mandatory. MAX 15mm from DWM3000 Pin23. Trace: 0.35mm width top layer only NO vias 3mm keepout. SMA body: 4× GND vias. Via stitching 5mm spacing around SMA.\",\"DWM3000 Pin23 → 50Ω trace → ANT1.\"\n\nTeknik Notlar:\n==============================================================\nALAN 3 — TEKNİK NOTLAR VE ÜRETİM KURALLARI (OmniCircuit AI)\nUWB RTLS Anchor v3.0\n==============================================================\n\n--------------------------------------------------------------\nPCB SPESİFİKASYONLARI\n--------------------------------------------------------------\nBoyut         : 130mm × 46mm\nKatman        : 4 (L1=Sinyal/Top, L2=GND Solid, L3=Güç, L4=Sinyal/Bottom)\nMalzeme       : FR4 TG150, 1.6mm\nBakır         : 1oz (35µm) tüm katmanlar\nMin iz        : 0.15mm (6mil)\nMin via delik : 0.3mm\nYüzey         : ENIG (Ni:3-5µm, Au:0.05-0.10µm)\nLehim maskesi : Yeşil LPI, her iki taraf\nİpek baskı    : Beyaz, min 0.15mm çizgi genişliği\n\n--------------------------------------------------------------\nEMPEDANSLı KATMANLAR (üreticiye bildirilecek)\n--------------------------------------------------------------\n50Ω ±3%  tek uçlu  : L1 sinyal izi (L1→L2 ref)\n  Hesap: h=0.2mm, εr=4.5, t=35µm → iz genişliği = 0.35mm\n  Kullanım: DWM3000 U2 Pin23 → ANT1 RF izi\n\n90Ω ±10% diferansiyel: L1 USB D+/D- çifti\n  Kullanım: J1_USB D+/D- → ESP32 USB_D+/D-\n\nTest kuponu panel üzerinde zorunlu — TDR raporu isteniyor.\n\n--------------------------------------------------------------\nZORUNLU YERLEŞİM KURALLARI (Placement Rules)\n--------------------------------------------------------------\n\n# RF KURALLARI — KESİNLİKLE UYULACAK\nRF-01: ANT1 (SMA) X=130mm sağ kenarında, U2 Pin23'ten MAX 15mm\nRF-02: U2 Pin23 → ANT1: 0.35mm iz, SADECE L1, VIA YOK\nRF-03: RF izi her iki yanında 3mm keepout (iz/via/bileşen yasak)\nRF-04: RF izi altında L2 Solid GND KESİNTİSİZ\nRF-05: ANT1 metal gövde 4× via ile L2 GND'ye\nRF-06: RF bölgesi via dikişi: 2mm aralık ızgara\nRF-07: U2 çevre via dikişi: 3mm aralık\n\n# GÜÇ KURALLARI\nPWR-01: TPS54331(U4) SW pini altında GND düzlemi YOK — 20mm yarıçap\nPWR-02: TPS54331 termal pad: 9× via (3×3), 0.3mm, L1→L2\nPWR-03: L1 induktor U4 SW pininden MAX 5mm\nPWR-04: C21/C22 U4 VIN'den MAX 3mm\nPWR-05: C27/C28 TPS780180 OUT'dan MAX 1mm — kritik 1.8V kararlılık\nPWR-06: 1V8_DWM izi yalnızca U2 VDD + U6 VCCB + U7/U13/U14 VCCA'ya bağlı\nPWR-07: R14/R15 U4 FB pininden MAX 1mm — feedback döngüsü sıkı\n\n# LEVEL SHIFTER KURALLARI\nLS-01: U6 (TXB0104) U2'den MAX 15mm\nLS-02: U7 U2 Pin22'den MAX 10mm\nLS-03: U13 U2 Pin27'den MAX 10mm\nLS-04: U14 U2 Pin26'dan MAX 10mm — YENİ IC\nLS-05: Her level shifter VCCA ve VCCB pinlerine ayrı 100nF — MAX 1mm\nLS-06: SPI izleri (GPIO10-13) eşit uzunluk ±2mm, sadece L1\nLS-07: R20-R23 seri dirençler ESP32 SK1/SK2 tarafına MAX 5mm\n\n# SPI ve RTLS ZAMANLAMA\nSPI-01: SPI_CLK/MOSI/MISO/CS — eşit iz uzunluğu ±2mm\nSPI-02: SPI max iz uzunluğu: 40mm (ESP32→TXB0104→DWM3000 toplam)\nSPI-03: EXT_TX/EXT_RX/IRQ izleri MAX 30mm\nSPI-04: Tüm SPI izleri altında L2 Solid GND referansı\n\n# AC GÜVENLİK KURALLARI\nAC-01: J1_AC, F1, RV1, U3 — sol PCB bölgesi X:0-30mm\nAC-02: AC bölgesi tüm DC bileşenlerden MIN 8mm clearance/creepage\nAC-03: AC-DC arası PCB slot/oyuk çizgisi önerilir\nAC-04: RV1 varistör: L ile N ARASI PARALEL, F1 sigortasından ÖNCE\nAC-05: IEC 60664-1 Tablo 2 — 230V AC, Kirlilik derece 2, Category II\n\n# RÖLE İZOLASYON KURALLARI\nREL-01: U11/U12 PC817 — LED tarafı (MCU) ile transistor tarafı (röle) MIN 8mm\nREL-02: Röle bölgesi RF bölümünden MIN 10mm\nREL-03: K1/K2 bobin izleri min 1mm genişlik (1A akım)\nREL-04: D2/D3 flyback diyotlar K1/K2 bobin pinlerinden MAX 5mm\nREL-05: J3/J4 vida terminalleri K1/K2 yanında, kart kenarında\n\n# ESP32 SOKET KURALLARI\nSOK-01: SK1 ve SK2 — 2.54mm pitch, 22 pin, female header\nSOK-02: SK1 ile SK2 arası 20.32mm (ESP32-S3-WROOM-2 modul aralığı)\nSOK-03: U1 (ESP32 modül) SK1+SK2 üstüne oturur — PCB'ye lehimlenmez\nSOK-04: GPIO33/34/35/36/37 pad'leri BAĞLANTISIZ — PSRAM rezerveli\nSOK-05: SK1+SK2 footprint: PinSocket_2x22_P2.54mm_Vertical\n\n# DEKUPLAJ KURALLARI\nDEC-01: Her IC VCC pininde 5mm içinde 100nF\nDEC-02: DWM3000 VDD pinleri: 100nF MAX 2mm — UWB kararlılığı için\nDEC-03: TXB0104 VCCA ve VCCB: ayrı 100nF, MAX 1mm — paylaşılmaz\nDEC-04: U7/U13/U14 VCCA ve VCCB: ayrı 100nF, MAX 1mm — paylaşılmaz\nDEC-05: W5500 her VCC pininde 100nF MAX 2mm\n\n# USB KURALLARI\nUSB-01: D+/D- diferansiyel çift: 90Ω ±10%, eşit uzunluk ±0.05mm\nUSB-02: D10 (USBLC6) J1_USB'den MAX 3mm\nUSB-03: GND düzlemi USB izleri altında\n\n--------------------------------------------------------------\nVIA SPESİFİKASYONLARI\n--------------------------------------------------------------\nTermal via (doldurulmuş):\n  U4 TPS54331  : 9× via (3×3 ızgara), 0.3mm çap, epoksi dolu\n  U1 ESP32     : 20× via, 0.3mm çap, termal pad\n  U2 DWM3000   : 16× via çevre, 0.3mm\n\nGND dikişi:\n  RF bölgesi   : 2mm aralık ızgara\n  DWM3000 çevre: 3mm aralık\n  PCB çevre    : 5mm aralık via çiti\n  USB konnektör: 6× via\n  Her dekuplaj cap GND pini: 2× via\n\nSinyal via: Sinyal başına max 2 via. Anten izinde via = 0.\n\n--------------------------------------------------------------\nİPEK BASKI ZORUNLU UYARILAR\n--------------------------------------------------------------\n[AC bölgesi]    : \"YÜKSEK GERİLİM — AC GİRİŞ / HIGH VOLTAGE AC INPUT\"\n[RF bölgesi]    : \"RF BÖLGE — ENGELLEME / RF ZONE — DO NOT OBSTRUCT\"\n[DWM3000 çevresi]: \"1.8V HASSAS MANTIK / 1.8V SENSITIVE LOGIC\"\n[U11/U12 çevresi]: İzolasyon çizgisi (2mm) + \"2500V İZOLASYON\"\n[J6-J13 GPIO33-37 pinleri]: \"PSRAM — BAĞLAMA / DO NOT CONNECT\"\n[Kart genel]    : \"UWB ANCHOR v3.0\" | \"REV A\" | \"SN:____\"\n\n--------------------------------------------------------------\nTEST NOKTALARI — ZORUNLU 18 ADET\n--------------------------------------------------------------\nTP1 =5V_MAIN     TP2 =3V3_MAIN    TP3 =1V8_DWM     TP4 =GND\nTP5 =ESP32_EN    TP6 =IRQ(1.8V)   TP7 =IRQ(3.3V)   TP8 =EXTTX(1.8V)\nTP9 =EXTTX(3.3V) TP10=EXTRX(1.8V) TP11=EXTRX(3.3V) TP12=I2C_SDA\nTP13=I2C_SCL     TP14=WDG_DONE    TP15=SPI_CLK     TP16=SPI_MOSI\nTP17=SPI_MISO    TP18=SPI_CS\nYerleşim: PCB kenar boyunca, TP çiftleri (TP6+TP7 gibi) MAX 5mm birbirine\n\n--------------------------------------------------------------\nGERBERde İSTENECEKLER\n--------------------------------------------------------------\nGTL GBL G1(GND) G2(PWR) GTS GBS GTO GBO GKO DRL TXT\n+ IPC-D-356A netlist\n+ Fabrikasyon çizimi PDF\n+ Montaj çizimi PDF\n+ Pick and Place CSV\n+ Empedans test kuponu (panel üzerinde)",
+  "assumptions": [
+    "ESP32-S3-WROOM-2 pinout derived from common module specifications for mapping to SK1/SK2.",
+    "SK1 and SK2 are treated as two separate 1x22 pin headers to accommodate the ESP32 module.",
+    "Default power connections for ICs (VCC/VDD to appropriate power rails, GND to GND) are assumed unless specified otherwise.",
+    "Unused GPIOs on ESP32 are left floating or connected to expansion headers as per BOM.",
+    "Standard I2C pull-up resistor values (4.7kΩ) are used for SDA/SCL.",
+    "Standard SPI series resistor values (100Ω) are used for signal integrity.",
+    "DWM3000 VDD pins (other than Pin6) are connected to 1V8_DWM, and VDDIO (Pin21) is also connected to 1V8_DWM.",
+    "Optocoupler U11/U12 VCC on LED side is connected to 3V3_MAIN."
+  ],
+  "components": [
+    {
+      "ref": "U1",
+      "type": "virtual_module",
+      "value": "ESP32-S3-WROOM-2-N32R16",
+      "manufacturer": "Espressif",
+      "part_number": "ESP32-S3-WROOM-2-N32R16",
+      "footprint": "not_pcb_mounted",
+      "reason": "Main controller for WiFi, BLE, and UWB coordination. Socketed for easy replacement. BOM states U1 plugs into SK1+SK2 sockets and is not soldered directly. BOM states U1 plugs into SK1+SK2 sockets and is not soldered directly.",
+      "constraints": [
+        "NOT soldered to PCB directly. Plugs into SK1+SK2 sockets.",
+        "GPIO33/34/35/36/37 pads MUST NOT be connected externally.",
+        "Centered on SK1+SK2 sockets — module edges must align with socket rows.",
+        "PCB footprint must be SK1+SK2 female sockets, not U1 solder pads",
+        "GPIO33/GPIO34/GPIO35/GPIO36/GPIO37 are PSRAM-reserved and must remain NC"
+      ],
+      "notes": "NOT soldered to PCB directly. Plugs into SK1+SK2 sockets. GPIO33/34/35/36/37 = PSRAM internal - DO NOT connect externally.",
+      "package_footprint": "Module (plugs into SK1+SK2)",
+      "placement": "Centered on SK1+SK2 sockets — module edges must align with socket rows",
+      "not_pcb_mounted": true
+    },
+    {
+      "ref": "U2",
+      "type": "uwb_transceiver",
+      "value": "DWM3000",
+      "manufacturer": "Qorvo",
+      "part_number": "DWM3000",
+      "footprint": "LGA-28",
+      "reason": "UWB Transceiver Module for RTLS functionality.",
+      "constraints": [
+        "RF keep-out: 3mm all sides of antenna trace.",
+        "SMA connector within 15mm.",
+        "Hybrid power: Pin6(VDD3V3)=3.3V; All other VDD pins=1.8V. VDDIO(Pin21)=1.8V.",
+        "Level shifters required on ALL SPI/GPIO signals.",
+        "Pin pitch (aralığı) must be calculated as 1.0mm for KiCad."
+      ],
+      "notes": "Hybrid power: Pin6(VDD3V3)=3.3V; All other VDD pins=1.8V. VDDIO(Pin21)=1.8V — level shifters required on ALL SPI/GPIO signals.",
+      "package_footprint": "LGA-28",
+      "placement": "RF keep-out: 3mm all sides of antenna trace. SMA connector within 15mm."
+    },
+    {
+      "ref": "U3",
+      "type": "ac_dc_converter",
+      "value": "HLK-10M05",
+      "manufacturer": "Hi-Link",
+      "part_number": "HLK-10M05",
+      "footprint": "PCB Module",
+      "reason": "Isolated AC-DC power supply for 5V main rail.",
+      "constraints": [
+        "AC section: MIN 8mm from all DC components.",
+        "Varistor RV1 and fuse F1 within 15mm.",
+        "Input: 100-240V AC. Output: 5V/2A."
+      ],
+      "notes": "Input: 100-240V AC. Output: 5V/2A. UPGRADED from HLK-5M05(5W) — insufficient margin.",
+      "package_footprint": "PCB Module",
+      "placement": "AC section: MIN 8mm from all DC components. Varistor RV1 and fuse F1 within 15mm."
+    },
+    {
+      "ref": "SK1",
+      "type": "socket",
+      "value": "PinSocket_1x22_P2.54mm",
+      "manufacturer": "Wurth Elektronik",
+      "part_number": "61302211821",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x22_P2.54mm_Vertical",
+      "reason": "Left row 22-pin female socket for ESP32-S3-WROOM-2 module.",
+      "constraints": [
+        "SK1 and SK2 parallel rows — spacing must exactly match ESP32-S3-WROOM-2 module pin pitch (2.54mm × 22 pins).",
+        "GPIO33-37 pads MUST NOT be connected.",
+        "2.54mm pitch 1x22 female socket"
+      ],
+      "notes": "SK1=left row(22pin) SK2=right row(22pin). GPIO33-37 pads MUST NOT be connected.",
+      "package_footprint": "Connector_PinSocket_2.54mm:PinSocket_2x22_P2.54mm_Vertical",
+      "placement": "SK1 and SK2 parallel rows — spacing must exactly match ESP32-S3-WROOM-2 module pin pitch (2.54mm × 22 pins)"
+    },
+    {
+      "ref": "SK2",
+      "type": "socket",
+      "value": "PinSocket_1x22_P2.54mm",
+      "manufacturer": "Wurth Elektronik",
+      "part_number": "61302211821",
+      "footprint": "Connector_PinSocket_2.54mm:PinSocket_1x22_P2.54mm_Vertical",
+      "reason": "Right row 22-pin female socket for ESP32-S3-WROOM-2 module.",
+      "constraints": [
+        "SK1 and SK2 parallel rows — spacing must exactly match ESP32-S3-WROOM-2 module pin pitch (2.54mm × 22 pins).",
+        "GPIO33-37 pads MUST NOT be connected.",
+        "2.54mm pitch 1x22 female socket"
+      ],
+      "notes": "SK1=left row(22pin) SK2=right row(22pin). GPIO33-37 pads MUST NOT be connected.",
+      "package_footprint": "Connector_PinSocket_2.54mm:PinSocket_2x22_P2.54mm_Vertical",
+      "placement": "SK1 and SK2 parallel rows — spacing must exactly match ESP32-S3-WROOM-2 module pin pitch (2.54mm × 22 pins)"
+    },
+    {
+      "ref": "U4",
+      "type": "buck_converter",
+      "value": "TPS54331DR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPS54331DR",
+      "footprint": "SOIC-8",
+      "reason": "Synchronous step-down converter for 3.3V main supply.",
+      "constraints": [
+        "C21/C22 MAX 3mm from VIN(Pin8).",
+        "L1 MAX 5mm from SW(Pin1).",
+        "C23/C24 MAX 3mm from output rail.",
+        "R14/R15 MAX 1mm from FB(Pin3).",
+        "NO GND plane within 20mm radius of SW pin.",
+        "R14=10kΩ(GND), R15=31.6kΩ(Vout) → Vout=3.33V."
+      ],
+      "notes": "R14=10kΩ(GND), R15=31.6kΩ(Vout) → Vout=3.33V. CORRECTED: R15 was 100kΩ → 1.6V output.",
+      "package_footprint": "SOIC-8",
+      "placement": "C21/C22 MAX 3mm from VIN(Pin8). L1 MAX 5mm from SW(Pin1). C23/C24 MAX 3mm from output rail. R14/R15 MAX 1mm from FB(Pin3). NO GND plane within 20mm radius of SW pin."
+    },
+    {
+      "ref": "U5",
+      "type": "ldo_regulator",
+      "value": "TPS780180200DRV",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPS780180200DRV",
+      "footprint": "SOT-23-5",
+      "reason": "Low-dropout regulator for 1.8V supply to DWM3000 and associated level shifters.",
+      "constraints": [
+        "C25/C26 MAX 2mm from IN pin.",
+        "C27/C28 MAX 1mm from OUT pin.",
+        "Place close to DWM3000 VDD pins.",
+        "1V8_DWM rail: ONLY DWM3000 VDD + TXB0104 VCCB + U7/U13/U14 VCCB. No other loads."
+      ],
+      "notes": "1V8_DWM rail: ONLY DWM3000 VDD + TXB0104 VCCB + U7/U13/U14 VCCB. No other loads.",
+      "package_footprint": "SOT-23-5",
+      "placement": "C25/C26 MAX 2mm from IN pin. C27/C28 MAX 1mm from OUT pin. Place close to DWM3000 VDD pins."
+    },
+    {
+      "ref": "U6",
+      "type": "level_shifter",
+      "value": "TXB0104RGYR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TXB0104RGYR",
+      "footprint": "VQFN-16",
+      "reason": "4-bit bidirectional voltage translator for DWM3000 SPI bus (3.3V ↔ 1.8V).",
+      "constraints": [
+        "MAX 15mm from DWM3000.",
+        "C29(VCCA) MAX 1mm from Pin1.",
+        "C30(VCCB) MAX 1mm from Pin16.",
+        "R20-R23 series resistors MAX 5mm from ESP32 GPIO side.",
+        "SPI traces equal length ±2mm.",
+        "VCCA=3.3V(ESP32 side), VCCB=1.8V(DWM3000 side), OE=GND."
+      ],
+      "notes": "VCCA=3.3V(ESP32 side), VCCB=1.8V(DWM3000 side), OE=GND.",
+      "package_footprint": "VQFN-16",
+      "placement": "MAX 15mm from DWM3000. C29(VCCA) MAX 1mm from Pin1. C30(VCCB) MAX 1mm from Pin16. R20-R23 series resistors MAX 5mm from ESP32 GPIO side. SPI traces equal length ±2mm."
+    },
+    {
+      "ref": "U7",
+      "type": "level_shifter",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "SOT-23-6",
+      "reason": "Single-bit voltage translator for DWM3000 IRQ signal (1.8V → 3.3V).",
+      "constraints": [
+        "MAX 10mm from DWM3000 Pin22(IRQ).",
+        "C33(VCCA/1.8V) MAX 1mm from Pin6.",
+        "C34(VCCB/3.3V) MAX 1mm from Pin5.",
+        "Trace to GPIO14 MAX 30mm.",
+        "Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH."
+      ],
+      "notes": "Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH.",
+      "package_footprint": "SOT-23-6",
+      "placement": "MAX 10mm from DWM3000 Pin22(IRQ). C33(VCCA/1.8V) MAX 1mm from Pin6. C34(VCCB/3.3V) MAX 1mm from Pin5. Trace to GPIO14 MAX 30mm."
+    },
+    {
+      "ref": "U13",
+      "type": "level_shifter",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "SOT-23-6",
+      "reason": "Single-bit voltage translator for DWM3000 EXT_TX signal (1.8V → 3.3V).",
+      "constraints": [
+        "MAX 10mm from DWM3000 Pin27(EXT_TX).",
+        "C35(VCCA/1.8V) MAX 1mm from Pin6.",
+        "C36(VCCB/3.3V) MAX 1mm from Pin5.",
+        "Trace to GPIO15 MAX 30mm.",
+        "Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH."
+      ],
+      "notes": "Direction A→B. VCCA=1.8V, VCCB=3.3V, DIR=HIGH.",
+      "package_footprint": "SOT-23-6",
+      "placement": "MAX 10mm from DWM3000 Pin27(EXT_TX). C35(VCCA/1.8V) MAX 1mm from Pin6. C36(VCCB/3.3V) MAX 1mm from Pin5. Trace to GPIO15 MAX 30mm."
+    },
+    {
+      "ref": "U14",
+      "type": "level_shifter",
+      "value": "SN74LVC1T45DBVR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "SN74LVC1T45DBVR",
+      "footprint": "SOT-23-6",
+      "reason": "Single-bit voltage translator for DWM3000 EXT_RX signal (3.3V → 1.8V).",
+      "constraints": [
+        "MAX 10mm from DWM3000 Pin26(EXT_RX).",
+        "C37(VCCA/3.3V) MAX 1mm from Pin6.",
+        "C38(VCCB/1.8V) MAX 1mm from Pin5.",
+        "Trace from GPIO16 MAX 30mm.",
+        "Direction A→B. VCCA=3.3V, VCCB=1.8V, DIR=HIGH."
+      ],
+      "notes": "NEW. Direction A→B. VCCA=3.3V, VCCB=1.8V, DIR=HIGH.",
+      "package_footprint": "SOT-23-6",
+      "placement": "MAX 10mm from DWM3000 Pin26(EXT_RX). C37(VCCA/3.3V) MAX 1mm from Pin6. C38(VCCB/1.8V) MAX 1mm from Pin5. Trace from GPIO16 MAX 30mm."
+    },
+    {
+      "ref": "U8",
+      "type": "watchdog_timer",
+      "value": "TPL5010DDCR",
+      "manufacturer": "Texas Instruments",
+      "part_number": "TPL5010DDCR",
+      "footprint": "SOT-23-6",
+      "reason": "Nano-power watchdog timer to reset ESP32 on timeout.",
+      "constraints": [
+        "No specific distance constraint. Place near ESP32 EN pin to keep reset trace short (<20mm).",
+        "GPIO45→DONE. Pulse every 30s. Resets ESP32 EN on 60s timeout."
+      ],
+      "notes": "GPIO45→DONE. Pulse every 30s. Resets ESP32 EN on 60s timeout.",
+      "package_footprint": "SOT-23-6",
+      "placement": "No specific distance constraint. Place near ESP32 EN pin to keep reset trace short (<20mm)."
+    },
+    {
+      "ref": "U9",
+      "type": "rtc",
+      "value": "DS3231SN",
+      "manufacturer": "Maxim / Analog Devices",
+      "part_number": "DS3231SN",
+      "footprint": "SO-8",
+      "reason": "Real-Time Clock for precise timekeeping.",
+      "constraints": [
+        "Place near I2C pull-up resistors R12/R13.",
+        "BAT1(CR2032) within 20mm.",
+        "SCL/SDA traces MAX 50mm.",
+        "I2C 0x68. SDA=GPIO21, SCL=GPIO22. VBAT=CR2032."
+      ],
+      "notes": "I2C 0x68. SDA=GPIO21, SCL=GPIO22. VBAT=CR2032.",
+      "package_footprint": "SO-8",
+      "placement": "Place near I2C pull-up resistors R12/R13. BAT1(CR2032) within 20mm. SCL/SDA traces MAX 50mm."
+    },
+    {
+      "ref": "U10",
+      "type": "eeprom",
+      "value": "AT24C256C-SSHL",
+      "manufacturer": "Microchip",
+      "part_number": "AT24C256C-SSHL",
+      "footprint": "SO-8",
+      "reason": "256Kbit I2C EEPROM for storing anchor configuration data.",
+      "constraints": [
+        "Place on same I2C bus as U9(DS3231). Within 30mm of U9 preferred.",
+        "I2C 0x50. Stores anchor XY coordinates. WP=GPIO23."
+      ],
+      "notes": "I2C 0x50. Stores anchor XY coordinates. WP=GPIO23.",
+      "package_footprint": "SO-8",
+      "placement": "Place on same I2C bus as U9(DS3231). Within 30mm of U9 preferred."
+    },
+    {
+      "ref": "U15",
+      "type": "ethernet_controller",
+      "value": "W5500",
+      "manufacturer": "WIZnet",
+      "part_number": "W5500",
+      "footprint": "LQFP-48",
+      "reason": "Hardwired TCP/IP Ethernet Controller for network connectivity.",
+      "constraints": [
+        "Crystal X1 MAX 10mm from W5500 clock pins.",
+        "C39-C42(decoupling) MAX 2mm from VCC pins.",
+        "C43-C44 MAX 5mm.",
+        "J18(RJ45) on PCB edge — MAX 30mm from W5500.",
+        "Keep W5500 traces away from UWB RF section MIN 20mm.",
+        "SPI2: GPIO39-42. RST=GPIO47, INT=GPIO48."
+      ],
+      "notes": "SPI2: GPIO39-42. RST=GPIO47, INT=GPIO48.",
+      "package_footprint": "LQFP-48",
+      "placement": "Crystal X1 MAX 10mm from W5500 clock pins. C39-C42(decoupling) MAX 2mm from VCC pins. C43-C44 MAX 5mm. J18(RJ45) on PCB edge — MAX 30mm from W5500. Keep W5500 traces away from UWB RF section MIN 20mm."
+    },
+    {
+      "ref": "U11",
+      "type": "optocoupler",
+      "value": "PC817X2CSP9F",
+      "manufacturer": "Sharp",
+      "part_number": "PC817X2CSP9F",
+      "footprint": "DIP-4",
+      "reason": "Optocoupler for isolating ESP32 GPIO4 from Relay K1 coil.",
+      "constraints": [
+        "MIN 8mm clearance between U11/U12 LED side (MCU) and transistor side (relay).",
+        "PCB slot/cutout recommended between isolated sections.",
+        "R16/R17 MAX 5mm from GPIO pins.",
+        "U11: GPIO4→K1."
+      ],
+      "notes": "U11: GPIO4→K1. U12: GPIO5→K2. CORRECTED from GPIO35/36.",
+      "package_footprint": "DIP-4",
+      "placement": "MIN 8mm clearance between U11/U12 LED side (MCU) and transistor side (relay). PCB slot/cutout recommended between isolated sections. R16/R17 MAX 5mm from GPIO pins."
+    },
+    {
+      "ref": "U12",
+      "type": "optocoupler",
+      "value": "PC817X2CSP9F",
+      "manufacturer": "Sharp",
+      "part_number": "PC817X2CSP9F",
+      "footprint": "DIP-4",
+      "reason": "Optocoupler for isolating ESP32 GPIO5 from Relay K2 coil.",
+      "constraints": [
+        "MIN 8mm clearance between U11/U12 LED side (MCU) and transistor side (relay).",
+        "PCB slot/cutout recommended between isolated sections.",
+        "R16/R17 MAX 5mm from GPIO pins.",
+        "U12: GPIO5→K2."
+      ],
+      "notes": "U11: GPIO4→K1. U12: GPIO5→K2. CORRECTED from GPIO35/36.",
+      "package_footprint": "DIP-4",
+      "placement": "MIN 8mm clearance between U11/U12 LED side (MCU) and transistor side (relay). PCB slot/cutout recommended between isolated sections. R16/R17 MAX 5mm from GPIO pins."
+    },
+    {
+      "ref": "Q1",
+      "type": "n_channel_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "2N7002",
+      "footprint": "SOT-23",
+      "reason": "N-Channel MOSFET for auto-reset circuit (controls ESP32 EN).",
+      "constraints": [
+        "Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+      ],
+      "notes": "Q1/Q2=auto-reset. Q3=Relay1 driver. Q4=Relay2 driver.",
+      "package_footprint": "SOT-23",
+      "placement": "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin. Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+    },
+    {
+      "ref": "Q2",
+      "type": "n_channel_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "2N7002",
+      "footprint": "SOT-23",
+      "reason": "N-Channel MOSFET for auto-reset circuit (controls ESP32 GPIO0).",
+      "constraints": [
+        "Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+      ],
+      "notes": "Q1/Q2=auto-reset. Q3=Relay1 driver. Q4=Relay2 driver.",
+      "package_footprint": "SOT-23",
+      "placement": "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin. Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+    },
+    {
+      "ref": "Q3",
+      "type": "n_channel_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "2N7002",
+      "footprint": "SOT-23",
+      "reason": "N-Channel MOSFET for driving Relay K1.",
+      "constraints": [
+        "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin."
+      ],
+      "notes": "Q1/Q2=auto-reset. Q3=Relay1 driver. Q4=Relay2 driver.",
+      "package_footprint": "SOT-23",
+      "placement": "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin. Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+    },
+    {
+      "ref": "Q4",
+      "type": "n_channel_mosfet",
+      "value": "2N7002",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "2N7002",
+      "footprint": "SOT-23",
+      "reason": "N-Channel MOSFET for driving Relay K2.",
+      "constraints": [
+        "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin."
+      ],
+      "notes": "Q1/Q2=auto-reset. Q3=Relay1 driver. Q4=Relay2 driver.",
+      "package_footprint": "SOT-23",
+      "placement": "Q3/Q4(relay drivers): MAX 5mm from respective PC817 output pin. Q1/Q2(auto-reset): MAX 5mm from ESP32 EN and GPIO0 pins."
+    },
+    {
+      "ref": "K1",
+      "type": "relay",
+      "value": "G5Q-14-DC5",
+      "manufacturer": "Omron",
+      "part_number": "G5Q-14-DC5",
+      "footprint": "PCB-THT",
+      "reason": "SPDT Relay for switching external loads via GPIO4.",
+      "constraints": [
+        "D2/D3 flyback diodes MAX 5mm from relay coil pins.",
+        "J3/J4 screw terminals adjacent to K1/K2 (within 10mm).",
+        "Keep relay section MIN 10mm from RF section.",
+        "SPDT: COM+NO+NC. K1=GPIO4 path."
+      ],
+      "notes": "SPDT: COM+NO+NC. K1=GPIO4 path. K2=GPIO5 path.",
+      "package_footprint": "PCB-THT",
+      "placement": "D2/D3 flyback diodes MAX 5mm from relay coil pins. J3/J4 screw terminals adjacent to K1/K2 (within 10mm). Keep relay section MIN 10mm from RF section."
+    },
+    {
+      "ref": "K2",
+      "type": "relay",
+      "value": "G5Q-14-DC5",
+      "manufacturer": "Omron",
+      "part_number": "G5Q-14-DC5",
+      "footprint": "PCB-THT",
+      "reason": "SPDT Relay for switching external loads via GPIO5.",
+      "constraints": [
+        "D2/D3 flyback diodes MAX 5mm from relay coil pins.",
+        "J3/J4 screw terminals adjacent to K1/K2 (within 10mm).",
+        "Keep relay section MIN 10mm from RF section.",
+        "SPDT: COM+NO+NC. K2=GPIO5 path."
+      ],
+      "notes": "SPDT: COM+NO+NC. K1=GPIO4 path. K2=GPIO5 path.",
+      "package_footprint": "PCB-THT",
+      "placement": "D2/D3 flyback diodes MAX 5mm from relay coil pins. J3/J4 screw terminals adjacent to K1/K2 (within 10mm). Keep relay section MIN 10mm from RF section."
+    },
+    {
+      "ref": "D1",
+      "type": "schottky_diode",
+      "value": "SS34-E3/57T",
+      "manufacturer": "Vishay",
+      "part_number": "SS34-E3/57T",
+      "footprint": "SMA",
+      "reason": "Schottky diode for TPS54331 buck converter flyback protection.",
+      "constraints": [
+        "MAX 3mm from TPS54331 SW pin(Pin1)."
+      ],
+      "notes": "TPS54331 SW node flyback protection.",
+      "package_footprint": "SMA",
+      "placement": "MAX 3mm from TPS54331 SW pin(Pin1)."
+    },
+    {
+      "ref": "D2",
+      "type": "schottky_diode",
+      "value": "1N5819",
+      "manufacturer": "Vishay",
+      "part_number": "1N5819",
+      "footprint": "SMA",
+      "reason": "Schottky diode for K1 relay coil flyback protection.",
+      "constraints": [
+        "MAX 5mm from relay coil pins K1/K2.",
+        "D2 parallel with K1 coil."
+      ],
+      "notes": "CORRECTED from 1N4148 to Schottky.",
+      "package_footprint": "SMA",
+      "placement": "MAX 5mm from relay coil pins K1/K2. D2 parallel with K1 coil. D3 parallel with K2 coil."
+    },
+    {
+      "ref": "D3",
+      "type": "schottky_diode",
+      "value": "1N5819",
+      "manufacturer": "Vishay",
+      "part_number": "1N5819",
+      "footprint": "SMA",
+      "reason": "Schottky diode for K2 relay coil flyback protection.",
+      "constraints": [
+        "MAX 5mm from relay coil pins K1/K2.",
+        "D3 parallel with K2 coil."
+      ],
+      "notes": "CORRECTED from 1N4148 to Schottky.",
+      "package_footprint": "SMA",
+      "placement": "MAX 5mm from relay coil pins K1/K2. D2 parallel with K1 coil. D3 parallel with K2 coil."
+    },
+    {
+      "ref": "D4",
+      "type": "switching_diode",
+      "value": "1N4148TR",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "1N4148TR",
+      "footprint": "SOD-323",
+      "reason": "Switching diode for auto-reset circuit (GPIO0).",
+      "constraints": [
+        "D4 MAX 3mm from GPIO0 pin."
+      ],
+      "notes": "Auto-reset circuit diodes.",
+      "package_footprint": "SOD-323",
+      "placement": "D4 MAX 3mm from GPIO0 pin. D5 MAX 3mm from ESP32 EN pin."
+    },
+    {
+      "ref": "D5",
+      "type": "switching_diode",
+      "value": "1N4148TR",
+      "manufacturer": "ON Semiconductor",
+      "part_number": "1N4148TR",
+      "footprint": "SOD-323",
+      "reason": "Switching diode for auto-reset circuit (EN).",
+      "constraints": [
+        "D5 MAX 3mm from ESP32 EN pin."
+      ],
+      "notes": "Auto-reset circuit diodes.",
+      "package_footprint": "SOD-323",
+      "placement": "D4 MAX 3mm from GPIO0 pin. D5 MAX 3mm from ESP32 EN pin."
+    },
+    {
+      "ref": "D6",
+      "type": "tvs_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "SMA",
+      "reason": "TVS diode for 3.3V rail ESD clamping (location 1).",
+      "constraints": [
+        "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+      ],
+      "notes": "3.3V rail ESD clamping (3 locations).",
+      "package_footprint": "SMA",
+      "placement": "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+    },
+    {
+      "ref": "D7",
+      "type": "tvs_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "SMA",
+      "reason": "TVS diode for 3.3V rail ESD clamping (location 2).",
+      "constraints": [
+        "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+      ],
+      "notes": "3.3V rail ESD clamping (3 locations).",
+      "package_footprint": "SMA",
+      "placement": "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+    },
+    {
+      "ref": "D8",
+      "type": "tvs_diode",
+      "value": "SMBJ3.3A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ3.3A",
+      "footprint": "SMA",
+      "reason": "TVS diode for 3.3V rail ESD clamping (location 3).",
+      "constraints": [
+        "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+      ],
+      "notes": "3.3V rail ESD clamping (3 locations).",
+      "package_footprint": "SMA",
+      "placement": "Each TVS MAX 5mm from its respective protected 3.3V rail connection point."
+    },
+    {
+      "ref": "D9",
+      "type": "tvs_diode",
+      "value": "SMBJ1.8A",
+      "manufacturer": "Littelfuse",
+      "part_number": "SMBJ1.8A",
+      "footprint": "SMA",
+      "reason": "TVS diode for 1.8V rail (DWM3000 core) ESD clamping.",
+      "constraints": [
+        "MAX 5mm from DWM3000 VDD pins. Place on 1V8_DWM rail, close to DWM3000."
+      ],
+      "notes": "1.8V rail (DWM3000 core) ESD clamping.",
+      "package_footprint": "SMA",
+      "placement": "MAX 5mm from DWM3000 VDD pins. Place on 1V8_DWM rail, close to DWM3000."
+    },
+    {
+      "ref": "D10",
+      "type": "usb_esd_protection",
+      "value": "USBLC6-2SC6",
+      "manufacturer": "STMicroelectronics",
+      "part_number": "USBLC6-2SC6",
+      "footprint": "SOT-23-6",
+      "reason": "USB ESD protection for D+/D- lines.",
+      "constraints": [
+        "MAX 3mm from USB-C connector J1_USB — mandatory for ESD effectiveness.",
+        "Place BEFORE USB signal reaches ESP32."
+      ],
+      "notes": "Place BEFORE USB signal reaches ESP32.",
+      "package_footprint": "SOT-23-6",
+      "placement": "⚠ MAX 3mm from USB-C connector J1_USB — mandatory for ESD effectiveness."
+    },
+    {
+      "ref": "RV1",
+      "type": "varistor",
+      "value": "14D471K",
+      "manufacturer": "Littelfuse",
+      "part_number": "14D471K",
+      "footprint": "14mm Disc",
+      "reason": "Varistor for AC input surge protection.",
+      "constraints": [
+        "On AC input — L-N parallel connection BEFORE fuse F1. Within 15mm of J1_AC."
+      ],
+      "notes": "L-N parallel, BEFORE F1.",
+      "package_footprint": "14mm Disc",
+      "placement": "On AC input — L-N parallel connection BEFORE fuse F1. Within 15mm of J1_AC."
+    },
+    {
+      "ref": "F1",
+      "type": "fuse",
+      "value": "0215001.MXP",
+      "manufacturer": "Littelfuse",
+      "part_number": "0215001.MXP",
+      "footprint": "5×20mm + Holder",
+      "reason": "Glass fuse for AC input overcurrent protection.",
+      "constraints": [
+        "First component on L (Line) after J1_AC. Within 20mm of AC input connector."
+      ],
+      "notes": "AC input fuse. Holder: Littelfuse 01000063Z",
+      "package_footprint": "5×20mm + Holder",
+      "placement": "First component on L (Line) after J1_AC. Within 20mm of AC input connector."
+    },
+    {
+      "ref": "F2",
+      "type": "ptc_resettable_fuse",
+      "value": "0ZCJ0050FF2G",
+      "manufacturer": "Bel Fuse",
+      "part_number": "0ZCJ0050FF2G",
+      "footprint": "1206 SMD",
+      "reason": "PTC resettable fuse for USB VBUS overcurrent protection.",
+      "constraints": [
+        "On USB VBUS line — between USB-C connector and FB1. MAX 10mm from connector."
+      ],
+      "notes": "USB VBUS overcurrent protection.",
+      "package_footprint": "1206 SMD",
+      "placement": "On USB VBUS line — between USB-C connector and FB1. MAX 10mm from connector."
+    },
+    {
+      "ref": "FB1",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "0603",
+      "reason": "Ferrite bead for USB VBUS noise filtering.",
+      "constraints": [
+        "FB1: on USB VBUS rail, MAX 10mm from F2."
+      ],
+      "notes": "FB1=USB, FB2=3V3→DWM3000, FB3=5V→relays.",
+      "package_footprint": "0603",
+      "placement": "FB1: on USB VBUS rail, MAX 10mm from F2. FB2: on 3V3 rail before DWM3000 section. FB3: on 5V rail before relay section."
+    },
+    {
+      "ref": "FB2",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "0603",
+      "reason": "Ferrite bead for 3.3V rail filtering before DWM3000 section.",
+      "constraints": [
+        "FB2: on 3V3 rail before DWM3000 section."
+      ],
+      "notes": "FB1=USB, FB2=3V3→DWM3000, FB3=5V→relays.",
+      "package_footprint": "0603",
+      "placement": "FB1: on USB VBUS rail, MAX 10mm from F2. FB2: on 3V3 rail before DWM3000 section. FB3: on 5V rail before relay section."
+    },
+    {
+      "ref": "FB3",
+      "type": "ferrite_bead",
+      "value": "BLM18PG221SN1D",
+      "manufacturer": "Murata",
+      "part_number": "BLM18PG221SN1D",
+      "footprint": "0603",
+      "reason": "Ferrite bead for 5V rail filtering before relay section.",
+      "constraints": [
+        "FB3: on 5V rail before relay section."
+      ],
+      "notes": "FB1=USB, FB2=3V3→DWM3000, FB3=5V→relays.",
+      "package_footprint": "0603",
+      "placement": "FB1: on USB VBUS rail, MAX 10mm from F2. FB2: on 3V3 rail before DWM3000 section. FB3: on 5V rail before relay section."
+    },
+    {
+      "ref": "L1",
+      "type": "power_inductor",
+      "value": "CDRH104R-220NC",
+      "manufacturer": "Sumida",
+      "part_number": "CDRH104R-220NC",
+      "footprint": "10×10mm",
+      "reason": "Power inductor for TPS54331 buck converter.",
+      "constraints": [
+        "MAX 5mm from TPS54331 SW pin(Pin1). Place on direct path SW→L1→output caps."
+      ],
+      "notes": "Buck converter inductor — current loop must be tight.",
+      "package_footprint": "10×10mm",
+      "placement": "⚠ MAX 5mm from TPS54331 SW pin(Pin1). Place on direct path SW→L1→output caps."
+    },
+    {
+      "ref": "X1",
+      "type": "smd_crystal",
+      "value": "25MHz / 18pF",
+      "manufacturer": "TXC",
+      "part_number": "7B-25.000MAAJ-T",
+      "footprint": "3.2×2.5mm SMD",
+      "reason": "25MHz crystal for W5500 reference clock.",
+      "constraints": [
+        "MAX 10mm from W5500 clock pins(X1/X2).",
+        "Load caps C_X1A/C_X1B MAX 2mm from crystal pins.",
+        "Keep away from high-current traces."
+      ],
+      "notes": "W5500 reference clock. Load caps: 2× 18pF.",
+      "package_footprint": "3.2×2.5mm SMD",
+      "placement": "⚠ MAX 10mm from W5500 clock pins(X1/X2). Load caps C_X1A/C_X1B MAX 2mm from crystal pins. Keep away from high-current traces."
+    },
+    {
+      "ref": "C1",
+      "type": "electrolytic_capacitor",
+      "value": "10µF/50V Electrolytic",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "Radial THT",
+      "reason": "Bulk capacitor for 5V main power rail.",
+      "constraints": [
+        "Near power entry points. MAX 15mm from each power rail input."
+      ],
+      "notes": "General bulk capacitors at power rails.",
+      "package_footprint": "Radial THT",
+      "placement": "Near power entry points. MAX 15mm from each power rail input."
+    },
+    {
+      "ref": "C2",
+      "type": "electrolytic_capacitor",
+      "value": "10µF/50V Electrolytic",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "Radial THT",
+      "reason": "Bulk capacitor for 5V main power rail.",
+      "constraints": [
+        "Near power entry points. MAX 15mm from each power rail input."
+      ],
+      "notes": "General bulk capacitors at power rails.",
+      "package_footprint": "Radial THT",
+      "placement": "Near power entry points. MAX 15mm from each power rail input."
+    },
+    {
+      "ref": "C3",
+      "type": "electrolytic_capacitor",
+      "value": "10µF/50V Electrolytic",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "Radial THT",
+      "reason": "Bulk capacitor for 3.3V main power rail.",
+      "constraints": [
+        "Near power entry points. MAX 15mm from each power rail input."
+      ],
+      "notes": "General bulk capacitors at power rails.",
+      "package_footprint": "Radial THT",
+      "placement": "Near power entry points. MAX 15mm from each power rail input."
+    },
+    {
+      "ref": "C4",
+      "type": "electrolytic_capacitor",
+      "value": "10µF/50V Electrolytic",
+      "manufacturer": "Nichicon",
+      "part_number": "UWX1H100MCL1GB",
+      "footprint": "Radial THT",
+      "reason": "Bulk capacitor for 3.3V main power rail.",
+      "constraints": [
+        "Near power entry points. MAX 15mm from each power rail input."
+      ],
+      "notes": "General bulk capacitors at power rails.",
+      "package_footprint": "Radial THT",
+      "placement": "Near power entry points. MAX 15mm from each power rail input."
+    },
+    {
+      "ref": "C5",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U4 (TPS54331) VIN pin.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C6",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U8 (TPL5010) VCC pin.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C7",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U9 (DS3231) VCC pin.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C8",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U10 (AT24C256C) VCC pin.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C9",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U11 (PC817) VCC pin (LED side).",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C10",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U12 (PC817) VCC pin (LED side).",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C11",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for LED6 (WS2812B) VCC pin.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C12",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H104KA01L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for USB VBUS after FB1.",
+      "constraints": [
+        "MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+      ],
+      "notes": "One per VCC pin on every IC.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from each IC VCC pin — mandatory for HF decoupling effectiveness."
+    },
+    {
+      "ref": "C13",
+      "type": "ceramic_capacitor",
+      "value": "10µF/16V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "0805",
+      "reason": "Bulk decoupling for ESP32 VDD pin group.",
+      "constraints": [
+        "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+      ],
+      "notes": "ESP32 VDD pin group bulk decoupling.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+    },
+    {
+      "ref": "C14",
+      "type": "ceramic_capacitor",
+      "value": "10µF/16V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "0805",
+      "reason": "Bulk decoupling for ESP32 VDD pin group.",
+      "constraints": [
+        "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+      ],
+      "notes": "ESP32 VDD pin group bulk decoupling.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+    },
+    {
+      "ref": "C15",
+      "type": "ceramic_capacitor",
+      "value": "10µF/16V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "0805",
+      "reason": "Bulk decoupling for ESP32 VDD pin group.",
+      "constraints": [
+        "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+      ],
+      "notes": "ESP32 VDD pin group bulk decoupling.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+    },
+    {
+      "ref": "C16",
+      "type": "ceramic_capacitor",
+      "value": "10µF/16V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61C106KE15L",
+      "footprint": "0805",
+      "reason": "Bulk decoupling for ESP32 VDD pin group.",
+      "constraints": [
+        "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+      ],
+      "notes": "ESP32 VDD pin group bulk decoupling.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from ESP32 VDD pin groups (SK1/SK2 power pins)."
+    },
+    {
+      "ref": "C17",
+      "type": "ceramic_capacitor",
+      "value": "1µF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for DWM3000 VDD pin.",
+      "constraints": [
+        "MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+      ],
+      "notes": "DWM3000 VDD pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+    },
+    {
+      "ref": "C18",
+      "type": "ceramic_capacitor",
+      "value": "1µF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for DWM3000 VDD pin.",
+      "constraints": [
+        "MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+      ],
+      "notes": "DWM3000 VDD pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+    },
+    {
+      "ref": "C19",
+      "type": "ceramic_capacitor",
+      "value": "1µF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for DWM3000 VDD pin.",
+      "constraints": [
+        "MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+      ],
+      "notes": "DWM3000 VDD pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+    },
+    {
+      "ref": "C20",
+      "type": "ceramic_capacitor",
+      "value": "1µF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C105KA12D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for DWM3000 VDD pin.",
+      "constraints": [
+        "MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+      ],
+      "notes": "DWM3000 VDD pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each DWM3000 VDD pin — tight placement critical for UWB stability."
+    },
+    {
+      "ref": "C21",
+      "type": "ceramic_capacitor",
+      "value": "22µF/10V X5R 1206",
+      "manufacturer": "Murata",
+      "part_number": "GRM31CR61A226KE19L",
+      "footprint": "1206",
+      "reason": "Input capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 3mm from TPS54331 VIN pin(Pin8)."
+      ],
+      "notes": "Buck converter input capacitors.",
+      "package_footprint": "1206",
+      "placement": "⚠ MAX 3mm from TPS54331 VIN pin(Pin8)."
+    },
+    {
+      "ref": "C22",
+      "type": "ceramic_capacitor",
+      "value": "22µF/10V X5R 1206",
+      "manufacturer": "Murata",
+      "part_number": "GRM31CR61A226KE19L",
+      "footprint": "1206",
+      "reason": "Input capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 3mm from TPS54331 VIN pin(Pin8)."
+      ],
+      "notes": "Buck converter input capacitors.",
+      "package_footprint": "1206",
+      "placement": "⚠ MAX 3mm from TPS54331 VIN pin(Pin8)."
+    },
+    {
+      "ref": "C23",
+      "type": "ceramic_capacitor",
+      "value": "4.7µF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H475KA12L",
+      "footprint": "0805",
+      "reason": "Output capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 3mm from 3V3 output rail after inductor L1."
+      ],
+      "notes": "Buck converter output capacitors.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 3mm from 3V3 output rail after inductor L1."
+    },
+    {
+      "ref": "C24",
+      "type": "ceramic_capacitor",
+      "value": "4.7µF/50V X7R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR71H475KA12L",
+      "footprint": "0805",
+      "reason": "Output capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 3mm from 3V3 output rail after inductor L1."
+      ],
+      "notes": "Buck converter output capacitors.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 3mm from 3V3 output rail after inductor L1."
+    },
+    {
+      "ref": "C25",
+      "type": "ceramic_capacitor",
+      "value": "10µF/6.3V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR60J106ME39L",
+      "footprint": "0805",
+      "reason": "Input capacitor for U5 (TPS780180) 1.8V LDO.",
+      "constraints": [
+        "MAX 2mm from TPS780180 IN pin."
+      ],
+      "notes": "1.8V LDO input capacitors.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 2mm from TPS780180 IN pin."
+    },
+    {
+      "ref": "C26",
+      "type": "ceramic_capacitor",
+      "value": "10µF/6.3V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR60J106ME39L",
+      "footprint": "0805",
+      "reason": "Input capacitor for U5 (TPS780180) 1.8V LDO.",
+      "constraints": [
+        "MAX 2mm from TPS780180 IN pin."
+      ],
+      "notes": "1.8V LDO input capacitors.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 2mm from TPS780180 IN pin."
+    },
+    {
+      "ref": "C27",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Output decoupling capacitor for U5 (TPS780180) 1.8V LDO.",
+      "constraints": [
+        "MAX 1mm from TPS780180 OUT pin — very tight."
+      ],
+      "notes": "1.8V LDO output decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 1mm from TPS780180 OUT pin — very tight."
+    },
+    {
+      "ref": "C28",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Output decoupling capacitor for U5 (TPS780180) 1.8V LDO.",
+      "constraints": [
+        "MAX 1mm from TPS780180 OUT pin — very tight."
+      ],
+      "notes": "1.8V LDO output decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 1mm from TPS780180 OUT pin — very tight."
+    },
+    {
+      "ref": "C29",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U6 (TXB0104) VCCA (3.3V) pin.",
+      "constraints": [
+        "C29 MAX 1mm from TXB0104 VCCA(Pin1).",
+        "SEPARATE caps — do not share."
+      ],
+      "notes": "VCCA(3.3V) and VCCB(1.8V) — SEPARATE.",
+      "package_footprint": "0603",
+      "placement": "⚠ C29 MAX 1mm from TXB0104 VCCA(Pin1). C30 MAX 1mm from VCCB(Pin16). SEPARATE caps — do not share."
+    },
+    {
+      "ref": "C30",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U6 (TXB0104) VCCB (1.8V) pin.",
+      "constraints": [
+        "C30 MAX 1mm from TXB0104 VCCB(Pin16).",
+        "SEPARATE caps — do not share."
+      ],
+      "notes": "VCCA(3.3V) and VCCB(1.8V) — SEPARATE.",
+      "package_footprint": "0603",
+      "placement": "⚠ C29 MAX 1mm from TXB0104 VCCA(Pin1). C30 MAX 1mm from VCCB(Pin16). SEPARATE caps — do not share."
+    },
+    {
+      "ref": "C31",
+      "type": "ceramic_capacitor",
+      "value": "330pF/50V C0G 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H331JA01D",
+      "footprint": "0603",
+      "reason": "Compensation capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 2mm from TPS54331 COMP pin(Pin4)."
+      ],
+      "notes": "TPS54331 compensation network.",
+      "package_footprint": "0603",
+      "placement": "MAX 2mm from TPS54331 COMP pin(Pin4)."
+    },
+    {
+      "ref": "C32",
+      "type": "ceramic_capacitor",
+      "value": "100pF/50V C0G 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H101JA01D",
+      "footprint": "0603",
+      "reason": "Compensation capacitor for U4 (TPS54331) buck converter.",
+      "constraints": [
+        "MAX 2mm from TPS54331 COMP pin(Pin4)."
+      ],
+      "notes": "TPS54331 compensation network.",
+      "package_footprint": "0603",
+      "placement": "MAX 2mm from TPS54331 COMP pin(Pin4)."
+    },
+    {
+      "ref": "C33",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U7 (SN74LVC1T45) VCCA (1.8V) pin.",
+      "constraints": [
+        "C33 MAX 1mm from U7 VCCA(Pin6/1.8V).",
+        "SEPARATE caps."
+      ],
+      "notes": "U7 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C33 MAX 1mm from U7 VCCA(Pin6/1.8V). C34 MAX 1mm from U7 VCCB(Pin5/3.3V). SEPARATE caps."
+    },
+    {
+      "ref": "C34",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U7 (SN74LVC1T45) VCCB (3.3V) pin.",
+      "constraints": [
+        "C34 MAX 1mm from U7 VCCB(Pin5/3.3V).",
+        "SEPARATE caps."
+      ],
+      "notes": "U7 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C33 MAX 1mm from U7 VCCA(Pin6/1.8V). C34 MAX 1mm from U7 VCCB(Pin5/3.3V). SEPARATE caps."
+    },
+    {
+      "ref": "C35",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U13 (SN74LVC1T45) VCCA (1.8V) pin.",
+      "constraints": [
+        "C35 MAX 1mm from U13 VCCA(1.8V).",
+        "SEPARATE caps."
+      ],
+      "notes": "U13 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C35 MAX 1mm from U13 VCCA(1.8V). C36 MAX 1mm from U13 VCCB(3.3V). SEPARATE caps."
+    },
+    {
+      "ref": "C36",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U13 (SN74LVC1T45) VCCB (3.3V) pin.",
+      "constraints": [
+        "C36 MAX 1mm from U13 VCCB(3.3V).",
+        "SEPARATE caps."
+      ],
+      "notes": "U13 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C35 MAX 1mm from U13 VCCA(1.8V). C36 MAX 1mm from U13 VCCB(3.3V). SEPARATE caps."
+    },
+    {
+      "ref": "C37",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U14 (SN74LVC1T45) VCCA (3.3V) pin.",
+      "constraints": [
+        "C37 MAX 1mm from U14 VCCA(3.3V).",
+        "SEPARATE caps."
+      ],
+      "notes": "NEW. U14 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C37 MAX 1mm from U14 VCCA(3.3V). C38 MAX 1mm from U14 VCCB(1.8V). SEPARATE caps."
+    },
+    {
+      "ref": "C38",
+      "type": "ceramic_capacitor",
+      "value": "100nF/16V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71C104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U14 (SN74LVC1T45) VCCB (1.8V) pin.",
+      "constraints": [
+        "C38 MAX 1mm from U14 VCCB(1.8V).",
+        "SEPARATE caps."
+      ],
+      "notes": "NEW. U14 VCCA+VCCB — separate caps each side.",
+      "package_footprint": "0603",
+      "placement": "⚠ C37 MAX 1mm from U14 VCCA(3.3V). C38 MAX 1mm from U14 VCCB(1.8V). SEPARATE caps."
+    },
+    {
+      "ref": "C39",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U15 (W5500) VCC pin.",
+      "constraints": [
+        "MAX 2mm from each W5500 VCC pin — one cap per pin."
+      ],
+      "notes": "W5500 VCC pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each W5500 VCC pin — one cap per pin."
+    },
+    {
+      "ref": "C40",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U15 (W5500) VCC pin.",
+      "constraints": [
+        "MAX 2mm from each W5500 VCC pin — one cap per pin."
+      ],
+      "notes": "W5500 VCC pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each W5500 VCC pin — one cap per pin."
+    },
+    {
+      "ref": "C41",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U15 (W5500) VCC pin.",
+      "constraints": [
+        "MAX 2mm from each W5500 VCC pin — one cap per pin."
+      ],
+      "notes": "W5500 VCC pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each W5500 VCC pin — one cap per pin."
+    },
+    {
+      "ref": "C42",
+      "type": "ceramic_capacitor",
+      "value": "100nF/50V X7R 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM188R71H104KA93D",
+      "footprint": "0603",
+      "reason": "Decoupling capacitor for U15 (W5500) VCC pin.",
+      "constraints": [
+        "MAX 2mm from each W5500 VCC pin — one cap per pin."
+      ],
+      "notes": "W5500 VCC pin decoupling.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from each W5500 VCC pin — one cap per pin."
+    },
+    {
+      "ref": "C43",
+      "type": "ceramic_capacitor",
+      "value": "10µF/25V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61E106KA73L",
+      "footprint": "0805",
+      "reason": "Bulk decoupling capacitor for U15 (W5500) VCC pins.",
+      "constraints": [
+        "MAX 5mm from W5500 VCC pins."
+      ],
+      "notes": "W5500 bulk decoupling capacitor.",
+      "package_footprint": "0805",
+      "placement": "MAX 5mm from W5500 VCC pins."
+    },
+    {
+      "ref": "C44",
+      "type": "ceramic_capacitor",
+      "value": "10µF/25V X5R 0805",
+      "manufacturer": "Murata",
+      "part_number": "GRM21BR61E106KA73L",
+      "footprint": "0805",
+      "reason": "Decoupling capacitor for U15 (W5500) REGD pin.",
+      "constraints": [
+        "MAX 3mm from W5500 REGD pin."
+      ],
+      "notes": "W5500 internal 1.2V LDO output decoupling.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from W5500 REGD pin."
+    },
+    {
+      "ref": "C_X1A",
+      "type": "ceramic_capacitor",
+      "value": "18pF/50V C0G 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H180JA01D",
+      "footprint": "0603",
+      "reason": "Load capacitor for X1 (W5500 crystal).",
+      "constraints": [
+        "MAX 2mm from X1 crystal pins — one cap per pin."
+      ]
+    },
+    {
+      "ref": "C_X1B",
+      "type": "ceramic_capacitor",
+      "value": "18pF/50V C0G 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H180JA01D",
+      "footprint": "0603",
+      "reason": "Load capacitor for X1 (W5500 crystal).",
+      "constraints": [
+        "MAX 2mm from X1 crystal pins — one cap per pin."
+      ]
+    },
+    {
+      "ref": "R1",
+      "type": "resistor",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for LED1 (Power Indicator).",
+      "constraints": [
+        "MAX 5mm from each LED anode. Between GPIO pin and LED."
+      ]
+    },
+    {
+      "ref": "R2",
+      "type": "resistor",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for LED2 (WiFi Status).",
+      "constraints": [
+        "MAX 5mm from each LED anode. Between GPIO pin and LED."
+      ]
+    },
+    {
+      "ref": "R3",
+      "type": "resistor",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for LED3 (UWB Activity).",
+      "constraints": [
+        "MAX 5mm from each LED anode. Between GPIO pin and LED."
+      ]
+    },
+    {
+      "ref": "R_LED4",
+      "type": "resistor",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for LED4 (System Status).",
+      "constraints": [
+        "MAX 5mm from each LED anode. Between GPIO pin and LED."
+      ]
+    },
+    {
+      "ref": "R_LED5",
+      "type": "resistor",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for LED5 (Ethernet Activity).",
+      "constraints": [
+        "MAX 5mm from each LED anode. Between GPIO pin and LED."
+      ]
+    },
+    {
+      "ref": "R6",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "General pull-up/pull-down resistor (unassigned, available for use).",
+      "constraints": [
+        "Within 5mm of associated IC pin."
+      ],
+      "notes": "Various pull-up/pull-down applications.",
+      "package_footprint": "0805",
+      "placement": "Within 5mm of associated IC pin."
+    },
+    {
+      "ref": "R7",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "General pull-up/pull-down resistor (unassigned, available for use).",
+      "constraints": [
+        "Within 5mm of associated IC pin."
+      ],
+      "notes": "Various pull-up/pull-down applications.",
+      "package_footprint": "0805",
+      "placement": "Within 5mm of associated IC pin."
+    },
+    {
+      "ref": "R8",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "General pull-up/pull-down resistor (unassigned, available for use).",
+      "constraints": [
+        "Within 5mm of associated IC pin."
+      ],
+      "notes": "Various pull-up/pull-down applications.",
+      "package_footprint": "0805",
+      "placement": "Within 5mm of associated IC pin."
+    },
+    {
+      "ref": "R9",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "General pull-up/pull-down resistor (unassigned, available for use).",
+      "constraints": [
+        "Within 5mm of associated IC pin."
+      ],
+      "notes": "Various pull-up/pull-down applications.",
+      "package_footprint": "0805",
+      "placement": "Within 5mm of associated IC pin."
+    },
+    {
+      "ref": "R10",
+      "type": "resistor",
+      "value": "1kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "0805",
+      "reason": "General series resistor (unassigned, available for use).",
+      "constraints": [
+        "Near associated signal pin."
+      ],
+      "notes": "General series resistors.",
+      "package_footprint": "0805",
+      "placement": "Near associated signal pin."
+    },
+    {
+      "ref": "R11",
+      "type": "resistor",
+      "value": "1kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "0805",
+      "reason": "General series resistor (unassigned, available for use).",
+      "constraints": [
+        "Near associated signal pin."
+      ],
+      "notes": "General series resistors.",
+      "package_footprint": "0805",
+      "placement": "Near associated signal pin."
+    },
+    {
+      "ref": "R12",
+      "type": "resistor",
+      "value": "4.7kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-074K7L",
+      "footprint": "0805",
+      "reason": "I2C pull-up resistor for SDA line.",
+      "constraints": [
+        "MAX 10mm from I2C bus. Place near U9(DS3231) or U10(AT24C256).",
+        "SDA(GPIO21) pull-up to 3.3V."
+      ],
+      "notes": "SDA(GPIO21) and SCL(GPIO22) pull-up to 3.3V.",
+      "package_footprint": "0805",
+      "placement": "MAX 10mm from I2C bus. Place near U9(DS3231) or U10(AT24C256)."
+    },
+    {
+      "ref": "R13",
+      "type": "resistor",
+      "value": "4.7kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-074K7L",
+      "footprint": "0805",
+      "reason": "I2C pull-up resistor for SCL line.",
+      "constraints": [
+        "MAX 10mm from I2C bus. Place near U9(DS3231) or U10(AT24C256).",
+        "SCL(GPIO22) pull-up to 3.3V."
+      ],
+      "notes": "SDA(GPIO21) and SCL(GPIO22) pull-up to 3.3V.",
+      "package_footprint": "0805",
+      "placement": "MAX 10mm from I2C bus. Place near U9(DS3231) or U10(AT24C256)."
+    },
+    {
+      "ref": "R14",
+      "type": "resistor",
+      "value": "10kΩ 0805 1%",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Bottom resistor in TPS54331 feedback divider.",
+      "constraints": [
+        "MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight.",
+        "Vout = 0.8×(1 + 31.6k/10k) = 3.33V."
+      ],
+      "notes": "Vout = 0.8×(1 + 31.6k/10k) = 3.33V.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight."
+    },
+    {
+      "ref": "R15",
+      "type": "resistor",
+      "value": "31.6kΩ 0805 1%",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0731K6L",
+      "footprint": "0805",
+      "reason": "Top resistor in TPS54331 feedback divider.",
+      "constraints": [
+        "MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight."
+      ],
+      "notes": "CORRECTED: was 100kΩ → 1.6V. Now 31.6kΩ → 3.33V.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 1mm from TPS54331 FB pin(Pin3). Keep feedback loop tight."
+    },
+    {
+      "ref": "R16",
+      "type": "resistor",
+      "value": "330Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07330RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for U11 (PC817) LED.",
+      "constraints": [
+        "R16 between GPIO4 and U11 Pin1. MAX 5mm from GPIO."
+      ],
+      "notes": "R16: GPIO4→U11. R17: GPIO5→U12.",
+      "package_footprint": "0805",
+      "placement": "R16 between GPIO4 and U11 Pin1. R17 between GPIO5 and U12 Pin1. MAX 5mm from GPIO."
+    },
+    {
+      "ref": "R17",
+      "type": "resistor",
+      "value": "330Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07330RL",
+      "footprint": "0805",
+      "reason": "Current limiting resistor for U12 (PC817) LED.",
+      "constraints": [
+        "R17 between GPIO5 and U12 Pin1. MAX 5mm from GPIO."
+      ],
+      "notes": "R16: GPIO4→U11. R17: GPIO5→U12.",
+      "package_footprint": "0805",
+      "placement": "R16 between GPIO4 and U11 Pin1. R17 between GPIO5 and U12 Pin1. MAX 5mm from GPIO."
+    },
+    {
+      "ref": "R18",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Gate pull-down resistor for Q3 (Relay1 driver).",
+      "constraints": [
+        "MAX 3mm from Q3/Q4 gate pin."
+      ],
+      "notes": "Q3/Q4 relay MOSFET gate pull-down.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from Q3/Q4 gate pin."
+    },
+    {
+      "ref": "R19",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Gate pull-down resistor for Q4 (Relay2 driver).",
+      "constraints": [
+        "MAX 3mm from Q3/Q4 gate pin."
+      ],
+      "notes": "Q3/Q4 relay MOSFET gate pull-down.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from Q3/Q4 gate pin."
+    },
+    {
+      "ref": "R20",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for SPI_CLK signal integrity.",
+      "constraints": [
+        "MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+      ],
+      "notes": "SPI_CS/MOSI/CLK/MISO series. Source-side placement.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+    },
+    {
+      "ref": "R21",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for SPI_MOSI signal integrity.",
+      "constraints": [
+        "MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+      ],
+      "notes": "SPI_CS/MOSI/CLK/MISO series. Source-side placement.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+    },
+    {
+      "ref": "R22",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for SPI_MISO signal integrity.",
+      "constraints": [
+        "MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+      ],
+      "notes": "SPI_CS/MOSI/CLK/MISO series. Source-side placement.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+    },
+    {
+      "ref": "R23",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for SPI_CS signal integrity.",
+      "constraints": [
+        "MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+      ],
+      "notes": "SPI_CS/MOSI/CLK/MISO series. Source-side placement.",
+      "package_footprint": "0805",
+      "placement": "⚠ MAX 5mm from ESP32 GPIO side (NOT DWM3000 side). Place close to source."
+    },
+    {
+      "ref": "R28",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Pull-up resistor for ESP32 EN pin.",
+      "constraints": [
+        "R28: MAX 5mm from EN pin."
+      ],
+      "notes": "R28=EN, R29=GPIO0(BOOT), R30=GPIO45(WDG).",
+      "package_footprint": "0805",
+      "placement": "R28: MAX 5mm from EN pin. R29: MAX 5mm from GPIO0 pin. R30: MAX 5mm from GPIO45."
+    },
+    {
+      "ref": "R29",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Pull-up resistor for ESP32 GPIO0 (BOOT) pin.",
+      "constraints": [
+        "R29: MAX 5mm from GPIO0 pin."
+      ],
+      "notes": "R28=EN, R29=GPIO0(BOOT), R30=GPIO45(WDG).",
+      "package_footprint": "0805",
+      "placement": "R28: MAX 5mm from EN pin. R29: MAX 5mm from GPIO0 pin. R30: MAX 5mm from GPIO45."
+    },
+    {
+      "ref": "R30",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Pull-up resistor for ESP32 GPIO45 (Watchdog) pin.",
+      "constraints": [
+        "R30: MAX 5mm from GPIO45."
+      ],
+      "notes": "R28=EN, R29=GPIO0(BOOT), R30=GPIO45(WDG).",
+      "package_footprint": "0805",
+      "placement": "R28: MAX 5mm from EN pin. R29: MAX 5mm from GPIO0 pin. R30: MAX 5mm from GPIO45."
+    },
+    {
+      "ref": "R31",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for USB DTR line in auto-reset circuit.",
+      "constraints": [
+        "MAX 5mm from USB-C connector DTR/RTS lines."
+      ],
+      "notes": "USB auto-reset circuit.",
+      "package_footprint": "0805",
+      "placement": "MAX 5mm from USB-C connector DTR/RTS lines."
+    },
+    {
+      "ref": "R32",
+      "type": "resistor",
+      "value": "100Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100RL",
+      "footprint": "0805",
+      "reason": "Series resistor for USB RTS line in auto-reset circuit.",
+      "constraints": [
+        "MAX 5mm from USB-C connector DTR/RTS lines."
+      ],
+      "notes": "USB auto-reset circuit.",
+      "package_footprint": "0805",
+      "placement": "MAX 5mm from USB-C connector DTR/RTS lines."
+    },
+    {
+      "ref": "R33",
+      "type": "resistor",
+      "value": "0Ω 0805",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-070RL",
+      "footprint": "0805",
+      "reason": "Solder jumper for optional circuit connection.",
+      "constraints": [
+        "No critical placement."
+      ],
+      "notes": "Optional circuit jumper.",
+      "package_footprint": "0805",
+      "placement": "No critical placement."
+    },
+    {
+      "ref": "R34",
+      "type": "resistor",
+      "value": "10kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-0710KL",
+      "footprint": "0805",
+      "reason": "Pull-up resistor for U5 (TPS780180) Enable pin.",
+      "constraints": [
+        "MAX 3mm from TPS780180 EN pin(Pin1)."
+      ],
+      "notes": "1.8V LDO always-enabled.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from TPS780180 EN pin(Pin1)."
+    },
+    {
+      "ref": "R35",
+      "type": "resistor",
+      "value": "10kΩ 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "0603",
+      "reason": "Pull-up resistor for DWM3000 EXT_RX pin to 1.8V.",
+      "constraints": [
+        "MAX 5mm from DWM3000 Pin26/27/28."
+      ],
+      "notes": "EXT_TX/EXT_RX/DEBUGOUT pull-up to 1V8_DWM.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 Pin26/27/28."
+    },
+    {
+      "ref": "R36",
+      "type": "resistor",
+      "value": "10kΩ 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "0603",
+      "reason": "Pull-up resistor for DWM3000 EXT_TX pin to 1.8V.",
+      "constraints": [
+        "MAX 5mm from DWM3000 Pin26/27/28."
+      ],
+      "notes": "EXT_TX/EXT_RX/DEBUGOUT pull-up to 1V8_DWM.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 Pin26/27/28."
+    },
+    {
+      "ref": "R37",
+      "type": "resistor",
+      "value": "10kΩ 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "0603",
+      "reason": "Pull-up resistor for DWM3000 DEBUGOUT pin to 1.8V.",
+      "constraints": [
+        "MAX 5mm from DWM3000 Pin26/27/28."
+      ],
+      "notes": "EXT_TX/EXT_RX/DEBUGOUT pull-up to 1V8_DWM.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 Pin26/27/28."
+    },
+    {
+      "ref": "R38",
+      "type": "resistor",
+      "value": "100Ω 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "0603",
+      "reason": "Series resistor for DWM3000 EXT_RX signal protection.",
+      "constraints": [
+        "MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+      ],
+      "notes": "EXT_RX/EXT_TX/DEBUGOUT series protection.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+    },
+    {
+      "ref": "R39",
+      "type": "resistor",
+      "value": "100Ω 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "0603",
+      "reason": "Series resistor for DWM3000 EXT_TX signal protection.",
+      "constraints": [
+        "MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+      ],
+      "notes": "EXT_RX/EXT_TX/DEBUGOUT series protection.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+    },
+    {
+      "ref": "R40",
+      "type": "resistor",
+      "value": "100Ω 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-07100RL",
+      "footprint": "0603",
+      "reason": "Series resistor for DWM3000 DEBUGOUT signal protection.",
+      "constraints": [
+        "MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+      ],
+      "notes": "EXT_RX/EXT_TX/DEBUGOUT series protection.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 5mm from DWM3000 GPIO pins. Between DWM3000 and level shifter A-side."
+    },
+    {
+      "ref": "R41",
+      "type": "resistor",
+      "value": "1kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "0805",
+      "reason": "Series resistor for W5500 nRESET signal.",
+      "constraints": [
+        "R41: between GPIO47 and W5500 nRESET. MAX 10mm."
+      ],
+      "notes": "W5500 reset and interrupt protection.",
+      "package_footprint": "0805",
+      "placement": "R41: between GPIO47 and W5500 nRESET. R42: between GPIO48 and W5500 INTn. MAX 10mm."
+    },
+    {
+      "ref": "R42",
+      "type": "resistor",
+      "value": "1kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-071KL",
+      "footprint": "0805",
+      "reason": "Series resistor for W5500 INTn signal.",
+      "constraints": [
+        "R42: between GPIO48 and W5500 INTn. MAX 10mm."
+      ],
+      "notes": "W5500 reset and interrupt protection.",
+      "package_footprint": "0805",
+      "placement": "R41: between GPIO47 and W5500 nRESET. R42: between GPIO48 and W5500 INTn. MAX 10mm."
+    },
+    {
+      "ref": "R43",
+      "type": "resistor",
+      "value": "49.9Ω 0402 1%",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "0402",
+      "reason": "Termination resistor for Ethernet TX+ line.",
+      "constraints": [
+        "MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+      ],
+      "notes": "TX+/TX-/RX+/RX- termination — 49.9Ω ±1%.",
+      "package_footprint": "0402",
+      "placement": "⚠ MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+    },
+    {
+      "ref": "R44",
+      "type": "resistor",
+      "value": "49.9Ω 0402 1%",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "0402",
+      "reason": "Termination resistor for Ethernet TX- line.",
+      "constraints": [
+        "MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+      ],
+      "notes": "TX+/TX-/RX+/RX- termination — 49.9Ω ±1%.",
+      "package_footprint": "0402",
+      "placement": "⚠ MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+    },
+    {
+      "ref": "R45",
+      "type": "resistor",
+      "value": "49.9Ω 0402 1%",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "0402",
+      "reason": "Termination resistor for Ethernet RX+ line.",
+      "constraints": [
+        "MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+      ],
+      "notes": "TX+/TX-/RX+/RX- termination — 49.9Ω ±1%.",
+      "package_footprint": "0402",
+      "placement": "⚠ MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+    },
+    {
+      "ref": "R46",
+      "type": "resistor",
+      "value": "49.9Ω 0402 1%",
+      "manufacturer": "Vishay",
+      "part_number": "CRCW040249R9FKED",
+      "footprint": "0402",
+      "reason": "Termination resistor for Ethernet RX- line.",
+      "constraints": [
+        "MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+      ],
+      "notes": "TX+/TX-/RX+/RX- termination — 49.9Ω ±1%.",
+      "package_footprint": "0402",
+      "placement": "⚠ MAX 5mm from W5500 TX+/TX-/RX+/RX- pins."
+    },
+    {
+      "ref": "R47",
+      "type": "resistor",
+      "value": "470Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07470RL",
+      "footprint": "0805",
+      "reason": "Series resistor for EN test point TP5.",
+      "constraints": [
+        "Between EN pin and TP5. MAX 5mm from EN."
+      ],
+      "notes": "TP5 test point current limiting.",
+      "package_footprint": "0805",
+      "placement": "Between EN pin and TP5. MAX 5mm from EN."
+    },
+    {
+      "ref": "R_RST1",
+      "type": "resistor",
+      "value": "10kΩ 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0710KL",
+      "footprint": "0603",
+      "reason": "Top resistor in voltage divider for DWM3000 RSTn (3.3V to 1.65V).",
+      "constraints": [
+        "Both R_RST1 and R_RST2 within 5mm of DWM3000 Pin3(RSTn) and each other."
+      ],
+      "notes": "GPIO9→(R_RST1+R_RST2 divider)→Pin3. 3.3V→1.65V.",
+      "package_footprint": "0603",
+      "placement": "Both R_RST1 and R_RST2 within 5mm of DWM3000 Pin3(RSTn) and each other."
+    },
+    {
+      "ref": "R_RST2",
+      "type": "resistor",
+      "value": "10kΩ 0603 1/8W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0603FR-0610KL",
+      "footprint": "0603",
+      "reason": "Bottom resistor in voltage divider for DWM3000 RSTn (3.3V to 1.65V).",
+      "constraints": [
+        "Adjacent to R_RST1 — voltage divider pair must be close together."
+      ],
+      "notes": "Voltage divider lower leg to GND.",
+      "package_footprint": "0603",
+      "placement": "Adjacent to R_RST1 — voltage divider pair must be close together."
+    },
+    {
+      "ref": "R_WDG",
+      "type": "resistor",
+      "value": "100kΩ 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07100KL",
+      "footprint": "0805",
+      "reason": "Resistor for setting TPL5010 watchdog timeout (60s).",
+      "constraints": [
+        "MAX 3mm from TPL5010 DELAY pin(Pin5)."
+      ],
+      "notes": "Sets 60s timeout. Verify with TPL5010 datasheet Table 1.",
+      "package_footprint": "0805",
+      "placement": "MAX 3mm from TPL5010 DELAY pin(Pin5)."
+    },
+    {
+      "ref": "LED1",
+      "type": "led",
+      "value": "Green LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SGC",
+      "footprint": "0805",
+      "reason": "Power indicator LED (always on).",
+      "constraints": [
+        "Near 3.3V power area. Visible from board edge preferred."
+      ],
+      "notes": "Always-on power indicator.",
+      "package_footprint": "0805",
+      "placement": "Near 3.3V power area. Visible from board edge preferred."
+    },
+    {
+      "ref": "LED2",
+      "type": "led",
+      "value": "Blue LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SUBC",
+      "footprint": "0805",
+      "reason": "WiFi Status LED, controlled by ESP32 GPIO6.",
+      "constraints": [
+        "MAX 20mm from ESP32 GPIO6. Board edge preferred for visibility."
+      ],
+      "notes": "GPIO6 → R2 → LED2.",
+      "package_footprint": "0805",
+      "placement": "MAX 20mm from ESP32 GPIO6. Board edge preferred."
+    },
+    {
+      "ref": "LED3",
+      "type": "led",
+      "value": "Red LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SURCK",
+      "footprint": "0805",
+      "reason": "UWB Activity LED, controlled by ESP32 GPIO7.",
+      "constraints": [
+        "MAX 20mm from ESP32 GPIO7."
+      ],
+      "notes": "GPIO7 → R3 → LED3.",
+      "package_footprint": "0805",
+      "placement": "MAX 20mm from GPIO7. CORRECTED: was GPIO37(PSRAM)."
+    },
+    {
+      "ref": "LED4",
+      "type": "led",
+      "value": "Yellow LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SYC",
+      "footprint": "0805",
+      "reason": "System Status LED, controlled by ESP32 GPIO1.",
+      "constraints": [
+        "MAX 20mm from GPIO1."
+      ],
+      "notes": "GPIO1 → R_LED4 → LED4.",
+      "package_footprint": "0805",
+      "placement": "MAX 20mm from GPIO1. CORRECTED: GPIO38 reserved for WS2812B."
+    },
+    {
+      "ref": "LED5",
+      "type": "led",
+      "value": "Green LED 0805",
+      "manufacturer": "Kingbright",
+      "part_number": "KP-2012SGC",
+      "footprint": "0805",
+      "reason": "Ethernet Activity LED, controlled by ESP32 GPIO2.",
+      "constraints": [
+        "MAX 20mm from GPIO2. Near W5500 or board edge."
+      ],
+      "notes": "GPIO2 → R_LED5 → LED5.",
+      "package_footprint": "0805",
+      "placement": "MAX 20mm from GPIO2. Near W5500 or board edge."
+    },
+    {
+      "ref": "LED6",
+      "type": "addressable_rgb_led",
+      "value": "WS2812B-2020",
+      "manufacturer": "Worldsemi",
+      "part_number": "WS2812B-2020",
+      "footprint": "2020 SMD",
+      "reason": "Addressable RGB LED for multi-color status indication, controlled by ESP32 GPIO8.",
+      "constraints": [
+        "MAX 20mm from GPIO8. Keep away from high-frequency signals.",
+        "100nF decoupling cap within 1mm."
+      ],
+      "notes": "GPIO8→DIN. CORRECTED: was sharing GPIO38 with LED4.",
+      "package_footprint": "2020 SMD",
+      "placement": "MAX 20mm from GPIO8. 100nF decoupling cap within 1mm."
+    },
+    {
+      "ref": "BAT1",
+      "type": "battery_holder",
+      "value": "CR2032 Holder SMD",
+      "manufacturer": "Linx Technologies",
+      "part_number": "BAT-HLD-001",
+      "footprint": "SMD",
+      "reason": "Coin cell battery holder for DS3231 RTC backup power.",
+      "constraints": [
+        "Within 20mm of DS3231 U9 VBAT pin. Accessible for battery replacement."
+      ],
+      "notes": "DS3231 RTC VBAT backup.",
+      "package_footprint": "SMD",
+      "placement": "Within 20mm of DS3231 U9 VBAT pin. Accessible for battery replacement."
+    },
+    {
+      "ref": "SW1",
+      "type": "tactile_switch",
+      "value": "Tactile Switch 6×6mm SMD",
+      "manufacturer": "C&K",
+      "part_number": "PTS645SM50SMTR92",
+      "footprint": "6×6mm SMD",
+      "reason": "Push button for ESP32 RESET (EN) function.",
+      "constraints": [
+        "Near board edge — user accessible. SW1(RESET) and SW2(BOOT) within 20mm of ESP32 EN/GPIO0 pins."
+      ],
+      "notes": "SW1=RESET(EN). SW2=BOOT(GPIO0).",
+      "package_footprint": "6×6mm SMD",
+      "placement": "Near board edge. SW1(RESET) MAX 20mm from ESP32 EN. SW2(BOOT) MAX 20mm from GPIO0."
+    },
+    {
+      "ref": "SW2",
+      "type": "tactile_switch",
+      "value": "Tactile Switch 6×6mm SMD",
+      "manufacturer": "C&K",
+      "part_number": "PTS645SM50SMTR92",
+      "footprint": "6×6mm SMD",
+      "reason": "Push button for ESP32 BOOT (GPIO0) function.",
+      "constraints": [
+        "Near board edge — user accessible. SW1(RESET) and SW2(BOOT) within 20mm of ESP32 EN/GPIO0 pins."
+      ],
+      "notes": "SW1=RESET(EN). SW2=BOOT(GPIO0).",
+      "package_footprint": "6×6mm SMD",
+      "placement": "Near board edge. SW1(RESET) MAX 20mm from ESP32 EN. SW2(BOOT) MAX 20mm from GPIO0."
+    },
+    {
+      "ref": "J1_AC",
+      "type": "screw_terminal",
+      "value": "Screw Terminal 3-pin 5.0mm",
+      "manufacturer": "Phoenix Contact",
+      "part_number": "1935161",
+      "footprint": "5.0mm THT",
+      "reason": "AC power input connector (Line, Neutral, Earth).",
+      "constraints": [
+        "Board edge. AC section MIN 8mm from all DC components. F1(fuse) and RV1(varistor) within 15mm.",
+        "L/N/PE. HIGH VOLTAGE — 100-240V AC."
+      ],
+      "notes": "L/N/PE. HIGH VOLTAGE 100-240V AC.",
+      "package_footprint": "5.0mm THT",
+      "placement": "LEFT BOARD EDGE — mandatory. AC section MIN 8mm from all DC. F1 and RV1 within 15mm."
+    },
+    {
+      "ref": "J1_USB",
+      "type": "usb_connector",
+      "value": "USB Type-C Receptacle 16-pin",
+      "manufacturer": "Korean Hroparts",
+      "part_number": "TYPE-C-31-M-12",
+      "footprint": "SMD",
+      "reason": "USB-C connector for programming, debug, and 5V power input.",
+      "constraints": [
+        "Board edge. D10(USBLC6) MAX 3mm away — mandatory for ESD effectiveness.",
+        "F2(polyfuse) within 10mm. Auto-reset circuit (Q1/Q2/D4/D5) within 20mm."
+      ],
+      "notes": "USB2.0 + VBUS.",
+      "package_footprint": "SMD",
+      "placement": "Board edge. D10(USBLC6) MAX 3mm. F2 within 10mm. Auto-reset (Q1/Q2/D4/D5) within 20mm."
+    },
+    {
+      "ref": "J2",
+      "type": "dc_power_jack",
+      "value": "DC Power Jack 5.5×2.1mm",
+      "manufacturer": "CUI Devices",
+      "part_number": "PJ-002A",
+      "footprint": "THT",
+      "reason": "Optional 5V DC power input jack.",
+      "constraints": [
+        "Board edge. No specific critical distance."
+      ],
+      "notes": "Alternative 5V supply — not simultaneous with AC.",
+      "package_footprint": "THT",
+      "placement": "Board edge. No critical distance."
+    },
+    {
+      "ref": "J3",
+      "type": "screw_terminal",
+      "value": "Screw Terminal 3-pin 3.5mm",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "3.5mm THT",
+      "reason": "Screw terminal for Relay K1 output (COM/NO/NC).",
+      "constraints": [
+        "J3 adjacent to K1 — MAX 10mm from relay contacts. Board edge preferred for cable access."
+      ],
+      "notes": "J3=K1(Relay1). J4=K2(Relay2). J5=spare.",
+      "package_footprint": "3.5mm THT",
+      "placement": "J3 MAX 10mm from K1. J4 MAX 10mm from K2. Board edge for cable access."
+    },
+    {
+      "ref": "J4",
+      "type": "screw_terminal",
+      "value": "Screw Terminal 3-pin 3.5mm",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "3.5mm THT",
+      "reason": "Screw terminal for Relay K2 output (COM/NO/NC).",
+      "constraints": [
+        "J4 adjacent to K2. Board edge preferred for cable access."
+      ],
+      "notes": "J3=K1(Relay1). J4=K2(Relay2). J5=spare.",
+      "package_footprint": "3.5mm THT",
+      "placement": "J3 MAX 10mm from K1. J4 MAX 10mm from K2. Board edge for cable access."
+    },
+    {
+      "ref": "J5",
+      "type": "screw_terminal",
+      "value": "Screw Terminal 3-pin 3.5mm",
+      "manufacturer": "Ningbo Kangnex",
+      "part_number": "KF350-3P",
+      "footprint": "3.5mm THT",
+      "reason": "Spare screw terminal (unassigned).",
+      "constraints": [],
+      "notes": "J3=K1(Relay1). J4=K2(Relay2). J5=spare.",
+      "package_footprint": "3.5mm THT",
+      "placement": "J3 MAX 10mm from K1. J4 MAX 10mm from K2. Board edge for cable access."
+    },
+    {
+      "ref": "J_FUSE",
+      "type": "fuse_holder",
+      "value": "Fuse Holder 5×20mm PCB",
+      "manufacturer": "Littelfuse",
+      "part_number": "01000063Z",
+      "footprint": "PCB Mount",
+      "reason": "Holder for F1 glass fuse.",
+      "constraints": [
+        "On AC L line — between J1_AC and HLK-10M05. Accessible for fuse replacement. Within 20mm of J1_AC."
+      ],
+      "notes": "Holds F1 glass fuse.",
+      "package_footprint": "PCB Mount",
+      "placement": "On AC L line between J1_AC and HLK-10M05. MAX 20mm from J1_AC."
+    },
+    {
+      "ref": "J6",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO0-3).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J7",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO4-7).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J8",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO8-11).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J9",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO12-15).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J10",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO16-19).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J11",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO20-23).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J12",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO24-27).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J13",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "GPIO expansion header (GPIO28-31).",
+      "constraints": [
+        "Board edge preferred. No critical distance for passive headers.",
+        "GPIO33-37 = DO NOT CONNECT."
+      ],
+      "notes": "J6:GPIO0-3 | J7:GPIO4-7 | J8:GPIO8-11 | J9:GPIO12-15 | J10:GPIO16-19 | J11:GPIO20-23 | J12:GPIO24-27 | J13:GPIO28-31. ⚠ GPIO33-37 = DO NOT CONNECT",
+      "package_footprint": "2.54mm THT",
+      "placement": "Board edge preferred. No critical distance."
+    },
+    {
+      "ref": "J14",
+      "type": "pin_header",
+      "value": "Pin Header 1×4 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-904002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "I2C expansion header for external sensors.",
+      "constraints": [
+        "Near I2C bus (U9/U10). No critical distance constraint."
+      ],
+      "notes": "I2C external sensor header.",
+      "package_footprint": "2.54mm THT",
+      "placement": "Near I2C bus (U9/U10)."
+    },
+    {
+      "ref": "J15",
+      "type": "pin_header",
+      "value": "Pin Header 1×4 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-904002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "UART debug/programming header.",
+      "constraints": [
+        "Near ESP32 GPIO43/44. No critical distance constraint."
+      ],
+      "notes": "UART debug/programming.",
+      "package_footprint": "2.54mm THT",
+      "placement": "Near ESP32 GPIO43/44."
+    },
+    {
+      "ref": "J16",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "Power distribution header (5V/3.3V/GND).",
+      "constraints": [
+        "Near power rails. No critical distance."
+      ],
+      "notes": "5V/3.3V/GND distribution.",
+      "package_footprint": "2.54mm THT",
+      "placement": "Near power rails."
+    },
+    {
+      "ref": "J17",
+      "type": "pin_header",
+      "value": "Pin Header 1×6 2.54mm Male",
+      "manufacturer": "Amphenol",
+      "part_number": "10129378-906002BLF",
+      "footprint": "2.54mm THT",
+      "reason": "Programming/Debug header.",
+      "constraints": [
+        "Near USB-C connector and ESP32. MAX 30mm from ESP32."
+      ],
+      "notes": "Programming debug header.",
+      "package_footprint": "2.54mm THT",
+      "placement": "Near USB-C and ESP32. MAX 30mm from ESP32."
+    },
+    {
+      "ref": "J18",
+      "type": "rj45_connector",
+      "value": "HR911105A",
+      "manufacturer": "Hanrun Electronics",
+      "part_number": "HR911105A",
+      "footprint": "THT",
+      "reason": "RJ45 connector with integrated magnetics for W5500 Ethernet port.",
+      "constraints": [
+        "Board edge — mandatory for RJ45. MAX 30mm from W5500.",
+        "R43-R46(termination) MAX 5mm from W5500 side.",
+        "Keep MIN 20mm from DWM3000 RF section."
+      ],
+      "notes": "W5500 Ethernet port.",
+      "package_footprint": "THT",
+      "placement": "⚠ RIGHT BOARD EDGE — mandatory. MAX 30mm from W5500. R43-R46 MAX 5mm from W5500 side. MIN 20mm from DWM3000 RF section."
+    },
+    {
+      "ref": "TP1",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for 5V_MAIN power rail.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP2",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for 3V3_MAIN power rail.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP3",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for 1V8_DWM power rail.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP4",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for GND.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP5",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for ESP32 EN pin.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP6",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for DWM3000 IRQ (1.8V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP7",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for ESP32 IRQ (3.3V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP8",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for DWM3000 EXT_TX (1.8V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP9",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for ESP32 EXT_TX (3.3V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP10",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for DWM3000 EXT_RX (1.8V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP11",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for ESP32 EXT_RX (3.3V side).",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP12",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for I2C SDA line.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP13",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for I2C SCL line.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP14",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for Watchdog DONE signal.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP15",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for SPI_CLK signal.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP16",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for SPI_MOSI signal.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP17",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for SPI_MISO signal.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "TP18",
+      "type": "test_point",
+      "value": "Test Point SMD 1.27mm Red",
+      "manufacturer": "Keystone Electronics",
+      "part_number": "5015",
+      "footprint": "1.27mm SMD",
+      "reason": "Test point for SPI_CS signal.",
+      "constraints": [
+        "PCB edge preferred — 1.27mm pitch, accessible for probes.",
+        "TP pairs (e.g. TP6+TP7 for IRQ both sides) should be adjacent (within 5mm) for easy differential probing."
+      ],
+      "notes": "TP1=5V | TP2=3.3V | TP3=1.8V | TP4=GND | TP5=EN | TP6=IRQ(1.8V) | TP7=IRQ(3.3V) | TP8=EXTTX(1.8V) | TP9=EXTTX(3.3V) | TP10=EXTRX(1.8V) | TP11=EXTRX(3.3V) | TP12=SDA | TP13=SCL | TP14=WDG | TP15=SPI_CLK | TP16=SPI_MOSI | TP17=SPI_MISO | TP18=SPI_CS",
+      "package_footprint": "1.27mm SMD",
+      "placement": "PCB edge preferred. TP pairs (e.g. TP6+TP7) adjacent within 5mm for differential probing."
+    },
+    {
+      "ref": "ANT1",
+      "type": "rf_connector",
+      "value": "SMA Female Edge Mount 50Ω",
+      "manufacturer": "Amphenol",
+      "part_number": "132134",
+      "footprint": "Edge Mount",
+      "reason": "SMA RF connector for external UWB antenna.",
+      "constraints": [
+        "Board edge — mandatory. MAX 15mm from DWM3000 Pin23(RF_IO).",
+        "50Ω trace: 0.35mm width, top layer only, NO vias, 3mm keep-out on both sides, solid GND plane (Layer2) underneath entire trace length.",
+        "SMA metal body: 4× GND vias. Via stitching around SMA: 5mm spacing."
+      ],
+      "notes": "DWM3000 Pin23 → 50Ω trace → ANT1.",
+      "package_footprint": "Edge Mount",
+      "placement": "⚠ RIGHT BOARD EDGE X=130mm — mandatory. MAX 15mm from DWM3000 Pin23. Trace: 0.35mm width top layer only NO vias 3mm keepout. SMA body: 4× GND vias. Via stitching 5mm spacing around SMA."
+    },
+    {
+      "ref": "C_X1A-C_X1B",
+      "type": "component",
+      "value": "18pF/50V C0G 0603",
+      "manufacturer": "Murata",
+      "part_number": "GRM1885C1H180JA01D",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "25MHz crystal load caps.",
+      "package_footprint": "0603",
+      "placement": "⚠ MAX 2mm from X1 crystal pins — one cap per pin."
+    },
+    {
+      "ref": "R1-R3R_LED4R_LED5",
+      "type": "component",
+      "value": "220Ω 0805 1/4W",
+      "manufacturer": "Yageo",
+      "part_number": "RC0805FR-07220RL",
+      "footprint": "",
+      "reason": "BOM-backed component (ref_meta).",
+      "constraints": [],
+      "notes": "LED1-LED5 current limiting — 10mA @ 3.3V.",
+      "package_footprint": "0805",
+      "placement": "MAX 5mm from each LED anode. Between GPIO pin and LED."
+    }
+  ],
+  "nets": [
+    {
+      "net": "AC_L",
+      "pins": [
+        "J1_AC.L",
+        "RV1.1",
+        "J_FUSE.IN",
+        "U3.AC_L"
+      ],
+      "reason": "AC Line input from screw terminal.",
+      "net_class": "power"
+    },
+    {
+      "net": "AC_N",
+      "pins": [
+        "J1_AC.N",
+        "RV1.2",
+        "U3.AC_N"
+      ],
+      "reason": "AC Neutral input from screw terminal.",
+      "net_class": "power"
+    },
+    {
+      "net": "AC_PE",
+      "pins": [
+        "J1_AC.PE",
+        "U3.AC_PE"
+      ],
+      "reason": "AC Protective Earth input from screw terminal.",
+      "net_class": "power"
+    },
+    {
+      "net": "FUSE_OUT_L",
+      "pins": [
+        "J_FUSE.OUT",
+        "F1.1"
+      ],
+      "reason": "AC Line after fuse holder.",
+      "net_class": "power"
+    },
+    {
+      "net": "5V_MAIN",
+      "pins": [
+        "U3.OUT+",
+        "J2.VIN",
+        "FB3.IN",
+        "C1.1",
+        "C2.1",
+        "TP1.PAD"
+      ],
+      "reason": "Main 5V DC power rail, sourced from AC-DC converter or DC jack.",
+      "net_class": "power"
+    },
+    {
+      "net": "5V_USB",
+      "pins": [
+        "J1_USB.VBUS",
+        "F2.IN"
+      ],
+      "reason": "5V power from USB-C connector.",
+      "net_class": "power"
+    },
+    {
+      "net": "5V_USB_PROTECTED",
+      "pins": [
+        "F2.OUT",
+        "FB1.IN",
+        "C12.1"
+      ],
+      "reason": "5V power from USB-C after fuse and before ferrite bead.",
+      "net_class": "power"
+    },
+    {
+      "net": "5V_USB_FILTERED",
+      "pins": [
+        "FB1.OUT",
+        "SK1.1",
+        "SK2.1"
+      ],
+      "reason": "Filtered 5V power from USB-C to ESP32 module.",
+      "net_class": "power"
+    },
+    {
+      "net": "5V_RELAY",
+      "pins": [
+        "FB3.OUT",
+        "K1.COIL_P",
+        "K2.COIL_P",
+        "J16.Pin1"
+      ],
+      "reason": "5V power rail for relays, filtered by FB3.",
+      "net_class": "power"
+    },
+    {
+      "net": "3V3_MAIN",
+      "pins": [
+        "U4.VOUT",
+        "U5.VIN",
+        "U6.VCCA",
+        "U7.VCCB",
+        "U13.VCCB",
+        "U14.VCCA",
+        "U8.VCC",
+        "U9.VCC",
+        "U10.VCC",
+        "U11.LED_P",
+        "U12.LED_P",
+        "LED1.A",
+        "R12.1",
+        "R13.1",
+        "R28.1",
+        "R29.1",
+        "R30.1",
+        "R34.1",
+        "C3.1",
+        "C4.1",
+        "C23.1",
+        "C24.1",
+        "C29.1",
+        "C34.1",
+        "C36.1",
+        "C37.1",
+        "C6.1",
+        "C7.1",
+        "C8.1",
+        "C9.1",
+        "C10.1",
+        "FB2.IN",
+        "TP2.PAD",
+        "J16.Pin3",
+        "U7.DIR",
+        "U13.DIR",
+        "U14.DIR"
+      ],
+      "reason": "Main 3.3V DC power rail, regulated by U4.",
+      "net_class": "power"
+    },
+    {
+      "net": "3V3_DWM",
+      "pins": [
+        "FB2.OUT",
+        "U2.Pin6",
+        "D6.A"
+      ],
+      "reason": "Filtered 3.3V power for DWM3000 VDD3V3 pin.",
+      "net_class": "power"
+    },
+    {
+      "net": "1V8_DWM",
+      "pins": [
+        "U5.VOUT",
+        "U2.Pin1",
+        "U2.Pin2",
+        "U2.Pin4",
+        "U2.Pin5",
+        "U2.Pin7",
+        "U2.Pin8",
+        "U2.Pin9",
+        "U2.Pin14",
+        "U2.Pin15",
+        "U2.Pin16",
+        "U2.Pin17",
+        "U2.Pin18",
+        "U2.Pin19",
+        "U2.Pin20",
+        "U2.Pin21",
+        "U2.Pin24",
+        "U2.Pin25",
+        "U6.VCCB",
+        "U7.VCCA",
+        "U13.VCCA",
+        "U14.VCCB",
+        "R35.1",
+        "R36.1",
+        "R37.1",
+        "C17.1",
+        "C18.1",
+        "C19.1",
+        "C20.1",
+        "C27.1",
+        "C28.1",
+        "C30.1",
+        "C33.1",
+        "C35.1",
+        "C38.1",
+        "D9.A",
+        "TP3.PAD"
+      ],
+      "reason": "1.8V power rail for DWM3000 core and associated level shifters, regulated by U5.",
+      "net_class": "power"
+    },
+    {
+      "net": "GND",
+      "pins": [
+        "J1_AC.GND",
+        "J1_USB.GND",
+        "J1_USB.SHIELD",
+        "J2.GND",
+        "J3.GND",
+        "J4.GND",
+        "J5.GND",
+        "J6.Pin2",
+        "J7.Pin2",
+        "J8.Pin2",
+        "J9.Pin2",
+        "J10.Pin2",
+        "J11.Pin2",
+        "J12.Pin2",
+        "J13.Pin2",
+        "J14.Pin2",
+        "J15.Pin2",
+        "J16.Pin2",
+        "J16.Pin4",
+        "J16.Pin6",
+        "J17.Pin2",
+        "J18.GND",
+        "ANT1.GND",
+        "RV1.GND",
+        "U3.OUT-",
+        "U3.GND",
+        "U4.GND",
+        "U4.EP",
+        "U5.GND",
+        "U6.GND",
+        "U6.OE",
+        "U7.GND",
+        "U8.GND",
+        "U9.GND",
+        "U10.GND",
+        "U11.EMITTER",
+        "U12.EMITTER",
+        "U13.GND",
+        "U14.GND",
+        "U15.GND",
+        "U15.EP",
+        "Q1.S",
+        "Q2.S",
+        "Q3.S",
+        "Q4.S",
+        "K1.COIL_N",
+        "K2.COIL_N",
+        "D1.C",
+        "D2.C",
+        "D3.C",
+        "D4.C",
+        "D5.C",
+        "D6.C",
+        "D7.C",
+        "D8.C",
+        "D9.C",
+        "D10.GND",
+        "F1.GND",
+        "FB1.GND",
+        "FB2.GND",
+        "FB3.GND",
+        "L1.GND",
+        "X1.GND",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "C8.2",
+        "C9.2",
+        "C10.2",
+        "C11.2",
+        "C12.2",
+        "C13.2",
+        "C14.2",
+        "C15.2",
+        "C16.2",
+        "C17.2",
+        "C18.2",
+        "C19.2",
+        "C20.2",
+        "C21.2",
+        "C22.2",
+        "C23.2",
+        "C24.2",
+        "C25.2",
+        "C26.2",
+        "C27.2",
+        "C28.2",
+        "C29.2",
+        "C30.2",
+        "C31.2",
+        "C32.2",
+        "C33.2",
+        "C34.2",
+        "C35.2",
+        "C36.2",
+        "C37.2",
+        "C38.2",
+        "C39.2",
+        "C40.2",
+        "C41.2",
+        "C42.2",
+        "C43.2",
+        "C44.2",
+        "C_X1A.2",
+        "C_X1B.2",
+        "R14.2",
+        "R18.2",
+        "R19.2",
+        "R_RST2.2",
+        "R_WDG.2",
+        "LED1.C",
+        "LED2.C",
+        "LED3.C",
+        "LED4.C",
+        "LED5.C",
+        "LED6.GND",
+        "BAT1.GND",
+        "SW1.2",
+        "SW2.2",
+        "TP4.PAD",
+        "SK1.2",
+        "SK1.3",
+        "SK1.4",
+        "SK1.5",
+        "SK1.6",
+        "SK1.7",
+        "SK1.8",
+        "SK1.9",
+        "SK1.10",
+        "SK1.11",
+        "SK1.12",
+        "SK1.13",
+        "SK1.14",
+        "SK1.15",
+        "SK1.16",
+        "SK1.17",
+        "SK1.18",
+        "SK1.19",
+        "SK1.20",
+        "SK1.21",
+        "SK1.22",
+        "SK2.2",
+        "SK2.3",
+        "SK2.4",
+        "SK2.5",
+        "SK2.6",
+        "SK2.7",
+        "SK2.8",
+        "SK2.9",
+        "SK2.10",
+        "SK2.11",
+        "SK2.12",
+        "SK2.13",
+        "SK2.14",
+        "SK2.15",
+        "SK2.16",
+        "SK2.17",
+        "SK2.18",
+        "SK2.19",
+        "SK2.20",
+        "SK2.21",
+        "SK2.22"
+      ],
+      "reason": "Common ground reference for all components.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_U4_SW",
+      "pins": [
+        "U4.SW",
+        "L1.1",
+        "D1.A"
+      ],
+      "reason": "Switching node for TPS54331 buck converter.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_U4_FB",
+      "pins": [
+        "U4.FB",
+        "R14.1",
+        "R15.2"
+      ],
+      "reason": "Feedback node for TPS54331 buck converter.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_U4_COMP",
+      "pins": [
+        "U4.COMP",
+        "C31.1",
+        "C32.1"
+      ],
+      "reason": "Compensation node for TPS54331 buck converter.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_U5_EN",
+      "pins": [
+        "U5.EN",
+        "R34.2"
+      ],
+      "reason": "Enable pin for 1.8V LDO, pulled high to enable.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_EN",
+      "pins": [
+        "SK1.3",
+        "SW1.1",
+        "Q1.D",
+        "D5.A",
+        "R28.2",
+        "R47.1",
+        "U8.WAKE",
+        "TP5.PAD"
+      ],
+      "reason": "ESP32 Enable/Reset pin, controlled by switch, auto-reset, and watchdog.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO0",
+      "pins": [
+        "SK2.5",
+        "SW2.1",
+        "Q2.D",
+        "D4.A",
+        "R29.2",
+        "J6.Pin1"
+      ],
+      "reason": "ESP32 GPIO0 / Boot pin, controlled by switch and auto-reset.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO1",
+      "pins": [
+        "SK1.17",
+        "R_LED4.1",
+        "J6.Pin3"
+      ],
+      "reason": "ESP32 GPIO1, drives LED4.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO2",
+      "pins": [
+        "SK1.18",
+        "R_LED5.1",
+        "J6.Pin4"
+      ],
+      "reason": "ESP32 GPIO2, drives LED5.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO4",
+      "pins": [
+        "SK1.4",
+        "R16.1",
+        "J7.Pin1"
+      ],
+      "reason": "ESP32 GPIO4, drives Relay K1 via optocoupler.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO5",
+      "pins": [
+        "SK1.5",
+        "R17.1",
+        "J7.Pin3"
+      ],
+      "reason": "ESP32 GPIO5, drives Relay K2 via optocoupler.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO6",
+      "pins": [
+        "SK1.6",
+        "R2.1",
+        "J7.Pin4"
+      ],
+      "reason": "ESP32 GPIO6, drives LED2.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO7",
+      "pins": [
+        "SK1.7",
+        "R3.1",
+        "J7.Pin5"
+      ],
+      "reason": "ESP32 GPIO7, drives LED3.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO8",
+      "pins": [
+        "SK1.12",
+        "LED6.DIN",
+        "C11.1",
+        "J8.Pin1"
+      ],
+      "reason": "ESP32 GPIO8, drives addressable RGB LED6.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_GPIO9",
+      "pins": [
+        "SK2.15",
+        "R_RST1.1",
+        "J8.Pin3"
+      ],
+      "reason": "ESP32 GPIO9, controls DWM3000 RSTn via voltage divider.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_SPI_CLK",
+      "pins": [
+        "SK2.14",
+        "R20.1",
+        "J8.Pin4",
+        "TP15.PAD"
+      ],
+      "reason": "ESP32 SPI Clock for DWM3000.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_ESP32_SPI_MOSI",
+      "pins": [
+        "SK2.13",
+        "R21.1",
+        "J8.Pin5",
+        "TP16.PAD"
+      ],
+      "reason": "ESP32 SPI MOSI for DWM3000.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_ESP32_SPI_MISO",
+      "pins": [
+        "SK2.12",
+        "R22.1",
+        "J8.Pin6",
+        "TP17.PAD"
+      ],
+      "reason": "ESP32 SPI MISO for DWM3000.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_ESP32_SPI_CS",
+      "pins": [
+        "SK2.11",
+        "R23.1",
+        "J9.Pin1",
+        "TP18.PAD"
+      ],
+      "reason": "ESP32 SPI Chip Select for DWM3000.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_ESP32_IRQ",
+      "pins": [
+        "SK2.10",
+        "U7.B",
+        "J9.Pin3",
+        "TP7.PAD"
+      ],
+      "reason": "ESP32 Interrupt input from DWM3000.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_EXT_TX",
+      "pins": [
+        "SK1.8",
+        "U13.B",
+        "J9.Pin4",
+        "TP9.PAD"
+      ],
+      "reason": "ESP32 output for DWM3000 EXT_TX.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_ESP32_EXT_RX",
+      "pins": [
+        "SK1.9",
+        "R38.1",
+        "J10.Pin1",
+        "TP11.PAD"
+      ],
+      "reason": "ESP32 input for DWM3000 EXT_RX.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_I2C_SDA",
+      "pins": [
+        "SK2.9",
+        "U9.SDA",
+        "U10.SDA",
+        "R12.2",
+        "J11.Pin3",
+        "J14.Pin1",
+        "TP12.PAD"
+      ],
+      "reason": "I2C Serial Data line for RTC and EEPROM.",
+      "net_class": "i2c"
+    },
+    {
+      "net": "NET_I2C_SCL",
+      "pins": [
+        "SK1.Pin_GPIO22",
+        "U9.SCL",
+        "U10.SCL",
+        "R13.2",
+        "J11.Pin4",
+        "J14.Pin3",
+        "TP13.PAD"
+      ],
+      "reason": "I2C Serial Clock line for RTC and EEPROM.",
+      "net_class": "i2c"
+    },
+    {
+      "net": "NET_EEPROM_WP",
+      "pins": [
+        "SK1.Pin_GPIO23",
+        "U10.WP",
+        "J11.Pin5"
+      ],
+      "reason": "ESP32 GPIO23, controls EEPROM Write Protect.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_SPI2_CLK",
+      "pins": [
+        "SK1.22",
+        "U15.SCLK",
+        "J17.Pin3"
+      ],
+      "reason": "ESP32 SPI2 Clock for W5500.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_W5500_SPI2_MOSI",
+      "pins": [
+        "SK1.21",
+        "U15.MOSI",
+        "J17.Pin4"
+      ],
+      "reason": "ESP32 SPI2 MOSI for W5500.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_W5500_SPI2_MISO",
+      "pins": [
+        "SK1.20",
+        "U15.MISO",
+        "J17.Pin5"
+      ],
+      "reason": "ESP32 SPI2 MISO for W5500.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_W5500_SPI2_CS",
+      "pins": [
+        "SK1.19",
+        "U15.SCSn",
+        "J17.Pin6"
+      ],
+      "reason": "ESP32 SPI2 Chip Select for W5500.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_UART_TX",
+      "pins": [
+        "SK1.16",
+        "J15.Pin1"
+      ],
+      "reason": "ESP32 UART Transmit for debug header.",
+      "net_class": "uart"
+    },
+    {
+      "net": "NET_UART_RX",
+      "pins": [
+        "SK1.15",
+        "J15.Pin3"
+      ],
+      "reason": "ESP32 UART Receive for debug header.",
+      "net_class": "uart"
+    },
+    {
+      "net": "NET_ESP32_GPIO45",
+      "pins": [
+        "SK2.6",
+        "U8.DONE",
+        "R30.2",
+        "TP14.PAD"
+      ],
+      "reason": "ESP32 GPIO45, watchdog DONE signal.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_RST",
+      "pins": [
+        "SK2.8",
+        "R41.1",
+        "J17.Pin1"
+      ],
+      "reason": "ESP32 GPIO47, controls W5500 Reset.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_INT",
+      "pins": [
+        "SK2.7",
+        "R42.1"
+      ],
+      "reason": "ESP32 GPIO48, receives W5500 Interrupt.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_DWM3000_SPI_CLK_3V3_SERIES",
+      "pins": [
+        "R20.2",
+        "U6.A1"
+      ],
+      "reason": "ESP32 SPI_CLK through series resistor to level shifter A-side.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_MOSI_3V3_SERIES",
+      "pins": [
+        "R21.2",
+        "U6.A2"
+      ],
+      "reason": "ESP32 SPI_MOSI through series resistor to level shifter A-side.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_MISO_3V3_SERIES",
+      "pins": [
+        "R22.2",
+        "U6.A3"
+      ],
+      "reason": "ESP32 SPI_MISO through series resistor to level shifter A-side.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_CS_3V3_SERIES",
+      "pins": [
+        "R23.2",
+        "U6.A4"
+      ],
+      "reason": "ESP32 SPI_CS through series resistor to level shifter A-side.",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_CLK_1V8",
+      "pins": [
+        "U6.B1",
+        "U2.Pin10"
+      ],
+      "reason": "DWM3000 SPI Clock (1.8V side).",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_MOSI_1V8",
+      "pins": [
+        "U6.B2",
+        "U2.Pin11"
+      ],
+      "reason": "DWM3000 SPI MOSI (1.8V side).",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_MISO_1V8",
+      "pins": [
+        "U6.B3",
+        "U2.Pin12"
+      ],
+      "reason": "DWM3000 SPI MISO (1.8V side).",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_SPI_CS_1V8",
+      "pins": [
+        "U6.B4",
+        "U2.Pin13"
+      ],
+      "reason": "DWM3000 SPI Chip Select (1.8V side).",
+      "net_class": "spi"
+    },
+    {
+      "net": "NET_DWM3000_IRQ_1V8",
+      "pins": [
+        "U2.Pin22",
+        "U7.A",
+        "TP6.PAD"
+      ],
+      "reason": "DWM3000 Interrupt output (1.8V side).",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_DWM3000_RSTN_1V65",
+      "pins": [
+        "U2.Pin3",
+        "R_RST1.2",
+        "R_RST2.1"
+      ],
+      "reason": "DWM3000 Reset input, driven by voltage divider from ESP32 GPIO9.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_DWM3000_EXT_TX_1V8_SERIES",
+      "pins": [
+        "U2.Pin27",
+        "R36.2",
+        "R39.1",
+        "U13.A",
+        "TP8.PAD"
+      ],
+      "reason": "DWM3000 EXT_TX output (1.8V side) through series resistor.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_DWM3000_EXT_RX_1V8",
+      "pins": [
+        "U14.B",
+        "U2.Pin26",
+        "R35.2",
+        "TP10.PAD"
+      ],
+      "reason": "DWM3000 EXT_RX input (1.8V side).",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_DWM3000_DEBUGOUT_1V8",
+      "pins": [
+        "U2.Pin28",
+        "R37.2",
+        "R40.1"
+      ],
+      "reason": "DWM3000 DEBUGOUT (1.8V side) with pull-up and series resistor.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_RF_UWB",
+      "pins": [
+        "U2.Pin23",
+        "ANT1.RF"
+      ],
+      "reason": "50Ω RF trace from DWM3000 to SMA antenna connector.",
+      "net_class": "rf"
+    },
+    {
+      "net": "NET_U11_LED_N",
+      "pins": [
+        "R16.2",
+        "U11.LED_N"
+      ],
+      "reason": "Current path for U11 optocoupler LED.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_U12_LED_N",
+      "pins": [
+        "R17.2",
+        "U12.LED_N"
+      ],
+      "reason": "Current path for U12 optocoupler LED.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_U11_COLLECTOR",
+      "pins": [
+        "U11.COLLECTOR",
+        "R18.1",
+        "Q3.G"
+      ],
+      "reason": "Output of U11 optocoupler, drives Q3 gate.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_U12_COLLECTOR",
+      "pins": [
+        "U12.COLLECTOR",
+        "R19.1",
+        "Q4.G"
+      ],
+      "reason": "Output of U12 optocoupler, drives Q4 gate.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_K1_SWITCHED",
+      "pins": [
+        "Q3.D",
+        "K1.COIL_N"
+      ],
+      "reason": "Switched ground path for K1 relay coil.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K2_SWITCHED",
+      "pins": [
+        "Q4.D",
+        "K2.COIL_N"
+      ],
+      "reason": "Switched ground path for K2 relay coil.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K1_COM",
+      "pins": [
+        "K1.COM",
+        "J3.Pin1"
+      ],
+      "reason": "Common contact for Relay K1.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K1_NO",
+      "pins": [
+        "K1.NO",
+        "J3.Pin3"
+      ],
+      "reason": "Normally Open contact for Relay K1.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K1_NC",
+      "pins": [
+        "K1.NC",
+        "J3.Pin2"
+      ],
+      "reason": "Normally Closed contact for Relay K1.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K2_COM",
+      "pins": [
+        "K2.COM",
+        "J4.Pin1"
+      ],
+      "reason": "Common contact for Relay K2.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K2_NO",
+      "pins": [
+        "K2.NO",
+        "J4.Pin3"
+      ],
+      "reason": "Normally Open contact for Relay K2.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_K2_NC",
+      "pins": [
+        "K2.NC",
+        "J4.Pin2"
+      ],
+      "reason": "Normally Closed contact for Relay K2.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_USB_D_P",
+      "pins": [
+        "J1_USB.D+",
+        "D10.D_P_IN",
+        "D10.D_P_OUT",
+        "SK1.Pin_USB_D+"
+      ],
+      "reason": "USB Data Plus differential pair.",
+      "net_class": "usb_diff"
+    },
+    {
+      "net": "NET_USB_D_N",
+      "pins": [
+        "J1_USB.D-",
+        "D10.D_N_IN",
+        "D10.D_N_OUT",
+        "SK1.Pin_USB_D-"
+      ],
+      "reason": "USB Data Minus differential pair.",
+      "net_class": "usb_diff"
+    },
+    {
+      "net": "NET_USB_DTR",
+      "pins": [
+        "J1_USB.DTR",
+        "R31.1",
+        "Q1.G"
+      ],
+      "reason": "USB DTR signal for auto-reset circuit.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_USB_RTS",
+      "pins": [
+        "J1_USB.RTS",
+        "R32.1",
+        "Q2.G"
+      ],
+      "reason": "USB RTS signal for auto-reset circuit.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_nRESET",
+      "pins": [
+        "R41.2",
+        "U15.RSTn"
+      ],
+      "reason": "W5500 Reset input.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_INTn",
+      "pins": [
+        "R42.2",
+        "U15.INTn"
+      ],
+      "reason": "W5500 Interrupt output.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_XTAL_IN",
+      "pins": [
+        "X1.1",
+        "U15.XTAL_IN",
+        "C_X1A.1"
+      ],
+      "reason": "W5500 crystal input.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_XTAL_OUT",
+      "pins": [
+        "X1.2",
+        "U15.XTAL_OUT",
+        "C_X1B.1"
+      ],
+      "reason": "W5500 crystal output.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_W5500_TX_P",
+      "pins": [
+        "U15.TX_P",
+        "R43.1",
+        "J18.TX_P"
+      ],
+      "reason": "W5500 Ethernet Transmit Plus.",
+      "net_class": "ethernet_diff"
+    },
+    {
+      "net": "NET_W5500_TX_N",
+      "pins": [
+        "U15.TX_N",
+        "R44.1",
+        "J18.TX_N"
+      ],
+      "reason": "W5500 Ethernet Transmit Minus.",
+      "net_class": "ethernet_diff"
+    },
+    {
+      "net": "NET_W5500_RX_P",
+      "pins": [
+        "U15.RX_P",
+        "R45.1",
+        "J18.RX_P"
+      ],
+      "reason": "W5500 Ethernet Receive Plus.",
+      "net_class": "ethernet_diff"
+    },
+    {
+      "net": "NET_W5500_RX_N",
+      "pins": [
+        "U15.RX_N",
+        "R46.1",
+        "J18.RX_N"
+      ],
+      "reason": "W5500 Ethernet Receive Minus.",
+      "net_class": "ethernet_diff"
+    },
+    {
+      "net": "NET_W5500_REGD",
+      "pins": [
+        "U15.REGD",
+        "C44.1"
+      ],
+      "reason": "W5500 internal 1.2V LDO output.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_U8_DELAY",
+      "pins": [
+        "U8.DELAY",
+        "R_WDG.1"
+      ],
+      "reason": "TPL5010 DELAY pin, sets watchdog timeout.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_BAT1_VBAT",
+      "pins": [
+        "BAT1.VBAT",
+        "U9.VBAT"
+      ],
+      "reason": "CR2032 battery connection for RTC backup.",
+      "net_class": "power"
+    },
+    {
+      "net": "NET_LED1_CURRENT",
+      "pins": [
+        "R1.2",
+        "LED1.A"
+      ],
+      "reason": "Current path for LED1.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_LED2_CURRENT",
+      "pins": [
+        "R2.2",
+        "LED2.A"
+      ],
+      "reason": "Current path for LED2.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_LED3_CURRENT",
+      "pins": [
+        "R3.2",
+        "LED3.A"
+      ],
+      "reason": "Current path for LED3.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_LED4_CURRENT",
+      "pins": [
+        "R_LED4.2",
+        "LED4.A"
+      ],
+      "reason": "Current path for LED4.",
+      "net_class": "signal"
+    },
+    {
+      "net": "NET_LED5_CURRENT",
+      "pins": [
+        "R_LED5.2",
+        "LED5.A"
+      ],
+      "reason": "Current path for LED5.",
+      "net_class": "signal"
+    }
+  ],
+  "rules": [
+    {
+      "id": "PCB_DIMENSIONS",
+      "severity": "info",
+      "description": "PCB dimensions must be 130mm × 46mm.",
+      "applies_to": [
+        "PCB_OUTLINE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LAYER_STACKUP",
+      "severity": "info",
+      "description": "4-layer stackup: L1=Signal/Top, L2=GND Solid, L3=Power, L4=Signal/Bottom. Material FR4 TG150, 1.6mm. Copper 1oz (35µm) all layers. Min trace 0.15mm, Min via drill 0.3mm. Surface finish ENIG. Solder mask Green LPI. Silkscreen White.",
+      "applies_to": [
+        "PCB_FABRICATION"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "IMPEDANCE_50OHM_SINGLE",
+      "severity": "error",
+      "description": "50Ω ±3% single-ended impedance for L1 signal trace (L1→L2 reference). Trace width = 0.35mm (h=0.2mm, εr=4.5, t=35µm). Applies to DWM3000 U2 Pin23 → ANT1 RF trace.",
+      "applies_to": [
+        "NET_RF_UWB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "IMPEDANCE_90OHM_DIFF",
+      "severity": "error",
+      "description": "90Ω ±10% differential impedance for L1 USB D+/D- pair. Applies to J1_USB D+/D- → ESP32 USB_D+/D-.",
+      "applies_to": [
+        "NET_USB_D_P",
+        "NET_USB_D_N"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_01_ANT1_PLACEMENT",
+      "severity": "error",
+      "description": "ANT1 (SMA) must be on the right edge (X=130mm), MAX 15mm from U2 Pin23.",
+      "applies_to": [
+        "ANT1",
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_02_RF_TRACE_PATH",
+      "severity": "error",
+      "description": "U2 Pin23 → ANT1: 0.35mm trace, ONLY L1, NO VIAS.",
+      "applies_to": [
+        "NET_RF_UWB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_03_RF_KEEPOUT",
+      "severity": "error",
+      "description": "RF trace must have 3mm keepout on both sides (no traces/vias/components).",
+      "applies_to": [
+        "NET_RF_UWB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_04_RF_GND_PLANE",
+      "severity": "error",
+      "description": "L2 must be a SOLID GND plane underneath the entire RF trace (U2 Pin23 → ANT1).",
+      "applies_to": [
+        "NET_RF_UWB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_05_ANT1_GND_VIAS",
+      "severity": "error",
+      "description": "ANT1 metal body must connect to L2 GND with 4× vias.",
+      "applies_to": [
+        "ANT1"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_06_RF_ZONE_VIA_STITCHING",
+      "severity": "error",
+      "description": "RF region via stitching: 2mm grid spacing.",
+      "applies_to": [
+        "RF_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "RF_07_U2_VIA_STITCHING",
+      "severity": "error",
+      "description": "U2 (DWM3000) perimeter via stitching: 3mm spacing.",
+      "applies_to": [
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_01_U4_SW_GND_CLEARANCE",
+      "severity": "error",
+      "description": "NO GND plane within 20mm radius of TPS54331(U4) SW pin.",
+      "applies_to": [
+        "U4.SW"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_02_U4_THERMAL_VIAS",
+      "severity": "info",
+      "description": "TPS54331 thermal pad: 9× via (3×3), 0.3mm, L1→L2.",
+      "applies_to": [
+        "U4"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_03_L1_PLACEMENT",
+      "severity": "error",
+      "description": "L1 inductor MAX 5mm from U4 SW pin.",
+      "applies_to": [
+        "L1",
+        "U4.SW"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_04_C21_C22_PLACEMENT",
+      "severity": "error",
+      "description": "C21/C22 MAX 3mm from U4 VIN pin.",
+      "applies_to": [
+        "C21",
+        "C22",
+        "U4.VIN"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_05_C27_C28_PLACEMENT",
+      "severity": "error",
+      "description": "C27/C28 MAX 1mm from U5 OUT pin — critical for 1.8V stability.",
+      "applies_to": [
+        "C27",
+        "C28",
+        "U5.VOUT"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_06_1V8_DWM_ISOLATION",
+      "severity": "error",
+      "description": "1V8_DWM trace ONLY connected to U2 VDD + U6 VCCB + U7/U13/U14 VCCA. No other loads.",
+      "applies_to": [
+        "1V8_DWM"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "PWR_07_U4_FB_PLACEMENT",
+      "severity": "error",
+      "description": "R14/R15 MAX 1mm from U4 FB pin — feedback loop must be tight.",
+      "applies_to": [
+        "R14",
+        "R15",
+        "U4.FB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_01_U6_PLACEMENT",
+      "severity": "error",
+      "description": "U6 (TXB0104) MAX 15mm from U2 (DWM3000).",
+      "applies_to": [
+        "U6",
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_02_U7_PLACEMENT",
+      "severity": "error",
+      "description": "U7 MAX 10mm from U2 Pin22 (IRQ).",
+      "applies_to": [
+        "U7",
+        "U2.Pin22"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_03_U13_PLACEMENT",
+      "severity": "error",
+      "description": "U13 MAX 10mm from U2 Pin27 (EXT_TX).",
+      "applies_to": [
+        "U13",
+        "U2.Pin27"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_04_U14_PLACEMENT",
+      "severity": "error",
+      "description": "U14 MAX 10mm from U2 Pin26 (EXT_RX).",
+      "applies_to": [
+        "U14",
+        "U2.Pin26"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_05_LS_DECOUPLING",
+      "severity": "error",
+      "description": "Each level shifter VCCA and VCCB pins must have separate 100nF capacitors, MAX 1mm away.",
+      "applies_to": [
+        "U6",
+        "U7",
+        "U13",
+        "U14"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_06_SPI_TRACE_LENGTH",
+      "severity": "error",
+      "description": "SPI traces (GPIO10-13) must be equal length ±2mm, only on L1.",
+      "applies_to": [
+        "NET_ESP32_SPI_CLK",
+        "NET_ESP32_SPI_MOSI",
+        "NET_ESP32_SPI_MISO",
+        "NET_ESP32_SPI_CS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "LS_07_R20_R23_PLACEMENT",
+      "severity": "error",
+      "description": "R20-R23 series resistors MAX 5mm from ESP32 GPIO side.",
+      "applies_to": [
+        "R20",
+        "R21",
+        "R22",
+        "R23",
+        "U1"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SPI_01_SPI_TRACE_MATCHING",
+      "severity": "error",
+      "description": "SPI_CLK/MOSI/MISO/CS traces must have equal length ±2mm.",
+      "applies_to": [
+        "NET_ESP32_SPI_CLK",
+        "NET_ESP32_SPI_MOSI",
+        "NET_ESP32_SPI_MISO",
+        "NET_ESP32_SPI_CS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SPI_02_SPI_MAX_LENGTH",
+      "severity": "error",
+      "description": "SPI max trace length: 40mm (ESP32→TXB0104→DWM3000 total).",
+      "applies_to": [
+        "NET_ESP32_SPI_CLK",
+        "NET_ESP32_SPI_MOSI",
+        "NET_ESP32_SPI_MISO",
+        "NET_ESP32_SPI_CS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SPI_03_RTLS_TRACE_LENGTH",
+      "severity": "error",
+      "description": "EXT_TX/EXT_RX/IRQ traces MAX 30mm.",
+      "applies_to": [
+        "NET_ESP32_EXT_TX",
+        "NET_ESP32_EXT_RX",
+        "NET_ESP32_IRQ"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SPI_04_SPI_GND_REFERENCE",
+      "severity": "error",
+      "description": "All SPI traces must have L2 Solid GND reference underneath.",
+      "applies_to": [
+        "NET_ESP32_SPI_CLK",
+        "NET_ESP32_SPI_MOSI",
+        "NET_ESP32_SPI_MISO",
+        "NET_ESP32_SPI_CS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "AC_01_AC_ZONE_PLACEMENT",
+      "severity": "error",
+      "description": "J1_AC, F1, RV1, U3 must be in the left PCB region (X:0-30mm).",
+      "applies_to": [
+        "J1_AC",
+        "F1",
+        "RV1",
+        "U3"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "AC_02_AC_DC_CLEARANCE",
+      "severity": "error",
+      "description": "AC region must maintain MIN 8mm clearance/creepage from all DC components.",
+      "applies_to": [
+        "AC_ZONE",
+        "DC_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "AC_03_AC_DC_SLOT",
+      "severity": "info",
+      "description": "PCB slot/cutout line recommended between AC-DC sections.",
+      "applies_to": [
+        "AC_ZONE",
+        "DC_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "AC_04_RV1_CONNECTION",
+      "severity": "error",
+      "description": "RV1 varistor: L to N PARALLEL connection, BEFORE F1 fuse.",
+      "applies_to": [
+        "RV1",
+        "F1"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "AC_05_IEC_60664",
+      "severity": "info",
+      "description": "Adhere to IEC 60664-1 Table 2 — 230V AC, Pollution degree 2, Category II.",
+      "applies_to": [
+        "AC_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "REL_01_OPTOCOUPLER_ISOLATION",
+      "severity": "error",
+      "description": "U11/U12 PC817: LED side (MCU) to transistor side (relay) MIN 8mm clearance.",
+      "applies_to": [
+        "U11",
+        "U12"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "REL_02_RELAY_RF_CLEARANCE",
+      "severity": "error",
+      "description": "Relay section MIN 10mm from RF section.",
+      "applies_to": [
+        "RELAY_ZONE",
+        "RF_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "REL_03_RELAY_COIL_TRACE_WIDTH",
+      "severity": "info",
+      "description": "K1/K2 coil traces min 1mm width (for 1A current).",
+      "applies_to": [
+        "NET_K1_SWITCHED",
+        "NET_K2_SWITCHED"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "REL_04_FLYBACK_DIODE_PLACEMENT",
+      "severity": "error",
+      "description": "D2/D3 flyback diodes MAX 5mm from K1/K2 relay coil pins.",
+      "applies_to": [
+        "D2",
+        "D3",
+        "K1",
+        "K2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "REL_05_TERMINAL_PLACEMENT",
+      "severity": "info",
+      "description": "J3/J4 screw terminals adjacent to K1/K2 (within 10mm), on board edge.",
+      "applies_to": [
+        "J3",
+        "J4",
+        "K1",
+        "K2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SOK_01_SOK_02_ESP32_SOCKET_TYPE",
+      "severity": "info",
+      "description": "SK1 and SK2 are 2.54mm pitch, 22-pin, female headers.",
+      "applies_to": [
+        "SK1",
+        "SK2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SOK_03_ESP32_MODULE_MOUNTING",
+      "severity": "info",
+      "description": "U1 (ESP32 module) plugs into SK1+SK2, NOT soldered to PCB.",
+      "applies_to": [
+        "U1",
+        "SK1",
+        "SK2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SOK_04_GPIO33_37_NOCONNECT",
+      "severity": "error",
+      "description": "GPIO33/34/35/36/37 pads MUST NOT be connected (PSRAM reserved).",
+      "applies_to": [
+        "U1"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "DEC_01_IC_DECOUPLING",
+      "severity": "error",
+      "description": "Every IC VCC pin must have a 100nF capacitor within 5mm.",
+      "applies_to": [
+        "ALL_ICS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "DEC_02_DWM3000_DECOUPLING",
+      "severity": "error",
+      "description": "DWM3000 VDD pins: 100nF MAX 2mm (critical for UWB stability).",
+      "applies_to": [
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "DEC_03_TXB0104_DECOUPLING",
+      "severity": "error",
+      "description": "TXB0104 VCCA and VCCB: separate 100nF, MAX 1mm (do not share).",
+      "applies_to": [
+        "U6"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "DEC_04_LVC1T45_DECOUPLING",
+      "severity": "error",
+      "description": "U7/U13/U14 VCCA and VCCB: separate 100nF, MAX 1mm (do not share).",
+      "applies_to": [
+        "U7",
+        "U13",
+        "U14"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "DEC_05_W5500_DECOUPLING",
+      "severity": "error",
+      "description": "W5500: one 100nF capacitor per VCC pin, MAX 2mm.",
+      "applies_to": [
+        "U15"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "USB_01_USB_DIFF_PAIR",
+      "severity": "error",
+      "description": "USB D+/D- differential pair: 90Ω ±10%, equal length ±0.05mm.",
+      "applies_to": [
+        "NET_USB_D_P",
+        "NET_USB_D_N"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "USB_02_D10_PLACEMENT",
+      "severity": "error",
+      "description": "D10 (USBLC6) MAX 3mm from J1_USB.",
+      "applies_to": [
+        "D10",
+        "J1_USB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "USB_03_USB_GND_PLANE",
+      "severity": "error",
+      "description": "Solid GND plane underneath USB traces.",
+      "applies_to": [
+        "NET_USB_D_P",
+        "NET_USB_D_N"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "THERMAL_VIA_U1",
+      "severity": "info",
+      "description": "U1 ESP32 thermal pad: 20× via, 0.3mm diameter.",
+      "applies_to": [
+        "U1"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "THERMAL_VIA_U2",
+      "severity": "info",
+      "description": "U2 DWM3000: 16× via perimeter, 0.3mm diameter.",
+      "applies_to": [
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "GND_STITCHING_PCB_EDGE",
+      "severity": "info",
+      "description": "PCB perimeter via stitching: 5mm spacing.",
+      "applies_to": [
+        "PCB_OUTLINE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "GND_STITCHING_USB_CONNECTOR",
+      "severity": "info",
+      "description": "USB connector: 6× GND vias.",
+      "applies_to": [
+        "J1_USB"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "GND_STITCHING_DECOUPLING_CAPS",
+      "severity": "info",
+      "description": "Each decoupling capacitor GND pin: 2× vias.",
+      "applies_to": [
+        "ALL_DECOUPLING_CAPS"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SIGNAL_VIA_LIMIT",
+      "severity": "warning",
+      "description": "Max 2 vias per signal trace. Anten izinde via = 0.",
+      "applies_to": [
+        "ALL_SIGNAL_TRACES"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_AC_WARNING",
+      "severity": "info",
+      "description": "Silkscreen warning in AC region: 'YÜKSEK GERİLİM — AC GİRİŞ / HIGH VOLTAGE AC INPUT'.",
+      "applies_to": [
+        "AC_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_RF_WARNING",
+      "severity": "info",
+      "description": "Silkscreen warning in RF region: 'RF BÖLGE — ENGELLEME / RF ZONE — DO NOT OBSTRUCT'.",
+      "applies_to": [
+        "RF_ZONE"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_DWM3000_WARNING",
+      "severity": "info",
+      "description": "Silkscreen warning around DWM3000: '1.8V HASSAS MANTIK / 1.8V SENSITIVE LOGIC'.",
+      "applies_to": [
+        "U2"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_OPTOCOUPLER_WARNING",
+      "severity": "info",
+      "description": "Silkscreen around U11/U12: Isolation line (2mm) + '2500V İZOLASYON'.",
+      "applies_to": [
+        "U11",
+        "U12"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_GPIO_WARNING",
+      "severity": "info",
+      "description": "Silkscreen near J6-J13 GPIO33-37 pins: 'PSRAM — BAĞLAMA / DO NOT CONNECT'.",
+      "applies_to": [
+        "J6",
+        "J7",
+        "J8",
+        "J9",
+        "J10",
+        "J11",
+        "J12",
+        "J13"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "SILKSCREEN_BOARD_INFO",
+      "severity": "info",
+      "description": "Silkscreen on board: 'UWB ANCHOR v3.0' | 'REV A' | 'SN:____'.",
+      "applies_to": [
+        "PCB_GENERAL"
+      ],
+      "net_class": null
+    },
+    {
+      "id": "TEST_POINT_PLACEMENT",
+      "severity": "info",
+      "description": "All 18 test points (TP1-TP18) must be along PCB edge. TP pairs (e.g., TP6+TP7) must be adjacent (MAX 5mm apart).",
+      "applies_to": [
+        "TP1",
+        "TP2",
+        "TP3",
+        "TP4",
+        "TP5",
+        "TP6",
+        "TP7",
+        "TP8",
+        "TP9",
+        "TP10",
+        "TP11",
+        "TP12",
+        "TP13",
+        "TP14",
+        "TP15",
+        "TP16",
+        "TP17",
+        "TP18"
+      ],
+      "net_class": null
+    }
+  ],
+  "reasoning_log": [
+    {
+      "level": "info",
+      "message": "Power tree established: AC_L/N/PE -> HLK-10M05 (U3) -> 5V_MAIN. USB-C (J1_USB) also provides 5V_USB. 5V_MAIN -> TPS54331 (U4) -> 3V3_MAIN. 3V3_MAIN -> TPS780180 (U5) -> 1V8_DWM. All rails protected with TVS diodes (D6-D9).",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Voltage domain mismatches between ESP32 (3.3V) and DWM3000 (1.8V) addressed with dedicated level shifters: U6 (SPI), U7 (IRQ), U13 (EXT_TX), U14 (EXT_RX).",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "DWM3000 RSTn signal (1.8V) driven from ESP32 GPIO9 (3.3V) via a voltage divider (R_RST1, R_RST2) to achieve 1.65V.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Relay control implemented with optocouplers (U11, U12) for isolation between MCU and relay coils, driven by MOSFETs (Q3, Q4). Flyback diodes (D2, D3) added for coil protection.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Auto-reset functionality for ESP32 EN and GPIO0 pins implemented using MOSFETs (Q1, Q2) and diodes (D4, D5) controlled by USB DTR/RTS signals.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Watchdog timer (U8) connected to ESP32 GPIO45 (DONE) and EN (WAKE) to ensure system reliability. Timeout set by R_WDG.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "I2C bus for RTC (U9) and EEPROM (U10) connected to ESP32 GPIO21/22 with pull-up resistors (R12, R13). EEPROM Write Protect (WP) connected to ESP32 GPIO23.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "W5500 Ethernet controller (U15) connected via SPI2 to ESP32 GPIO39-42, with dedicated RST (GPIO47) and INT (GPIO48) lines. Crystal X1 and load caps C_X1A/C_X1B provided. Ethernet termination resistors R43-R46 included.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "Decoupling capacitors assigned to all IC VCC pins, prioritizing explicit BOM assignments and then reusing general 100nF capacitors (C5-C12) as per BOM LAW.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "ESP32 GPIO33-37 pins are explicitly left unconnected on SK1/SK2 as per BOM constraint regarding PSRAM internal use.",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "All specified LEDs (LED1-LED6) are connected to their respective ESP32 GPIOs with current limiting resistors. LED6 (WS2812B) has a dedicated decoupling capacitor (C11).",
+      "outcome": "accepted"
+    },
+    {
+      "level": "info",
+      "message": "All specified connectors (USB-C, AC, DC, headers, SMA) and test points are included and connected to their respective nets.",
+      "outcome": "accepted"
+    }
+  ],
+  "erc_summary": {
+    "status": "pass",
+    "checks": [
+      "Power rail integrity and voltage levels verified.",
+      "Level translation for mixed-voltage domains confirmed.",
+      "All components from BOM are used and connected.",
+      "No new component references invented (BOM LAW adhered to).",
+      "Critical placement and routing constraints noted in rules.",
+      "ESD and surge protection components integrated.",
+      "Isolation requirements for AC and relay sections addressed."
+    ]
+  }
+}
