@@ -859,8 +859,8 @@ class KiCadAutomationService:
 
         for ref in sorted(endpoint_refs):
             if ref.upper() == "J2":
-                value = "SMA Anten Konektörü"
-                comp_type = "sma_connector"
+                value = "DC Power Jack 5.5x2.1mm"
+                comp_type = "dc_power_jack"
             elif ref.upper() == "J1":
                 value = "AC Şebeke Girişi"
                 comp_type = "ac_connector"
@@ -1153,7 +1153,7 @@ class KiCadAutomationService:
                         pad.SetNet(gnd)
                     elif ref == "U2":
                         pad.SetNet(gnd)
-                    elif ref in ("J2", "ANT1") and pad.GetName() in ("2", "3", "4", "5", "SHIELD", "GND"):
+                    elif ref == "ANT1" and pad.GetName() in ("2", "3", "4", "5", "SHIELD", "GND"):
                         pad.SetNet(gnd)
                     else:
                         # 2. Geriye kalanlar için tekil NC neti
@@ -1631,6 +1631,8 @@ class KiCadAutomationService:
             return ("Connector_USB", "USB_C_Receptacle_HRO_TYPE-C-31-M-12")
         if ref == "J18":
             return ("Connector_RJ", "RJ45_Hanrun_HR911105A_Horizontal")
+        if ref == "J2":
+            return ("Connector_BarrelJack", "BarrelJack_CUI_PJ-002A_Horizontal")
         if ref == "ANT1":
             return ("Connector_Coaxial", "SMA_Amphenol_132134_Vertical")
 
@@ -1694,15 +1696,23 @@ class KiCadAutomationService:
                 return fp
             return self._build_generic_tht_2pin(pcbnew, board, pitch_mm=5.08)
 
-        # 5. J2 (SMA anten) — koaksiyel konnektör
-        if ref == "J2" or comp_type == "sma_connector":
+        # 5. J2 (DC Power Jack 5.5x2.1mm) — barrel jack
+        if ref == "J2" or comp_type == "dc_power_jack":
             fp = self._load_kicad_library_footprint(
                 pcbnew, board,
-                "Connector_Coaxial", "SMA_Amphenol_901-144_Vertical"
+                "Connector_BarrelJack", "BarrelJack_CUI_PJ-002A_Horizontal"
             )
             if fp is not None:
+                print(f"[FP] {ref}: BarrelJack_CUI_PJ-002A_Horizontal kullanılıyor", flush=True)
                 return fp
-            return self._build_generic_tht_2pin(pcbnew, board, pitch_mm=5.08)
+            fp = self._load_kicad_library_footprint(
+                pcbnew, board,
+                "Connector_BarrelJack", "BarrelJack_Horizontal"
+            )
+            if fp is not None:
+                print(f"[FP] {ref}: BarrelJack_Horizontal kullanılıyor", flush=True)
+                return fp
+            return self._build_generic_tht_2pin(pcbnew, board, pitch_mm=2.54)
 
         # 6. Son çare: 2 padli genel SMD
         print(f"[FP] UYARI: {ref} ({part_number}) için footprint bulunamadı — genel SMD kullanılıyor", flush=True)
@@ -3009,7 +3019,7 @@ class KiCadAutomationService:
         if ref == "J18" or "HR911105A" in part_upper:
             return RJ45_HR911105A_PIN_MAP.get(pin_name)
 
-        if ref == "ANT1" or ref == "J2" or c_type == "sma_connector":
+        if ref == "ANT1" or c_type == "sma_connector":
             if pin_name in ("GND", "SHIELD"):
                 return ("2", "2", "2", "2")
             return SMA_CONNECTOR_PIN_MAP.get(pin_name)
@@ -3049,10 +3059,11 @@ class KiCadAutomationService:
         if ref == "J1" or c_type == "ac_connector":
             return AC_CONNECTOR_PIN_MAP.get(pin_name)
 
-        if ref == "J2" or c_type == "sma_connector":
-            if pin_name in ("GND", "SHIELD"):
-                return ("2", "2", "2", "2")
-            return SMA_CONNECTOR_PIN_MAP.get(pin_name)
+        if ref == "J2" or c_type == "dc_power_jack":
+            # DC Jack PJ-002A: Pin1=VCC(tip), Pin2=GND(sleeve)
+            if pin_name in ("GND", "SLEEVE", "RING"):
+                return "2"
+            return "1"  # VCC / tip
 
         if ref.startswith("U") and c_type == "level_shifter":
             return SN74_PIN_MAP.get(pin_name)
