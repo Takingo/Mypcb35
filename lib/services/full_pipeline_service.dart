@@ -8,7 +8,7 @@ import 'dart:io';
 /// every phase; this service polls that file while the process runs and
 /// notifies the UI via a Stream of [PipelineProgress] snapshots.
 class FullPipelineService {
-  const FullPipelineService({this.projectRoot = r'C:\Mypcb'});
+  const FullPipelineService({this.projectRoot = '.'});
 
   final String projectRoot;
 
@@ -47,7 +47,7 @@ class FullPipelineService {
       args.addAll(['--bom-file', tmp.path]);
     }
 
-    final python = _resolvePython();
+    final python = await _resolvePython();
 
     Process process;
     try {
@@ -116,15 +116,36 @@ class FullPipelineService {
       } catch (_) {}
     }
 
-    if (exitCode == 0 || lastSnapshot?.status == 'awaiting_human' || lastSnapshot?.status == 'completed') {
+    if (exitCode == 0 ||
+        lastSnapshot?.status == 'awaiting_human' ||
+        lastSnapshot?.status == 'completed' ||
+        (lastSnapshot?.status == 'failed' && lastSnapshot?.errorDetails != null)) {
       return;
     }
     yield PipelineProgress.error(
-      'orchestrator exit=${exitCode ?? await process.exitCode}\nstderr tail: ${stderrLines.take(5).join("\n")}',
+      'orchestrator exit=${exitCode ?? await process.exitCode}\n'
+      'stderr tail:\n${_tail(stderrLines, 80)}\n'
+      'stdout tail:\n${_tail(stdoutLines, 40)}',
     );
   }
 
-  String _resolvePython() {
+  String _tail(List<String> lines, int count) {
+    if (lines.length <= count) return lines.join('\n');
+    return lines.sublist(lines.length - count).join('\n');
+  }
+
+  Future<String> _resolvePython() async {
+    final configFile = File('$projectRoot${Platform.pathSeparator}project_config.json');
+    if (configFile.existsSync()) {
+      try {
+        final raw = await configFile.readAsString();
+        final config = jsonDecode(raw) as Map<String, dynamic>;
+        final pyPath = config['kicad_python_path'] as String?;
+        if (pyPath != null && File(pyPath).existsSync()) {
+          return pyPath;
+        }
+      } catch (_) {}
+    }
     if (File(_kicadPython).existsSync()) return _kicadPython;
     return _systemPython;
   }
@@ -135,8 +156,11 @@ class PipelineProgress {
     required this.status,
     required this.currentPhase,
     required this.phases,
+    required this.progressPercent,
+    required this.statusMessage,
     this.finalArtifact,
     this.hitlBlocker,
+    this.errorDetails,
     this.error,
   });
 
@@ -144,11 +168,15 @@ class PipelineProgress {
     return PipelineProgress(
       status: json['status'] as String? ?? 'unknown',
       currentPhase: json['current_phase'] as String?,
+      progressPercent:
+          (json['progress_percent'] as num? ?? 0).round().clamp(0, 100).toInt(),
+      statusMessage: json['status_message'] as String? ?? '',
       phases: (json['phases'] as List? ?? [])
           .map((p) => PipelinePhase.fromJson(p as Map<String, dynamic>))
           .toList(),
       finalArtifact: json['final_artifact'] as String?,
       hitlBlocker: json['hitl_blocker'] as Map<String, dynamic>?,
+      errorDetails: json['error_details'] as String?,
     );
   }
 
@@ -157,6 +185,8 @@ class PipelineProgress {
       status: 'failed',
       currentPhase: null,
       phases: const [],
+      progressPercent: 0,
+      statusMessage: 'Pipeline durdu',
       error: msg,
     );
   }
@@ -164,8 +194,11 @@ class PipelineProgress {
   final String status;
   final String? currentPhase;
   final List<PipelinePhase> phases;
+  final int progressPercent;
+  final String statusMessage;
   final String? finalArtifact;
   final Map<String, dynamic>? hitlBlocker;
+  final String? errorDetails;
   final String? error;
 
   bool get isRunning => status == 'running';
@@ -179,10 +212,23 @@ class PipelineProgress {
       other.status == status &&
       other.currentPhase == currentPhase &&
       other.phases.length == phases.length &&
-      other.finalArtifact == finalArtifact;
+      other.progressPercent == progressPercent &&
+      other.statusMessage == statusMessage &&
+      other.finalArtifact == finalArtifact &&
+      (other.hitlBlocker != null) == (hitlBlocker != null) &&
+      other.errorDetails == errorDetails;
 
   @override
-  int get hashCode => Object.hash(status, currentPhase, phases.length, finalArtifact);
+  int get hashCode => Object.hash(
+        status,
+        currentPhase,
+        phases.length,
+        progressPercent,
+        statusMessage,
+        finalArtifact,
+        hitlBlocker != null,
+        errorDetails,
+      );
 }
 
 class PipelinePhase {
@@ -210,7 +256,7 @@ class PipelinePhase {
   final int repairAttempts;
   final String notes;
 
-  bool get isSuccess => status == 'success' || status == 'success_fallback';
+  bool get isSuccess => status == 'success' || status == 'success_fallback' || status == 'review';
   bool get isRunning => status == 'running';
   bool get isFailed => status == 'failed';
 }

@@ -2,10 +2,25 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
+import urllib.error
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+_FULL_KICAD_FOOTPRINT_RE = re.compile(r"^[^\s:]+:[^\s:]+$")
+_BOM_FOOTPRINT_COLUMNS = (
+    "KiCad_Footprint",
+    "KiCad Footprint",
+    "Footprint",
+    "Package / Footprint",
+    "Package",
+)
 
 
 @dataclass(frozen=True)
@@ -34,7 +49,7 @@ def _parse_bom_csv(bom_file: Path) -> dict[str, dict[str, str]]:
                     "value": (row.get("Value") or row.get("Deger") or "").strip(),
                     "manufacturer": (row.get("Manufacturer") or row.get("Uretici") or "").strip(),
                     "part_number": (row.get("Part Number") or row.get("Parca Numarasi") or "").strip(),
-                    "package_footprint": (row.get("Package / Footprint") or row.get("Footprint") or row.get("Package") or "").strip(),
+                    "package_footprint": _first_bom_value(row, _BOM_FOOTPRINT_COLUMNS),
                     "placement": (row.get("Critical Placement Distance") or row.get("Placement") or "").strip(),
                     "notes": (row.get("Notes") or row.get("Description") or row.get("Notlar") or row.get("Aciklama") or "").strip(),
                 }
@@ -45,6 +60,18 @@ def _parse_bom_csv(bom_file: Path) -> dict[str, dict[str, str]]:
     except Exception:  # noqa: BLE001 — BOM bicimi beklenmedikse hizalama atlanir
         return {}
     return ref_meta
+
+
+def _first_bom_value(row: dict[str, str], columns: tuple[str, ...]) -> str:
+    for column in columns:
+        value = (row.get(column) or "").strip()
+        if value:
+            return value
+    return ""
+
+
+def _is_full_kicad_footprint(value: str) -> bool:
+    return bool(_FULL_KICAD_FOOTPRINT_RE.fullmatch(value.strip()))
 
 
 def load_bom_evidence(netlist: dict[str, Any], bom_file: Path) -> BomEvidence:
@@ -177,8 +204,11 @@ def _align_component_metadata(components: list[dict[str, Any]], evidence: BomEvi
             bom_val = (meta.get(field) or "").strip()
             if bom_val:
                 component[field] = bom_val
-        if not str(component.get("footprint", "")).strip():
-            footprint = _footprint_from_package_meta(meta.get("package_footprint", ""), ref)
+        bom_package = (meta.get("package_footprint") or "").strip()
+        if _is_full_kicad_footprint(bom_package):
+            component["footprint"] = bom_package
+        elif not str(component.get("footprint", "")).strip():
+            footprint = _footprint_from_package_meta(bom_package, ref)
             if footprint:
                 component["footprint"] = footprint
 
@@ -337,6 +367,8 @@ def _normalize_component_part_numbers(components: list[dict[str, Any]], evidence
         "PC817": "PC817X2CSP9F",
         "SS14": "SS34-E3/57T",
         "SS34": "SS34-E3/57T",
+        "ESP32-S3-WROOM-1": "ESP32-S3-WROOM-2-N32R16",
+        "ESP32-S3-WROOM-1-N16R8": "ESP32-S3-WROOM-2-N32R16",
     }
     for component in components:
         part = str(component.get("part_number", "")).strip()
@@ -510,6 +542,7 @@ def _component_for_ref(ref: str, evidence: BomEvidence) -> dict[str, Any] | None
             "value": val,
             "manufacturer": mfr,
             "part_number": part,
+            "package_footprint": meta.get("package_footprint", ""),
             "footprint": _footprint_from_package_meta(meta.get("package_footprint", ""), upper),
             "reason": "BOM-backed component (ref_meta).",
             "constraints": [],
@@ -538,7 +571,10 @@ def _looks_like_component_ref(ref: str) -> bool:
 
 
 def _footprint_from_package_meta(package: str, ref: str) -> str:
-    text = package.strip().upper()
+    raw = package.strip()
+    if _is_full_kicad_footprint(raw):
+        return raw
+    text = raw.upper()
     upper = ref.upper()
     if not text:
         return ""
@@ -552,7 +588,7 @@ def _footprint_from_package_meta(package: str, ref: str) -> str:
         return "Resistor_SMD:R_0805_2012Metric"
     if "0805" in text and re.fullmatch(r"C\d+", upper):
         return "Capacitor_SMD:C_0805_2012Metric"
-    return package.strip()
+    return raw
 
 
 def _dedupe(values: list[str]) -> list[str]:
@@ -573,6 +609,424 @@ def _ref_sort_key(ref: str) -> tuple[str, int, str]:
     return (match.group(1), int(match.group(2)), ref)
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Component Resolver (footprint resolution for missing library entries)
+# ──────────────────────────────────────────────────────────────────────────────
+@dataclass
+class FootprintResult:
+    """Result of a footprint resolution attempt."""
+    mpn: str
+    ref: str
+    found: bool
+    source: str  # "local", "snapeda", "ultralibrarian", "manual"
+    requested_footprint: str = ""
+    resolved_footprint: str = ""
+    footprint_path: str = ""
+    datasheet_url: str = ""
+    pin_count: int = 0
+    pin_map: dict[str, str] | None = None
+    error: str = ""
+
+
+class ComponentResolver:
+    """Resolves missing KiCad footprints for BOM components.
+
+    Current implementation:
+    - Scans KiCad library paths to verify footprint availability
+    - Reports missing footprints as a JSON report
+    - Stub methods for future SnapEDA/UltraLibrarian API integration
+
+    The resolver does NOT modify the netlist or BOM — it produces a
+    missing_footprints_report.json that the UI surfaces to the user.
+    """
+
+    # Known KiCad library directories (Windows default)
+    KICAD_LIB_PATHS = [
+        Path(r"C:\Program Files\KiCad\10.0\share\kicad\footprints"),
+        Path(r"C:\Program Files\KiCad\10.0\share\kicad\symbols"),
+    ]
+
+    def __init__(self, project_root: Path | None = None):
+        self.root = Path(project_root) if project_root else Path.cwd()
+        self.report_path = self.root / "assets" / "generated" / "missing_footprints_report.json"
+        self.project_lib_dir = (
+            self.root
+            / "outputs"
+            / "kicad"
+            / "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
+            / "OmniCircuit.pretty"
+        )
+
+    def resolve_missing_footprints(
+        self, components: list[dict[str, Any]],
+    ) -> list[FootprintResult]:
+        """Check all components for footprint availability.
+        Returns list of resolution results for missing footprints."""
+        results: list[FootprintResult] = []
+        for comp in components:
+            ref = str(comp.get("ref", "")).strip()
+            mpn = str(comp.get("part_number", "")).strip()
+            footprint = str(comp.get("footprint", "")).strip()
+
+            if not footprint or footprint == "not_pcb_mounted":
+                continue
+
+            # Check local KiCad library
+            if self._check_local_library(footprint):
+                continue  # Footprint exists locally
+            active = self._check_active_pcb_model(ref)
+            if active:
+                results.append(FootprintResult(
+                    mpn=mpn,
+                    ref=ref,
+                    found=True,
+                    source="local_pcb_model",
+                    requested_footprint=footprint,
+                    resolved_footprint=active,
+                    footprint_path=str(self._active_pcb_path()),
+                ))
+                continue
+
+            # Try to resolve via API (stub)
+            result = self._try_resolve(ref, mpn, footprint)
+            if result.found and result.resolved_footprint:
+                comp["footprint"] = result.resolved_footprint
+            results.append(result)
+
+        # Write report
+        self._write_report(results)
+        return results
+
+    def _check_local_library(self, footprint_name: str) -> bool:
+        """Check if a footprint exists in KiCad's local library.
+
+        Footprint format: "Library:Footprint" (e.g. "Resistor_SMD:R_0603_1608Metric")
+        """
+        if ":" not in footprint_name:
+            return True  # Cannot verify non-standard footprint names
+
+        lib_name, fp_name = footprint_name.split(":", 1)
+        if lib_name == "OmniCircuit" and (self.project_lib_dir / f"{fp_name}.kicad_mod").exists():
+            return True
+        for lib_base in self.KICAD_LIB_PATHS:
+            # KiCad stores footprints as: footprints/LibName.pretty/FpName.kicad_mod
+            fp_dir = lib_base / f"{lib_name}.pretty"
+            if fp_dir.exists():
+                fp_file = fp_dir / f"{fp_name}.kicad_mod"
+                if fp_file.exists():
+                    return True
+        return False
+
+    def _active_pcb_path(self) -> Path:
+        cfg_path = self.root / "project_config.json"
+        project_name = "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs"
+        try:
+            cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+            project_name = cfg.get("project_name", project_name)
+        except Exception:
+            pass
+        return self.root / "outputs" / "kicad" / project_name / f"{project_name}.kicad_pcb"
+
+    def _check_active_pcb_model(self, ref: str) -> str:
+        pcb_path = self._active_pcb_path()
+        if not pcb_path.exists() or not ref:
+            return ""
+        text = pcb_path.read_text(encoding="utf-8", errors="ignore")
+        ref_patterns = (
+            rf'\(property\s+"Reference"\s+"?{re.escape(ref)}"?',
+            rf'\(fp_text\s+reference\s+"?{re.escape(ref)}"?',
+        )
+        for pattern in ref_patterns:
+            ref_match = re.search(pattern, text)
+            if not ref_match:
+                continue
+            header_start = text.rfind("(footprint ", 0, ref_match.start())
+            if header_start < 0:
+                continue
+            header = re.search(r'\(footprint\s+"([^"]+)"', text[header_start:header_start + 300])
+            if header:
+                return header.group(1)
+        return ""
+
+    def _try_resolve(self, ref: str, mpn: str, footprint: str) -> FootprintResult:
+        """Attempt to resolve a missing footprint from external sources."""
+        result = self._query_snapeda(mpn, ref, footprint)
+        if result and result.found:
+            return result
+
+        result = self._query_ultralibrarian(mpn, ref, footprint)
+        if result and result.found:
+            return result
+
+        # Not found — report for manual resolution
+        return FootprintResult(
+            mpn=mpn,
+            ref=ref,
+            found=False,
+            source="manual",
+            requested_footprint=footprint,
+            error=f"Footprint '{footprint}' not found in KiCad library. "
+                  f"MPN: {mpn}. Bileşen pin yapısı çözülemedi, lütfen onaylayın.",
+        )
+
+    def _query_snapeda(self, mpn: str, ref: str) -> FootprintResult | None:
+        """Query SnapEDA API for footprint. STUB — returns None.
+
+        TODO: Implement real SnapEDA API call:
+        - POST https://www.snapeda.com/api/v1/search?q={mpn}
+        - Download .kicad_mod file
+        - Save to project library path
+        """
+        # STUB: Real API integration will be added in a future PR
+        return None
+
+    def _query_ultralibrarian(self, mpn: str, ref: str) -> FootprintResult | None:
+        """Query UltraLibrarian API for footprint. STUB — returns None.
+
+        TODO: Implement real UltraLibrarian API call:
+        - GET https://app.ultralibrarian.com/api/v1/search?q={mpn}
+        - Download KiCad library files
+        - Save to project library path
+        """
+        # STUB: Real API integration will be added in a future PR
+        return None
+
+    def _extract_pin_map_from_datasheet(self, datasheet_url: str) -> dict[str, str] | None:
+        """Extract pin mapping from a component datasheet using LLM. STUB.
+
+        TODO: Implement datasheet pin extraction:
+        - Download PDF from datasheet_url
+        - Send to Gemma 4 / GPT-4o with pin table extraction prompt
+        - Parse pin name -> pin number mapping
+        - Validate against expected footprint
+        """
+        # STUB: Real LLM-based extraction will be added in a future PR
+        return None
+
+    def _query_snapeda(self, mpn: str, ref: str, footprint: str = "") -> FootprintResult | None:  # type: ignore[override]
+        """Query SnapEDA-compatible search endpoint and download KiCad footprint."""
+        if not mpn:
+            return None
+        api_key = os.environ.get("SNAPEDA_API_KEY", "")
+        url = "https://www.snapeda.com/api/v1/search?" + urllib.parse.urlencode({"q": mpn})
+        headers = {"Accept": "application/json"}
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
+        payload = self._http_json(url, headers=headers)
+        if not payload:
+            return None
+        return self._result_from_api_payload(
+            payload,
+            source="snapeda",
+            ref=ref,
+            mpn=mpn,
+            requested_footprint=footprint,
+        )
+
+    def _query_ultralibrarian(self, mpn: str, ref: str, footprint: str = "") -> FootprintResult | None:  # type: ignore[override]
+        """Query UltraLibrarian-compatible search endpoint and download KiCad footprint."""
+        if not mpn:
+            return None
+        api_key = os.environ.get("ULTRALIBRARIAN_API_KEY", "")
+        if not api_key:
+            return None
+        url = "https://app.ultralibrarian.com/api/v1/search?" + urllib.parse.urlencode({"q": mpn})
+        payload = self._http_json(url, headers={
+            "Accept": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        })
+        if not payload:
+            return None
+        return self._result_from_api_payload(
+            payload,
+            source="ultralibrarian",
+            ref=ref,
+            mpn=mpn,
+            requested_footprint=footprint,
+        )
+
+    def _result_from_api_payload(
+        self,
+        payload: Any,
+        *,
+        source: str,
+        ref: str,
+        mpn: str,
+        requested_footprint: str,
+    ) -> FootprintResult | None:
+        item = self._first_library_item(payload)
+        if not item:
+            return None
+        download_url = self._first_value(item, (
+            "kicad_footprint_url",
+            "kicad_mod_url",
+            "download_url",
+            "download",
+            "url",
+        ))
+        datasheet_url = self._first_value(item, (
+            "datasheet_url",
+            "datasheet",
+            "pdf_url",
+        ))
+        if not download_url:
+            return FootprintResult(
+                mpn=mpn,
+                ref=ref,
+                found=False,
+                source=source,
+                requested_footprint=requested_footprint,
+                datasheet_url=datasheet_url,
+                error=f"{source} returned a match but no KiCad footprint download URL.",
+            )
+        saved = self._download_footprint(download_url, ref, mpn)
+        if not saved:
+            return FootprintResult(
+                mpn=mpn,
+                ref=ref,
+                found=False,
+                source=source,
+                requested_footprint=requested_footprint,
+                datasheet_url=datasheet_url,
+                error=f"{source} download failed or did not contain a .kicad_mod footprint.",
+            )
+        pin_map = self._extract_pin_map_from_datasheet(datasheet_url) if datasheet_url else None
+        pin_count = self._count_footprint_pads(saved)
+        return FootprintResult(
+            mpn=mpn,
+            ref=ref,
+            found=True,
+            source=source,
+            requested_footprint=requested_footprint,
+            resolved_footprint=f"OmniCircuit:{saved.stem}",
+            footprint_path=str(saved),
+            datasheet_url=datasheet_url,
+            pin_count=pin_count,
+            pin_map=pin_map,
+        )
+
+    def _http_json(self, url: str, *, headers: dict[str, str]) -> Any:
+        try:
+            req = urllib.request.Request(url, headers=headers, method="GET")
+            with urllib.request.urlopen(req, timeout=20) as response:
+                raw = response.read().decode("utf-8", errors="replace")
+            return json.loads(raw)
+        except (OSError, urllib.error.HTTPError, urllib.error.URLError, json.JSONDecodeError):
+            return None
+
+    def _first_library_item(self, payload: Any) -> dict[str, Any] | None:
+        if isinstance(payload, dict):
+            for key in ("results", "items", "data", "components"):
+                value = payload.get(key)
+                if isinstance(value, list) and value:
+                    return value[0] if isinstance(value[0], dict) else None
+            return payload
+        if isinstance(payload, list) and payload and isinstance(payload[0], dict):
+            return payload[0]
+        return None
+
+    def _first_value(self, item: dict[str, Any], keys: tuple[str, ...]) -> str:
+        for key in keys:
+            value = item.get(key)
+            if isinstance(value, str) and value:
+                return value
+            if isinstance(value, dict):
+                nested = self._first_value(value, keys)
+                if nested:
+                    return nested
+            if isinstance(value, list):
+                for entry in value:
+                    if isinstance(entry, str) and entry:
+                        return entry
+                    if isinstance(entry, dict):
+                        nested = self._first_value(entry, keys)
+                        if nested:
+                            return nested
+        return ""
+
+    def _download_footprint(self, url: str, ref: str, mpn: str) -> Path | None:
+        try:
+            req = urllib.request.Request(url, headers={"Accept": "*/*"}, method="GET")
+            with urllib.request.urlopen(req, timeout=60) as response:
+                data = response.read()
+        except (OSError, urllib.error.HTTPError, urllib.error.URLError):
+            return None
+        text = data.decode("utf-8", errors="ignore")
+        if "(footprint" not in text and "(module" not in text:
+            return None
+        safe_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", mpn or ref).strip("_") or ref
+        self.project_lib_dir.mkdir(parents=True, exist_ok=True)
+        target = self.project_lib_dir / f"{safe_name}.kicad_mod"
+        target.write_text(text, encoding="utf-8")
+        return target
+
+    def _count_footprint_pads(self, footprint_path: Path) -> int:
+        try:
+            text = footprint_path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            return 0
+        return len(re.findall(r"\(pad\s+", text))
+
+    def _extract_pin_map_from_datasheet(self, datasheet_url: str) -> dict[str, str] | None:  # type: ignore[override]
+        """Use the active LLM provider to extract a conservative pin map summary."""
+        if not datasheet_url:
+            return None
+        try:
+            from engine.ollama_client import OllamaClient
+        except ModuleNotFoundError:
+            try:
+                from ollama_client import OllamaClient  # type: ignore
+            except ModuleNotFoundError:
+                return None
+        prompt = (
+            "Extract only a JSON object that maps datasheet pin numbers to pin names. "
+            "If the datasheet cannot be accessed from this URL or the pin table is uncertain, return {}.\n"
+            f"Datasheet URL: {datasheet_url}"
+        )
+        try:
+            text = OllamaClient().generate_response(prompt)
+            start = text.find("{")
+            end = text.rfind("}")
+            if start < 0 or end <= start:
+                return None
+            parsed = json.loads(text[start:end + 1])
+            if isinstance(parsed, dict):
+                return {str(k): str(v) for k, v in parsed.items()}
+        except Exception:
+            return None
+        return None
+
+    def _write_report(self, results: list[FootprintResult]) -> None:
+        """Write missing footprint report for UI consumption."""
+        report = {
+            "schema": "COMPONENT_RESOLVER_V1",
+            "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "total_missing": len(results),
+            "resolved": sum(1 for r in results if r.found),
+            "unresolved": sum(1 for r in results if not r.found),
+            "items": [
+                {
+                    "ref": r.ref,
+                    "mpn": r.mpn,
+                    "found": r.found,
+                    "source": r.source,
+                    "requested_footprint": r.requested_footprint,
+                    "resolved_footprint": r.resolved_footprint,
+                    "footprint_path": r.footprint_path,
+                    "datasheet_url": r.datasheet_url,
+                    "pin_count": r.pin_count,
+                    "pin_map": r.pin_map or {},
+                    "error": r.error,
+                }
+                for r in results
+            ],
+        }
+        self.report_path.parent.mkdir(parents=True, exist_ok=True)
+        self.report_path.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+
+
 def main() -> int:
     import argparse
 
@@ -580,6 +1034,8 @@ def main() -> int:
     parser.add_argument("--netlist", default="outputs/phase1/AI_NETLIST_V1.json")
     parser.add_argument("--bom", default="BOM.csv")
     parser.add_argument("--output", default="")
+    parser.add_argument("--check-footprints", action="store_true",
+                        help="Also check for missing footprints in KiCad library")
     args = parser.parse_args()
     target = write_normalized_design_source(
         Path(args.netlist),
@@ -587,6 +1043,20 @@ def main() -> int:
         Path(args.output) if args.output else None,
     )
     print(f"Normalized design source written: {target}")
+
+    if args.check_footprints:
+        netlist = json.loads(target.read_text(encoding="utf-8"))
+        components = netlist.get("components", [])
+        resolver = ComponentResolver()
+        results = resolver.resolve_missing_footprints(components)
+        missing = [r for r in results if not r.found]
+        if missing:
+            print(f"\n[!] {len(missing)} missing footprint(s):")
+            for r in missing:
+                print(f"  {r.ref} ({r.mpn}): {r.error}")
+        else:
+            print(f"\n[OK] All footprints resolved ({len(results)} checked)")
+
     return 0
 
 

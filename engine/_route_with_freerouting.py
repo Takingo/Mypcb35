@@ -38,7 +38,7 @@ SES = PCB.with_suffix(".ses")
 
 MAX_PASSES = int(os.environ.get("FR_MAX_PASSES", "1"))
 THREADS = int(os.environ.get("FR_THREADS", "1"))
-TIMEOUT_S = int(os.environ.get("FR_TIMEOUT_S", "600"))
+TIMEOUT_S = 3600
 
 
 def export_dsn(board: object) -> bool:

@@ -1,189 +1,49 @@
 {
   "schema": "PIPELINE_PROGRESS_V1",
-  "status": "awaiting_human",
+  "status": "failed",
   "current_phase": null,
+  "progress_percent": 34,
+  "status_message": "Pipeline beklenmeyen hata ile durdu",
   "phases": [
     {
+      "name": "ai_synthesis",
+      "status": "success_fallback",
+      "duration_s": 259.44,
+      "repair_attempts": 2,
+      "notes": "deterministic_fallback used (AI error: HTTP 503 hatasi. URL: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab)\nretry attempt 2/3\ndeterministic_fallback used (AI error: Gemini API kotasi asildi (HTTP 429). https://aistudio.google.com/app/apikey adresinden plan/kullanimi kontrol edin. Alte)\nretry attempt 3/3\ndeterministic_fallback used (AI error: Gemini API kotasi asildi (HTTP 429). https://aistudio.google.com/app/apikey adresinden plan/kullanimi kontrol edin. Alte)",
+      "started_at": "2026-06-07T04:27:22+00:00",
+      "ended_at": "2026-06-07T04:31:42+00:00"
+    },
+    {
       "name": "design_feasibility",
+      "status": "success",
+      "duration_s": 0.1,
+      "repair_attempts": 0,
+      "notes": "83 PCB-mounted components pass for 130x46mm (density=56.6%). Layer count auto-upgraded to 4 for routing margin.\n⚠ Yoğunluk=56.6%: Katman sayısı otomatik olarak 4'e yükseltildi.\nÖnerilen minimum kart alanı: 7441 mm²",
+      "started_at": "2026-06-07T04:31:42+00:00",
+      "ended_at": "2026-06-07T04:31:42+00:00"
+    },
+    {
+      "name": "component_resolution",
       "status": "review",
-      "duration_s": 0.02,
+      "duration_s": 1.53,
       "repair_attempts": 0,
-      "notes": "180 PCB-mounted components are dense for 130x46mm; estimated utilization=1.49, engineering review required.",
-      "started_at": "2026-06-05T04:10:07+00:00",
-      "ended_at": "2026-06-05T04:10:07+00:00"
+      "notes": "component resolver: resolved=9, unresolved=1\nunresolved footprint review required: J2(132289)\nHITL auto decision accepted: temporary_footprint - Otonom SaaS Akışı: Çözülemeyen footprint için otomatik geçici footprint atandı ve akış devam ettirildi.\nRouting deneme #1: Mevcut yerlesim ve yonlendirme",
+      "started_at": "2026-06-07T04:31:42+00:00",
+      "ended_at": "2026-06-07T04:31:43+00:00"
     },
     {
       "name": "kicad_generation",
-      "status": "success",
-      "duration_s": 32.72,
-      "repair_attempts": 0,
-      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
-      "started_at": "2026-06-05T04:10:07+00:00",
-      "ended_at": "2026-06-05T04:10:40+00:00"
-    },
-    {
-      "name": "drc_cleanup",
-      "status": "success",
-      "duration_s": 0.01,
-      "repair_attempts": 0,
-      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
-      "started_at": "2026-06-05T04:10:40+00:00",
-      "ended_at": "2026-06-05T04:10:40+00:00"
-    },
-    {
-      "name": "drc_verify",
-      "status": "failed",
-      "duration_s": 2.79,
-      "repair_attempts": 0,
-      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
-      "started_at": "2026-06-05T04:10:40+00:00",
-      "ended_at": "2026-06-05T04:10:43+00:00"
-    },
-    {
-      "name": "kicad_generation",
-      "status": "success",
-      "duration_s": 32.68,
-      "repair_attempts": 0,
-      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
-      "started_at": "2026-06-05T04:10:43+00:00",
-      "ended_at": "2026-06-05T04:11:15+00:00"
-    },
-    {
-      "name": "drc_cleanup",
-      "status": "success",
+      "status": "running",
       "duration_s": 0.0,
       "repair_attempts": 0,
-      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
-      "started_at": "2026-06-05T04:11:15+00:00",
-      "ended_at": "2026-06-05T04:11:15+00:00"
-    },
-    {
-      "name": "drc_verify",
-      "status": "failed",
-      "duration_s": 2.6,
-      "repair_attempts": 0,
-      "notes": "violations=183 (critical=4, assembly_review=179), schematic_parity=0, unconnected=0",
-      "started_at": "2026-06-05T04:11:15+00:00",
-      "ended_at": "2026-06-05T04:11:18+00:00"
-    },
-    {
-      "name": "kicad_generation",
-      "status": "success",
-      "duration_s": 36.5,
-      "repair_attempts": 0,
-      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
-      "started_at": "2026-06-05T04:11:18+00:00",
-      "ended_at": "2026-06-05T04:11:54+00:00"
-    },
-    {
-      "name": "drc_cleanup",
-      "status": "success",
-      "duration_s": 0.0,
-      "repair_attempts": 0,
-      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
-      "started_at": "2026-06-05T04:11:54+00:00",
-      "ended_at": "2026-06-05T04:11:54+00:00"
-    },
-    {
-      "name": "drc_verify",
-      "status": "failed",
-      "duration_s": 2.56,
-      "repair_attempts": 0,
-      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
-      "started_at": "2026-06-05T04:11:54+00:00",
-      "ended_at": "2026-06-05T04:11:57+00:00"
-    },
-    {
-      "name": "kicad_generation",
-      "status": "success",
-      "duration_s": 37.99,
-      "repair_attempts": 0,
-      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
-      "started_at": "2026-06-05T04:11:57+00:00",
-      "ended_at": "2026-06-05T04:12:35+00:00"
-    },
-    {
-      "name": "drc_cleanup",
-      "status": "success",
-      "duration_s": 0.0,
-      "repair_attempts": 0,
-      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
-      "started_at": "2026-06-05T04:12:35+00:00",
-      "ended_at": "2026-06-05T04:12:35+00:00"
-    },
-    {
-      "name": "drc_verify",
-      "status": "failed",
-      "duration_s": 2.28,
-      "repair_attempts": 0,
-      "notes": "violations=181 (critical=2, assembly_review=179), schematic_parity=0, unconnected=0",
-      "started_at": "2026-06-05T04:12:35+00:00",
-      "ended_at": "2026-06-05T04:12:37+00:00"
-    },
-    {
-      "name": "kicad_generation",
-      "status": "success",
-      "duration_s": 34.65,
-      "repair_attempts": 0,
-      "notes": "PCB/DRC written: esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.kicad_pcb; manufacturing=C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing; kicad_exit=2",
-      "started_at": "2026-06-05T04:12:37+00:00",
-      "ended_at": "2026-06-05T04:13:12+00:00"
-    },
-    {
-      "name": "drc_cleanup",
-      "status": "success",
-      "duration_s": 0.0,
-      "repair_attempts": 0,
-      "notes": "routing and zone fill handled by KiCad automation; second Freerouting pass is disabled. Gerber/drill/PnP export waits for clean DRC.",
-      "started_at": "2026-06-05T04:13:12+00:00",
-      "ended_at": "2026-06-05T04:13:12+00:00"
-    },
-    {
-      "name": "drc_verify",
-      "status": "failed",
-      "duration_s": 2.57,
-      "repair_attempts": 0,
-      "notes": "violations=182 (critical=3, assembly_review=179), schematic_parity=0, unconnected=0",
-      "started_at": "2026-06-05T04:13:12+00:00",
-      "ended_at": "2026-06-05T04:13:14+00:00"
+      "notes": "",
+      "started_at": "2026-06-07T04:31:43+00:00"
     }
   ],
   "final_artifact": null,
-  "hitl_blocker": {
-    "schema": "HITL_STATE_V1",
-    "status": "awaiting_human_input",
-    "blocker_type": "routing",
-    "session_id": "6bf57cf1-4f79-477a-a815-4e230999600b",
-    "raised_at": "2026-06-05T04:13:14+00:00",
-    "context": {
-      "phase": "drc_verify",
-      "violation_types": {
-        "tracks_crossing": 1,
-        "pth_inside_courtyard": 2
-      },
-      "unconnected_count": 0,
-      "drc_report": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\drc_report.json"
-    },
-    "question": "DRC verify found 3 violation(s), 0 schematic parity item(s), and 0 unconnected item(s) after auto-cleanup. These require routing decisions the auto-pipeline cannot safely make.",
-    "suggested_choices": [
-      {
-        "id": "manual_route",
-        "label": "Open in KiCad GUI and route manually",
-        "consequence": "Engineer fixes layout; re-run pipeline from drc_verify"
-      },
-      {
-        "id": "force_pack",
-        "label": "Force-pack ZIP anyway (NOT recommended)",
-        "consequence": "Production ZIP with known issues; explicit override"
-      },
-      {
-        "id": "abort",
-        "label": "Abort and investigate",
-        "consequence": "Stop here, review DRC report manually"
-      }
-    ],
-    "answer_path": "assets\\generated\\hitl_answer.json"
-  },
-  "started_at": "2026-06-05T04:10:07+00:00",
-  "updated_at": "2026-06-05T04:13:14+00:00"
+  "hitl_blocker": null,
+  "error_details": "Traceback (most recent call last):\n  File \"C:\\Mypcb\\engine\\full_pipeline_orchestrator.py\", line 1381, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"C:\\Mypcb\\engine\\full_pipeline_orchestrator.py\", line 1256, in main\n    if not phase_kicad_generation(state):\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Mypcb\\engine\\full_pipeline_orchestrator.py\", line 891, in phase_kicad_generation\n    r = subprocess.run(cmd, capture_output=True, text=True, encoding=\"utf-8\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\KiCad\\10.0\\bin\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\KiCad\\10.0\\bin\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Program Files\\KiCad\\10.0\\bin\\Lib\\subprocess.py\", line 1628, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'C:\\\\Mypcb\\\\tool\\\\run_kicad_phase2.ps1', '-Export', '-ContinueOnDrcError']' timed out after 900 seconds\n",
+  "started_at": "2026-06-07T04:27:22+00:00",
+  "updated_at": "2026-06-07T05:10:07+00:00"
 }

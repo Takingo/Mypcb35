@@ -1,10 +1,10 @@
 {
   "schema": "FABRICATION_PACKAGE_V1",
-  "generated_at": "2026-06-04T19:04:38+00:00",
+  "generated_at": "2026-06-05T08:28:30+00:00",
   "status": "package_ready",
   "message": "Tasarim, Dogrulama ve Uretim Hazirligi Tamamlandi. Uretim paketi hazir.",
-  "production_zip": "outputs\\fabrication\\Quantum_Mind_Anchor_v2_4_Production.zip",
-  "production_zip_size_bytes": 165146,
+  "production_zip": "outputs\\fabrication\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs_Production.zip",
+  "production_zip_size_bytes": 241992,
   "board_width_mm": 130.0,
   "board_height_mm": 46.0,
   "checkout": {
@@ -18,182 +18,182 @@
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Adhesive.gba",
       "size_bytes": 505
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
-      "size_bytes": 478
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Courtyard.gbr",
+      "size_bytes": 2543
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl",
-      "size_bytes": 8245
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Cu.gbl",
+      "size_bytes": 28588
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
-      "size_bytes": 487
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Fab.gbr",
+      "size_bytes": 29298
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs",
-      "size_bytes": 26409
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Mask.gbs",
+      "size_bytes": 129498
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp",
-      "size_bytes": 506
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Paste.gbp",
+      "size_bytes": 2429
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo",
-      "size_bytes": 507
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-B_Silkscreen.gbo",
+      "size_bytes": 2190
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1",
-      "size_bytes": 1307
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Edge_Cuts.gm1",
+      "size_bytes": 1303
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Adhesive.gta",
       "size_bytes": 505
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
-      "size_bytes": 12241
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Courtyard.gbr",
+      "size_bytes": 18532
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl",
-      "size_bytes": 32049
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Cu.gtl",
+      "size_bytes": 55561
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
-      "size_bytes": 317657
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Fab.gbr",
+      "size_bytes": 128224
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts",
-      "size_bytes": 111497
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Mask.gts",
+      "size_bytes": 257545
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp",
-      "size_bytes": 8842
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Paste.gtp",
+      "size_bytes": 10241
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto",
-      "size_bytes": 109923
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-F_Silkscreen.gto",
+      "size_bytes": 30217
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In1_Cu.g1",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In1_Cu.g1",
-      "size_bytes": 81059
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In1_Cu.g1",
+      "size_bytes": 175796
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In2_Cu.g2",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In2_Cu.g2",
-      "size_bytes": 127757
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-In2_Cu.g2",
+      "size_bytes": 219554
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-job.gbrjob",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-job.gbrjob",
-      "size_bytes": 6201
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-job.gbrjob",
+      "size_bytes": 6200
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-Margin.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_1.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_2.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_3.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_4.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
-      "size_bytes": 7056
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Comments.gbr",
+      "size_bytes": 481
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Drawings.gbr",
       "size_bytes": 488
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco1.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
       "category": "gerber",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\gerber\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs-User_Eco2.gbr",
       "size_bytes": 478
     },
     {
       "name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl",
       "category": "drill",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\drill\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl",
-      "size_bytes": 2617
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\drill\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs.drl",
+      "size_bytes": 3495
     },
     {
       "name": "pick_and_place.csv",
       "category": "pick_and_place",
-      "path": "C:\\Mypcb\\outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\position\\pick_and_place.csv",
-      "size_bytes": 4045
+      "path": "outputs\\kicad\\esp32_s3_dwm3000_uwb_anchor_with_relay_outputs\\manufacturing\\position\\pick_and_place.csv",
+      "size_bytes": 6899
     },
     {
       "name": "BOM.csv",
       "category": "bom",
       "path": "BOM.csv",
-      "size_bytes": 19894
+      "size_bytes": 24818
     }
   ],
   "estimate": {

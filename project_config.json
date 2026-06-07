@@ -1,0 +1,9 @@
+{
+  "project_name": "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs",
+  "board_size_mm": [130, 46],
+  "kicad_cli_path": "C:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.exe",
+  "kicad_python_path": "C:\\Program Files\\KiCad\\10.0\\bin\\python.exe",
+  "output_root": "./outputs",
+  "bom_file": "BOM.csv",
+  "constraints_file": "PCB_NOTES.md"
+}

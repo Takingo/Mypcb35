@@ -20,9 +20,20 @@ import argparse
 import csv
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+if hasattr(sys.stdout, "reconfigure") and sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure") and sys.stderr.encoding and sys.stderr.encoding.lower() != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8")
+
+try:
+    from engine.netlist_source_normalizer import normalize_design_source
+except ModuleNotFoundError:
+    from netlist_source_normalizer import normalize_design_source  # type: ignore
 
 INPUT_EVIDENCE_SCHEMA = "INPUT_EVIDENCE_V1"
 
@@ -98,6 +109,11 @@ class InputEvidenceValidator:
                              "message": message, **extra})
 
         netlist = json.loads(self.netlist_path.read_text(encoding="utf-8")) if self.netlist_path.exists() else {}
+        
+        # Apply normalization first so we don't report false positives for BOM vs raw AI mismatch
+        if netlist:
+            netlist = normalize_design_source(netlist, self.bom_path)
+            
         components = netlist.get("components", [])
         nets = netlist.get("nets", [])
         net_refs = {c.get("ref") for c in components if c.get("ref")}
@@ -235,16 +251,339 @@ class InputEvidenceValidator:
             print(f"[INPUT-EVIDENCE] Asset yazilamadi: {exc}", flush=True)
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Absolute Constraints Guard (Post-step invariant checker)
+# ──────────────────────────────────────────────────────────────────────────────
+class ConstraintViolation(Exception):
+    """Raised when an absolute constraint is violated after a pipeline step."""
+    def __init__(self, check_name: str, message: str, details: dict[str, Any] | None = None):
+        self.check_name = check_name
+        self.details = details or {}
+        super().__init__(f"[{check_name}] {message}")
+
+
+# Critical components that must NEVER be removed from the board
+CRITICAL_COMPONENTS = {
+    "U15": "W5500 (Ethernet Controller)",
+    "J18": "RJ45 (Ethernet Connector)",
+    "U2": "DWM3000 (UWB Transceiver)",
+    "SK1": "ESP32 Socket Left",
+    "SK2": "ESP32 Socket Right",
+}
+
+# RF keepout radius around DWM3000 (mm)
+RF_KEEPOUT_RADIUS_MM = 5.0
+
+# AC-DC isolation gap (mm)
+ISOLATION_GAP_MM = 8.0
+
+
+class AbsoluteConstraintGuard:
+    """Post-step invariant checker for absolute design constraints.
+
+    Call `validate_post_step()` after each pipeline step. If any
+    constraint is violated, a `ConstraintViolation` is raised which
+    the orchestrator should catch and handle (rollback + retry).
+    """
+
+    def __init__(self, project_root: Path | None = None):
+        self.root = Path(project_root) if project_root else Path.cwd()
+        self.config_path = self.root / "project_config.json"
+
+    def validate_post_step(
+        self,
+        pcb_path: Path,
+        step_name: str,
+        *,
+        expected_board_size_mm: tuple[float, float] | None = None,
+    ) -> list[dict[str, Any]]:
+        """Run all absolute constraint checks. Returns list of violations found.
+        Raises ConstraintViolation on critical violations."""
+        if not pcb_path.exists():
+            return []
+
+        violations: list[dict[str, Any]] = []
+        pcb_text = pcb_path.read_text(encoding="utf-8", errors="ignore")
+
+        # 1. Board dimensions check
+        dim_viols = self._check_board_dimensions(
+            pcb_text,
+            expected_board_size_mm=expected_board_size_mm,
+        )
+        violations.extend(dim_viols)
+
+        # 2. Critical components check
+        comp_viols = self._check_critical_components(pcb_text)
+        violations.extend(comp_viols)
+
+        # 3. Isolation slot check
+        iso_viols = self._check_isolation_slot(pcb_text)
+        violations.extend(iso_viols)
+
+        # 4. RF keepout check
+        rf_viols = self._check_rf_keepout(pcb_text)
+        violations.extend(rf_viols)
+
+        # Report
+        if violations:
+            critical = [v for v in violations if v.get("severity") == "error"]
+            if critical:
+                raise ConstraintViolation(
+                    check_name=f"post_{step_name}",
+                    message=f"{len(critical)} absolute constraint(s) violated: "
+                            + "; ".join(v["message"] for v in critical[:3]),
+                    details={"violations": violations, "step": step_name},
+                )
+        return violations
+
+    def _check_board_dimensions(
+        self,
+        pcb_text: str,
+        *,
+        expected_board_size_mm: tuple[float, float] | None = None,
+    ) -> list[dict[str, Any]]:
+        """Verify Edge_Cuts match project_config.json board_size_mm."""
+        violations: list[dict[str, Any]] = []
+        if expected_board_size_mm is not None:
+            expected_w, expected_h = expected_board_size_mm
+        else:
+            if not self.config_path.exists():
+                return violations
+            try:
+                cfg = json.loads(self.config_path.read_text(encoding="utf-8"))
+                expected = cfg.get("board_size_mm")
+                if not expected or not isinstance(expected, (list, tuple)) or len(expected) < 2:
+                    return violations
+                expected_w, expected_h = float(expected[0]), float(expected[1])
+            except Exception:
+                return violations
+
+        # Parse Edge_Cuts from PCB text
+        edge_matches = self._edge_line_matches(pcb_text)
+        if not edge_matches:
+            return violations
+
+        xs, ys = [], []
+        for x1, y1, x2, y2 in edge_matches:
+            xs.extend([float(x1), float(x2)])
+            ys.extend([float(y1), float(y2)])
+
+        actual_w = round(max(xs) - min(xs), 1)
+        actual_h = round(max(ys) - min(ys), 1)
+        # Allow ±1mm tolerance (auto-routing may adjust edges slightly)
+        tolerance = 1.0
+        if abs(actual_w - expected_w) > tolerance or abs(actual_h - expected_h) > tolerance:
+            violations.append({
+                "check": "board_dimensions",
+                "severity": "error",
+                "message": (
+                    f"Board boyutu beklenenden farklı: "
+                    f"beklenen {expected_w}x{expected_h}mm, "
+                    f"bulunan {actual_w}x{actual_h}mm"
+                ),
+                "expected": [expected_w, expected_h],
+                "actual": [actual_w, actual_h],
+            })
+        return violations
+
+    def _edge_line_matches(self, pcb_text: str) -> list[tuple[str, str, str, str]]:
+        matches: list[tuple[str, str, str, str]] = []
+        for block in re.findall(r"\(gr_line\b.*?\n\t\)", pcb_text, flags=re.DOTALL):
+            if "Edge.Cuts" not in block and "Edge_Cuts" not in block:
+                continue
+            start = re.search(r"\(start\s+(-?[\d.]+)\s+(-?[\d.]+)\)", block)
+            end = re.search(r"\(end\s+(-?[\d.]+)\s+(-?[\d.]+)\)", block)
+            if start and end:
+                matches.append((start.group(1), start.group(2), end.group(1), end.group(2)))
+        return matches
+
+    def _check_critical_components(self, pcb_text: str) -> list[dict[str, Any]]:
+        """Verify critical components exist in the PCB file."""
+        violations: list[dict[str, Any]] = []
+        for ref, description in CRITICAL_COMPONENTS.items():
+            patterns = (
+                rf'\(fp_text\s+reference\s+"?{re.escape(ref)}"?',
+                rf'\(property\s+"Reference"\s+"?{re.escape(ref)}"?',
+            )
+            if not any(re.search(pattern, pcb_text) for pattern in patterns):
+                violations.append({
+                    "check": "critical_component",
+                    "severity": "error",
+                    "message": f"Kritik bileşen PCB'de bulunamadı: {ref} ({description})",
+                    "ref": ref,
+                    "description": description,
+                })
+        return violations
+
+    def _check_isolation_slot(self, pcb_text: str) -> list[dict[str, Any]]:
+        """Check that AC and DC zones have adequate separation.
+        Looks for the HLK-10M05 (AC-DC module) and verifies there's
+        sufficient clearance around it."""
+        violations: list[dict[str, Any]] = []
+        hlk_block = self._footprint_block_by_terms(pcb_text, ("HLK", "ACDC", "AC_DC"))
+        if not hlk_block:
+            return violations  # No AC module found, skip check
+
+        at = re.search(r"\(at\s+(-?[\d.]+)\s+(-?[\d.]+)", hlk_block)
+        if not at:
+            return violations
+        ac_x, ac_y = float(at.group(1)), float(at.group(2))
+
+        # Find all other component positions and check minimum distance
+        comp_positions: list[tuple[float, float]] = []
+        for block in self._footprint_blocks(pcb_text):
+            block_at = re.search(r"\(at\s+(-?[\d.]+)\s+(-?[\d.]+)", block)
+            if block_at:
+                comp_positions.append((float(block_at.group(1)), float(block_at.group(2))))
+        too_close = []
+        for px, py in comp_positions:
+            dist = ((px - ac_x) ** 2 + (py - ac_y) ** 2) ** 0.5
+            if 0.1 < dist < ISOLATION_GAP_MM:  # Skip self (dist ~0)
+                too_close.append((px, py, round(dist, 1)))
+
+        if too_close:
+            violations.append({
+                "check": "isolation_slot",
+                "severity": "error",
+                "message": (
+                    f"AC-DC izolasyon boşluğu ({ISOLATION_GAP_MM}mm) ihlali: "
+                    f"{len(too_close)} bileşen AC modülüne çok yakın"
+                ),
+                "ac_position": [ac_x, ac_y],
+                "too_close_count": len(too_close),
+            })
+        return violations
+
+    def _check_rf_keepout(self, pcb_text: str) -> list[dict[str, Any]]:
+        """Check that no foreign vias/tracks exist within RF_KEEPOUT_RADIUS_MM
+        of DWM3000."""
+        violations: list[dict[str, Any]] = []
+        dwm_block = self._footprint_block_by_reference(pcb_text, "U2")
+        if not dwm_block:
+            dwm_block = self._footprint_block_by_terms(pcb_text, ("DWM3000",))
+        if not dwm_block:
+            return violations  # DWM3000 not placed yet
+
+        at = re.search(r"\(at\s+(-?[\d.]+)\s+(-?[\d.]+)", dwm_block)
+        if not at:
+            return violations
+        dwm_x, dwm_y = float(at.group(1)), float(at.group(2))
+
+        # Check vias near DWM3000
+        via_positions = re.findall(
+            r'\(via\b[^)]*\(at\s+(-?[\d.]+)\s+(-?[\d.]+)\)',
+            pcb_text,
+        )
+        intruding_vias = 0
+        for vx, vy in via_positions:
+            dist = ((float(vx) - dwm_x) ** 2 + (float(vy) - dwm_y) ** 2) ** 0.5
+            if dist < RF_KEEPOUT_RADIUS_MM:
+                intruding_vias += 1
+
+        if intruding_vias > 0:
+            violations.append({
+                "check": "rf_keepout",
+                "severity": "error",
+                "message": (
+                    f"DWM3000 RF keepout ihlali: {intruding_vias} via "
+                    f"{RF_KEEPOUT_RADIUS_MM}mm keepout alanı içinde"
+                ),
+                "dwm_position": [dwm_x, dwm_y],
+                "intruding_vias": intruding_vias,
+                "keepout_radius_mm": RF_KEEPOUT_RADIUS_MM,
+            })
+        return violations
+
+    def _footprint_block_by_reference(self, pcb_text: str, ref: str) -> str:
+        for block in self._footprint_blocks(pcb_text):
+            if (
+                re.search(rf'\(fp_text\s+reference\s+"?{re.escape(ref)}"?', block)
+                or re.search(rf'\(property\s+"Reference"\s+"?{re.escape(ref)}"?', block)
+            ):
+                return block
+        return ""
+
+    def _footprint_block_by_terms(self, pcb_text: str, terms: tuple[str, ...]) -> str:
+        upper_terms = tuple(term.upper() for term in terms)
+        for block in self._footprint_blocks(pcb_text):
+            upper = block.upper()
+            if any(term in upper for term in upper_terms):
+                return block
+        return ""
+
+    def _footprint_blocks(self, pcb_text: str) -> list[str]:
+        blocks: list[str] = []
+        marker = "(footprint "
+        pos = 0
+        while True:
+            start = pcb_text.find(marker, pos)
+            if start < 0:
+                return blocks
+            depth = 0
+            end = start
+            in_string = False
+            escaped = False
+            for index in range(start, len(pcb_text)):
+                ch = pcb_text[index]
+                if in_string:
+                    if escaped:
+                        escaped = False
+                    elif ch == "\\":
+                        escaped = True
+                    elif ch == '"':
+                        in_string = False
+                    continue
+                if ch == '"':
+                    in_string = True
+                    continue
+                if ch == "(":
+                    depth += 1
+                elif ch == ")":
+                    depth -= 1
+                    if depth == 0:
+                        end = index + 1
+                        break
+            if end <= start:
+                return blocks
+            blocks.append(pcb_text[start:end])
+            pos = end
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="OmniCircuit input evidence validator.")
     parser.add_argument("--project-root", default=".")
+    parser.add_argument("--check-constraints", action="store_true",
+                        help="Also run absolute constraint checks on existing PCB")
     args = parser.parse_args()
-    report = InputEvidenceValidator(Path(args.project_root)).validate()
+    root = Path(args.project_root)
+    report = InputEvidenceValidator(root).validate()
     print(json.dumps({
         "schema": report["schema"],
         "status": report["status"],
         "counts": report["counts"],
     }, indent=2, ensure_ascii=False))
+
+    if args.check_constraints:
+        # Find PCB file and run constraint checks
+        try:
+            with open(root / "project_config.json", "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+            proj = cfg.get("project_name", "esp32_s3_dwm3000_uwb_anchor_with_relay_outputs")
+            pcb_file = root / "outputs" / "kicad" / proj / f"{proj}.kicad_pcb"
+            if pcb_file.exists():
+                guard = AbsoluteConstraintGuard(root)
+                try:
+                    viols = guard.validate_post_step(pcb_file, "cli_check")
+                    if viols:
+                        print(f"\n[WARN] {len(viols)} constraint warning(s):")
+                        for v in viols:
+                            print(f"  [{v['severity']}] {v['message']}")
+                except ConstraintViolation as e:
+                    print(f"\n[CRITICAL] {e}")
+                    return 2
+        except Exception as exc:
+            print(f"Constraint check skipped: {exc}")
+
     return 0
 
 

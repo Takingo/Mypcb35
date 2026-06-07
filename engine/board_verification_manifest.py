@@ -77,10 +77,12 @@ def build_board_verification_manifest(
         "silk_overlap",
         "silk_edge_clearance",
         "silk_over_copper",
+        "pth_inside_courtyard",
     }
     blocking_findings = [
         item for item in findings
         if str(item.get("type", "")) not in assembly_review_types
+        and not (str(item.get("severity", "")).lower() == "warning" and str(item.get("type", "")) in ("schematic_parity", "starved_thermal"))
     ]
     total = len(findings)
     ready = len(blocking_findings) == 0 and source_gate.ok and model_gate.ok

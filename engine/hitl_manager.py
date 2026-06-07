@@ -58,6 +58,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from engine.omnicircuit_improvements import check_pre_defined_decision
+except Exception:  # noqa: BLE001
+    try:
+        from omnicircuit_improvements import check_pre_defined_decision
+    except Exception:  # noqa: BLE001
+        check_pre_defined_decision = None  # type: ignore[assignment]
+
 # UTF-8 stdout for Turkish messages
 if hasattr(sys.stdout, "reconfigure") and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
@@ -80,6 +88,58 @@ def _ensure_dirs() -> None:
     HITL_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 
+def _auto_decision_for_blocker(
+    *,
+    blocker_type: str,
+    question: str,
+    context: dict[str, Any],
+    suggested_choices: Iterable[dict[str, str]] | None,
+) -> dict[str, Any] | None:
+    if check_pre_defined_decision is None:
+        return None
+    try:
+        decision = check_pre_defined_decision(
+            question + "\n" + json.dumps(context, ensure_ascii=False)
+        )
+    except Exception as exc:  # noqa: BLE001
+        print(f"[HITL] predefined decision check failed: {exc}", file=sys.stderr)
+        return None
+    if not decision:
+        return None
+
+    _ensure_dirs()
+    answer_value = str(decision.get("decision") or decision.get("answer") or "bypass")
+    state = {
+        "schema": "HITL_STATE_V1",
+        "status": "auto_decided",
+        "blocker_type": blocker_type,
+        "session_id": str(uuid.uuid4()),
+        "raised_at": _iso_utc(),
+        "context": context,
+        "question": question,
+        "suggested_choices": list(suggested_choices or []),
+        "answer_path": str(HITL_ANSWER_FILE),
+        "auto_decision": True,
+    }
+    answer = {
+        "session_id": state["session_id"],
+        "decision": answer_value,
+        "rationale": str(decision.get("rationale") or ""),
+        "decided_at": _iso_utc(),
+        "automatic": True,
+    }
+    state["answer"] = answer
+    _append_log(state, answer)
+    try:
+        if HITL_STATE_FILE.exists():
+            HITL_STATE_FILE.unlink()
+    except FileNotFoundError:
+        pass
+    print(f"[HITL] AUTO-DECISION ({blocker_type}) -> {answer_value}", file=sys.stderr)
+    print(f"[HITL] Rationale: {answer['rationale']}", file=sys.stderr)
+    return state
+
+
 def emit_blocker(
     *,
     blocker_type: str,
@@ -92,6 +152,15 @@ def emit_blocker(
         raise ValueError(
             f"blocker_type must be one of {sorted(VALID_BLOCKER_TYPES)}, got {blocker_type!r}"
         )
+    auto_state = _auto_decision_for_blocker(
+        blocker_type=blocker_type,
+        question=question,
+        context=context,
+        suggested_choices=suggested_choices,
+    )
+    if auto_state is not None:
+        return auto_state
+
     _ensure_dirs()
     state = {
         "schema": "HITL_STATE_V1",
@@ -161,6 +230,8 @@ def ask_human_engineer(
         context=context or {},
         suggested_choices=suggested_choices,
     )
+    if state.get("status") == "auto_decided":
+        return dict(state.get("answer") or {})
     return wait_for_answer(state, timeout_s=timeout_s)
 
 

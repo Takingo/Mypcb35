@@ -111,6 +111,12 @@ constraints — but use ONLY components from the BOM.
 CRITICAL ENGINEERING CONSTRAINT:
 Qorvo DWM3000 UWB modülünün pin aralığı (pitch) standart kütüphanelerdeki gibi 1.27mm DEĞİL, mutlak surette 1.0mm olarak hesaplanmalı ve KiCad'e bu şekilde iletilmelidir! (Add this to the constraints array for DWM3000).
 
+ABSOLUTE REQUIREMENTS FOR THIS RUN:
+- W5500 Ethernet controller (U15) MUST BE INCLUDED.
+- 25MHz Crystal (X1) MUST BE INCLUDED.
+- ESP32 sockets SK1 and SK2 MUST BE INCLUDED. The ESP32 is NOT soldered directly to the board, it plugs into SK1 and SK2.
+Do NOT omit these under any circumstances.
+
 JSON SCHEMA TO FOLLOW EXACTLY:
 {
   "schema": "AI_Netlist_v1",
@@ -556,10 +562,10 @@ class CognitiveNetlistGenerator:
         components.extend([
             Component("J1", "connector", "AC Mains 3-pin", "Phoenix Contact", "1803578",
                       "TerminalBlock_PhoenixContact:MKDS_3-3,5", "220V AC input: L, N, PE",
-                      ["AC clearance 8mm", "creepage IEC60664-1"]),
+                      ["AC clearance 8mm", "creepage IEC60664-1", "8mm isolation slot required"]),
             Component("J2", "connector", "SMA edge", "Amphenol", "132289",
                       "Connector_Coaxial:SMA_Edge_P1.27mm", "DWM3000 UWB RF antenna output",
-                      ["50 ohm controlled impedance"]),
+                      ["50 ohm controlled impedance", "MAX 15mm from U2.23", "no via on RF trace"]),
             Component("J3", "connector", "Debug UART 4-pin", "JST", "B4B-PH-K-S",
                       "Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical",
                       "UART0 debug + 3V3 + GND"),
@@ -593,6 +599,74 @@ class CognitiveNetlistGenerator:
                 Component("F1", "fuse", "500mA/250V", "Littelfuse", "0451.500MRL",
                           "Fuse:Fuse_1206_3216Metric", "AC supply protection")
             )
+        
+        # W5500, Crystal, RJ45, and Passives
+        components.extend([
+            Component("U15", "ethernet", "W5500", "WIZnet", "W5500",
+                      "Package_QFP:LQFP-48_7x7mm_P0.5mm", "Hardwired TCP/IP Ethernet Controller"),
+            Component("X1", "crystal", "25MHz / 18pF", "TXC", "7B-25.000MAAJ-T",
+                      "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "25MHz crystal for W5500"),
+            Component("C_X1A", "capacitor", "18pF", "Murata", "GRM1885C1H180JA01D", "Capacitor_SMD:C_0603_1608Metric", "25MHz crystal load 1", ["MAX 2mm from X1.1"]),
+            Component("C_X1B", "capacitor", "18pF", "Murata", "GRM1885C1H180JA01D", "Capacitor_SMD:C_0603_1608Metric", "25MHz crystal load 2", ["MAX 2mm from X1.3"]),
+            Component("U9", "rtc", "DS3231SN", "Maxim", "DS3231SN", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "I2C RTC", ["near battery"]),
+            Component("U10", "eeprom", "AT24C256C", "Microchip", "AT24C256C-SSHM-T", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", "I2C EEPROM", ["MAX 30mm from U9"]),
+            Component("BAT1", "battery", "CR2032", "Keystone", "1060TR", "Battery:BatteryHolder_Keystone_1060_1x2032", "RTC battery", ["MAX 20mm from U9"]),
+            Component("R12", "resistor", "4.7k", "Yageo", "RC0805FR-074K7L", "Resistor_SMD:R_0805_2012Metric", "I2C SDA pull-up", ["near U9"]),
+            Component("R13", "resistor", "4.7k", "Yageo", "RC0805FR-074K7L", "Resistor_SMD:R_0805_2012Metric", "I2C SCL pull-up", ["near U9"]),
+            Component("LED1", "led", "Red LED", "Kingbright", "APT2012SURCK", "LED_SMD:LED_0805_2012Metric", "Power indicator"),
+            Component("LED2", "led", "Green LED", "Kingbright", "APT2012CGCK", "LED_SMD:LED_0805_2012Metric", "UWB status"),
+            Component("LED3", "led", "Blue LED", "Kingbright", "APT2012QBC/D", "LED_SMD:LED_0805_2012Metric", "WiFi status"),
+            Component("LED4", "led", "Yellow LED", "Kingbright", "APT2012SYCK", "LED_SMD:LED_0805_2012Metric", "Relay status"),
+            Component("R_LED1", "resistor", "330R", "Yageo", "RC0805FR-07330RL", "Resistor_SMD:R_0805_2012Metric", "LED1 limit", ["MAX 5mm from LED1"]),
+            Component("R_LED2", "resistor", "330R", "Yageo", "RC0805FR-07330RL", "Resistor_SMD:R_0805_2012Metric", "LED2 limit", ["MAX 5mm from LED2"]),
+            Component("R_LED3", "resistor", "330R", "Yageo", "RC0805FR-07330RL", "Resistor_SMD:R_0805_2012Metric", "LED3 limit", ["MAX 5mm from LED3"]),
+            Component("R_LED4", "resistor", "330R", "Yageo", "RC0805FR-07330RL", "Resistor_SMD:R_0805_2012Metric", "LED4 limit", ["MAX 5mm from LED4"]),
+            Component("J18", "connector", "RJ45 with Magnetics", "Hanrun", "HR911105A", 
+                      "Connector_RJ:RJ45_Hanrun_HR911105A", "W5500 Ethernet port", ["MAX 30mm from W5500", "RIGHT BOARD EDGE"]),
+            Component("R41", "resistor", "1k", "Yageo", "RC0805FR-071KL", "Resistor_SMD:R_0805_2012Metric", "W5500 RST limit", ["MAX 10mm from W5500"]),
+            Component("R42", "resistor", "1k", "Yageo", "RC0805FR-071KL", "Resistor_SMD:R_0805_2012Metric", "W5500 INT limit", ["MAX 10mm from W5500"]),
+            Component("R43", "resistor", "49.9R", "Vishay", "CRCW040249R9FKED", "Resistor_SMD:R_0402_1005Metric", "W5500 Term TXP", ["MAX 5mm from W5500"]),
+            Component("R44", "resistor", "49.9R", "Vishay", "CRCW040249R9FKED", "Resistor_SMD:R_0402_1005Metric", "W5500 Term TXN", ["MAX 5mm from W5500"]),
+            Component("R45", "resistor", "49.9R", "Vishay", "CRCW040249R9FKED", "Resistor_SMD:R_0402_1005Metric", "W5500 Term RXP", ["MAX 5mm from W5500"]),
+            Component("R46", "resistor", "49.9R", "Vishay", "CRCW040249R9FKED", "Resistor_SMD:R_0402_1005Metric", "W5500 Term RXN", ["MAX 5mm from W5500"]),
+            Component("C43", "capacitor", "10uF", "Murata", "GRM21BR61C106KE15L", "Capacitor_SMD:C_0805_2012Metric", "W5500 bulk", ["MAX 5mm from W5500"]),
+            Component("C44", "capacitor", "10uF", "Murata", "GRM21BR61C106KE15L", "Capacitor_SMD:C_0805_2012Metric", "W5500 REGD", ["MAX 3mm from W5500"]),
+            Component("LED5", "led", "Green LED", "Kingbright", "KP-2012SGC", "LED_SMD:LED_0805_2012Metric", "Ethernet Activity LED"),
+            Component("R_LED5", "resistor", "220R", "Yageo", "RC0805FR-07220RL", "Resistor_SMD:R_0805_2012Metric", "LED5 limit")
+        ])
+        nets.extend([
+            NetConnection("W5500_CLK", ["U15.30", "X1.1", "C_X1A.1"], "clock", "Crystal to W5500"),
+            NetConnection("W5500_CLK_OUT", ["U15.31", "X1.3", "C_X1B.1"], "clock", "W5500 to Crystal"),
+            NetConnection("ETH_SCLK", ["U1.GPIO39", "U15.32"], "spi", "W5500 SPI Clock"),
+            NetConnection("ETH_MISO", ["U1.GPIO40", "U15.35"], "spi", "W5500 SPI MISO"),
+            NetConnection("ETH_MOSI", ["U1.GPIO41", "U15.34"], "spi", "W5500 SPI MOSI"),
+            NetConnection("ETH_CS", ["U1.GPIO42", "U15.33"], "spi", "W5500 SPI CS"),
+            NetConnection("ETH_RST", ["U1.GPIO47", "R41.1"], "gpio", "W5500 Reset"),
+            NetConnection("ETH_RST_W5500", ["R41.2", "U15.37"], "gpio", "W5500 Reset pin"),
+            NetConnection("ETH_INT", ["U1.GPIO48", "R42.1"], "gpio", "W5500 Interrupt"),
+            NetConnection("ETH_INT_W5500", ["R42.2", "U15.36"], "gpio", "W5500 Interrupt pin"),
+            NetConnection("I2C_SDA", ["U1.GPIO21", "U9.7", "U10.5", "R12.2"], "i2c", "I2C SDA"),
+            NetConnection("I2C_SCL", ["U1.GPIO22", "U9.8", "U10.6", "R13.2"], "i2c", "I2C SCL"),
+            NetConnection("+3V3_I2C_PULLUP", ["+3V3_L", "R12.1", "R13.1"], "power_3v3", "I2C pull-ups"),
+            NetConnection("RTC_VBAT", ["BAT1.1", "U9.6"], "power", "RTC battery"),
+            NetConnection("GND_RTC", ["BAT1.2", "U9.5", "U10.4", "U10.1", "U10.2", "U10.3", "U10.7"], "ground", "RTC/EEPROM GND and address pins"),
+            NetConnection("+3V3_RTC", ["+3V3_L", "U9.2", "U10.8"], "power_3v3", "RTC/EEPROM VCC"),
+            NetConnection("LED1_GPIO", ["U1.GPIO2", "R_LED1.1"], "gpio", "Power/Status LED1"),
+            NetConnection("LED1_A", ["R_LED1.2", "LED1.2"], "gpio", "LED1 Anode"),
+            NetConnection("LED2_GPIO", ["U1.GPIO6", "R_LED2.1"], "gpio", "UWB status LED2"),
+            NetConnection("LED2_A", ["R_LED2.2", "LED2.2"], "gpio", "LED2 Anode"),
+            NetConnection("LED3_GPIO", ["U1.GPIO7", "R_LED3.1"], "gpio", "WiFi status LED3"),
+            NetConnection("LED3_A", ["R_LED3.2", "LED3.2"], "gpio", "LED3 Anode"),
+            NetConnection("LED4_GPIO", ["U1.GPIO8", "R_LED4.1"], "gpio", "Relay status LED4"),
+            NetConnection("LED4_A", ["R_LED4.2", "LED4.2"], "gpio", "LED4 Anode"),
+            NetConnection("LED5_GPIO", ["U1.GPIO10", "R_LED5.1"], "gpio", "LED5 control"),
+            NetConnection("LED5_A", ["R_LED5.2", "LED5.2"], "gpio", "LED5 Anode"),
+            NetConnection("ETH_TXP", ["U15.2", "R43.1", "J18.1"], "eth", "W5500 TXP"),
+            NetConnection("ETH_TXN", ["U15.1", "R44.1", "J18.2"], "eth", "W5500 TXN"),
+            NetConnection("ETH_RXP", ["U15.6", "R45.1", "J18.3"], "eth", "W5500 RXP"),
+            NetConnection("ETH_RXN", ["U15.5", "R46.1", "J18.6"], "eth", "W5500 RXN"),
+            NetConnection("ETH_REGD", ["U15.20", "C44.1"], "power_1v2", "W5500 Internal 1.2V LDO out"),
+        ])
         if "RV1" not in existing_refs:
             components.append(
                 Component("RV1", "varistor", "275VAC", "Bourns", "MOV-14D471K",
@@ -618,10 +692,14 @@ class CognitiveNetlistGenerator:
             ("C36", "100nF",     "U13 SN74LVC1T45 VCCB bypass"),
             ("C37", "100nF",     "U14 SN74LVC1T45 VCCA bypass"),
             ("C38", "100nF",     "U14 SN74LVC1T45 VCCB bypass"),
-            ("C39", "10uF",      "DWM3000 VDD3V3 bulk"),
-            ("C40", "100nF",     "DWM3000 VDD3V3 HF bypass"),
-            ("C41", "10uF",      "DWM3000 VDDIO(1V8) bulk"),
-            ("C42", "100nF",     "DWM3000 VDDIO(1V8) HF bypass"),
+            ("C39", "100nF",     "W5500 VCC bypass"),
+            ("C40", "100nF",     "W5500 VCC bypass"),
+            ("C41", "100nF",     "W5500 VCC bypass"),
+            ("C42", "100nF",     "W5500 VCC bypass"),
+            ("C45", "10uF",      "DWM3000 VDD3V3 bulk"),
+            ("C46", "100nF",     "DWM3000 VDD3V3 HF bypass"),
+            ("C47", "10uF",      "DWM3000 VDDIO(1V8) bulk"),
+            ("C48", "100nF",     "DWM3000 VDDIO(1V8) HF bypass"),
         ]
         for ref, val, desc in bypass_caps:
             if ref not in existing_refs:
@@ -644,13 +722,14 @@ class CognitiveNetlistGenerator:
             NetConnection("BUCK_FB_GND",["R14.2", "U4.GND"],             "ground",   "FB lower to GND"),
             NetConnection("+3V3_FB_TOP",["R15.2", "L1.2"],               "power_3v3","FB upper to Vout"),
             NetConnection("+5V_BYPASS", ["C1.1", "C2.1", "C21.1", "C22.1", "C25.1", "C26.1"], "power_5v", "5V bypass caps"),
-            NetConnection("+3V3_BYPASS",["C29.1", "C34.1", "C36.1", "C37.1", "C39.1", "C40.1"], "power_3v3", "3V3 bypass caps"),
-            NetConnection("+1V8_BYPASS",["C27.1", "C28.1", "C30.1", "C33.1", "C35.1", "C38.1", "C41.1", "C42.1"], "power_1v8", "1V8 bypass caps"),
+            NetConnection("+3V3_BYPASS",["C29.1", "C34.1", "C36.1", "C37.1", "C39.1", "C40.1", "C41.1", "C42.1", "C45.1", "C46.1", "R43.2", "R44.2", "R45.2", "R46.2", "U15.4", "U15.8", "U15.11", "U15.15", "U15.24", "U15.43", "U15.48", "C43.1"], "power_3v3", "3V3 bypass caps"),
+            NetConnection("+1V8_BYPASS",["C27.1", "C28.1", "C30.1", "C33.1", "C35.1", "C38.1", "C47.1", "C48.1"], "power_1v8", "1V8 bypass caps"),
             NetConnection("GND_BYPASS", [
                 "C1.2","C2.2","C21.2","C22.2","C23.2","C24.2",
                 "C25.2","C26.2","C27.2","C28.2","C29.2","C30.2",
                 "C33.2","C34.2","C35.2","C36.2","C37.2","C38.2",
-                "C39.2","C40.2","C41.2","C42.2",
+                "C39.2","C40.2","C41.2","C42.2","C45.2","C46.2",
+                "C47.2","C48.2","LED1.1","LED2.1","LED3.1","LED4.1","LED5.1", "U15.3", "U15.7", "U15.16", "C43.2", "C44.2", "C_X1A.2", "C_X1B.2"
             ], "ground", "All bypass cap GND returns"),
         ])
         reasoning.append(

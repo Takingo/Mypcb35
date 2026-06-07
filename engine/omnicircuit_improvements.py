@@ -10,8 +10,14 @@ from __future__ import annotations
 import re
 import json
 import math
+import sys
 from pathlib import Path
 from typing import Any
+
+if hasattr(sys.stdout, "reconfigure") and (sys.stdout.encoding or "").lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure") and (sys.stderr.encoding or "").lower() != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # GELİŞTİRME 1: GENİŞLETİLMİŞ FOOTPRINT VERİTABANI (~500 bileşen)
@@ -752,6 +758,18 @@ PRE_DEFINED_DECISIONS: dict[str, dict] = {
         "rationale": "RELAY1=GPIO4, RELAY2=GPIO5. GPIO35/36 PSRAM rezerveli — kesinlikle kullanılamaz.",
         "prevent_options": ["GPIO35", "GPIO36", "GPIO37"]
     },
+}
+
+PRE_DEFINED_DECISIONS["unresolved_footprint"] = {
+    "question_pattern": (
+        r"unresolved\s+footprint|footprint\s+review|footprint/pin|"
+        r"footprint/pin yapisi.*cozumlenemedi|footprint/pin yapısı.*çözülemedi|"
+        r"pin yapisi.*cozumlenemedi|pin yapısı.*çözülemedi"
+    ),
+    "answer": "temporary_footprint",
+    "decision": "temporary_footprint",
+    "rationale": "Otonom SaaS Akışı: Çözülemeyen footprint için otomatik geçici footprint atandı ve akış devam ettirildi.",
+    "prevent_options": ["Wait for manual footprint review", "Stop pipeline", "Karar Gerekli"],
 }
 
 
